@@ -22,6 +22,12 @@ const express = require('express')
 const rootPrefix    = "."
   , indexRoutes     = require( rootPrefix + '/routes/index')
   , blockRoutes     = require( rootPrefix + '/routes/block')
+  , blocksRoutes     = require( rootPrefix + '/routes/blocks')
+  , transactionsRoutes     = require( rootPrefix + '/routes/transactions')
+  , transactionRoutes     = require( rootPrefix + '/routes/transaction')
+  ,addressRoutes   = require( rootPrefix + '/routes/address')
+  ,searchRoutes   = require( rootPrefix + '/routes/search')
+
 ;
 
 var app = express();
@@ -49,6 +55,13 @@ app.use(sanitizer());
 // load index routes
 app.use('/', indexRoutes);
 
-app.use('/block', blockRoutes);
+app.use('/utitlity-chain/block', blockRoutes);
+app.use('/utitlity-chain/blocks', blocksRoutes);
+app.use('/utitlity-chain/transactions', transactionsRoutes);
+app.use('/utitlity-chain/transaction', transactionRoutes);
+app.use('/utitlity-chain/address', addressRoutes);
+app.use('/utitlity-chain/search', searchRoutes);
+
+
 
 module.exports = app;

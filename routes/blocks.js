@@ -1,25 +1,16 @@
 var express = require('express');
-var block = require('../lib/webInterface/block')
+var blocks = require('../lib/webInterface/blocks')
 var router = express.Router();
 
-router.get("/:block_number", function(req, res, next){
+router.get("/recent/:page", function(req, res, next){
 
-	var blockNumber = req.params.block_number;
-	var blockData = block.getBlock(blockNumber)
-
-	callbackData(req,res,blockData)
-});
-
-
-router.get("/:address/transactions/:page", function(req, res, next){
-
-	var address = req.params.address;
 	var page = req.params.page;
 
-	var blockTransactions = block.getBlcokTransactions(address,page)
+	var recentBlocks = blocks.getRecentBlocks(page)
 
-	callbackData(req,res,blockTransactions)
+	callbackData(req,res,recentBlocks)
 });
+
 
 
 function callbackData(req,res,data) {
