@@ -1,8 +1,12 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET home page. */
-router.get("/:format?", function(req, res, next){
+router.get("/recent", function(req, res, next){
+
+	var count = req.query.count;
+
+	var response = {} ; // block.something(count)
+
   if (req.params.format) { 
   	res.json({title:'Hello World'}); 
   }else {

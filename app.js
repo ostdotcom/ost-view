@@ -21,6 +21,7 @@ const express = require('express')
 //All the requires.
 const rootPrefix    = "."
   , indexRoutes     = require( rootPrefix + '/routes/index')
+  , blockRoutes     = require( rootPrefix + '/routes/block')
 ;
 
 var app = express();
@@ -47,5 +48,7 @@ app.use(sanitizer());
 
 // load index routes
 app.use('/', indexRoutes);
+
+app.use('/block', blockRoutes);
 
 module.exports = app;
