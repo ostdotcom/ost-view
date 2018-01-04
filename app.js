@@ -55,12 +55,12 @@ app.use(sanitizer());
 // load index routes
 app.use('/', indexRoutes);
 
-app.use('/utitlity-chain/block', blockRoutes);
-app.use('/utitlity-chain/blocks', blocksRoutes);
-app.use('/utitlity-chain/transactions', transactionsRoutes);
-app.use('/utitlity-chain/transaction', transactionRoutes);
-app.use('/utitlity-chain/address', addressRoutes);
-app.use('/utitlity-chain/search', searchRoutes);
+app.use('/utility-chain/block', blockRoutes);
+app.use('/utility-chain/blocks', blocksRoutes);
+app.use('/utility-chain/transactions', transactionsRoutes);
+app.use('/utility-chain/transaction', transactionRoutes);
+app.use('/utility-chain/address', addressRoutes);
+app.use('/utility-chain/search', searchRoutes);
 
 
 

@@ -2,12 +2,30 @@ var express = require('express');
 var block = require('../lib/webInterface/block')
 var router = express.Router();
 
+
+const reqPrefix           = "../"
+    , responseHelper      = require(reqPrefix + "lib/formatter/response" )
+;
+
+
+const renderResult = function(requestResponse, responseObject) {
+    return requestResponse.renderResponse(responseObject);
+  };
+
 router.get("/:block_number", function(req, res, next){
 
 	var blockNumber = req.params.block_number;
-	var blockData = block.getBlock(blockNumber)
+	block.getBlock(blockNumber)
+		.then(function(requestResponse){
+			console.log(requestResponse);
 
-	callbackData(req,res,blockData)
+			 return renderResult(requestResponse, res);
+		})
+		.catch(function(reason){
+			console.log("****** block: /:block_number ***** catch ***** " + reason);
+				
+			return renderResult( responseHelper.error('r_wi_1', "Something Went Wrong"),res );
+         });
 });
 
 
@@ -16,25 +34,16 @@ router.get("/:address/transactions/:page", function(req, res, next){
 	var address = req.params.address;
 	var page = req.params.page;
 
-	var blockTransactions = block.getBlcokTransactions(address,page)
-
-	callbackData(req,res,blockTransactions)
+	block.getBlcokTransactions(address,page)
+		.then(function(requestResponse){
+			 return renderResult(requestResponse, res);
+		})
+		.catch(function(reason){
+			console.log("****** block: /:address/transactions/:page ***** catch ***** "+reason);
+			return renderResult( responseHelper.error('r_wi_1', "Something Went Wrong"),res );
+		});
 });
 
-
-function callbackData(req,res,data) {
-	var contype = req.headers['content-type'];
-
-  	if (contype != undefined && (contype ==='application/json')){
-
-  		res.json({data:data}); 
- 	}else {
- 		var jsonString = JSON.stringify(data,null,2);  
- 	  	//res.render('index', { title: jsonString });
- 	  	  		res.json({data:data}); 
-
-	}
-}
 
 
 module.exports = router;

@@ -3,29 +3,34 @@ var search = require('../lib/webInterface/search')
 var router = express.Router();
 
 
+const reqPrefix           = "../"
+    , responseHelper      = require(reqPrefix + "lib/formatter/response" )
+;
+
+
+const renderResult = function(requestResponse, responseObject) {
+    return requestResponse.renderResponse(responseObject);
+  };
+
+
 router.get('/:param',function(req, res, next){
 
 	var param = req.params.param;
 
-	console.log("****** addressValue*****", param)
- 	var transaction = search.getParamData(param);
+ 	search.getParamData(param)
+ 		.then(function(requestResponse) {
+ 			console.log("search: inside * this * funciton")
+			 return renderResult(requestResponse, res);
+ 		})
+ 		.catch(function(reason){
+			console.log("****** search: /:param ***** catch ***** "+reason);
+			return renderResult( responseHelper.error('r_wi_1', "Something Went Wrong"),res );
 
-	callbackData(req, res, transaction)
+ 		});
+
+ 	 			//callbackData(req, res, requestResponse)
+
+
 });
-
-function callbackData(req,res,data) {
-	var contype = req.headers['content-type'];
-
-  	if (contype != undefined && (contype ==='application/json')){
-
-  		res.json({data:data}); 
- 	}else {
- 		var jsonString = JSON.stringify(data,null,2);  
- 	  	//res.render('index', { title: jsonString });
- 	  	  		res.json({data:data}); 
-
-	}
-}
-
 
 module.exports = router ;

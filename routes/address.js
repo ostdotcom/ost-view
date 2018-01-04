@@ -2,15 +2,27 @@ var express = require('express')
 var address = require('../lib/webInterface/address')
 var router = express.Router();
 
+const reqPrefix           = "../"
+    , responseHelper      = require(reqPrefix + "lib/formatter/response" )
+;
 
-router.get('/:address?',function(req, res, next){
+
+const renderResult = function(requestResponse, responseObject) {
+    return requestResponse.renderResponse(responseObject);
+  };
+
+router.get('/:address',function(req, res, next){
 
 	var addressValue = req.params.address;
+ 	address.getAddressData(addressValue)
+	 	.then(function(requestResponse){
+			 return renderResult(requestResponse, res);
+		})
+		.catch(function(reason){
+			console.log("****** address: /:address ***** catch ***** "+reason);
+			return renderResult( responseHelper.error('r_wi_1', "Something Went Wrong"),res );
 
-	console.log("****** addressValue*****", addressValue)
- 	var addressData = address.getAddressData(addressValue);
-
-	callbackData(req, res, addressData)
+		});
 });
 
 
@@ -18,10 +30,14 @@ router.get('/:address/balance',function(req, res, next){
 
 	var addressValue = req.params.address;
 
-	console.log("****** addressValue balance*****", addressValue)
- 	var addressBalance = address.getAddressBalance(addressValue);
-
-	callbackData(req, res, addressBalance)
+ 	address.getAddressBalance(addressValue)
+ 		.then(function(requestResponse){
+			 return renderResult(requestResponse, res);
+		})
+		.catch(function(reason){
+			console.log("****** address: /:address/balance ***** catch ***** "+reason);
+			return renderResult( responseHelper.error('r_wi_1', "Something Went Wrong"),res );
+		});
 });
 
 router.get('/:address/transaction/:page', function(req, res, next){
@@ -29,26 +45,17 @@ router.get('/:address/transaction/:page', function(req, res, next){
 	var addressValue = req.params.address;
 	var page = req.params.page;
 
- 	var addressTransaction = address.getAddressTransactions(addressValue, page);
-
-	callbackData(req, res, addressTransaction);
+ 	address.getAddressTransactions(addressValue, page)
+ 		.then(function(requestResponse){
+			 return renderResult(requestResponse, res);
+		})
+		.catch(function(reason){
+			console.log("****** address: /:address/transaction/:page ***** catch ***** "+reason);
+			return renderResult( responseHelper.error('r_wi_1', "Something Went Wrong"),res );
+		});
 });
 
 
-
-function callbackData(req,res,data) {
-	var contype = req.headers['content-type'];
-
-  	if (contype != undefined && (contype ==='application/json')){
-
-  		res.json({data:data}); 
- 	}else {
- 		var jsonString = JSON.stringify(data,null,2);  
- 	  	//res.render('index', { title: jsonString });
- 	  	  		res.json({data:data}); 
-
-	}
-}
 
 
 
