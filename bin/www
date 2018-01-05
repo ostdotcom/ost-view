@@ -5,7 +5,7 @@
  */
 
 var app = require('../app');
-var debug = require('debug')('block-scanner:server');
+var debug = require('debug')('openst-explorer:server');
 var http = require('http');
 
 /**
