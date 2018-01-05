@@ -27,7 +27,6 @@ const rootPrefix    = "."
   , transactionRoutes     = require( rootPrefix + '/routes/transaction')
   ,addressRoutes   = require( rootPrefix + '/routes/address')
   ,searchRoutes   = require( rootPrefix + '/routes/search')
-
 ;
 
 var app = express();
