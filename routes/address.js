@@ -29,7 +29,6 @@ router.get('/:address',function(req, res, next){
 router.get('/:address/balance',function(req, res, next){
 
 	var addressValue = req.params.address;
-
  	address.getAddressBalance(addressValue)
  		.then(function(requestResponse){
 			 return renderResult(requestResponse, res);
