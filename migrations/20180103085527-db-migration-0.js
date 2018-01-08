@@ -8,6 +8,7 @@ const constants = require('../config/core_constants.js');
 /**
   * We receive the dbmigrate dependency from dbmigrate initially.
   * This enables us to not have to rely on NODE_PATH.
+  * Author: Sachin
   */
 exports.setup = function(options, seedLink) {
   dbm = options.dbmigrate;
@@ -17,7 +18,6 @@ exports.setup = function(options, seedLink) {
 
 exports.up = function(db) {
 	return createBlockTable(db)
- 	.then((result)=> { return createNumberIndexOnBlockTable(db);}) 
   	.then((result)=> { return createTransactionTable(db);})
   	.then((result)=> { return createHashIndexOnTransactionTable(db);})
   	.then((result)=> { return createTransactionLedgerTable(db);})
@@ -26,7 +26,7 @@ exports.up = function(db) {
   	.then((result)=> { return createIndexOnIntTransactionTable(db);})
   	.then((result)=> { return createIntTransactionLedgerTable(db);})
   	.then((result)=> { return createIndexOnIntTxnLedgerTable(db);}
-    ,
+  	,
     function(err) {
       return;
     }
@@ -41,15 +41,15 @@ exports.down = function(db) {
     })
   .then(
   	function(result) {
-  		db.dropTable(constants.TRANSACTION_LEDGER_TABLE_NAME);
+  		db.dropTable(constants.ADDRESS_TRANSACTION_TABLE_NAME);
   	})
   .then(
   	function(result) {
-  		db.dropTable(constants.INT_TRANSACTION_TABLE_NAME);
+  		db.dropTable(constants.TOKEN_TRANSACTION_TABLE_NAME);
   	})
   .then(
   	function(result) {
-  		db.dropTable(constants.INT_TRANSACTION_LEDGER_TABLE_NAME);
+  		db.dropTable(constants.ADDRESS_TOKEN_TRANSACTION_TABLE_NAME);
   	},
     function(err) {
       return;
@@ -64,82 +64,89 @@ exports._meta = {
 /**************************** Helper methods *****************************/
 var createBlockTable = function(db) {
 	return db.createTable(constants.BLOCK_TABLE_NAME, {
-    number: { type: 'int', primaryKey: true },
-    hash: { type: 'string', notNull: true },
-    parenthash: 'string',
-    miner: 'string',
-    difficulty: 'string',
-    totaldifficulty: 'string',
-    gaslimit: 'int',
-    gasUsed: 'int',
-    timestamp: 'int'
-  });
+	    number: { type: 'bigint', primaryKey: true },
+	    hash: { type: 'string', notNull: true , length: 66},
+	    parent_hash: { type: 'string', notNull: true , length: 66},
+	    miner: { type: 'string', notNull: true , length: 42},
+	    difficulty: { type: 'string', notNull: true },
+	    total_difficulty: { type: 'string', notNull: true },
+	    gas_limit: { type: 'int', notNull: true },
+	    gas_used: { type: 'int', notNull: true },
+	    total_transactions: { type: 'int', notNull: true },
+	    timestamp: { type: 'int', notNull: true }
+  	});
 }
 
 var createNumberIndexOnBlockTable = function(db) {
- 	db.addIndex(constants.BLOCK_TABLE_NAME, constants.BLOCK_NUMBER_INDEX, 'number', true);
+ 	db.addIndex(constants.BLOCK_TABLE_NAME, 'n_index', 'number', true);
 }
 
 var createTransactionTable = function(db) {
 	db.createTable(constants.TRANSACTION_TABLE_NAME, {
-        hash: { type: 'string', primaryKey: true },
-        blocknumber: 'int',
-        from: 'string',
-        gas: 'int',
-        gasprice: 'int',
-        blockhash: 'string',
-        nounce: 'string',
-        to: 'string',
-        transactionIndex: 'int',
-        contractAddress: 'string',
-        logs: 'blob',
-        timestamp: 'int'
+        hash: { type: 'string', primaryKey: true , length: 66},
+        block_number: { type: 'bigint', notNull: true },
+        transaction_index: { type: 'int', notNull: true },
+        contract_address: { type: 'string', notNull: false , length: 42},
+        t_from: { type: 'string', notNull: true , length: 42},
+        t_to: { type: 'string', notNull: true , length: 42},
+        tokens: {type: 'decimal', notNull: true, length: '40,0'},
+        gas_used: { type: 'int', notNull: true },
+        gas_price: {type: 'decimal', notNull: true, length: '40,0'},
+        nounce: { type: 'bigint', notNull: true },
+        logs: { type: 'blob', notNull: false },
+        timestamp: { type: 'int', notNull: true }
     });   
 }
 
 var createHashIndexOnTransactionTable = function(db) {
-	db.addIndex(constants.TRANSACTION_TABLE_NAME, constants.TRANSACTION_HASH_INDEX, 'hash', true);
+	db.addIndex(constants.TRANSACTION_TABLE_NAME, 'h_index', 'hash', true);
+	db.addIndex(constants.TRANSACTION_TABLE_NAME, 'b_index', 'block_number', false);
 }
 
 var createTransactionLedgerTable = function(db) {
-	db.createTable(constants.TRANSACTION_LEDGER_TABLE_NAME, {
-        address: { type: 'string', notNull: true },
-        transactionahash: { type: 'string', notNull: true },
-        inout: { type: 'tinyint', notNull: true, length: 1 },
-        timestamp: 'int'
+	db.createTable(constants.ADDRESS_TRANSACTION_TABLE_NAME, {
+        address: { type: 'string', notNull: true , length: 42},
+        corresponding_address: { type: 'string', notNull: true , length: 42},
+        tokens: {type: 'decimal', notNull: true, length: '40,0'},
+        transaction_hash: { type: 'string', notNull: true, length: 66},
+        transaction_fees: {type: 'decimal', notNull: true, length: '40,0'},
+        inflow: { type: 'boolean', notNull: true},
+        timestamp: { type: 'int', notNull: true }
     }); 
 }
 
 var createGroupIndexOnTxnLedgerTable = function(db) {
-	db.addIndex(constants.TRANSACTION_LEDGER_TABLE_NAME, constants.TRANSACTION_LEDGER_ADD_INDEX, ['address','timestamp'], true);
+	db.addIndex(constants.ADDRESS_TRANSACTION_TABLE_NAME, 'a_t_index', ['address','timestamp'], true);
 }
 
 var createIntTransactionTable = function(db) {
-	db.createTable(constants.INT_TRANSACTION_TABLE_NAME, {
-        hash: { type: 'string', notNull: true },
-        contract: 'string',
-        from: 'string',
-        to: 'string',
-        value: 'int',
-        timestamp: 'int'
+	db.createTable(constants.TOKEN_TRANSACTION_TABLE_NAME, {
+        hash: { type: 'string', notNull: true , length: 66},
+        contract_address: { type: 'string', notNull: true , length: 42},
+        t_from: { type: 'string', notNull: true , length: 42},
+        t_to: { type: 'string', notNull: true , length: 42},
+        tokens: {type: 'decimal', notNull: true, length: '40,0'},
+        timestamp: { type: 'int', notNull: true }
     });
 }
 
 var createIndexOnIntTransactionTable = function(db) {
-	db.addIndex(constants.INT_TRANSACTION_TABLE_NAME, constants.INT_TRANSACTION_HASH_FROM_INDEX, ['hash','from'], false);
-	db.addIndex(constants.INT_TRANSACTION_TABLE_NAME, constants.INT_TRANSACTION_HASH_TO_INDEX, ['hash','to'], false);
+	db.addIndex(constants.TOKEN_TRANSACTION_TABLE_NAME, 'c_t_index', ['contract_address','timestamp'], false);
 }
 
 var createIntTransactionLedgerTable = function(db) {
-	db.createTable(constants.INT_TRANSACTION_LEDGER_TABLE_NAME, {
-        address: { type: 'string', notNull: true },
-        transactionhash: 'string',
-        from: 'string',
-        inout: { type: 'tinyint', notNull: true, length: 1 },
-        timestamp: 'int'
+	db.createTable(constants.ADDRESS_TOKEN_TRANSACTION_TABLE_NAME, {
+        address: { type: 'string', notNull: true , length: 42},
+        corresponding_address: { type: 'string', notNull: true , length: 42},
+        tokens: {type: 'decimal', notNull: true, length: '40,0'},
+        contract_address: { type: 'string', notNull: true , length: 42},
+        transaction_hash: { type: 'string', notNull: true, length: 66},
+        inflow: { type: 'boolean', notNull: true },
+        timestamp: { type: 'int', notNull: true }
     });
 }
 
 var createIndexOnIntTxnLedgerTable = function(db) {
-	db.addIndex(constants.INT_TRANSACTION_LEDGER_TABLE_NAME, constants.INT_TRANSACTION_LEDGER_ADDRESS_INDEX, ['address', 'timestamp'], false);
+	db.addIndex(constants.ADDRESS_TOKEN_TRANSACTION_TABLE_NAME, 'a_index', ['address', 'timestamp'], false);
+	db.addIndex(constants.ADDRESS_TOKEN_TRANSACTION_TABLE_NAME, 'a_c_t_index', ['address', 'contract_address', 'timestamp'], false);
 }

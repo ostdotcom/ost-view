@@ -1,13 +1,22 @@
+"use strict";
+
+/*
+ * MySQL: Helper file to interact with mysql queries
+ * Author: Sachin
+ */
+
+
 var mysql = require('mysql');
 const logger = require('../CustomConsoleLogger');
 
 function MySQL() {
-	var con = mysql.createConnection({
+	this.con = mysql.createConnection({
   		host: process.env.OST_EXP_DB_HOST,
   		user: process.env.OST_EXP_DB_USER,
- 		password: process.env.OST_EXP_DB_PWD
+ 		password: process.env.OST_EXP_DB_PWD,
+ 		database: process.env.OST_EXP_DB_NAME_STAGE
 	});
-	con.connect(function(err) {
+	this.con.connect(function(err) {
   		if (err) {
   			logger.error(err);
   			throw err;
@@ -17,15 +26,55 @@ function MySQL() {
 }
 
 MySQL.prototype = {
-  	createTable: function (tableName) {
-  		logger.info("Create Table", tableName);
+
+	/**
+	*   data format expected is JSONArray
+	*	data = [
+		[number_data,
+	   	hashdata,
+	    parent_hash_data,
+	    miner_data,
+	    difficulty_data,
+	    total_difficulty_data,
+	    gas_limit_data,
+	    gas_used_data,
+	    total_transactions_data,
+	    timestamp_data
+	    ],
+	    [number_data,
+	   	hashdata,
+	    parent_hash_data,
+	    miner_data,
+	    difficulty_data,
+	    total_difficulty_data,
+	    gas_limit_data,
+	    gas_used_data,
+	    total_transactions_data,
+	    timestamp_data
+	    ]
+	    ];
+	*
+	*
+	*/
+  	insertData: function (tableName, columnsSequence ,data, callback) {
+  		logger.log("Insert into table", tableName, data);
+  			
+  		var query = "INSERT INTO " + tableName + " " + columnsSequence;
+  		if (data[0].constructor === Array) {
+  			query += (" " + "VALUES ?");
+  		} else {
+  			query += (" " + "VALUES (?)");	
+  		}
+  		return Promise.resolve(this.con.query(query, [data]));
   	},
-  	dropTable: function (tableName) {
-    	logger.info("Create Table", tableName);
+
+  	updateData: function (tableName, data) {
+  		logger.log("Update into table", tableName, data);
+  		//var sql = "UPDATE "+ tableName +" SET address = 'Canyon 123' WHERE address = 'Valley 345'";
+  		var sql = '';
+  		return con.query( sql );
   	},
-  	insertOrUpdateData: function (tableName, data) {
-  		logger.info("Insert Table", tableName, data);
-  	},
+
   	releaseConnection: function () {
   		logger.info("Releasing connection");
   		this.con.release();

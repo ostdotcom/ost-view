@@ -2,7 +2,7 @@
 
 /*
  * Constants file: Load constants
- *
+ * Author: Sachin
  */
 
 
@@ -13,19 +13,20 @@ function define(key, value) {
 }
 
 define("BLOCK_TABLE_NAME", 'blocks');
-define("BLOCK_NUMBER_INDEX", 'block_number_index');
-
 define("TRANSACTION_TABLE_NAME", 'transactions');
-define("TRANSACTION_HASH_INDEX", 'transaction_hash_index');
-
-define("TRANSACTION_LEDGER_TABLE_NAME", 'transaction_ledger');
-define("TRANSACTION_LEDGER_ADD_INDEX", 'transaction_address_index');
-
-define("INT_TRANSACTION_TABLE_NAME", 'int_transaction');
-define("INT_TRANSACTION_LEDGER_TABLE_NAME", 'int_transaction_ledger');
-define("INT_TRANSACTION_HASH_FROM_INDEX", 'int_transaction_hash_from_index');
-define("INT_TRANSACTION_HASH_TO_INDEX", 'int_transaction_hash_to_index');
-define("INT_TRANSACTION_LEDGER_ADDRESS_INDEX", 'int_transaction_ledger_address_index');
+define("ADDRESS_TRANSACTION_TABLE_NAME", 'address_transactions');
+define("TOKEN_TRANSACTION_TABLE_NAME", 'token_transactions');
+define("ADDRESS_TOKEN_TRANSACTION_TABLE_NAME", 'address_token_transactions');
 
 
+// define("blocks_format", '(?,?,?,?,?,?,?,?,?,?)');
+define("BLOCKS_DATA_SEQUENCE", '(number, hash, parent_hash, miner, difficulty, total_difficulty, gas_limit, gas_used, total_transactions, timestamp)');
+define("TRANSACTION_DATA_SEQUENCE", '(hash, block_number, transaction_index, contract_address, t_from, t_to, tokens, gas_used, gas_price, nounce, logs, timestamp)');
+define("ADDRESS_TRANSACTION_DATA_SEQUENCE", '(address, corresponding_address, tokens, transaction_hash, transaction_fees, inflow, timestamp)');
+define("TOKEN_TRANSACTION_DATA_SEQUENCE", '(hash, contract_address, t_from, t_to, tokens, timestamp)');
+define("ADDRESS_TOKEN_TRANSACTION_DATA_SEQUENCE", '(address, corresponding_address, tokens, t_to, contract_address, transaction_hash, inflow, timestamp)')
+
+// Index Map
+define("TRANSACTION_INDEX_MAP", {'hash':0, 'block_number':1, 'transaction_index':2, 'contract_address':3, 't_from':4, 't_to':5, 'tokens':6, 'gas_used':7, 'gas_price':8, 'nounce':9, 'logs':10, 'timestamp':11});
+define("TOKEN_TRANSACTION_INDEX_MAP", {'hash':0, 'contract_address':1, 't_from':2, 't_to':3, 'tokens':4, 'timestamp':5});
 module.exports = constants;
