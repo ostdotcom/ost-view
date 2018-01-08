@@ -29,4 +29,11 @@ define("ADDRESS_TOKEN_TRANSACTION_DATA_SEQUENCE", '(address, corresponding_addre
 // Index Map
 define("TRANSACTION_INDEX_MAP", {'hash':0, 'block_number':1, 'transaction_index':2, 'contract_address':3, 't_from':4, 't_to':5, 'tokens':6, 'gas_used':7, 'gas_price':8, 'nounce':9, 'logs':10, 'timestamp':11});
 define("TOKEN_TRANSACTION_INDEX_MAP", {'hash':0, 'contract_address':1, 't_from':2, 't_to':3, 'tokens':4, 'timestamp':5});
+
+define("ENVIRONMENT", process.env.ENVIRONMENT);
+
+
+define('OSTE_GETH_UTILITY_RPC_PROVIDER', process.env.OSTE_GETH_UTILITY_RPC_PROVIDER);
+define('OSTE_GETH_VALUE_RPC_PROVIDER', process.env.OSTE_GETH_VALUE_RPC_PROVIDER);
+
 module.exports = constants;

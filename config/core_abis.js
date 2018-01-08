@@ -34,7 +34,6 @@ function CoreAbis() {
 
 CoreAbis.prototype = {
     getABI: function(name){
-      console.log("********* 3.getABI : "+name);
       return this.abiHash[name];
     }
 

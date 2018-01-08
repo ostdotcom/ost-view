@@ -29,26 +29,44 @@ if (process.env.USE_MOCK_SIMPLE_TOKEN != 1) {
 }
 
 
-const allAddresses = {
-  users: {
+// const allAddresses = {
+//   users: {
 
-    utilityChainOwner: {
-      address: process.env.OST_UTILITY_CHAIN_OWNER_ADDR,
-      passphrase: process.env.OST_UTILITY_CHAIN_OWNER_PASSPHRASE
-    },
+//     utilityChainOwner: {
+//       address: process.env.OST_UTILITY_CHAIN_OWNER_ADDR,
+//       passphrase: process.env.OST_UTILITY_CHAIN_OWNER_PASSPHRASE
+//     },
 
+//   }
+// };
+
+
+var users = {}
+var usersConfigJSON = require("../users_config.json");
+
+for (var i = 0; i < usersConfigJSON.length; i++) {
+  var userName = usersConfigJSON[i];
+  var userAddress = 'OSTE_UTILITY_CHAIN_'+ userName.toUpperCase()+'_ADDR';
+  var userPassphrase = 'OSTE_UTILITY_CHAIN_'+ userName.toUpperCase()+'_PASSPHRASE';
+
+  users[userName] = {
+    address : process.env[userAddress],
+    passphrase : process.env[userPassphrase]
   }
-};
+}  
+
 
 
 var contracts = {}
 
-var coreAbiInstance = coreAbis.getInstance();
-var jsonFile = coreAbiInstance.getJSONFile("contract_config.json");
+var contractConfigJSON = require("../contract_config.json")
 
-for (var i = 0; i < jsonFile.length; i++) {
-  var contractName = jsonFile[i];
-  var contractAddress = 'OSTE_CONTRACT_'+contractName+'_ADDER';
+var coreAbiInstance = coreAbis.getInstance();
+
+for (var i = 0; i < contractConfigJSON.length; i++) {
+  var contractName = contractConfigJSON[i];
+  var contractAddress = 'OSTE_CONTRACT_'+contractName.toUpperCase()+'_ADDR';
+
   contracts[contractName] = {
     address : process.env[contractAddress],
     abi : coreAbiInstance.getABI(contractName)
@@ -58,8 +76,8 @@ for (var i = 0; i < jsonFile.length; i++) {
 
 // generate a contract address to name map for reverse lookup
 const addrToContractNameMap = {};
-for (var contractName in allAddresses.contracts) {
-  var addr = allAddresses.contracts[contractName].address;
+for (var contractName in contracts) {
+  var addr = contracts[contractName].address;
 
   if ( Array.isArray(addr) ) {
     for (var i = 0; i < addr.length; i++) {
@@ -73,11 +91,11 @@ for (var contractName in allAddresses.contracts) {
 // helper methods to access difference addresses and their respective details
 const coreAddresses = {
   getAddressForUser: function(userName) {
-    return allAddresses.users[userName].address;
+    return users[userName].address;
   },
 
   getPassphraseForUser: function(userName) {
-    return allAddresses.users[userName].passphrase;
+    return users[userName].passphrase;
   },
 
   getAddressForContract: function(contractName) {
