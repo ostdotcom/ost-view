@@ -93,13 +93,13 @@ var createTransactionTable = function(db) {
         gas_used: { type: 'int', notNull: true },
         gas_price: {type: 'decimal', notNull: true, length: '40,0'},
         nounce: { type: 'bigint', notNull: true },
+        input_data: { type: 'blob', notNull: false },
         logs: { type: 'blob', notNull: false },
         timestamp: { type: 'int', notNull: true }
     });   
 }
 
 var createHashIndexOnTransactionTable = function(db) {
-	db.addIndex(constants.TRANSACTION_TABLE_NAME, 'h_index', 'hash', true);
 	db.addIndex(constants.TRANSACTION_TABLE_NAME, 'b_index', 'block_number', false);
 }
 

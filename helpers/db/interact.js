@@ -10,37 +10,53 @@ const constants = require('../../config/core_constants.js');
 const logger = require('../CustomConsoleLogger');
 const dbhelper = {
 
-	insertBlock: function( blockData ) {
-		mysql.getInstance().insertData(constants.BLOCK_TABLE_NAME, constants.BLOCKS_DATA_SEQUENCE, blockData)
-			.then(function(res) {console.log(res);});		
+	insertBlock: function( blockDataArray ) {
+		return mysql.getInstance().insertData(constants.BLOCK_TABLE_NAME, constants.BLOCKS_DATA_SEQUENCE, blockDataArray);				
 	},
 
-	insertTransaction: function( transactionData ) {
-		mysql.getInstance().insertData(constants.TRANSACTION_TABLE_NAME, constants.TRANSACTION_DATA_SEQUENCE, transactionData)
-			.then(function(res,data) {console.log(data);});
-		var addressTransactionData = this.getAddressTransactionData( transactionData );
-		logger.log(addressTransactionData);
+	insertTransaction: function( transactionDataArray ) {
+		var result = [];
 
-		this.insertAddressTransaction(addressTransactionData);
+		for (var ind in transactionDataArray) {
+			var transactionData = transactionDataArray[ind];
+			var transactionResponse =  mysql.getInstance().insertData(constants.TRANSACTION_TABLE_NAME, constants.TRANSACTION_DATA_SEQUENCE, transactionData)
+			result.push(transactionResponse);
+
+			var addressTransactionData = this.getAddressTransactionData( transactionData );
+			logger.log(addressTransactionData);
+
+			var addressTransactionResponse = this.insertAddressTransaction(addressTransactionData);
+			result.push(addressTransactionResponse);
+		}
+
+		return result;
 	},
 
 	insertAddressTransaction: function( addressTransactionData) {
-		mysql.getInstance().insertData(constants.ADDRESS_TRANSACTION_TABLE_NAME, constants.ADDRESS_TRANSACTION_DATA_SEQUENCE, addressTransactionData)
-			.then(function(res,data) {console.log(data);});	
+		return mysql.getInstance().insertData(constants.ADDRESS_TRANSACTION_TABLE_NAME, constants.ADDRESS_TRANSACTION_DATA_SEQUENCE, addressTransactionData);
 	},
 
-	insertTokenTransaction: function( tokenTransactionData ) {
-		mysql.getInstance().insertData(constants.TOKEN_TRANSACTION_TABLE_NAME, constants.TOKEN_TRANSACTION_DATA_SEQUENCE, tokenTransactionData)
-			.then(function(res,data) {console.log(data);});
-		var addressTransactionData = this.getAddressTokenTransactionData( tokenTransactionData );
-		logger.log(addressTransactionData);
+	insertTokenTransaction: function( tokenTransactionDataArray ) {
+		var result = [];
+		for (var ind in tokenTransactionDataArray) {
+			var tokenTransactionData = 	tokenTransactionDataArray[ind];
 
-		this.insertAddressTokenTransaction( addressTransactionData );
+			var transactionResponse = mysql.getInstance().insertData(constants.TOKEN_TRANSACTION_TABLE_NAME, constants.TOKEN_TRANSACTION_DATA_SEQUENCE, tokenTransactionData);
+			result.push(transactionResponse);
+
+			var addressTransactionData = this.getAddressTokenTransactionData( tokenTransactionData );
+			logger.log(addressTransactionData);
+
+			var addressTransactionResponse = this.insertAddressTokenTransaction( addressTransactionData );
+			result.push(addressTransactionResponse);
+		}
+
+		return result;
 
 	},
+
 	insertAddressTokenTransaction: function( addressTokenTransactionData ){
-		mysql.getInstance().insertData(constants.ADDRESS_TOKEN_TRANSACTION_TABLE_NAME, constants.ADDRESS_TOKEN_TRANSACTION_DATA_SEQUENCE, addressTokenTransactionData)
-			.then(function(res,data) {console.log(data);});	
+		return mysql.getInstance().insertData(constants.ADDRESS_TOKEN_TRANSACTION_TABLE_NAME, constants.ADDRESS_TOKEN_TRANSACTION_DATA_SEQUENCE, addressTokenTransactionData);
 	},
 
 	getAddressTransactionData: function( transactionData ) {

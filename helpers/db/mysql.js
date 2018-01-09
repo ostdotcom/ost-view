@@ -59,13 +59,14 @@ MySQL.prototype = {
   	insertData: function (tableName, columnsSequence ,data, callback) {
   		logger.log("Insert into table", tableName, data);
   			
-  		var query = "INSERT INTO " + tableName + " " + columnsSequence;
+  		var query = "REPLACE INTO " + tableName + " " + columnsSequence;
   		if (data[0].constructor === Array) {
   			query += (" " + "VALUES ?");
   		} else {
   			query += (" " + "VALUES (?)");	
   		}
-  		return Promise.resolve(this.con.query(query, [data]));
+  		logger.log(query);
+      return this.con.query(query, [data]);
   	},
 
   	updateData: function (tableName, data) {
