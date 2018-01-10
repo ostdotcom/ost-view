@@ -88,7 +88,7 @@ var createTransactionTable = function(db) {
         transaction_index: { type: 'int', notNull: true },
         contract_address: { type: 'string', notNull: false , length: 42},
         t_from: { type: 'string', notNull: true , length: 42},
-        t_to: { type: 'string', notNull: true , length: 42},
+        t_to: { type: 'string', notNull: false , length: 42},
         tokens: {type: 'decimal', notNull: true, length: '40,0'},
         gas_used: { type: 'int', notNull: true },
         gas_price: {type: 'decimal', notNull: true, length: '40,0'},
