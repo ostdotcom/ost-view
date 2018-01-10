@@ -26,18 +26,29 @@ const dbhelper = {
 		var oThis = this;
 		return new Promise(function(resolve, reject){
 			var result = [];
+			var transactionPromiseList = [];
+			var addressTransactionData = [];
 			for (var ind in transactionDataArray) {
 				var transactionData = transactionDataArray[ind];
 				var transactionResponse =  mysql.getInstance().insertData(constants.TRANSACTION_TABLE_NAME, constants.TRANSACTION_DATA_SEQUENCE, transactionData);
-				result.push(transactionResponse);
+				transactionPromiseList.push(transactionResponse);
 
-				var addressTransactionData = oThis.getAddressTransactionData( transactionData );
+				//Format transactions
+				addressTransactionData = oThis.getAddressTransactionData( transactionData );
 				logger.log(addressTransactionData);
-
-				var addressTransactionResponse = oThis.insertAddressTransaction(addressTransactionData);
-				result.push(addressTransactionResponse);
 			}
-			resolve(result);	
+
+
+			Promise.all(transactionPromiseList)
+				.then(function(res){
+				result.push(res);
+
+				oThis.insertAddressTransaction(addressTransactionData)
+					.then(function(res){
+						result.push(res);
+						resolve(result);	
+					});
+			});
 		});
 	},
 
@@ -49,22 +60,30 @@ const dbhelper = {
 		var oThis = this;
 		return new Promise(function(resolve, reject){
 			var result = [];
+			var transactionPromiseList = [];
+			var addressTransactionData = [];
 			for (var ind in tokenTransactionDataArray) {
-				var tokenTransactionData = 	tokenTransactionDataArray[ind];
-
+				var tokenTransactionData = tokenTransactionDataArray[ind];
 				var transactionResponse = mysql.getInstance().insertData(constants.TOKEN_TRANSACTION_TABLE_NAME, constants.TOKEN_TRANSACTION_DATA_SEQUENCE, tokenTransactionData);
-				result.push(transactionResponse);
+				transactionPromiseList.push(transactionResponse);
 
-				var addressTransactionData = oThis.getAddressTokenTransactionData( tokenTransactionData );
+				//Format token transactions
+				addressTransactionData = oThis.getAddressTokenTransactionData( tokenTransactionData );
 				logger.log(addressTransactionData);
-
-				var addressTransactionResponse = oThis.insertAddressTokenTransaction( addressTransactionData );
-				result.push(addressTransactionResponse);
 			}
-			resolve(result);
 
+
+			Promise.all(transactionPromiseList)
+				.then(function(res){
+				result.push(res);
+
+				oThis.insertAddressTokenTransaction( addressTransactionData )
+					.then(function(res){
+						result.push(res);
+						resolve(result);	
+					});
+			});
 		});
-
 	},
 
 	insertAddressTokenTransaction: function( addressTokenTransactionData ){

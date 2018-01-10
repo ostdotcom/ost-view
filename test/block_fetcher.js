@@ -56,7 +56,7 @@ var fetchBlock = function(blockNumber) {
         .then(function() { return web3Interact.getBlock(blockNumber);})
         .then(writeBlockToDB)
         .then(writeTransactionsToDB)
-        .then(writeTansactionToLedger)
+        .then(writeTokenTansactionToDB)
         .then(setfetchBlockCron)
         .catch(errorHandling);
 }
@@ -193,9 +193,9 @@ var writeTransactionsToDB =  function(blockData) {
     });
 }
 
-var writeTansactionToLedger = function (transactionArray) {
+var writeTokenTansactionToDB = function (transactionArray) {
 
-    console.log("InternalTransaction#Logs ");
+    console.log("TokenTransaction#Logs ");
 
     return new Promise(function(resolve, reject){
         if (transactionArray.length > 0) {
