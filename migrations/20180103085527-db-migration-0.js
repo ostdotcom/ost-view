@@ -106,7 +106,7 @@ var createHashIndexOnTransactionTable = function(db) {
 var createTransactionLedgerTable = function(db) {
 	db.createTable(constants.ADDRESS_TRANSACTION_TABLE_NAME, {
         address: { type: 'string', notNull: true , length: 42},
-        corresponding_address: { type: 'string', notNull: true , length: 42},
+        corresponding_address: { type: 'string', notNull: false , length: 42},
         tokens: {type: 'decimal', notNull: true, length: '40,0'},
         transaction_hash: { type: 'string', notNull: true, length: 66},
         transaction_fees: {type: 'decimal', notNull: true, length: '40,0'},

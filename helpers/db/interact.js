@@ -122,7 +122,9 @@ const dbhelper = {
 
 		//Push address transactions
 		addressTxnArray.push(addressTxnFirst);
-		addressTxnArray.push(addressTxnSecond);
+		if (transactionData[txnMap['t_to']] && transactionData[txnMap['t_to']] != transactionData[txnMap['t_from']]) {
+			addressTxnArray.push(addressTxnSecond);
+		}
 
 		return addressTxnArray;
 	},
