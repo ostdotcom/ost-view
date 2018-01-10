@@ -10,6 +10,14 @@ const constants = require('../../config/core_constants.js');
 const logger = require('../CustomConsoleLogger');
 const dbhelper = {
 
+	getAddressTransactions: function( address ) {
+		return mysql.getInstance().selectAddressTransactions(constants.ADDRESS_TRANSACTION_TABLE_NAME, address);				
+	},
+
+	getAddressTokenTransactions: function( address ) {
+		return mysql.getInstance().selectAddressTransactions(constants.ADDRESS_TOKEN_TRANSACTION_TABLE_NAME, address);				
+	},
+
 	insertBlock: function( blockDataArray ) {
 		return mysql.getInstance().insertData(constants.BLOCK_TABLE_NAME, constants.BLOCKS_DATA_SEQUENCE, blockDataArray);				
 	},
@@ -137,4 +145,5 @@ const dbhelper = {
 //To test
 // dbhelper.insertBlock([1,'test','pare','pare','pare','pare',3,4,3,4]);
 // dbhelper.insertTransaction(['tester', 12, 323, 'parde', 'parxe', 'pare', 3223, 4, 3, 4, null, 3]);
+//dbhelper.getAddressTokenTransactions('0xf94185bc3a096a317a3682dec62b06c7a0de0cd0').then(logger.log);
 module.exports = dbhelper;

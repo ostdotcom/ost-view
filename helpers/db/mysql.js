@@ -56,8 +56,28 @@ MySQL.prototype = {
 	*
 	*
 	*/
+    selectAddressTransactions: function (tableName, address) {
+      var oThis = this;
+      logger.log("select for transaction address", tableName, address);
+      var query = "SELECT * from " + tableName + " WHERE address=\'" + address + "\'";
+      
+      return new Promise(function(resolve, reject){
+          try {
+            oThis.con.query(query, function (err, result, fields) {
+                if (err) throw err;
+                logger.info(result);
+                resolve(result);
+            });
+          } catch(err) {
+             logger.error(err);
+             reject(err)
+          }
+      });
+    },
+
   	insertData: function (tableName, columnsSequence ,data, callback) {
-  		logger.log("Insert into table", tableName, data);
+  		var oThis = this;
+      logger.log("Insert into table", tableName, data);
   			
   		var query = "REPLACE INTO " + tableName + " " + columnsSequence;
   		if (data[0].constructor === Array) {
@@ -66,7 +86,18 @@ MySQL.prototype = {
   			query += (" " + "VALUES (?)");	
   		}
   		logger.log(query);
-      return this.con.query(query, [data]);
+      return new Promise(function(resolve, reject){
+          try {
+            oThis.con.query(query, [data], function (err, result) {
+                if (err) throw err;
+                logger.info(result);
+                resolve(result);
+            });
+          } catch(err) {
+             logger.error(err);
+             reject(err)
+          }
+      });
   	},
 
   	updateData: function (tableName, data) {

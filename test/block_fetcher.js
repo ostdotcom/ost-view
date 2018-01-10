@@ -1,13 +1,24 @@
+"use strict"
 
-var web3Interact = require('../lib/web3/interact/value_rpc_interact');
-var dbInteract = require('../helpers/db/interact.js');
-const logger = require('../helpers/CustomConsoleLogger');
-var erctoken = require('../lib/contract_interact/erc20Token');
+/**
+  * File: block_fetcher
+  * To create cron job to fetch blocks from the node and feed them into DB 
+  */
+
 var BigNumber = require('bignumber.js');
 
-var web3 = web3Interact;
-//var Utils = require('./utils.js');
-//const web3RpcProvider = require('./web3/rpc_provider');
+const reqPrefix           = "../"
+    , web3Interact        = require( reqPrefix + "lib/web3/interact/value_rpc_interact")
+    , dbInteract          = require( reqPrefix + "helpers/db/interact.js")
+    , logger              = require( reqPrefix  + "helpers/CustomConsoleLogger")
+    , erctoken            = require( reqPrefix + "lib/contract_interact/erc20Token")
+    ;
+ 
+
+var state = {
+    chainID     : 0,
+    blockNumber : 0
+};
 
 var setfetchBlockCron = function(blockNumber) {
     setTimeout(function() {
@@ -15,19 +26,14 @@ var setfetchBlockCron = function(blockNumber) {
     }, 2000/*config.cronInterval*/ );
 }
 
-var state = {
-    blockNumber:0
-};
-
-var fetchBlocks = async function(config) {
+var fetchBlocks = async function() {
     const hightestBlockResult = await web3Interact.highestBlock();
     
     if (hightestBlockResult != null) {
         const hightestBlock = hightestBlockResult.data.block_number;
-
-        setfetchBlockCron(hightestBlock/*config.initBlock*/);
+        setfetchBlockCron(hightestBlock);
     } else {
-        setfetchBlockCron(122/*config.initBlock*/);
+        setfetchBlockCron(state.blockNumber);
     }
 }
 
@@ -54,24 +60,6 @@ var fetchBlock = function(blockNumber) {
         .catch(errorHandling);
 }
 
-// var getBlockData = function(web3) {
-//     return new Promise(function(resolve, reject) {
-//         web3.eth.getBlock(blockNumber, true, function(error, blockData) {
-//             if(error) {
-//                 reject(error);
-//             }
-//             else if(blockData == null) {
-//                 reject(null);
-//             }
-//             else { 
-//                 resolve(blockData);
-//             }
-
-//         });
-//     });
-    
-// }
-
 var errorHandling = function(err) {
     console.log("ERROR" + err);
     setfetchBlockCron(state.blockNumber);
@@ -88,9 +76,11 @@ var writeBlockToDB = function(blockDataResponse) {
             reject('{success:false}');
         } else {
             var blockData = formatBlockData(blockDataResponse.data);
-            var res = dbInteract.insertBlock(blockData);
-            //console.log(res);
-            resolve(blockDataResponse.data);   
+            dbInteract.insertBlock(blockData).then(
+                function(res){
+                    //console.log(res);
+                    resolve(blockDataResponse.data);
+                });  
         }  
     });
     
@@ -188,10 +178,11 @@ var writeTransactionsToDB =  function(blockData) {
                         .then(function(res) {
                             var receiptRes = res;
                             var insertionTransactionArray = formatTransactionData(transactionRes, receiptRes, blockData.timestamp);
-                            var res = dbInteract.insertTransaction(insertionTransactionArray);
-                            console.log(res);
-
-                            resolve(insertionTransactionArray);
+                            dbInteract.insertTransaction(insertionTransactionArray).then(
+                                function(res){
+                                    console.log(res);
+                                    resolve(insertionTransactionArray);
+                                });  
                         });
                 });
     } else {
@@ -210,7 +201,6 @@ var writeTansactionToLedger = function (transactionArray) {
             var decodedTxnArray = [];
             for (var txnIndex in transactionArray) {
                 var transaction =  transactionArray[txnIndex];   
-                console.log("JSON PARSED", transaction) 
                 var decodedContTransaction = erctoken.decodeTransactionsFromLogs(JSON.parse(transaction[11]));
                 var decodedTxn = formatTokenTransactionData(transaction, decodedContTransaction);
                 for (var index in decodedTxn) {
@@ -218,10 +208,15 @@ var writeTansactionToLedger = function (transactionArray) {
                 }
             }
             console.log(decodedTxnArray);
-            var res = dbInteract.insertTokenTransaction(decodedTxnArray);
-            console.log(res);
+            dbInteract.insertTokenTransaction(decodedTxnArray)
+            .then(
+                function(res){
+                    console.log(res);
+                    resolve(+state.blockNumber + 1);
+                });
+        } else {
+            resolve(+state.blockNumber + 1);
         }
-        resolve(state.blockNumber + 1);
     });
 
 }
@@ -237,40 +232,15 @@ var isNodeConnected = function(blockNumber) {
     }); 
 }
 
-// var processOfTableDeletion = function() {
-//     console.log('Table deletion process completed');
-//     return dbhandle.createTables()
-// }
+// To handle command line with format $> node block_fetch.js <chainID> <initial_block_number>
+if (process.argv.length > 2) {
+    state.chainID = process.argv[2];
+    state.blockNumber = isNaN(process.argv[3]) ? 0 : process.argv[3];
+    logger.log('Chain ID :', state.chainID);
+    logger.log('Init Block Number :', state.blockNumber);
+} else {
+    console.error('\n\tPlease Specify chain ID \n\t$>node block_fetcher.js <chainID> <blockNumber>(optional)\n');
+    process.exit(1);
+}
 
-// var processOfTableCreation = function() {
-//     console.log('Table creation process completed');
-//     fetchBlocks();
-// }
-
-/** On Startup **/
-// geth --rpc --rpcaddr "localhost" --rpcport "8545"  --rpcapi "eth,net,web3"
-
-var config;
-setfetchBlockCron(95);
-// try {
-//     var configContents = fs.readFileSync('config.json');
-//     config = JSON.parse(configContents);
-// }
-// catch (error) {
-//     if (error.code === 'ENOENT') {
-//         console.log('No config file found. Using default configuration (will ' + 
-//             'download all blocks starting from latest)');
-//     }
-//     else {
-//         throw error;
-//         process.exit(1);
-//     }
-// }
-
-// // set the default geth port if it's not provided
-// if (!('gethPort' in config) || (typeof config.gethPort) !== 'number') {
-//     config.gethPort = 8545; // default
-// }
-
-// console.log('Using configuration:');
-//console.log(config);
+setfetchBlockCron(state.blockNumber);
