@@ -80,13 +80,18 @@ MySQL.prototype = {
       logger.log("Insert into table", tableName, data);
   			
   		var query = "REPLACE INTO " + tableName + " " + columnsSequence;
-  		if (data[0].constructor === Array) {
-  			query += (" " + "VALUES ?");
-  		} else {
-  			query += (" " + "VALUES (?)");	
-  		}
-  		logger.log(query);
       return new Promise(function(resolve, reject){
+          if (data == undefined || data.length < 1) {
+              resolve("No data");
+              return;
+          }
+
+          if (data[0].constructor === Array) {
+      			query += (" " + "VALUES ?");
+      		} else {
+      			query += (" " + "VALUES (?)");	
+      		}
+      		logger.log(query);
           try {
             oThis.con.query(query, [data], function (err, result) {
                 if (err) throw err;
