@@ -1,10 +1,10 @@
 var express = require('express')
-var search = require('../lib/webInterface/search')
-var router = express.Router();
+var search 	= require('../lib/webInterface/search')
+var router = express.Router({mergeParams: true});
 
 
-const reqPrefix           = "../"
-    , responseHelper      = require(reqPrefix + "lib/formatter/response" )
+const reqPrefix           = ".."
+    , responseHelper      = require(reqPrefix + "/lib/formatter/response" )
 ;
 
 

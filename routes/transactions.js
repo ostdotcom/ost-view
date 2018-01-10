@@ -1,10 +1,10 @@
-var express = require('express');
-var transactions = require('../lib/webInterface/transactions')
-var router = express.Router();
+var express = require('express')
+var transactions  = require('../lib/webInterface/transactions')
+var router = express.Router({mergeParams: true});
 
 
-const reqPrefix           = "../"
-    , responseHelper      = require(reqPrefix + "lib/formatter/response" )
+const reqPrefix           = ".."
+    , responseHelper      = require(reqPrefix + "/lib/formatter/response" )
 ;
 
 
@@ -17,7 +17,6 @@ router.get("/recent/:page", function(req, res, next){
 	var page = req.params.page;
 	transactions.getRecentTransactions(page)
 		.then(function(requestResponse) {
- 			console.log("transactions: inside * this * funciton")
 			 return renderResult(requestResponse, res);
  		})
  		.catch(function(reason){
@@ -32,7 +31,6 @@ router.get("/pending/:page", function(req, res, next){
 
 	transactions.getPendingTransactions(page)
 		.then(function(requestResponse) {
- 			console.log("transactions: inside * this * funciton")
 			 return renderResult(requestResponse, res);
  		})
  		.catch(function(reason){

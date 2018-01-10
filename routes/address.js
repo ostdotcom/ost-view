@@ -1,9 +1,9 @@
 var express = require('express')
 var address = require('../lib/webInterface/address')
-var router = express.Router();
+var router = express.Router({mergeParams: true});
 
-const reqPrefix           = "../"
-    , responseHelper      = require(reqPrefix + "lib/formatter/response" )
+const reqPrefix           = ".."
+    , responseHelper      = require(reqPrefix + "/lib/formatter/response" )
 ;
 
 

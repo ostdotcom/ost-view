@@ -1,6 +1,6 @@
 var express = require('express');
 var blocks = require('../lib/webInterface/blocks')
-var router = express.Router();
+var router = express.Router({mergeParams: true});
 
 const reqPrefix           = "../"
     , responseHelper      = require(reqPrefix + "lib/formatter/response" )

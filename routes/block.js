@@ -1,10 +1,9 @@
 var express = require('express');
-var block = require('../lib/webInterface/block')
-var router = express.Router();
+var block   = require('../lib/webInterface/block')
+var router = express.Router({mergeParams: true});
 
-
-const reqPrefix           = "../"
-    , responseHelper      = require(reqPrefix + "lib/formatter/response" )
+const reqPrefix           = ".."
+    , responseHelper      = require(reqPrefix + "/lib/formatter/response" )
 ;
 
 
@@ -15,6 +14,8 @@ const renderResult = function(requestResponse, responseObject) {
 router.get("/:block_number", function(req, res, next){
 
 	var blockNumber = req.params.block_number;
+	var chainId = req.params.chainId;
+
 	block.getBlock(blockNumber)
 		.then(function(requestResponse){
 			console.log(requestResponse);

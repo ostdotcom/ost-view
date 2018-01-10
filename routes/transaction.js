@@ -1,10 +1,10 @@
 var express = require('express');
 var transaction = require('../lib/webInterface/transaction')
-var router = express.Router();
+var router = express.Router({mergeParams: true});
 
 
-const reqPrefix           = "../"
-    , responseHelper      = require(reqPrefix + "lib/formatter/response" )
+const reqPrefix           = ".."
+    , responseHelper      = require(reqPrefix + '/lib/formatter/response' )
 ;
 
 
@@ -19,7 +19,6 @@ router.get("/:hash", function(req, res, next){
 
 	transaction.getTransaction(hash)
 		.then(function(requestResponse) {
- 			console.log("transaction: inside * this * funciton")
 			 return renderResult(requestResponse, res);
  		})
  		.catch(function(reason){

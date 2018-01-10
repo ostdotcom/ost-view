@@ -54,13 +54,12 @@ app.use(sanitizer());
 // load index routes
 app.use('/', indexRoutes);
 
-app.use('/utility-chain/block', blockRoutes);
-app.use('/utility-chain/blocks', blocksRoutes);
-app.use('/utility-chain/transactions', transactionsRoutes);
-app.use('/utility-chain/transaction', transactionRoutes);
-app.use('/utility-chain/address', addressRoutes);
-app.use('/utility-chain/search', searchRoutes);
-
+app.use('/chain-id/:chainId/block', blockRoutes);
+app.use('/chain-id/:chainId/blocks', blocksRoutes);
+app.use('/chain-id/:chainId/transactions', transactionsRoutes);
+app.use('/chain-id/:chainId/transaction', transactionRoutes);
+app.use('/chain-id/:chainId/address', addressRoutes);
+app.use('/chain-id/:chainId/search', searchRoutes);
 
 
 module.exports = app;
