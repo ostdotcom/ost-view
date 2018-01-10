@@ -21,6 +21,11 @@ OPENST-EXPLORER
   > npm install
 ```
 
+* Create DB with name define in dbconfig.json
+```
+  > db-migrate up --config ./config/dbconfig.json --env stage
+```
+
 * Start Block fetching Cron Job
 ```
   > source test/openst_env_vars.sh

@@ -12,6 +12,7 @@ const reqPrefix           = "../"
     , dbInteract          = require( reqPrefix + "helpers/db/interact.js")
     , logger              = require( reqPrefix  + "helpers/CustomConsoleLogger")
     , erctoken            = require( reqPrefix + "lib/contract_interact/erc20Token")
+    , constants           = require( reqPrefix + "config/core_constants")
     ;
  
 
@@ -134,12 +135,12 @@ var formatTokenTransactionData = function( transaction, decodedContTransactionLi
     for ( var ind in decodedContTransactionList) {
         var decodedContTransaction = decodedContTransactionList[ind];
         var formatedContractTxn = [];
-        formatedContractTxn.push( transaction[0] );
+        formatedContractTxn.push( transaction[constants['TRANSACTION_INDEX_MAP']['hash']] );
         formatedContractTxn.push( decodedContTransaction.address );
         formatedContractTxn.push( decodedContTransaction._from );
         formatedContractTxn.push( decodedContTransaction._to );
         formatedContractTxn.push( decodedContTransaction._value );
-        formatedContractTxn.push( transaction[12]);
+        formatedContractTxn.push( transaction[constants['TRANSACTION_INDEX_MAP']['timestamp']]);
 
         formatedContractTxnList.push(formatedContractTxn);
     }
@@ -161,7 +162,7 @@ var writeTransactionsToDB =  function(blockData) {
         if (transactions != undefined && transactions.length > 0) {
             var promiseReceiptArray = [];
             var promiseTransactionArray = [];
-            for (index in transactions) {
+            for (var index in transactions) {
                     logger.info("Transaction :", transactions[index]);
                     
                     var promiseReceipt = web3Interact.getReceipt(transactions[index]);
@@ -201,7 +202,7 @@ var writeTansactionToLedger = function (transactionArray) {
             var decodedTxnArray = [];
             for (var txnIndex in transactionArray) {
                 var transaction =  transactionArray[txnIndex];   
-                var decodedContTransaction = erctoken.decodeTransactionsFromLogs(JSON.parse(transaction[11]));
+                var decodedContTransaction = erctoken.decodeTransactionsFromLogs(JSON.parse(transaction[constants['TRANSACTION_INDEX_MAP']['logs']]));
                 var decodedTxn = formatTokenTransactionData(transaction, decodedContTransaction);
                 for (var index in decodedTxn) {
                     decodedTxnArray.push(decodedTxn[index]);

@@ -23,21 +23,22 @@ const dbhelper = {
 	},
 
 	insertTransaction: function( transactionDataArray ) {
-		var result = [];
+		var oThis = this;
+		return new Promise(function(resolve, reject){
+			var result = [];
+			for (var ind in transactionDataArray) {
+				var transactionData = transactionDataArray[ind];
+				var transactionResponse =  mysql.getInstance().insertData(constants.TRANSACTION_TABLE_NAME, constants.TRANSACTION_DATA_SEQUENCE, transactionData);
+				result.push(transactionResponse);
 
-		for (var ind in transactionDataArray) {
-			var transactionData = transactionDataArray[ind];
-			var transactionResponse =  mysql.getInstance().insertData(constants.TRANSACTION_TABLE_NAME, constants.TRANSACTION_DATA_SEQUENCE, transactionData)
-			result.push(transactionResponse);
+				var addressTransactionData = oThis.getAddressTransactionData( transactionData );
+				logger.log(addressTransactionData);
 
-			var addressTransactionData = this.getAddressTransactionData( transactionData );
-			logger.log(addressTransactionData);
-
-			var addressTransactionResponse = this.insertAddressTransaction(addressTransactionData);
-			result.push(addressTransactionResponse);
-		}
-
-		return result;
+				var addressTransactionResponse = oThis.insertAddressTransaction(addressTransactionData);
+				result.push(addressTransactionResponse);
+			}
+			resolve(result);	
+		});
 	},
 
 	insertAddressTransaction: function( addressTransactionData) {
@@ -45,21 +46,24 @@ const dbhelper = {
 	},
 
 	insertTokenTransaction: function( tokenTransactionDataArray ) {
-		var result = [];
-		for (var ind in tokenTransactionDataArray) {
-			var tokenTransactionData = 	tokenTransactionDataArray[ind];
+		var oThis = this;
+		return new Promise(function(resolve, reject){
+			var result = [];
+			for (var ind in tokenTransactionDataArray) {
+				var tokenTransactionData = 	tokenTransactionDataArray[ind];
 
-			var transactionResponse = mysql.getInstance().insertData(constants.TOKEN_TRANSACTION_TABLE_NAME, constants.TOKEN_TRANSACTION_DATA_SEQUENCE, tokenTransactionData);
-			result.push(transactionResponse);
+				var transactionResponse = mysql.getInstance().insertData(constants.TOKEN_TRANSACTION_TABLE_NAME, constants.TOKEN_TRANSACTION_DATA_SEQUENCE, tokenTransactionData);
+				result.push(transactionResponse);
 
-			var addressTransactionData = this.getAddressTokenTransactionData( tokenTransactionData );
-			logger.log(addressTransactionData);
+				var addressTransactionData = oThis.getAddressTokenTransactionData( tokenTransactionData );
+				logger.log(addressTransactionData);
 
-			var addressTransactionResponse = this.insertAddressTokenTransaction( addressTransactionData );
-			result.push(addressTransactionResponse);
-		}
+				var addressTransactionResponse = oThis.insertAddressTokenTransaction( addressTransactionData );
+				result.push(addressTransactionResponse);
+			}
+			resolve(result);
 
-		return result;
+		});
 
 	},
 
