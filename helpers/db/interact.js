@@ -170,5 +170,6 @@ const dbhelper = {
 //To test
 // dbhelper.insertBlock([1,'test','pare','pare','pare','pare',3,4,3,4]);
 // dbhelper.insertTransaction(['tester', 12, 323, 'parde', 'parxe', 'pare', 3223, 4, 3, 4, null, 3]);
-//dbhelper.getAddressTokenTransactions('0xf94185bc3a096a317a3682dec62b06c7a0de0cd0').then(logger.log);
+// dbhelper.getAddressTokenTransactions('0xf37c5eF8b20F16CA5F7b4Efe9Ea261aa4Cff63b2').then(logger.log);
+// dbhelper.getAddressTransactions('0xf37c5eF8b20F16CA5F7b4Efe9Ea261aa4Cff63b2').then(logger.log);
 module.exports = dbhelper;

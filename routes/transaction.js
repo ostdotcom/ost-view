@@ -19,7 +19,7 @@ router.get("/:hash", function(req, res, next){
 
 	transaction.getTransaction(hash)
 		.then(function(requestResponse) {
-			 return renderResult(requestResponse, res);
+			 return renderResult(responseHelper.successWithData(requestResponse), res);
  		})
  		.catch(function(reason){
 			console.log("****** transaction: /:hash ***** catch ***** " + reason);
