@@ -30,12 +30,12 @@ router.get("/:block_number", function(req, res, next){
 });
 
 
-router.get("/:address/transactions/:page", function(req, res, next){
+router.get("/:block_number/transactions/:page", function(req, res, next){
 
-	var address = req.params.address;
+	var block_number = req.params.block_number;
 	var page = req.params.page;
 
-	block.getBlcokTransactions(address,page)
+	block.getBlockTransactions(block_number,page)
 		.then(function(requestResponse){
 			 return renderResult(requestResponse, res);
 		})

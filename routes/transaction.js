@@ -27,18 +27,6 @@ router.get("/:hash", function(req, res, next){
  		});
 });
 
-// function callbackData(req,res,data) {
-// 	var contype = req.headers['content-type'];
 
-//   	if (contype != undefined && (contype ==='application/json')){
-
-//   		res.json({data:data}); 
-//  	}else {
-//  		var jsonString = JSON.stringify(data,null,2);  
-//  	  	res.render('index', { title: jsonString });
-//  	  	//  		res.json({data:data}); 
-
-// 	}
-// }
 
 module.exports = router;

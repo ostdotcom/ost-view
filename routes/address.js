@@ -39,7 +39,7 @@ router.get('/:address/balance',function(req, res, next){
 		});
 });
 
-router.get('/:address/transaction/:page', function(req, res, next){
+router.get('/:address/transactions/:page', function(req, res, next){
 
 	var addressValue = req.params.address;
 	var page = req.params.page;
