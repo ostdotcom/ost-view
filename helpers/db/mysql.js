@@ -21,7 +21,7 @@ function MySQL() {
   			logger.error(err);
   			throw err;
   		}
-  		logger.info("***************MySQL Connected!*************");
+  		// logger.info("***************MySQL Connected!*************");
 		});
 }
 
@@ -74,6 +74,28 @@ MySQL.prototype = {
                reject(err)
             }
         });
+    },
+    
+    selectRecentTransactions: function (tableName, pageNumber, pageSize) {
+        var oThis = this;
+        logger.log("select for recent transactions ");
+        logger.log("PageNumber ", pageNumber) 
+        logger.log("PageSize ", pageSize);
+        var query = "SELECT * from " + tableName + " ORDER BY timestamp DESC LIMIT " + ((pageNumber-1)*pageSize) + "," + pageSize;
+
+        return new Promise(function(resolve, reject){
+            try {
+              oThis.con.query(query, function (err, result, fields) {
+                  if (err) throw err;
+                  logger.info(result);
+                  resolve(result);
+              });
+            } catch(err) {
+               logger.error(err);
+               reject(err)
+            }
+        });
+
     },
 
     selectBlockTransactions: function (tableName, blockNumber, pageNumber, pageSize) {
@@ -138,7 +160,7 @@ MySQL.prototype = {
           try {
             oThis.con.query(query, [data], function (err, result) {
                 if (err) throw err;
-                logger.info(result);
+                logger.info("Insertion in " + tableName + " successful");
                 resolve(result);
             });
           } catch(err) {
@@ -146,13 +168,6 @@ MySQL.prototype = {
              reject(err)
           }
       });
-  	},
-
-  	updateData: function (tableName, data) {
-  		logger.log("Update into table", tableName, data);
-  		//var sql = "UPDATE "+ tableName +" SET address = 'Canyon 123' WHERE address = 'Valley 345'";
-  		var sql = '';
-  		return con.query( sql );
   	},
 
   	releaseConnection: function () {

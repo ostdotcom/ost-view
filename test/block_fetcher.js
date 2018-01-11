@@ -63,7 +63,7 @@ var fetchBlock = function(blockNumber) {
 }
 
 var errorHandling = function(err) {
-    console.log("ERROR" + err);
+    console.log("ERROR " + err);
     setfetchBlockCron(state.blockNumber);
 }
 
@@ -182,7 +182,6 @@ var writeTransactionsToDB =  function(blockData) {
                             var insertionTransactionArray = formatTransactionData(transactionRes, receiptRes, blockData.timestamp);
                             dbInteract.insertTransaction(insertionTransactionArray).then(
                                 function(res){
-                                    console.log(res);
                                     resolve(insertionTransactionArray);
                                 });  
                         });
@@ -213,7 +212,6 @@ var writeTokenTansactionToDB = function (transactionArray) {
             dbInteract.insertTokenTransaction(decodedTxnArray)
             .then(
                 function(res){
-                    console.log(res);
                     resolve(+state.blockNumber + 1);
                 });
         } else {
@@ -229,7 +227,7 @@ var isNodeConnected = function(blockNumber) {
             .then(function(msg){
                 resolve(blockNumber);
             }).catch(function(err){
-                reject(err);
+                reject("\n\tYou Geth Node Client is down with ERROR :\n" + err);
             });
     }); 
 }
