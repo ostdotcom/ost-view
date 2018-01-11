@@ -4,6 +4,7 @@ var router = express.Router({mergeParams: true});
 
 const reqPrefix           = ".."
     , responseHelper      = require(reqPrefix + "/lib/formatter/response" )
+    , coreConfig = require(reqPrefix + "/config/core_config")
 ;
 
 
@@ -17,7 +18,11 @@ const blockMiddleware = function(req,res, next){
 	var chainId = req.params.chainId;
 	var page = req.params.page;
 
-	req.blockInstance = new block("");
+
+	const webRPC = coreConfig.getWebRPC(chainId);
+	const chainDbConfig = coreConfig.getChainDbConfig(chainId);
+
+	req.blockInstance = new block(webRPC, chainDbConfig);
 
 	req.blockNumber = blockNumber;
 	req.chainId = chainId;

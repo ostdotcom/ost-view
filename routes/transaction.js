@@ -5,6 +5,7 @@ var router = express.Router({mergeParams: true});
 
 const reqPrefix           = ".."
     , responseHelper      = require(reqPrefix + '/lib/formatter/response' )
+    , coreConfig = require(reqPrefix + "/config/core_config")
 ;
 
 
@@ -18,7 +19,10 @@ const transactionMiddleware = function(req,res, next){
 	var chainId = req.params.chainId;
 	var hash = req.params.hash;
 
-	req.transactionInstance = new transaction("");
+	const webRPC = coreConfig.getWebRPC(chainId);
+	const chainDbConfig = coreConfig.getChainDbConfig(chainId);
+
+	req.transactionInstance = new transaction(webRPC, chainDbConfig);
 
 	req.hash = hash;
 

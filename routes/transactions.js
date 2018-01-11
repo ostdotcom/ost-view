@@ -5,6 +5,7 @@ var router = express.Router({mergeParams: true});
 
 const reqPrefix           = ".."
     , responseHelper      = require(reqPrefix + "/lib/formatter/response" )
+    , coreConfig = require(reqPrefix + "/config/core_config")
 ;
 
 
@@ -16,7 +17,10 @@ const transactionsMiddleware = function(req,res, next){
 	var chainId = req.params.chainId;
 	var page = req.params.page;
 
-	req.transactionsInstance = new transactions("");
+	const webRPC = coreConfig.getWebRPC(chainId);
+	const chainDbConfig = coreConfig.getChainDbConfig(chainId);
+
+	req.transactionsInstance = new transactions(webRPC, chainDbConfig);
 
 	req.page = page;
 
@@ -37,10 +41,9 @@ router.get("/recent/:page",transactionsMiddleware, function(req, res){
  		});
 });
 
-router.get("/pending/:page",transactionsMiddleware, function(req, res){
+router.get("/pending",transactionsMiddleware, function(req, res){
 
-
-	req.transactionsInstance.getPendingTransactions(req.page)
+	req.transactionsInstance.getPendingTransactions()
 		.then(function(requestResponse) {
 			 return renderResult(requestResponse, res);
  		})

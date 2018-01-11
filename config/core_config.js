@@ -48,5 +48,11 @@ module.exports = {
 			return this.getChainConfig(chainId).db_config;
 		}
 		return undefined;
-	}
+	},
+
+	getWebRPC(chainId){
+		if (this.getChainConfig(chainId)) {
+			return this.getChainConfig(chainId).web_rpc;
+		}
+	},
 };

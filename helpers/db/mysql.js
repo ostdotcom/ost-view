@@ -179,7 +179,7 @@ MySQL.prototype = {
 
 //To create Singleton 
 const mysqlHandle = (function () {
-    var instance;
+    var dbInstances = {};
  
     function createInstance( dbconfig ) {
         var object = new MySQL(dbconfig);
@@ -188,10 +188,12 @@ const mysqlHandle = (function () {
 
     return {
         getInstance: function ( dbconfig ) {
-            if (!instance) {
-                instance = createInstance( dbconfig );
+            const db = dbconfig.database
+            if (!dbInstances[db]) {
+                const instance = createInstance( dbconfig );
+                dbInstances[db] = instance
             }
-            return instance;
+            return dbInstances[db];
         }
     };
 })();
