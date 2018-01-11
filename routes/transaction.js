@@ -13,13 +13,25 @@ const renderResult = function(requestResponse, responseObject) {
   };
 
 
-router.get("/:hash", function(req, res, next){
-	
+
+const transactionMiddleware = function(req,res, next){
+	var chainId = req.params.chainId;
 	var hash = req.params.hash;
 
-	transaction.getTransaction(hash)
+	req.transactionInstance = new transaction("");
+
+	req.hash = hash;
+
+	next();
+}
+
+
+router.get("/:hash",transactionMiddleware, function(req, res){
+	
+
+	req.transactionInstance.getTransaction(req.hash)
 		.then(function(requestResponse) {
-			 return renderResult(responseHelper.successWithData(requestResponse), res);
+			 return renderResult(requestResponse, res);
  		})
  		.catch(function(reason){
 			console.log("****** transaction: /:hash ***** catch ***** " + reason);

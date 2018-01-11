@@ -11,17 +11,30 @@ const renderResult = function(requestResponse, responseObject) {
     return requestResponse.renderResponse(responseObject);
   };
 
-router.get('/:address',function(req, res, next){
 
+
+const addressMiddleware = function(req,res, next){
+	var chainId = req.params.chainId;
 	var addressValue = req.params.address;
+	var page = req.params.page;
 
+	req.addressInstance = new address("");
+
+	req.addressValue = addressValue;
+	req.page = page;
+
+	next();
+}
+ 
+
+router.get('/:address', addressMiddleware, function(req, res){
 
 	console.log("********* 0 *******");
 
-		testFunction(addressValue);
+		testFunction(req.addressValue);
 
 
- 	address.getAddressData(addressValue)
+ 	req.addressInstance.getAddressData(req.addressValue)
 	 	.then(function(requestResponse){
 			 return renderResult(requestResponse, res);
 		})
@@ -33,11 +46,10 @@ router.get('/:address',function(req, res, next){
 });
 
 
-router.get('/:address/balance',function(req, res, next){
+router.get('/:address/balance', addressMiddleware, function(req, res){
 
 
-	var addressValue = req.params.address;
- 	address.getAddressBalance(addressValue)
+ 	req.addressInstance.getAddressBalance(req.addressValue)
  		.then(function(requestResponse){
 			 return renderResult(requestResponse, res);
 		})
@@ -47,12 +59,10 @@ router.get('/:address/balance',function(req, res, next){
 		});
 });
 
-router.get('/:address/transactions/:page', function(req, res, next){
+router.get('/:address/transactions/:page',addressMiddleware, function(req, res){
 
-	var addressValue = req.params.address;
-	var page = req.params.page;
 
- 	address.getAddressTransactions(addressValue, page)
+ 	req.addressInstance.getAddressTransactions(req.addressValue, req.page)
  		.then(function(requestResponse){
 			 return renderResult(requestResponse, res);
 		})

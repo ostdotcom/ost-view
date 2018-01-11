@@ -12,11 +12,22 @@ const renderResult = function(requestResponse, responseObject) {
   };
 
 
-router.get("/recent/:page", function(req, res, next){
-
+const blocksMiddleware = function(req,res, next){
+	var chainId = req.params.chainId;
 	var page = req.params.page;
 
-	blocks.getRecentBlocks(page)
+	req.blocksInstance = new blocks("");
+
+	req.chainId = chainId;
+	req.page = page;
+
+	next();
+}
+
+router.get("/recent/:page",blocksMiddleware, function(req, res){
+
+
+	req.blocksInstance.getRecentBlocks(req.page)
 		.then(function(requestResponse){
 			 return renderResult(requestResponse, res);
 		})

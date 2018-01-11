@@ -12,10 +12,22 @@ const renderResult = function(requestResponse, responseObject) {
     return requestResponse.renderResponse(responseObject);
   };
 
-router.get("/recent/:page", function(req, res, next){
-
+const transactionsMiddleware = function(req,res, next){
+	var chainId = req.params.chainId;
 	var page = req.params.page;
-	transactions.getRecentTransactions(page)
+
+	req.transactionsInstance = new transactions("");
+
+	req.page = page;
+
+	next();
+}
+
+
+
+router.get("/recent/:page",transactionsMiddleware, function(req, res){
+
+	req.transactionsInstance.getRecentTransactions(req.page)
 		.then(function(requestResponse) {
 			 return renderResult(requestResponse, res);
  		})
@@ -25,11 +37,10 @@ router.get("/recent/:page", function(req, res, next){
  		});
 });
 
-router.get("/pending/:page", function(req, res, next){
+router.get("/pending/:page",transactionsMiddleware, function(req, res){
 
-	var page = req.params.page;	
 
-	transactions.getPendingTransactions(page)
+	req.transactionsInstance.getPendingTransactions(req.page)
 		.then(function(requestResponse) {
 			 return renderResult(requestResponse, res);
  		})
