@@ -60,3 +60,6 @@ typings/
 # package lock file
 package-lock.json
 
+# database temp file
+database.json
+

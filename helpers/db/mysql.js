@@ -9,12 +9,12 @@
 var mysql = require('mysql');
 const logger = require('../CustomConsoleLogger');
 
-function MySQL() {
+function MySQL(dbconfig) {
 	this.con = mysql.createConnection({
-  		host: process.env.OST_EXP_DB_HOST,
-  		user: process.env.OST_EXP_DB_USER,
- 		password: process.env.OST_EXP_DB_PWD,
- 		database: process.env.OST_EXP_DB_NAME_STAGE
+  		host: dbconfig.host,
+  		user: dbconfig.user,
+ 		  password: dbconfig.password,
+ 		  database: dbconfig.database
 	});
 	this.con.connect(function(err) {
   		if (err) {
@@ -181,15 +181,15 @@ MySQL.prototype = {
 const mysqlHandle = (function () {
     var instance;
  
-    function createInstance() {
-        var object = new MySQL();
+    function createInstance( dbconfig ) {
+        var object = new MySQL(dbconfig);
         return object;
     }
 
     return {
-        getInstance: function () {
+        getInstance: function ( dbconfig ) {
             if (!instance) {
-                instance = createInstance();
+                instance = createInstance( dbconfig );
             }
             return instance;
         }

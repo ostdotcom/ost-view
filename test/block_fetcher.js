@@ -2,32 +2,38 @@
 
 /**
   * File: block_fetcher
-  * To create cron job to fetch blocks from the node and feed them into DB 
+  * It creates cron job to fetch blocks from the node and feed them into the provided DB.
+  * Author: Sachin
   */
 
-var BigNumber = require('bignumber.js');
-
 const reqPrefix           = "../"
-    , web3Interact        = require( reqPrefix + "lib/web3/interact/value_rpc_interact")
-    , dbInteract          = require( reqPrefix + "helpers/db/interact.js")
+    , Web3Interact        = require( reqPrefix + "lib/web3/interact/rpc_interact")
+    , DbInteract          = require( reqPrefix + "helpers/db/interact.js")
     , logger              = require( reqPrefix  + "helpers/CustomConsoleLogger")
     , erctoken            = require( reqPrefix + "lib/contract_interact/erc20Token")
     , constants           = require( reqPrefix + "config/core_constants")
     , core_config         = require( reqPrefix + "config/core_config")
     ;
- 
+
+
+var dbInteract;
+var web3Interact
+
+//State of the fetcher with config details.
 var state = {
     chainID     : 141,
     blockNumber : 0,
     config      : core_config['141'],
 };
 
+//Methods to set timeout for the fetchBlock api
 var setfetchBlockCron = function(blockNumber) {
     setTimeout(function() {
         fetchBlock(blockNumber);
     }, state.config.cron_interval );
 }
 
+//Method to start cron from the higest block available.
 var fetchBlocks = async function() {
     const hightestBlockResult = await web3Interact.highestBlock();
     
@@ -39,19 +45,19 @@ var fetchBlocks = async function() {
     }
 }
 
+//Method to fetch block using blockNumber
 var fetchBlock = function(blockNumber) {
     // check for undefined object
     if(blockNumber == undefined) {
-        console.log("fetchBlock undefined blockNumber ");
+        logger.log("In #fetchBlock undefined blockNumber ");
         return; 
     }
 
     // Set state
     state.blockNumber = blockNumber;
-    console.log('************* New Block ***************')
+    logger.log('************* New Block ***************')
 
-    console.log("Block number", blockNumber);
-    console.log("State Block number", state.blockNumber);
+    logger.log("\tBlock number", blockNumber);
 
     web3Interact.isNodeConnected()
         .then(function() { return web3Interact.getBlock(blockNumber);})
@@ -63,18 +69,18 @@ var fetchBlock = function(blockNumber) {
 }
 
 var errorHandling = function(err) {
-    console.log("ERROR " + err);
+    logger.log("ERROR " + err);
     setfetchBlockCron(state.blockNumber);
 }
 
 
 var writeBlockToDB = function(blockDataResponse) {
-    console.log("Importing block into DB. Please wait.");
-    console.log(blockDataResponse.data);
+    logger.log("Importing block into DB. Please wait.");
+    logger.log(blockDataResponse.data);
     
     return new Promise(function(resolve, reject){
         if (blockDataResponse.success != true) {
-            console.log("Block success failure");
+            logger.log("Block success failure");
             reject('{success:false}');
         } else {
             var blockData = formatBlockData(blockDataResponse.data);
@@ -157,8 +163,8 @@ var formatTokenTransactionData = function( transaction, decodedContTransactionLi
 var writeTransactionsToDB =  function(blockData) {
     var bulkOps = [];
     var transactions = blockData.transactions;
-    var blockNumber = blockData.number;
-    console.log("transaction array", blockData ,transactions, blockNumber);
+
+    console.log("Transaction Array",transactions);
     return new Promise(function(resolve, reject){
         if (transactions != undefined && transactions.length > 0) {
             var promiseReceiptArray = [];
@@ -195,10 +201,9 @@ var writeTransactionsToDB =  function(blockData) {
 
 var writeTokenTansactionToDB = function (transactionArray) {
 
-    console.log("TokenTransaction#Logs ");
-
     return new Promise(function(resolve, reject){
         if (transactionArray.length > 0) {
+            logger.log("TokenTransaction#Logs ");
             var decodedTxnArray = [];
             for (var txnIndex in transactionArray) {
                 var transaction =  transactionArray[txnIndex];   
@@ -208,7 +213,7 @@ var writeTokenTansactionToDB = function (transactionArray) {
                     decodedTxnArray.push(decodedTxn[index]);
                 }
             }
-            console.log(decodedTxnArray);
+            logger.log(decodedTxnArray);
             dbInteract.insertTokenTransaction(decodedTxnArray)
             .then(
                 function(res){
@@ -233,30 +238,34 @@ var isNodeConnected = function(blockNumber) {
 }
 
 // To handle command line with format $> node block_fetch.js <chainID> <initial_block_number>
+if (process.argv.length > 2) {
+    state.chainID = process.argv[2];
+    if (isNaN(process.argv[3])) {
+        state.blockNumber = 0;   
+    } else {
+        state.blockNumber = process.argv[3];
+    }    
+    state.config = core_config.getChainConfig(state.chainID);
+    if (undefined != state.config) {
+        dbInteract = new DbInteract(state.config.db_config);
+        web3Interact = new Web3Interact(state.config.web_rpc);
+        logger.log('State Configuration', state);
+    } else {
+        logger.error('\n\tInvalide chain ID \n');
+        process.exit(1);
+    }
+} else {
+    logger.error('\n\tPlease Specify chain ID \n\t$>node block_fetcher.js <chainID> <blockNumber>(optional)\n');
+    process.exit(1);
+}
 
 dbInteract.getHigestInsertedBlock()
     .then(function(blockNumber){
         logger.log("Block Number fetched ", blockNumber);
-        if (process.argv.length > 2) {
-            state.chainID = process.argv[2];
-            if (isNaN(process.argv[3])) {
-                if (blockNumber != null) {
-                    state.blockNumber = +blockNumber + 1;
-                } else {
-                    state.blockNumber = 0;
-                }    
-            } else {
-                state.blockNumber = process.argv[3];
-            }
-            
-            state.config = core_config['141'];
-            logger.log('State Configuration', state);
-        } else {
-            logger.error('\n\tPlease Specify chain ID \n\t$>node block_fetcher.js <chainID> <blockNumber>(optional)\n');
-            process.exit(1);
+        if (blockNumber != null) {
+            state.blockNumber = +blockNumber + 1;
         }
         setfetchBlockCron(state.blockNumber);
-
     }).catch(function(err){
         logger.error('\nNot able to fetch block number)\n', err);
         process.exit(1);

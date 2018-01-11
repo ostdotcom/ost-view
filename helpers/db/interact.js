@@ -5,14 +5,22 @@
  * Author: Sachin
  */
 
-const mysql = require('./mysql.js');
+const mysqlConstructor = require('./mysql.js');
 const constants = require('../../config/core_constants.js');
 const logger = require('../CustomConsoleLogger');
-const dbhelper = {
+
+var mysql;
+
+const dbhelper = module.exports = function(dbconfig){
+	this.mysql = mysqlConstructor.getInstance(dbconfig);
+} 
+
+
+dbhelper.prototype = {
 
 
 	getHigestInsertedBlock: function ( blockNumber ) {
-		return mysql.getInstance().selectHigestInsertedBlock(constants.BLOCK_TABLE_NAME);
+		return this.mysql.selectHigestInsertedBlock(constants.BLOCK_TABLE_NAME);
 	},
 
 	getRecentTransactions: function ( pageNumber, pageSize) {
@@ -22,7 +30,7 @@ const dbhelper = {
 		if(undefined == pageSize) {
 			pageSize = 10;
 		}
-		return mysql.getInstance().selectRecentTransactions(constants.TRANSACTION_TABLE_NAME, pageNumber, pageSize);
+		return this.mysql.selectRecentTransactions(constants.TRANSACTION_TABLE_NAME, pageNumber, pageSize);
 	},
 
 	getBlockTransactions: function ( blockNumber, pageNumber, pageSize) {
@@ -32,7 +40,7 @@ const dbhelper = {
 		if(undefined == pageSize) {
 			pageSize = 10;
 		}
-		return mysql.getInstance().selectBlockTransactions(constants.TRANSACTION_TABLE_NAME, blockNumber, pageNumber, pageSize);
+		return this.mysql.selectBlockTransactions(constants.TRANSACTION_TABLE_NAME, blockNumber, pageNumber, pageSize);
 	},
 
 	getAddressTransactions: function( address, pageNumber, pageSize ) {
@@ -42,7 +50,7 @@ const dbhelper = {
 		if(undefined == pageSize) {
 			pageSize = 10;
 		}
-		return mysql.getInstance().selectAddressTransactions(constants.ADDRESS_TRANSACTION_TABLE_NAME, address, pageNumber, pageSize);				
+		return this.mysql.selectAddressTransactions(constants.ADDRESS_TRANSACTION_TABLE_NAME, address, pageNumber, pageSize);				
 	},
 
 	getAddressTokenTransactions: function( address, pageNumber, pageSize ) {
@@ -52,11 +60,11 @@ const dbhelper = {
 		if(undefined == pageSize) {
 			pageSize = 10;
 		}
-		return mysql.getInstance().selectAddressTransactions(constants.ADDRESS_TOKEN_TRANSACTION_TABLE_NAME, address, pageNumber, pageSize);				
+		return this.mysql.selectAddressTransactions(constants.ADDRESS_TOKEN_TRANSACTION_TABLE_NAME, address, pageNumber, pageSize);				
 	},
 
 	insertBlock: function( blockDataArray ) {
-		return mysql.getInstance().insertData(constants.BLOCK_TABLE_NAME, constants.BLOCKS_DATA_SEQUENCE, blockDataArray);				
+		return this.mysql.insertData(constants.BLOCK_TABLE_NAME, constants.BLOCKS_DATA_SEQUENCE, blockDataArray);				
 	},
 
 	insertTransaction: function( transactionDataArray ) {
@@ -67,7 +75,7 @@ const dbhelper = {
 			var addressTransactionData = [];
 			for (var ind in transactionDataArray) {
 				var transactionData = transactionDataArray[ind];
-				var transactionResponse =  mysql.getInstance().insertData(constants.TRANSACTION_TABLE_NAME, constants.TRANSACTION_DATA_SEQUENCE, transactionData);
+				var transactionResponse =  oThis.mysql.insertData(constants.TRANSACTION_TABLE_NAME, constants.TRANSACTION_DATA_SEQUENCE, transactionData);
 				transactionPromiseList.push(transactionResponse);
 
 				//Format transactions
@@ -90,7 +98,7 @@ const dbhelper = {
 	},
 
 	insertAddressTransaction: function( addressTransactionData) {
-		return mysql.getInstance().insertData(constants.ADDRESS_TRANSACTION_TABLE_NAME, constants.ADDRESS_TRANSACTION_DATA_SEQUENCE, addressTransactionData);
+		return this.mysql.insertData(constants.ADDRESS_TRANSACTION_TABLE_NAME, constants.ADDRESS_TRANSACTION_DATA_SEQUENCE, addressTransactionData);
 	},
 
 	insertTokenTransaction: function( tokenTransactionDataArray ) {
@@ -101,7 +109,7 @@ const dbhelper = {
 			var addressTransactionData = [];
 			for (var ind in tokenTransactionDataArray) {
 				var tokenTransactionData = tokenTransactionDataArray[ind];
-				var transactionResponse = mysql.getInstance().insertData(constants.TOKEN_TRANSACTION_TABLE_NAME, constants.TOKEN_TRANSACTION_DATA_SEQUENCE, tokenTransactionData);
+				var transactionResponse = oThis.mysql.insertData(constants.TOKEN_TRANSACTION_TABLE_NAME, constants.TOKEN_TRANSACTION_DATA_SEQUENCE, tokenTransactionData);
 				transactionPromiseList.push(transactionResponse);
 
 				//Format token transactions
@@ -124,7 +132,7 @@ const dbhelper = {
 	},
 
 	insertAddressTokenTransaction: function( addressTokenTransactionData ){
-		return mysql.getInstance().insertData(constants.ADDRESS_TOKEN_TRANSACTION_TABLE_NAME, constants.ADDRESS_TOKEN_TRANSACTION_DATA_SEQUENCE, addressTokenTransactionData);
+		return this.mysql.insertData(constants.ADDRESS_TOKEN_TRANSACTION_TABLE_NAME, constants.ADDRESS_TOKEN_TRANSACTION_DATA_SEQUENCE, addressTokenTransactionData);
 	},
 
 	getAddressTransactionData: function( transactionData ) {
@@ -210,6 +218,3 @@ const dbhelper = {
 //dbhelper.insertTransaction(['tester', 12, 323, 'parde', 'parxe', 'pare', 3223, 4, 3, 4, null, 3]);
 //dbhelper.getAddressTokenTransactions('0x6c319a125bf5507937db6f8faae715bddc668f5b', 2).then(logger.log);
 //dbhelper.getBlockTransactions(13,10);
-//dbhelper.getRecentTransactions(1,10);
-
-module.exports = dbhelper;
