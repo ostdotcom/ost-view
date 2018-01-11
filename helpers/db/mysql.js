@@ -56,10 +56,53 @@ MySQL.prototype = {
 	*
 	*
 	*/
-    selectAddressTransactions: function (tableName, address) {
+
+    selectHigestInsertedBlock: function (tableName) {
+        var oThis = this;
+        logger.log("Getting higest block Number");
+        var query = "SELECT MAX(number) from " + tableName;
+
+        return new Promise(function(resolve, reject){
+            try {
+              oThis.con.query(query, function (err, result, fields) {
+                  if (err) throw err;
+                  logger.info(result);
+                  resolve(result[0]['MAX(number)']);
+              });
+            } catch(err) {
+               logger.error(err);
+               reject(err)
+            }
+        });
+    },
+
+    selectBlockTransactions: function (tableName, blockNumber, pageNumber, pageSize) {
+        var oThis = this;
+        logger.log("select for transaction in block of blockNumber ", blockNumber);
+        logger.log("PageNumber ", pageNumber) 
+        logger.log("PageSize ", pageSize);
+        var query = "SELECT * from " + tableName + " WHERE block_number= " + blockNumber + " LIMIT " + ((pageNumber-1)*pageSize) + "," + pageSize;
+
+        return new Promise(function(resolve, reject){
+            try {
+              oThis.con.query(query, function (err, result, fields) {
+                  if (err) throw err;
+                  logger.info(result);
+                  resolve(result);
+              });
+            } catch(err) {
+               logger.error(err);
+               reject(err)
+            }
+        });
+
+    },
+    selectAddressTransactions: function (tableName, address, pageNumber, pageSize) {
       var oThis = this;
       logger.log("select for transaction address", tableName, address);
-      var query = "SELECT * from " + tableName + " WHERE address=\'" + address + "\'";
+      logger.log("PageNumber ", pageNumber) 
+      logger.log("PageSize ", pageSize);
+      var query = "SELECT * from " + tableName + " WHERE address=\'" + address + "\'" + " LIMIT " + ((pageNumber-1)*pageSize) + "," + pageSize;;
       
       return new Promise(function(resolve, reject){
           try {
@@ -75,7 +118,7 @@ MySQL.prototype = {
       });
     },
 
-  	insertData: function (tableName, columnsSequence ,data, callback) {
+  	insertData: function (tableName, columnsSequence ,data) {
   		var oThis = this;
       logger.log("Insert into table", tableName, data);
   			

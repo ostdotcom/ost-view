@@ -10,12 +10,38 @@ const constants = require('../../config/core_constants.js');
 const logger = require('../CustomConsoleLogger');
 const dbhelper = {
 
-	getAddressTransactions: function( address ) {
-		return mysql.getInstance().selectAddressTransactions(constants.ADDRESS_TRANSACTION_TABLE_NAME, address);				
+	getHigestInsertedBlock: function ( blockNumber ) {
+		return mysql.getInstance().selectHigestInsertedBlock(constants.BLOCK_TABLE_NAME);
 	},
 
-	getAddressTokenTransactions: function( address ) {
-		return mysql.getInstance().selectAddressTransactions(constants.ADDRESS_TOKEN_TRANSACTION_TABLE_NAME, address);				
+	getBlockTransactions: function ( blockNumber, pageNumber, pageSize) {
+		if(undefined == pageNumber) {
+			pageNumber = 1;
+		}
+		if(undefined == pageSize) {
+			pageSize = 10;
+		}
+		return mysql.getInstance().selectBlockTransactions(constants.TRANSACTION_TABLE_NAME, blockNumber, pageNumber, pageSize);
+	},
+
+	getAddressTransactions: function( address, pageNumber, pageSize ) {
+		if(undefined == pageNumber) {
+			pageNumber = 1;
+		}
+		if(undefined == pageSize) {
+			pageSize = 10;
+		}
+		return mysql.getInstance().selectAddressTransactions(constants.ADDRESS_TRANSACTION_TABLE_NAME, address, pageNumber, pageSize);				
+	},
+
+	getAddressTokenTransactions: function( address, pageNumber, pageSize ) {
+		if(undefined == pageNumber) {
+			pageNumber = 1;
+		}
+		if(undefined == pageSize) {
+			pageSize = 10;
+		}
+		return mysql.getInstance().selectAddressTransactions(constants.ADDRESS_TOKEN_TRANSACTION_TABLE_NAME, address, pageNumber, pageSize);				
 	},
 
 	insertBlock: function( blockDataArray ) {
@@ -168,8 +194,15 @@ const dbhelper = {
 };
 
 //To test
+<<<<<<< HEAD
 // dbhelper.insertBlock([1,'test','pare','pare','pare','pare',3,4,3,4]);
 // dbhelper.insertTransaction(['tester', 12, 323, 'parde', 'parxe', 'pare', 3223, 4, 3, 4, null, 3]);
 // dbhelper.getAddressTokenTransactions('0xf37c5eF8b20F16CA5F7b4Efe9Ea261aa4Cff63b2').then(logger.log);
 // dbhelper.getAddressTransactions('0xf37c5eF8b20F16CA5F7b4Efe9Ea261aa4Cff63b2').then(logger.log);
+=======
+//dbhelper.insertBlock([1,'test','pare','pare','pare','pare',3,4,3,4]);
+//dbhelper.insertTransaction(['tester', 12, 323, 'parde', 'parxe', 'pare', 3223, 4, 3, 4, null, 3]);
+//dbhelper.getAddressTokenTransactions('0x6c319a125bf5507937db6f8faae715bddc668f5b', 2).then(logger.log);
+//dbhelper.getBlockTransactions(13,10);
+>>>>>>> Added Config provider
 module.exports = dbhelper;

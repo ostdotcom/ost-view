@@ -13,18 +13,19 @@ const reqPrefix           = "../"
     , logger              = require( reqPrefix  + "helpers/CustomConsoleLogger")
     , erctoken            = require( reqPrefix + "lib/contract_interact/erc20Token")
     , constants           = require( reqPrefix + "config/core_constants")
+    , core_config         = require( reqPrefix + "config/core_config")
     ;
  
-
 var state = {
-    chainID     : 0,
-    blockNumber : 0
+    chainID     : 141,
+    blockNumber : 0,
+    config      : core_config['141'],
 };
 
 var setfetchBlockCron = function(blockNumber) {
     setTimeout(function() {
         fetchBlock(blockNumber);
-    }, 2000/*config.cronInterval*/ );
+    }, state.config.cron_interval );
 }
 
 var fetchBlocks = async function() {
@@ -234,14 +235,32 @@ var isNodeConnected = function(blockNumber) {
 }
 
 // To handle command line with format $> node block_fetch.js <chainID> <initial_block_number>
-if (process.argv.length > 2) {
-    state.chainID = process.argv[2];
-    state.blockNumber = isNaN(process.argv[3]) ? 0 : process.argv[3];
-    logger.log('Chain ID :', state.chainID);
-    logger.log('Init Block Number :', state.blockNumber);
-} else {
-    console.error('\n\tPlease Specify chain ID \n\t$>node block_fetcher.js <chainID> <blockNumber>(optional)\n');
-    process.exit(1);
-}
 
-setfetchBlockCron(state.blockNumber);
+dbInteract.getHigestInsertedBlock()
+    .then(function(blockNumber){
+        logger.log("Block Number fetched ", blockNumber);
+        if (process.argv.length > 2) {
+            state.chainID = process.argv[2];
+            if (isNaN(process.argv[3])) {
+                if (blockNumber != null) {
+                    state.blockNumber = +blockNumber + 1;
+                } else {
+                    state.blockNumber = 0;
+                }    
+            } else {
+                state.blockNumber = process.argv[3];
+            }
+            
+            state.config = core_config['141'];
+            logger.log('State Configuration', state);
+        } else {
+            logger.error('\n\tPlease Specify chain ID \n\t$>node block_fetcher.js <chainID> <blockNumber>(optional)\n');
+            process.exit(1);
+        }
+        setfetchBlockCron(state.blockNumber);
+
+    }).catch(function(err){
+        logger.error('\nNot able to fetch block number)\n', err);
+        process.exit(1);
+    }); 
+
