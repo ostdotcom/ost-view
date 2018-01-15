@@ -261,8 +261,8 @@ if (process.argv.length > 2) {
 
 dbInteract.getHigestInsertedBlock()
     .then(function(blockNumber){
-        logger.log("Block Number fetched ", blockNumber);
-        if (blockNumber != null) {
+        logger.log("Higest Block Number ", blockNumber);
+        if (state.blockNumber == 0 && blockNumber != null) {
             state.blockNumber = +blockNumber + 1;
         }
         setfetchBlockCron(state.blockNumber);
