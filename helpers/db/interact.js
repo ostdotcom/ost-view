@@ -19,12 +19,12 @@ const DbHelper = module.exports = function(dbconfig){
 DbHelper.prototype = {
 
 
-	getAddressLedgerInContract: function (address, contarctAddress, page, pageSize){
-		//sachin write function to get address ledger in contract
+	getAddressLedgerInContract: function (address, contarctAddress, pageNumber, pageSize){
+		return this.mysql.selectAddressLedgerInContract(constants.BLOCK_TABLE_NAME, address, contarctAddress, pageNumber, pageSize);
 	},
 
-	getContractLedger: function (contarctAddress, page, pageSize){
-		//sachin write function to get ledger in contract
+	getContractLedger: function (contarctAddress, pageNumber, pageSize){
+		return this.mysql.selectContractLedger(constants.BLOCK_TABLE_NAME, contarctAddress, pageNumber, pageSize);
 	},
 
 	getHigestInsertedBlock: function ( blockNumber ) {

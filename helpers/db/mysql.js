@@ -76,6 +76,57 @@ MySQL.prototype = {
         });
     },
     
+
+    selectAddressLedgerInContract: function (tableName, address, contractAddress, pageNumber, pageSize){
+       var oThis = this;
+        logger.log("select for address ledger in contract ");
+        logger.log("address ", address) 
+        logger.log("contractAddress ", contractAddress);
+        logger.log("PageNumber ", pageNumber); 
+        logger.log("PageSize ", pageSize);
+
+        //Sachin update query
+        //var query = "SELECT * from " + tableName + " ORDER BY timestamp DESC LIMIT " + ((pageNumber-1)*pageSize) + "," + pageSize;
+
+        return new Promise(function(resolve, reject){
+            try {
+              oThis.con.query(query, function (err, result, fields) {
+                  if (err) throw err;
+                  logger.info(result);
+                  resolve(result);
+              });
+            } catch(err) {
+               logger.error(err);
+               reject(err)
+            }
+        });
+    },
+
+    selectContractLedger: function (tableName, contractAddress, pageNumber, pageSize){
+       var oThis = this;
+        logger.log("select for contract ledger");
+        logger.log("contractAddress ", contractAddress);
+        logger.log("PageNumber ", pageNumber); 
+        logger.log("PageSize ", pageSize);
+
+        //Sachin update query
+        //var query = "SELECT * from " + tableName + " ORDER BY timestamp DESC LIMIT " + ((pageNumber-1)*pageSize) + "," + pageSize;
+
+        return new Promise(function(resolve, reject){
+            try {
+              oThis.con.query(query, function (err, result, fields) {
+                  if (err) throw err;
+                  logger.info(result);
+                  resolve(result);
+              });
+            } catch(err) {
+               logger.error(err);
+               reject(err)
+            }
+        });
+    },
+
+
     selectRecentTransactions: function (tableName, pageNumber, pageSize) {
         var oThis = this;
         logger.log("select for recent transactions ");
