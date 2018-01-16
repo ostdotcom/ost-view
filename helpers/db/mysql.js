@@ -27,35 +27,62 @@ var MySQL = module.exports = function(dbconfig){
 
 MySQL.prototype = {
 
-	/**
-	*   data format expected is JSONArray
-	*	data = [
-		[number_data,
-	   	hashdata,
-	    parent_hash_data,
-	    miner_data,
-	    difficulty_data,
-	    total_difficulty_data,
-	    gas_limit_data,
-	    gas_used_data,
-	    total_transactions_data,
-	    timestamp_data
-	    ],
-	    [number_data,
-	   	hashdata,
-	    parent_hash_data,
-	    miner_data,
-	    difficulty_data,
-	    total_difficulty_data,
-	    gas_limit_data,
-	    gas_used_data,
-	    total_transactions_data,
-	    timestamp_data
-	    ]
-	    ];
-	*
-	*
-	*/
+    selectTransaction: function (tableName, transactionHash){
+        var oThis = this;
+
+        var query = "SELECT * from " + tableName + " WHERE hash=\'"+ transactionHash+"\'";
+
+        return new Promise(function(resolve, reject){
+            try {
+              oThis.con.query(query, function (err, result, fields) {
+                  if (err) throw err;
+                  logger.info(result);
+                  console.log(result)
+                  resolve(result);
+              });
+            } catch(err) {
+               logger.error(err);
+               reject(err)
+            }
+        });
+    },
+
+    selectRecentBlocks: function (tableName, pageNumber, pageSize){
+        var oThis = this;
+
+        var query = "SELECT * from " + tableName + " ORDER BY timestamp DESC LIMIT " + ((pageNumber-1)*pageSize) + "," + pageSize;
+
+        return new Promise(function(resolve, reject){
+            try {
+              oThis.con.query(query, function (err, result, fields) {
+                  if (err) throw err;
+                  logger.info(result);
+                  resolve(result);
+              });
+            } catch(err) {
+               logger.error(err);
+               reject(err)
+            }
+        });
+    },
+
+	 selectBlock: function (tableName, blockNumber){
+      var oThis = this;
+
+      var query = "SELECT * from " + tableName + " WHERE number="+ blockNumber;
+       return new Promise(function(resolve, reject){
+              try {
+                oThis.con.query(query, function (err, result, fields) {
+                    if (err) throw err;
+                    logger.info(result);
+                    resolve(result);
+                });
+              } catch(err) {
+                 logger.error(err);
+                 reject(err)
+              }
+        });
+    },
 
     selectHigestInsertedBlock: function (tableName) {
         var oThis = this;

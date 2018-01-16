@@ -16,15 +16,43 @@ const DbHelper = module.exports = function(dbconfig){
 } 
 
 
+const defaultPageSize = 10;
+const defaultPageNumber = 1;
+
 DbHelper.prototype = {
 
 
-	getAddressLedgerOfContract: function (address, contractAddress, pageNumber, pageSize){
+	getTransaction: function (transactionHash){
+
+		return this.mysql.selectTransaction(constants.TRANSACTION_TABLE_NAME, transactionHash);
+
+	},
+
+	getRecentBlocks: function (pageNumber, pageSize){
 		if(undefined == pageNumber) {
-			pageNumber = 1;
+			pageNumber = defaultPageNumber;
 		}
 		if(undefined == pageSize) {
-			pageSize = 10;
+			pageSize = defaultPageSize;
+		}
+
+		return this.mysql.selectRecentBlocks(constants.BLOCK_TABLE_NAME, pageNumber, pageSize);
+	},
+
+	getBlock : function (blockNumber){
+		if(undefined == blockNumber) {
+			return;
+		}
+
+		return this.mysql.selectBlock(constants.BLOCK_TABLE_NAME, blockNumber);
+	},
+
+	getAddressLedgerOfContract: function (address, contractAddress, pageNumber, pageSize){
+		if(undefined == pageNumber) {
+			pageNumber = defaultPageNumber;
+		}
+		if(undefined == pageSize) {
+			pageSize = defaultPageSize;
 		}
 
 		return this.mysql.selectAddressLedgerOfContract(constants.ADDRESS_TOKEN_TRANSACTION_TABLE_NAME, address, contractAddress, pageNumber, pageSize);
@@ -37,7 +65,7 @@ DbHelper.prototype = {
 		if(undefined == pageSize) {
 			pageSize = 10;
 		}
-		
+
 		return this.mysql.selectContractLedger(constants.ADDRESS_TOKEN_TRANSACTION_TABLE_NAME, contractAddress, pageNumber, pageSize);
 	},
 
