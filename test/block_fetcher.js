@@ -247,7 +247,7 @@ if (process.argv.length > 2) {
     }    
     state.config = core_config.getChainConfig(state.chainID);
     if (undefined != state.config) {
-        dbInteract = new DbInteract(state.config.db_config);
+        dbInteract = DbInteract.getInstance(state.config.db_config);
         web3Interact = new Web3Interact(state.config.web_rpc);
         logger.log('State Configuration', state);
     } else {
