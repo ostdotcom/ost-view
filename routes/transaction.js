@@ -5,7 +5,7 @@ var router = express.Router({mergeParams: true});
 
 const reqPrefix           = ".."
     , responseHelper      = require(reqPrefix + '/lib/formatter/response' )
-    , coreConfig = require(reqPrefix + "/config/core_config")
+    , coreConfig = require(reqPrefix + "/config")
 ;
 
 

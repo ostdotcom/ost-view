@@ -33,8 +33,8 @@ function CoreAbis() {
 
 
 CoreAbis.prototype = {
-    getABI: function(name){
-      return this.abiHash[name];
+    getABI: function(){
+      return this.abiHash['ERC20Token'];
     }
 
     ,getJSONFile: function(fileName){
