@@ -66,7 +66,7 @@ DbHelper.prototype = {
 			pageSize = 10;
 		}
 
-		return this.mysql.selectContractLedger(constants.ADDRESS_TOKEN_TRANSACTION_TABLE_NAME, contractAddress, pageNumber, pageSize);
+		return this.mysql.selectContractLedger(constants.TOKEN_TRANSACTION_TABLE_NAME, contractAddress, pageNumber, pageSize);
 	},
 
 	getHigestInsertedBlock: function ( blockNumber ) {
@@ -286,11 +286,3 @@ const dbHelperHandler = (function () {
 })();
 
 module.exports = dbHelperHandler;
-
-
-//To test
-
-//dbhelper.insertBlock([1,'test','pare','pare','pare','pare',3,4,3,4]);
-//dbhelper.insertTransaction(['tester', 12, 323, 'parde', 'parxe', 'pare', 3223, 4, 3, 4, null, 3]);
-//dbhelper.getAddressTokenTransactions('0x6c319a125bf5507937db6f8faae715bddc668f5b', 2).then(logger.log);
-//dbhelper.getBlockTransactions(13,10);

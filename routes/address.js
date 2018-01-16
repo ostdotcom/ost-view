@@ -86,4 +86,18 @@ router.get('/:address/contract/:contractAddress/:page',addressMiddleware, functi
 });
 
 
+router.get('/:address/internal_transactions/:page',addressMiddleware, function(req, res){
+
+
+ 	req.addressInstance.getAddressTransactions(req.addressValue, req.page)
+ 		.then(function(requestResponse){
+			 return renderResult(requestResponse, res);
+		})
+		.catch(function(reason){
+			console.log("****** address: /:address/internal_transactions/:page ***** catch ***** ")
+			console.log(reason);
+			return renderResult( responseHelper.error('r_wi_1', "Something Went Wrong"),res );
+		});
+});
+
 module.exports = router;
