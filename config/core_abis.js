@@ -21,7 +21,7 @@ const rootPostfix = ".abi"
 
 function CoreAbis() {
   this.abiHash = {};
-  var jsonFile = parseFile('../contract_config.json',"utf8");
+  var jsonFile = ['ERC20Token'];
 
     for (var i = 0; i < jsonFile.length; i++) {
        

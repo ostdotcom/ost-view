@@ -6,13 +6,13 @@
   * Author: Sachin
   */
 
-const reqPrefix           = "../"
-    , Web3Interact        = require( reqPrefix + "lib/web3/interact/rpc_interact")
-    , DbInteract          = require( reqPrefix + "helpers/db/interact.js")
-    , logger              = require( reqPrefix  + "helpers/CustomConsoleLogger")
-    , erctoken            = require( reqPrefix + "lib/contract_interact/erc20Token")
-    , constants           = require( reqPrefix + "config/core_constants")
-    , core_config         = require( reqPrefix + "config/core_config")
+const reqPrefix           = ".."
+    , Web3Interact        = require( reqPrefix + "/lib/web3/interact/rpc_interact")
+    , DbInteract          = require( reqPrefix + "/helpers/db/interact.js")
+    , logger              = require( reqPrefix + "/helpers/CustomConsoleLogger")
+    , erctoken            = require( reqPrefix + "/lib/contract_interact/erc20Token")
+    , constants           = require( reqPrefix + "/config/core_constants")
+    , core_config         = require( reqPrefix + "/config")
     ;
 
 

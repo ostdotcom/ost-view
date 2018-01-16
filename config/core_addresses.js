@@ -29,37 +29,9 @@ if (process.env.USE_MOCK_SIMPLE_TOKEN != 1) {
 }
 
 
-// const allAddresses = {
-//   users: {
-
-//     utilityChainOwner: {
-//       address: process.env.OST_UTILITY_CHAIN_OWNER_ADDR,
-//       passphrase: process.env.OST_UTILITY_CHAIN_OWNER_PASSPHRASE
-//     },
-
-//   }
-// };
-
-
-var users = {}
-var usersConfigJSON = require("../users_config.json");
-
-for (var i = 0; i < usersConfigJSON.length; i++) {
-  var userName = usersConfigJSON[i];
-  var userAddress = 'OSTE_UTILITY_CHAIN_'+ userName.toUpperCase()+'_ADDR';
-  var userPassphrase = 'OSTE_UTILITY_CHAIN_'+ userName.toUpperCase()+'_PASSPHRASE';
-
-  users[userName] = {
-    address : process.env[userAddress],
-    passphrase : process.env[userPassphrase]
-  }
-}  
-
-
-
 var contracts = {}
 
-var contractConfigJSON = require("../contract_config.json")
+var contractConfigJSON = ['ERC20Token'];
 
 var coreAbiInstance = coreAbis.getInstance();
 

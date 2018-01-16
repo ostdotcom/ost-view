@@ -1,6 +1,6 @@
 "use strict";
 
-var core_config = require("../config/core_config.js");
+var core_config = require("../config.js");
 // first require the package
 var DBMigrate = require( 'db-migrate' );
 var fs 		  = require('fs');
