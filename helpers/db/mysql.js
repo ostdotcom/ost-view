@@ -77,7 +77,7 @@ MySQL.prototype = {
     },
     
 
-    selectAddressLedgerInContract: function (tableName, address, contractAddress, pageNumber, pageSize){
+    selectAddressLedgerOfContract: function (tableName, address, contractAddress, pageNumber, pageSize){
        var oThis = this;
         logger.log("select for address ledger in contract ");
         logger.log("address ", address) 
@@ -85,9 +85,9 @@ MySQL.prototype = {
         logger.log("PageNumber ", pageNumber); 
         logger.log("PageSize ", pageSize);
 
-        //Sachin update query
-        //var query = "SELECT * from " + tableName + " ORDER BY timestamp DESC LIMIT " + ((pageNumber-1)*pageSize) + "," + pageSize;
+        var query = "SELECT * from " + tableName + " WHERE address= \'" + address + "\' AND contract_address=\'"+ contractAddress + "\' ORDER BY timestamp DESC LIMIT " + ((pageNumber-1)*pageSize) + "," + pageSize;
 
+        console.log(query);
         return new Promise(function(resolve, reject){
             try {
               oThis.con.query(query, function (err, result, fields) {
@@ -109,8 +109,7 @@ MySQL.prototype = {
         logger.log("PageNumber ", pageNumber); 
         logger.log("PageSize ", pageSize);
 
-        //Sachin update query
-        //var query = "SELECT * from " + tableName + " ORDER BY timestamp DESC LIMIT " + ((pageNumber-1)*pageSize) + "," + pageSize;
+        var query = "SELECT * from " + tableName + " WHERE contract_address=\'"+ contractAddress + "\' ORDER BY timestamp DESC LIMIT " + ((pageNumber-1)*pageSize) + "," + pageSize;
 
         return new Promise(function(resolve, reject){
             try {

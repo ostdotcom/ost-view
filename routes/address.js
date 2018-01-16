@@ -27,7 +27,8 @@ const addressMiddleware = function(req,res, next){
 
 	req.addressValue = addressValue;
 	req.page = page;
-
+	req.contractAddress = contractAddress;
+	
 	next();
 }
  
@@ -79,7 +80,7 @@ router.get('/:address/contract/:contractAddress/:page',addressMiddleware, functi
 			 return renderResult(requestResponse, res);
 		})
 		.catch(function(reason){
-			console.log("****** address: /:address/transaction/:page ***** catch ***** "+reason);
+			console.log("****** address: /:address/contract/:contractAddress/:page ***** catch ***** "+reason);
 			return renderResult( responseHelper.error('r_wi_1', "Something Went Wrong"),res );
 		});
 });

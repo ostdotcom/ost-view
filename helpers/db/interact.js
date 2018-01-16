@@ -19,12 +19,26 @@ const DbHelper = module.exports = function(dbconfig){
 DbHelper.prototype = {
 
 
-	getAddressLedgerInContract: function (address, contractAddress, pageNumber, pageSize){
-		return this.mysql.selectAddressLedgerInContract(constants.ADDRESS_TOKEN_TRANSACTION_DATA_SEQUENCE, address, contractAddress, pageNumber, pageSize);
+	getAddressLedgerOfContract: function (address, contractAddress, pageNumber, pageSize){
+		if(undefined == pageNumber) {
+			pageNumber = 1;
+		}
+		if(undefined == pageSize) {
+			pageSize = 10;
+		}
+
+		return this.mysql.selectAddressLedgerOfContract(constants.ADDRESS_TOKEN_TRANSACTION_TABLE_NAME, address, contractAddress, pageNumber, pageSize);
 	},
 
 	getContractLedger: function (contractAddress, pageNumber, pageSize){
-		return this.mysql.selectContractLedger(constants.ADDRESS_TOKEN_TRANSACTION_DATA_SEQUENCE, contractAddress, pageNumber, pageSize);
+		if(undefined == pageNumber) {
+			pageNumber = 1;
+		}
+		if(undefined == pageSize) {
+			pageSize = 10;
+		}
+		
+		return this.mysql.selectContractLedger(constants.ADDRESS_TOKEN_TRANSACTION_TABLE_NAME, contractAddress, pageNumber, pageSize);
 	},
 
 	getHigestInsertedBlock: function ( blockNumber ) {
