@@ -32,13 +32,12 @@ const contractMiddleware = function(req,res, next){
 
 router.get("/:contractAddress/:page",contractMiddleware, function(req, res){
 
-
 	req.contractInstance.getContractLedger(req.contractAddress, req.page)
 		.then(function(requestResponse){
 			 return renderResult(requestResponse, res);
 		})
 		.catch(function(reason){
-			console.log("****** blocks: /recent/:page ***** catch ***** "+ reason);
+			console.log("****** contract: /:contractAddress/:page ***** catch ***** "+ reason);
 			return renderResult( responseHelper.error('r_wi_1', "Something Went Wrong"),res );
 		});
 });
