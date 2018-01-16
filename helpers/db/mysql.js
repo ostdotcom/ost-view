@@ -9,7 +9,7 @@
 var mysql = require('mysql');
 const logger = require('../CustomConsoleLogger');
 
-function MySQL(dbconfig) {
+var MySQL = module.exports = function(dbconfig){
 	this.con = mysql.createConnection({
   		host: dbconfig.host,
   		user: dbconfig.user,
@@ -177,25 +177,25 @@ MySQL.prototype = {
 }
 
 
-//To create Singleton 
-const mysqlHandle = (function () {
-    var dbInstances = {};
+// //To create Singleton 
+// const mysqlHandle = (function () {
+//     var dbInstances = {};
  
-    function createInstance( dbconfig ) {
-        var object = new MySQL(dbconfig);
-        return object;
-    }
+//     function createInstance( dbconfig ) {
+//         var object = new MySQL(dbconfig);
+//         return object;
+//     }
 
-    return {
-        getInstance: function ( dbconfig ) {
-            const db = dbconfig.database
-            if (!dbInstances[db]) {
-                const instance = createInstance( dbconfig );
-                dbInstances[db] = instance
-            }
-            return dbInstances[db];
-        }
-    };
-})();
+//     return {
+//         getInstance: function ( dbconfig ) {
+//             const db = dbconfig.database
+//             if (!dbInstances[db]) {
+//                 const instance = createInstance( dbconfig );
+//                 dbInstances[db] = instance
+//             }
+//             return dbInstances[db];
+//         }
+//     };
+// })();
 
-module.exports = mysqlHandle;
+// module.exports = mysqlHandle;

@@ -5,19 +5,27 @@
  * Author: Sachin
  */
 
-const mysqlConstructor = require('./mysql.js');
+const MySQL = require('./mysql.js');
 const constants = require('../../config/core_constants.js');
 const logger = require('../CustomConsoleLogger');
 
 var mysql;
 
-const dbhelper = module.exports = function(dbconfig){
-	this.mysql = mysqlConstructor.getInstance(dbconfig);
+const DbHelper = module.exports = function(dbconfig){
+	this.mysql = new MySQL(dbconfig);
 } 
 
 
-dbhelper.prototype = {
+DbHelper.prototype = {
 
+
+	getAddressLedgerInContract: function (address, contarctAddress, page, pageSize){
+		//sachin write function to get address ledger in contract
+	},
+
+	getContractLedger: function (contarctAddress, page, pageSize){
+		//sachin write function to get ledger in contract
+	},
 
 	getHigestInsertedBlock: function ( blockNumber ) {
 		return this.mysql.selectHigestInsertedBlock(constants.BLOCK_TABLE_NAME);
@@ -211,6 +219,35 @@ dbhelper.prototype = {
 	}
 
 };
+
+
+
+//To create Singleton 
+const dbHelperHandler = (function () {
+    var dbHelpers = {};
+ 
+    function createInstance( dbconfig ) {
+        var object = new DbHelper(dbconfig);
+        return object;
+    }
+
+    return {
+        getInstance: function ( dbconfig ) {
+            const db = dbconfig.database
+            logger.log("**** 1. check instance"+ db);
+            if (!dbHelpers[db]) {
+            	logger.log("**** 2. create instance"+db);
+                const instance = createInstance( dbconfig );
+                dbHelpers[db] = instance
+            }
+            logger.log("**** 3. return instance"+db);
+            return dbHelpers[db];
+        }
+    };
+})();
+
+module.exports = dbHelperHandler;
+
 
 //To test
 

@@ -18,6 +18,7 @@ const addressMiddleware = function(req,res, next){
 	var chainId = req.params.chainId;
 	var addressValue = req.params.address;
 	var page = req.params.page;
+	var contractAddress = req.params.contractAddress;
 
 	const webRPC = coreConfig.getWebRPC(chainId);
 	const chainDbConfig = coreConfig.getChainDbConfig(chainId);
@@ -69,5 +70,19 @@ router.get('/:address/transactions/:page',addressMiddleware, function(req, res){
 			return renderResult( responseHelper.error('r_wi_1', "Something Went Wrong"),res );
 		});
 });
+
+router.get('/:address/contract/:contractAddress/:page',addressMiddleware, function(req, res){
+
+
+ 	req.addressInstance.getAddressLedgerInContract(req.addressValue, req.contractAddress, req.page)
+ 		.then(function(requestResponse){
+			 return renderResult(requestResponse, res);
+		})
+		.catch(function(reason){
+			console.log("****** address: /:address/transaction/:page ***** catch ***** "+reason);
+			return renderResult( responseHelper.error('r_wi_1', "Something Went Wrong"),res );
+		});
+});
+
 
 module.exports = router;
