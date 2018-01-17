@@ -9,34 +9,29 @@ const MySQL = require('./mysql.js');
 const constants = require('../../config/core_constants.js');
 const logger = require('../CustomConsoleLogger');
 
-var mysql;
+const DEFAULT_PAGE_NUMBER = 1;
+const DEFAULT_PAGE_SIZE = 10;
 
-const DbHelper = module.exports = function(dbconfig){
-	this.mysql = new MySQL(dbconfig);
+const DbHelper = function(dbObj){
+	this.dbObject = dbObj;
 } 
-
-
-const defaultPageSize = 10;
-const defaultPageNumber = 1;
 
 DbHelper.prototype = {
 
-
 	getTransaction: function (transactionHash){
 
-		return this.mysql.selectTransaction(constants.TRANSACTION_TABLE_NAME, transactionHash);
-
+		return this.dbObject.selectTransaction(constants.TRANSACTION_TABLE_NAME, transactionHash);
 	},
 
 	getRecentBlocks: function (pageNumber, pageSize){
 		if(undefined == pageNumber) {
-			pageNumber = defaultPageNumber;
+			pageNumber = DEFAULT_PAGE_NUMBER;
 		}
 		if(undefined == pageSize) {
-			pageSize = defaultPageSize;
+			pageSize = DEFAULT_PAGE_SIZE;
 		}
 
-		return this.mysql.selectRecentBlocks(constants.BLOCK_TABLE_NAME, pageNumber, pageSize);
+		return this.dbObject.selectRecentBlocks(constants.BLOCK_TABLE_NAME, pageNumber, pageSize);
 	},
 
 	getBlock : function (blockNumber){
@@ -44,77 +39,81 @@ DbHelper.prototype = {
 			return;
 		}
 
-		return this.mysql.selectBlock(constants.BLOCK_TABLE_NAME, blockNumber);
+		return this.dbObject.selectBlock(constants.BLOCK_TABLE_NAME, blockNumber);
 	},
 
 	getAddressLedgerOfContract: function (address, contractAddress, pageNumber, pageSize){
 		if(undefined == pageNumber) {
-			pageNumber = defaultPageNumber;
+			pageNumber = DEFAULT_PAGE_NUMBER;
 		}
 		if(undefined == pageSize) {
-			pageSize = defaultPageSize;
+			pageSize = DEFAULT_PAGE_SIZE;
 		}
 
-		return this.mysql.selectAddressLedgerOfContract(constants.ADDRESS_TOKEN_TRANSACTION_TABLE_NAME, address, contractAddress, pageNumber, pageSize);
+		return this.dbObject.selectAddressLedgerOfContract(constants.ADDRESS_TOKEN_TRANSACTION_TABLE_NAME, address, contractAddress, pageNumber, pageSize);
 	},
 
 	getContractLedger: function (contractAddress, pageNumber, pageSize){
 		if(undefined == pageNumber) {
-			pageNumber = 1;
+			pageNumber = DEFAULT_PAGE_NUMBER;
 		}
 		if(undefined == pageSize) {
-			pageSize = 10;
+			pageSize = DEFAULT_PAGE_SIZE;
 		}
 
-		return this.mysql.selectContractLedger(constants.TOKEN_TRANSACTION_TABLE_NAME, contractAddress, pageNumber, pageSize);
+		return this.dbObject.selectContractLedger(constants.TOKEN_TRANSACTION_TABLE_NAME, contractAddress, pageNumber, pageSize);
 	},
 
 	getHigestInsertedBlock: function ( blockNumber ) {
-		return this.mysql.selectHigestInsertedBlock(constants.BLOCK_TABLE_NAME);
+		return this.dbObject.selectHigestInsertedBlock(constants.BLOCK_TABLE_NAME);
 	},
 
 	getRecentTransactions: function ( pageNumber, pageSize) {
 		if(undefined == pageNumber) {
-			pageNumber = 1;
+			pageNumber = DEFAULT_PAGE_NUMBER;
 		}
 		if(undefined == pageSize) {
-			pageSize = 10;
+			pageSize = DEFAULT_PAGE_SIZE;
 		}
-		return this.mysql.selectRecentTransactions(constants.TRANSACTION_TABLE_NAME, pageNumber, pageSize);
+
+		return this.dbObject.selectRecentTransactions(constants.TRANSACTION_TABLE_NAME, pageNumber, pageSize);
 	},
 
 	getBlockTransactions: function ( blockNumber, pageNumber, pageSize) {
 		if(undefined == pageNumber) {
-			pageNumber = 1;
+			pageNumber = DEFAULT_PAGE_NUMBER;
 		}
 		if(undefined == pageSize) {
-			pageSize = 10;
+			pageSize = DEFAULT_PAGE_SIZE;
 		}
-		return this.mysql.selectBlockTransactions(constants.TRANSACTION_TABLE_NAME, blockNumber, pageNumber, pageSize);
+
+		return this.dbObject.selectBlockTransactions(constants.TRANSACTION_TABLE_NAME, blockNumber, pageNumber, pageSize);
 	},
 
 	getAddressTransactions: function( address, pageNumber, pageSize ) {
 		if(undefined == pageNumber) {
-			pageNumber = 1;
+			pageNumber = DEFAULT_PAGE_NUMBER;
 		}
 		if(undefined == pageSize) {
-			pageSize = 10;
+			pageSize = DEFAULT_PAGE_SIZE;
 		}
-		return this.mysql.selectAddressTransactions(constants.ADDRESS_TRANSACTION_TABLE_NAME, address, pageNumber, pageSize);				
+
+		return this.dbObject.selectAddressTransactions(constants.ADDRESS_TRANSACTION_TABLE_NAME, address, pageNumber, pageSize);				
 	},
 
 	getAddressTokenTransactions: function( address, pageNumber, pageSize ) {
 		if(undefined == pageNumber) {
-			pageNumber = 1;
+			pageNumber = DEFAULT_PAGE_NUMBER;
 		}
 		if(undefined == pageSize) {
-			pageSize = 10;
+			pageSize = DEFAULT_PAGE_SIZE;
 		}
-		return this.mysql.selectAddressTransactions(constants.ADDRESS_TOKEN_TRANSACTION_TABLE_NAME, address, pageNumber, pageSize);				
+
+		return this.dbObject.selectAddressTransactions(constants.ADDRESS_TOKEN_TRANSACTION_TABLE_NAME, address, pageNumber, pageSize);				
 	},
 
 	insertBlock: function( blockDataArray ) {
-		return this.mysql.insertData(constants.BLOCK_TABLE_NAME, constants.BLOCKS_DATA_SEQUENCE, blockDataArray);				
+		return this.dbObject.insertData(constants.BLOCK_TABLE_NAME, constants.BLOCKS_DATA_SEQUENCE, blockDataArray);				
 	},
 
 	insertTransaction: function( transactionDataArray ) {
@@ -125,7 +124,7 @@ DbHelper.prototype = {
 			var addressTransactionData = [];
 			for (var ind in transactionDataArray) {
 				var transactionData = transactionDataArray[ind];
-				var transactionResponse =  oThis.mysql.insertData(constants.TRANSACTION_TABLE_NAME, constants.TRANSACTION_DATA_SEQUENCE, transactionData);
+				var transactionResponse =  othis.dbObject.insertData(constants.TRANSACTION_TABLE_NAME, constants.TRANSACTION_DATA_SEQUENCE, transactionData);
 				transactionPromiseList.push(transactionResponse);
 
 				//Format transactions
@@ -148,7 +147,7 @@ DbHelper.prototype = {
 	},
 
 	insertAddressTransaction: function( addressTransactionData) {
-		return this.mysql.insertData(constants.ADDRESS_TRANSACTION_TABLE_NAME, constants.ADDRESS_TRANSACTION_DATA_SEQUENCE, addressTransactionData);
+		return this.dbObject.insertData(constants.ADDRESS_TRANSACTION_TABLE_NAME, constants.ADDRESS_TRANSACTION_DATA_SEQUENCE, addressTransactionData);
 	},
 
 	insertTokenTransaction: function( tokenTransactionDataArray ) {
@@ -159,7 +158,7 @@ DbHelper.prototype = {
 			var addressTransactionData = [];
 			for (var ind in tokenTransactionDataArray) {
 				var tokenTransactionData = tokenTransactionDataArray[ind];
-				var transactionResponse = oThis.mysql.insertData(constants.TOKEN_TRANSACTION_TABLE_NAME, constants.TOKEN_TRANSACTION_DATA_SEQUENCE, tokenTransactionData);
+				var transactionResponse = othis.dbObject.insertData(constants.TOKEN_TRANSACTION_TABLE_NAME, constants.TOKEN_TRANSACTION_DATA_SEQUENCE, tokenTransactionData);
 				transactionPromiseList.push(transactionResponse);
 
 				//Format token transactions
@@ -182,7 +181,7 @@ DbHelper.prototype = {
 	},
 
 	insertAddressTokenTransaction: function( addressTokenTransactionData ){
-		return this.mysql.insertData(constants.ADDRESS_TOKEN_TRANSACTION_TABLE_NAME, constants.ADDRESS_TOKEN_TRANSACTION_DATA_SEQUENCE, addressTokenTransactionData);
+		return this.dbObject.insertData(constants.ADDRESS_TOKEN_TRANSACTION_TABLE_NAME, constants.ADDRESS_TOKEN_TRANSACTION_DATA_SEQUENCE, addressTokenTransactionData);
 	},
 
 	getAddressTransactionData: function( transactionData ) {
@@ -269,7 +268,13 @@ const dbHelperHandler = (function () {
     var dbHelpers = {};
  
     function createInstance( dbconfig ) {
-        var object = new DbHelper(dbconfig);
+    	var dbObject;
+    	if (dbconfig.driver == "mysql") {
+    		dbObject = new MySQL(dbconfig);
+    	} else {
+    		throw "No supported db driver found in interact.js";
+    	}
+        var object = new DbHelper(dbObject);
         return object;
     }
 
