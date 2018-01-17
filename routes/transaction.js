@@ -18,6 +18,7 @@ const renderResult = function(requestResponse, responseObject) {
 const transactionMiddleware = function(req,res, next){
 	var chainId = req.params.chainId;
 	var hash = req.params.hash;
+	var page = req.params.page;
 
 	const webRPC = coreConfig.getWebRPC(chainId);
 	const chainDbConfig = coreConfig.getChainDbConfig(chainId);
@@ -25,6 +26,7 @@ const transactionMiddleware = function(req,res, next){
 	req.transactionInstance = new transaction(webRPC, chainDbConfig);
 
 	req.hash = hash;
+	req.page = page;
 
 	next();
 }
@@ -32,17 +34,26 @@ const transactionMiddleware = function(req,res, next){
 
 router.get("/:hash",transactionMiddleware, function(req, res){
 	
-
 	req.transactionInstance.getTransaction(req.hash)
 		.then(function(requestResponse) {
 			 return renderResult(requestResponse, res);
  		})
  		.catch(function(reason){
 			console.log("****** transaction: /:hash ***** catch ***** " + reason);
-			return renderResult( responseHelper.error('r_wi_1', "Something Went Wrong"),res );
+			return renderResult( responseHelper.error('', reason),res );
  		});
 });
 
-
+router.get("/:hash/address_transaction/:page",transactionMiddleware, function(req, res){
+	
+	req.transactionInstance.getAddressTransactions(req.hash, req.page)
+		.then(function(requestResponse) {
+			 return renderResult(requestResponse, res);
+ 		})
+ 		.catch(function(reason){
+			console.log("****** transaction: /:hash ***** catch ***** " + reason);
+			return renderResult( responseHelper.error('', reason),res );
+ 		});
+});
 
 module.exports = router;

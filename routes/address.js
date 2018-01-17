@@ -13,7 +13,6 @@ const renderResult = function(requestResponse, responseObject) {
   };
 
 
-
 const addressMiddleware = function(req,res, next){
 	var chainId = req.params.chainId;
 	var addressValue = req.params.address;
@@ -31,19 +30,32 @@ const addressMiddleware = function(req,res, next){
 	
 	next();
 }
- 
+
+const balanceIndex = 0;
+const transactionsIndex = 1; 
+const defaultPageNumber = 1;
+
+const balanceKey = "balance";
+const transactionsKey = "transactions";
 
 router.get('/:address', addressMiddleware, function(req, res){
 
- 	req.addressInstance.getAddressData(req.addressValue)
-	 	.then(function(requestResponse){
-			 return renderResult(requestResponse, res);
-		})
-		.catch(function(reason){
-			console.log("****** address: /:address ***** catch ***** "+reason);
-			return renderResult( responseHelper.error('r_wi_1', "Something Went Wrong"),res );
+	var promiseResolvers = [];
 
-		});
+  	promiseResolvers.push(req.addressInstance.getAddressBalance(req.addressValue));
+    promiseResolvers.push(req.addressInstance.getAddressTransactions(req.addressValue, defaultPageNumber));        
+
+	  Promise.all(promiseResolvers).then(function(rsp) {
+		
+		const balance = rsp[balanceIndex].data;
+		const transactions = rsp[transactionsIndex].data
+
+		const responseObject = {};
+		responseObject[balanceKey] = balance;
+		responseObject[transactionsKey] = transactions;
+
+		return renderResult(responseHelper.successWithData(responseObject), res);
+	  });
 });
 
 
@@ -55,7 +67,7 @@ router.get('/:address/balance', addressMiddleware, function(req, res){
 		})
 		.catch(function(reason){
 			console.log("****** address: /:address/balance ***** catch ***** "+reason);
-			return renderResult( responseHelper.error('r_wi_1', "Something Went Wrong"),res );
+			return renderResult( responseHelper.error('', reason),res );
 		});
 });
 
@@ -68,7 +80,7 @@ router.get('/:address/transactions/:page',addressMiddleware, function(req, res){
 		})
 		.catch(function(reason){
 			console.log("****** address: /:address/transaction/:page ***** catch ***** "+reason);
-			return renderResult( responseHelper.error('r_wi_1', "Something Went Wrong"),res );
+			return renderResult( responseHelper.error('', reason),res );
 		});
 });
 
@@ -81,7 +93,7 @@ router.get('/:address/contract/:contractAddress/:page',addressMiddleware, functi
 		})
 		.catch(function(reason){
 			console.log("****** address: /:address/contract/:contractAddress/:page ***** catch ***** "+reason);
-			return renderResult( responseHelper.error('r_wi_1', "Something Went Wrong"),res );
+			return renderResult( responseHelper.error('', reason),res );
 		});
 });
 
@@ -94,9 +106,8 @@ router.get('/:address/internal_transactions/:page',addressMiddleware, function(r
 			 return renderResult(requestResponse, res);
 		})
 		.catch(function(reason){
-			console.log("****** address: /:address/internal_transactions/:page ***** catch ***** ")
-			console.log(reason);
-			return renderResult( responseHelper.error('r_wi_1', "Something Went Wrong"),res );
+			console.log("****** address: /:address/internal_transactions/:page ***** catch ***** " + reason);
+			return renderResult( responseHelper.error('', reason),res );
 		});
 });
 

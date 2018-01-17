@@ -38,7 +38,7 @@ router.get('/:param',searchMiddleware, function(req, res){
  		})
  		.catch(function(reason){
 			console.log("****** search: /:param ***** catch ***** "+reason);
-			return renderResult( responseHelper.error('r_wi_1', "Something Went Wrong"),res );
+			return renderResult( responseHelper.error('', reason),res );
 
  		});
 

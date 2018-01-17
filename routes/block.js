@@ -43,7 +43,7 @@ router.get("/:block_number", blockMiddleware, function(req, res){
 		.catch(function(reason){
 			console.log("****** block: /:block_number ***** catch ***** " + reason);
 				
-			return renderResult( responseHelper.error('r_wi_1', "Something Went Wrong"),res );
+			return renderResult( responseHelper.error('', reason),res );
         });
 });
 
@@ -56,7 +56,7 @@ router.get("/:block_number/transactions/:page", blockMiddleware, function(req, r
 		})
 		.catch(function(reason){
 			console.log("****** block: /:address/transactions/:page ***** catch ***** " + reason);
-			return renderResult( responseHelper.error('r_wi_1', "Something Went Wrong"),res );
+			return renderResult( responseHelper.error('', reason),res );
 		});
 });
 

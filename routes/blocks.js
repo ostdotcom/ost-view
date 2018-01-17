@@ -37,7 +37,7 @@ router.get("/recent/:page",blocksMiddleware, function(req, res){
 		})
 		.catch(function(reason){
 			console.log("****** blocks: /recent/:page ***** catch ***** "+ reason);
-			return renderResult( responseHelper.error('r_wi_1', "Something Went Wrong"),res );
+			return renderResult( responseHelper.error('', reason),res );
 		});
 });
 

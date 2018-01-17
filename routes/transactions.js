@@ -37,7 +37,7 @@ router.get("/recent/:page",transactionsMiddleware, function(req, res){
  		})
  		.catch(function(reason){
 			console.log("****** transactions: /recent/:page ***** catch ***** "+reason);
-			return renderResult( responseHelper.error('r_wi_1', "Something Went Wrong"),res );
+			return renderResult( responseHelper.error('', reason),res );
  		});
 });
 
@@ -49,7 +49,7 @@ router.get("/pending",transactionsMiddleware, function(req, res){
  		})
  		.catch(function(reason){
 			console.log("****** transactions: /pending/:page ***** catch ***** "+reason);
-			return renderResult( responseHelper.error('r_wi_1', "Something Went Wrong"),res );
+			return renderResult( responseHelper.error('', reason),res );
  		});
 });
 
