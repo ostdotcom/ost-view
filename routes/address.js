@@ -35,8 +35,6 @@ const balanceIndex = 0;
 const transactionsIndex = 1; 
 const defaultPageNumber = 1;
 
-const balanceKey = "balance";
-const transactionsKey = "transactions";
 
 router.get('/:address', addressMiddleware, function(req, res){
 
