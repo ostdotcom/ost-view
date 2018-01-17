@@ -33,7 +33,11 @@ router.get("/recent/:page",blocksMiddleware, function(req, res){
 
 	req.blocksInstance.getRecentBlocks(req.page)
 		.then(function(requestResponse){
-			 return renderResult(requestResponse, res);
+			const response = responseHelper.successWithData({
+				blocks: requestResponse
+			});
+
+			return renderResult(response, res);		
 		})
 		.catch(function(reason){
 			console.log("****** blocks: /recent/:page ***** catch ***** "+ reason);

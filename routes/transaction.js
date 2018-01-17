@@ -36,8 +36,13 @@ router.get("/:hash",transactionMiddleware, function(req, res){
 	
 	req.transactionInstance.getTransaction(req.hash)
 		.then(function(requestResponse) {
-			 return renderResult(requestResponse, res);
- 		})
+			
+			const response = responseHelper.successWithData({
+				transaction: requestResponse
+			});
+
+			return renderResult(response, res);		 	
+		})
  		.catch(function(reason){
 			console.log("****** transaction: /:hash ***** catch ***** " + reason);
 			return renderResult( responseHelper.error('', reason),res );
@@ -48,7 +53,11 @@ router.get("/:hash/address_transaction/:page",transactionMiddleware, function(re
 	
 	req.transactionInstance.getAddressTransactions(req.hash, req.page)
 		.then(function(requestResponse) {
-			 return renderResult(requestResponse, res);
+			const response = responseHelper.successWithData({
+				address_transaction: requestResponse
+			});
+
+			return renderResult(response, res);	
  		})
  		.catch(function(reason){
 			console.log("****** transaction: /:hash ***** catch ***** " + reason);

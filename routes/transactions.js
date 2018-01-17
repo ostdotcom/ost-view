@@ -33,7 +33,11 @@ router.get("/recent/:page",transactionsMiddleware, function(req, res){
 
 	req.transactionsInstance.getRecentTransactions(req.page)
 		.then(function(requestResponse) {
-			 return renderResult(requestResponse, res);
+			const response = responseHelper.successWithData({
+				recent_transactions : requestResponse
+			});
+
+			return renderResult(response, res);		 	
  		})
  		.catch(function(reason){
 			console.log("****** transactions: /recent/:page ***** catch ***** "+reason);
@@ -45,8 +49,12 @@ router.get("/pending",transactionsMiddleware, function(req, res){
 
 	req.transactionsInstance.getPendingTransactions()
 		.then(function(requestResponse) {
-			 return renderResult(requestResponse, res);
- 		})
+			const response = responseHelper.successWithData({
+				transaction: requestResponse
+			});
+
+			return renderResult(response, res);		 	
+		})
  		.catch(function(reason){
 			console.log("****** transactions: /pending/:page ***** catch ***** "+reason);
 			return renderResult( responseHelper.error('', reason),res );

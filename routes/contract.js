@@ -34,7 +34,11 @@ router.get("/:contractAddress/:page",contractMiddleware, function(req, res){
 
 	req.contractInstance.getContractLedger(req.contractAddress, req.page)
 		.then(function(requestResponse){
-			 return renderResult(requestResponse, res);
+			const response = responseHelper.successWithData({
+				contract_transactions: requestResponse
+			});
+
+			return renderResult(response, res);		
 		})
 		.catch(function(reason){
 			console.log("****** contract: /:contractAddress/:page ***** catch ***** "+ reason);

@@ -31,14 +31,16 @@ const blockMiddleware = function(req,res, next){
 	next();
 }
 
-
 router.get("/:block_number", blockMiddleware, function(req, res){
 
 	req.blockInstance.getBlock(req.blockNumber)
 		.then(function(requestResponse){
-			console.log(requestResponse);
 
-			 return renderResult(requestResponse, res);
+			const response = responseHelper.successWithData({
+				block: requestResponse
+			});
+
+			return renderResult(response, res);
 		})
 		.catch(function(reason){
 			console.log("****** block: /:block_number ***** catch ***** " + reason);
@@ -52,7 +54,12 @@ router.get("/:block_number/transactions/:page", blockMiddleware, function(req, r
 
 	req.blockInstance.getBlockTransactions(req.blockNumber,req.page)
 		.then(function(requestResponse){
-			 return renderResult(requestResponse, res);
+
+			const response = responseHelper.successWithData({
+				transactions: requestResponse
+			});
+
+			return renderResult(response, res);
 		})
 		.catch(function(reason){
 			console.log("****** block: /:address/transactions/:page ***** catch ***** " + reason);

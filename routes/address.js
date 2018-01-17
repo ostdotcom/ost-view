@@ -47,14 +47,15 @@ router.get('/:address', addressMiddleware, function(req, res){
 
 	  Promise.all(promiseResolvers).then(function(rsp) {
 		
-		const balance = rsp[balanceIndex].data;
-		const transactions = rsp[transactionsIndex].data
+		const balanceValue = rsp[balanceIndex];
+		const transactionsValue = rsp[transactionsIndex]
 
-		const responseObject = {};
-		responseObject[balanceKey] = balance;
-		responseObject[transactionsKey] = transactions;
+		const response = responseHelper.successWithData({
+			balance : balanceValue, 
+			transactions : transactionsValue
+		});
 
-		return renderResult(responseHelper.successWithData(responseObject), res);
+		return renderResult(response, res);
 	  });
 });
 
@@ -63,7 +64,11 @@ router.get('/:address/balance', addressMiddleware, function(req, res){
 
  	req.addressInstance.getAddressBalance(req.addressValue)
  		.then(function(requestResponse){
-			 return renderResult(requestResponse, res);
+			const response = responseHelper.successWithData({
+				balance : requestResponse, 
+			});
+
+			return renderResult(response, res);	
 		})
 		.catch(function(reason){
 			console.log("****** address: /:address/balance ***** catch ***** "+reason);
@@ -76,9 +81,13 @@ router.get('/:address/transactions/:page',addressMiddleware, function(req, res){
 
  	req.addressInstance.getAddressTransactions(req.addressValue, req.page)
  		.then(function(requestResponse){
-			 return renderResult(requestResponse, res);
-		})
-		.catch(function(reason){
+			const response = responseHelper.successWithData({
+				transactions : requestResponse, 
+			});
+
+			return renderResult(response, res);	
+		})		
+ 		.catch(function(reason){
 			console.log("****** address: /:address/transaction/:page ***** catch ***** "+reason);
 			return renderResult( responseHelper.error('', reason),res );
 		});
@@ -89,7 +98,11 @@ router.get('/:address/contract/:contractAddress/:page',addressMiddleware, functi
 
  	req.addressInstance.getAddressLedgerInContract(req.addressValue, req.contractAddress, req.page)
  		.then(function(requestResponse){
-			 return renderResult(requestResponse, res);
+			const response = responseHelper.successWithData({
+				contract_transactions : requestResponse, 
+			});
+
+			return renderResult(response, res);	
 		})
 		.catch(function(reason){
 			console.log("****** address: /:address/contract/:contractAddress/:page ***** catch ***** "+reason);
@@ -103,7 +116,11 @@ router.get('/:address/internal_transactions/:page',addressMiddleware, function(r
 
  	req.addressInstance.getAddressTransactions(req.addressValue, req.page)
  		.then(function(requestResponse){
-			 return renderResult(requestResponse, res);
+			const response = responseHelper.successWithData({
+				internal_transactions : requestResponse, 
+			});
+
+			return renderResult(response, res);	
 		})
 		.catch(function(reason){
 			console.log("****** address: /:address/internal_transactions/:page ***** catch ***** " + reason);
