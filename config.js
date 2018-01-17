@@ -17,7 +17,7 @@ const chain_config = {
 		    user      		: process.env.OST_EXP_DB_USER,
 		    password  		: process.env.OST_EXP_DB_PWD,
 		    host      		: process.env.OST_EXP_DB_HOST,
-		    database  		: process.env.OST_EXP_DB_NAME_STAGE,
+		    database  		: process.env.OST_EXP_DB_NAME,
 		    blockAttributes : ['miner','difficulty','totalDifficulty','gasLimit','gasUsed'],
 		    txnAttributes   : ['gas', 'gasPrice', 'input','nonce', 'contractAddress']	
     	}

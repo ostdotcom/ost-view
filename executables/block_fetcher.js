@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 "use strict"
 
 /**
@@ -13,6 +14,7 @@ const reqPrefix           = ".."
     , erctoken            = require( reqPrefix + "/lib/contract_interact/erc20Token")
     , constants           = require( reqPrefix + "/config/core_constants")
     , core_config         = require( reqPrefix + "/config")
+    , cliHandler          = require('commander');
     ;
 
 
@@ -238,12 +240,19 @@ var isNodeConnected = function(blockNumber) {
 }
 
 // To handle command line with format $> node block_fetch.js <chainID> <initial_block_number>
-if (process.argv.length > 2) {
-    state.chainID = process.argv[2];
-    if (isNaN(process.argv[3])) {
+cliHandler
+  .version('1.0')
+  .usage('Please Specify chain ID \n$>node block_fetcher.js <chainID> <blockNumber>(optional)')
+  .option('-c, --chainID <n>', 'Id of the chain', parseInt)
+  .option('-n, --blockNumber <n>', 'Number of the block', parseInt)
+  .parse(process.argv);
+
+if (cliHandler.chainID) {
+    state.chainID = cliHandler.chainID;
+    if (isNaN(cliHandler.blockNumber)) {
         state.blockNumber = 0;   
-    } else {
-        state.blockNumber = process.argv[3];
+    } else {    
+        state.blockNumber = cliHandler.blockNumber;
     }    
     state.config = core_config.getChainConfig(state.chainID);
     if (undefined != state.config) {
