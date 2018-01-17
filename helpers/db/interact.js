@@ -124,7 +124,7 @@ DbHelper.prototype = {
 			var addressTransactionData = [];
 			for (var ind in transactionDataArray) {
 				var transactionData = transactionDataArray[ind];
-				var transactionResponse =  othis.dbObject.insertData(constants.TRANSACTION_TABLE_NAME, constants.TRANSACTION_DATA_SEQUENCE, transactionData);
+				var transactionResponse =  oThis.dbObject.insertData(constants.TRANSACTION_TABLE_NAME, constants.TRANSACTION_DATA_SEQUENCE, transactionData);
 				transactionPromiseList.push(transactionResponse);
 
 				//Format transactions
@@ -158,7 +158,7 @@ DbHelper.prototype = {
 			var addressTransactionData = [];
 			for (var ind in tokenTransactionDataArray) {
 				var tokenTransactionData = tokenTransactionDataArray[ind];
-				var transactionResponse = othis.dbObject.insertData(constants.TOKEN_TRANSACTION_TABLE_NAME, constants.TOKEN_TRANSACTION_DATA_SEQUENCE, tokenTransactionData);
+				var transactionResponse = oThis.dbObject.insertData(constants.TOKEN_TRANSACTION_TABLE_NAME, constants.TOKEN_TRANSACTION_DATA_SEQUENCE, tokenTransactionData);
 				transactionPromiseList.push(transactionResponse);
 
 				//Format token transactions
@@ -257,8 +257,51 @@ DbHelper.prototype = {
 		addressTxnArray.push(addressTxnSecond);
 
 		return addressTxnArray;
-	}
+	},
 
+	deleteBlock: function(blockNumber) {
+		if( blockNumber ) {
+			return this.dbObject.deleteForBlockNumber(constants.BLOCK_TABLE_NAME, 'number', blockNumber);
+		}
+		return null;
+
+	},
+
+	deleteAddressTokenTransactions: function(txnHashArray) {
+		if (txnHashArray) {
+			return this.dbObject.deleteForTransactions(constants.ADDRESS_TOKEN_TRANSACTION_TABLE_NAME,'transaction_hash', txnHashArray);
+		}
+		return null;
+	},
+
+	deleteTokenTransactions: function(txnHashArray) {
+		if (txnHashArray) {
+			return this.dbObject.deleteForTransactions(constants.ADDRESS_TRANSACTION_TABLE_NAME, 'transaction_hash', txnHashArray);
+		}
+		return null;
+	},
+
+	deleteAddressTransactions: function(txnHashArray) {
+		if (txnHashArray) {
+			return this.dbObject.deleteForTransactions(constants.TOKEN_TRANSACTION_TABLE_NAME, 'hash', txnHashArray);
+		}
+		return null;
+	},
+
+	deleteTransactions: function(txnHashArray) {
+		if (txnHashArray) {
+			return this.dbObject.deleteForTransactions(constants.TRANSACTION_TABLE_NAME, 'hash', txnHashArray);
+		}
+		return null;
+	},
+
+	updateVerifiedFlag: function(blockNumber) {
+		if (undefined != blockNumber) {
+			return this.dbObject.updateAttribute(constants.BLOCK_TABLE_NAME, 'verified', true, 'number', blockNumber);
+		}
+		return null;
+
+	}
 };
 
 

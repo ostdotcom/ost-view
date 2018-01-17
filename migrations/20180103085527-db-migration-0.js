@@ -73,7 +73,8 @@ var createBlockTable = function(db) {
 	    gas_limit: { type: 'int', notNull: true },
 	    gas_used: { type: 'int', notNull: true },
 	    total_transactions: { type: 'int', notNull: true },
-	    timestamp: { type: 'int', notNull: true }
+	    timestamp: { type: 'int', notNull: true },
+      verified: { type: 'boolean', notNull: true, default: 0}
   	});
 }
 

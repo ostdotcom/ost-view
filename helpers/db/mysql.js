@@ -21,7 +21,6 @@ var MySQL = module.exports = function(dbconfig){
   			logger.error(err);
   			throw err;
   		}
-  		// logger.info("***************MySQL Connected!*************");
 		});
 }
 
@@ -247,32 +246,83 @@ MySQL.prototype = {
       });
   	},
 
+    deleteForTransactions: function (tableName, attributName ,txnHashArray) {
+        var oThis = this;
+        logger.log("Delete in table", tableName, txnHashArray);
+          
+        var query = "DELETE  from " + tableName + " WHERE "+ attributName + " IN (?)";
+        return new Promise(function(resolve, reject){
+            if (txnHashArray == undefined || txnHashArray.length < 1) {
+                resolve("No transactions in Array");
+                return;
+            }
+
+            logger.log(query);
+            try {
+              oThis.con.query(query, txnHashArray, function (err, result) {
+                  if (err) throw err;
+                  logger.info("Deletion in " + tableName + " successful");
+                  resolve(result);
+              });
+            } catch(err) {
+               logger.error(err);
+               reject(err)
+            }
+        });
+    },
+
+    deleteForBlockNumber: function(tableName, attributName, blockNumber) {
+        var oThis = this;
+        logger.log("Delete in table", tableName, blockNumber);
+          
+        var query = "DELETE  from " + tableName + " WHERE "+ attributName + "=?";
+        return new Promise(function(resolve, reject){
+            if (blockNumber == undefined) {
+                resolve("Block Number is undefined");
+                return;
+            }
+
+            logger.log(query);
+            try {
+              oThis.con.query(query, blockNumber, function (err, result) {
+                  if (err) throw err;
+                  logger.info("Deletion in " + tableName + " successful");
+                  resolve(result);
+              });
+            } catch(err) {
+               logger.error(err);
+               reject(err)
+            }
+        });
+    },
+
+    updateAttribute: function(tableName, attributName, value, whereAttribute, whereValue) {
+        var oThis = this;
+        logger.log("Update in table", tableName, attributName, value);
+          
+        var query = "UPDATE " + tableName + " SET "+ attributName + "=? WHERE " + whereAttribute + "=" + whereValue;
+        return new Promise(function(resolve, reject){
+            if (value == undefined) {
+                resolve("value is undefined");
+                return;
+            }
+
+            logger.log(query);
+            try {
+              oThis.con.query(query, value, function (err, result) {
+                  if (err) throw err;
+                  logger.info("Updation in " + tableName + " successful");
+                  resolve(result);
+              });
+            } catch(err) {
+               logger.error(err);
+               reject(err)
+            }
+        });
+    },
+
   	releaseConnection: function () {
   		logger.info("Releasing connection");
   		this.con.release();
   	}
 }
-
-
-// //To create Singleton 
-// const mysqlHandle = (function () {
-//     var dbInstances = {};
- 
-//     function createInstance( dbconfig ) {
-//         var object = new MySQL(dbconfig);
-//         return object;
-//     }
-
-//     return {
-//         getInstance: function ( dbconfig ) {
-//             const db = dbconfig.database
-//             if (!dbInstances[db]) {
-//                 const instance = createInstance( dbconfig );
-//                 dbInstances[db] = instance
-//             }
-//             return dbInstances[db];
-//         }
-//     };
-// })();
-
-// module.exports = mysqlHandle;

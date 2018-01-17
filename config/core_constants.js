@@ -20,7 +20,7 @@ define("ADDRESS_TOKEN_TRANSACTION_TABLE_NAME", 'address_token_transactions');
 
 
 // define("blocks_format", '(?,?,?,?,?,?,?,?,?,?)');
-define("BLOCKS_DATA_SEQUENCE", '(number, hash, parent_hash, miner, difficulty, total_difficulty, gas_limit, gas_used, total_transactions, timestamp)');
+define("BLOCKS_DATA_SEQUENCE", '(number, hash, parent_hash, miner, difficulty, total_difficulty, gas_limit, gas_used, total_transactions, timestamp, verified)');
 define("TRANSACTION_DATA_SEQUENCE", '(hash, block_number, transaction_index, contract_address, t_from, t_to, tokens, gas_used, gas_price, nounce, input_data, logs, timestamp)');
 define("ADDRESS_TRANSACTION_DATA_SEQUENCE", '(address, corresponding_address, tokens, transaction_hash, transaction_fees, inflow, timestamp)');
 define("TOKEN_TRANSACTION_DATA_SEQUENCE", '(hash, contract_address, t_from, t_to, tokens, timestamp)');

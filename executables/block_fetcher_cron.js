@@ -11,8 +11,6 @@ const reqPrefix           = ".."
     , Web3Interact        = require( reqPrefix + "/lib/web3/interact/rpc_interact")
     , DbInteract          = require( reqPrefix + "/helpers/db/interact.js")
     , logger              = require( reqPrefix + "/helpers/CustomConsoleLogger")
-    , erctoken            = require( reqPrefix + "/lib/contract_interact/erc20Token")
-    , constants           = require( reqPrefix + "/config/core_constants")
     , core_config         = require( reqPrefix + "/config")
     , BlockFetcher        = require( reqPrefix + "/lib/block_utils/block_fetcher")
     , cliHandler          = require('commander');
@@ -57,7 +55,7 @@ if (cliHandler.chainID) {
     if (undefined != state.config) {
         dbInteract = DbInteract.getInstance(state.config.db_config);
         web3Interact = new Web3Interact(state.config.web_rpc);
-        block_fetcher = BlockFetcher.newInstance(web3Interact, dbInteract);
+        block_fetcher = BlockFetcher.newInstance(web3Interact, dbInteract, false);
         logger.log('State Configuration', state);
     } else {
         logger.error('\n\tInvalide chain ID \n');
