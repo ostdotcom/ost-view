@@ -5,6 +5,7 @@ var router = express.Router({mergeParams: true});
 const reqPrefix           = ".."
     , responseHelper      = require(reqPrefix + "/lib/formatter/response" )
     , coreConfig = require(reqPrefix + "/config")
+    , logger = require(reqPrefix + '/helpers/CustomConsoleLogger')
 ;
 
 
@@ -43,7 +44,7 @@ router.get("/:block_number", blockMiddleware, function(req, res){
 			return renderResult(response, res);
 		})
 		.catch(function(reason){
-			console.log("****** block: /:block_number ***** catch ***** " + reason);
+			logger.log("****** block: /:block_number ***** catch ***** " + reason);
 				
 			return renderResult( responseHelper.error('', reason),res );
         });
@@ -62,7 +63,7 @@ router.get("/:block_number/transactions/:page", blockMiddleware, function(req, r
 			return renderResult(response, res);
 		})
 		.catch(function(reason){
-			console.log("****** block: /:address/transactions/:page ***** catch ***** " + reason);
+			logger.log("****** block: /:address/transactions/:page ***** catch ***** " + reason);
 			return renderResult( responseHelper.error('', reason),res );
 		});
 });

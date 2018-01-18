@@ -4,7 +4,8 @@ var router = express.Router({mergeParams: true});
 
 const reqPrefix           = ".."
     , responseHelper      = require(reqPrefix + "/lib/formatter/response" )
-    , coreConfig = require(reqPrefix + "/config")
+    , coreConfig = require(reqPrefix +  + "/config")
+    , logger = require(reqPrefix + '/helpers/CustomConsoleLogger')
 ;
 
 
@@ -69,7 +70,7 @@ router.get('/:address/balance', addressMiddleware, function(req, res){
 			return renderResult(response, res);	
 		})
 		.catch(function(reason){
-			console.log("****** address: /:address/balance ***** catch ***** "+reason);
+			logger.log("****** address: /:address/balance ***** catch ***** "+reason);
 			return renderResult( responseHelper.error('', reason),res );
 		});
 });
@@ -86,7 +87,7 @@ router.get('/:address/transactions/:page',addressMiddleware, function(req, res){
 			return renderResult(response, res);	
 		})		
  		.catch(function(reason){
-			console.log("****** address: /:address/transaction/:page ***** catch ***** "+reason);
+			logger.log("****** address: /:address/transaction/:page ***** catch ***** "+reason);
 			return renderResult( responseHelper.error('', reason),res );
 		});
 });
@@ -103,7 +104,7 @@ router.get('/:address/contract/:contractAddress/:page',addressMiddleware, functi
 			return renderResult(response, res);	
 		})
 		.catch(function(reason){
-			console.log("****** address: /:address/contract/:contractAddress/:page ***** catch ***** "+reason);
+			logger.log("****** address: /:address/contract/:contractAddress/:page ***** catch ***** "+reason);
 			return renderResult( responseHelper.error('', reason),res );
 		});
 });
@@ -121,7 +122,7 @@ router.get('/:address/internal_transactions/:page',addressMiddleware, function(r
 			return renderResult(response, res);	
 		})
 		.catch(function(reason){
-			console.log("****** address: /:address/internal_transactions/:page ***** catch ***** " + reason);
+			logger.log("****** address: /:address/internal_transactions/:page ***** catch ***** " + reason);
 			return renderResult( responseHelper.error('', reason),res );
 		});
 });

@@ -6,6 +6,7 @@ var router = express.Router({mergeParams: true});
 const reqPrefix           = ".."
     , responseHelper      = require(reqPrefix + '/lib/formatter/response' )
     , coreConfig = require(reqPrefix + "/config")
+    , logger = require(reqPrefix + '/helpers/CustomConsoleLogger')
 ;
 
 
@@ -44,7 +45,7 @@ router.get("/:hash",transactionMiddleware, function(req, res){
 			return renderResult(response, res);		 	
 		})
  		.catch(function(reason){
-			console.log("****** transaction: /:hash ***** catch ***** " + reason);
+			logger.log("****** transaction: /:hash ***** catch ***** " + reason);
 			return renderResult( responseHelper.error('', reason),res );
  		});
 });
@@ -60,7 +61,7 @@ router.get("/:hash/address_transaction/:page",transactionMiddleware, function(re
 			return renderResult(response, res);	
  		})
  		.catch(function(reason){
-			console.log("****** transaction: /:hash ***** catch ***** " + reason);
+			logger.log("****** transaction: /:hash ***** catch ***** " + reason);
 			return renderResult( responseHelper.error('', reason),res );
  		});
 });

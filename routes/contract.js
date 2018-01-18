@@ -5,6 +5,7 @@ var router = express.Router({mergeParams: true});
 const reqPrefix           = "../"
     , responseHelper      = require(reqPrefix + "lib/formatter/response" )
     , coreConfig = require(reqPrefix + "/config")
+    , logger = require(reqPrefix + '/helpers/CustomConsoleLogger')
 ;
 
 
@@ -41,7 +42,7 @@ router.get("/:contractAddress/:page",contractMiddleware, function(req, res){
 			return renderResult(response, res);		
 		})
 		.catch(function(reason){
-			console.log("****** contract: /:contractAddress/:page ***** catch ***** "+ reason);
+			logger.log("****** contract: /:contractAddress/:page ***** catch ***** "+ reason);
 			return renderResult( responseHelper.error('', reason),res );
 		});
 });

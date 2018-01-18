@@ -6,6 +6,7 @@ var router = express.Router({mergeParams: true});
 const reqPrefix           = ".."
     , responseHelper      = require(reqPrefix + "/lib/formatter/response" )
     , coreConfig = require(reqPrefix + "/config")
+    , logger = require(reqPrefix + '/helpers/CustomConsoleLogger')
 ;
 
 
@@ -40,7 +41,7 @@ router.get("/recent/:page",transactionsMiddleware, function(req, res){
 			return renderResult(response, res);		 	
  		})
  		.catch(function(reason){
-			console.log("****** transactions: /recent/:page ***** catch ***** "+reason);
+			logger.log("****** transactions: /recent/:page ***** catch ***** "+reason);
 			return renderResult( responseHelper.error('', reason),res );
  		});
 });
@@ -50,13 +51,13 @@ router.get("/pending",transactionsMiddleware, function(req, res){
 	req.transactionsInstance.getPendingTransactions()
 		.then(function(requestResponse) {
 			const response = responseHelper.successWithData({
-				transaction: requestResponse
+				pending_transactions : requestResponse
 			});
 
 			return renderResult(response, res);		 	
 		})
  		.catch(function(reason){
-			console.log("****** transactions: /pending/:page ***** catch ***** "+reason);
+			logger.log("****** transactions: /pending/:page ***** catch ***** "+reason);
 			return renderResult( responseHelper.error('', reason),res );
  		});
 });
