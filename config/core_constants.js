@@ -35,4 +35,10 @@ define("ENVIRONMENT", process.env.ENVIRONMENT);
 define('OSTE_GETH_UTILITY_RPC_PROVIDER', process.env.OSTE_GETH_UTILITY_RPC_PROVIDER);
 define('OSTE_GETH_VALUE_RPC_PROVIDER', process.env.OSTE_GETH_VALUE_RPC_PROVIDER);
 
+//constants
+define('ACCOUNT_HASH_LENGTH',42);
+define('TRANSACTION_HASH_LENGTH', 66);
+define('DEFAULT_PAGE_SIZE', 10);
+define('DEFAULT_PAGE_NUMBER',1);
+
 module.exports = constants;

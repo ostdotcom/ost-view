@@ -36,7 +36,8 @@ router.get("/:contractAddress/:page",contractMiddleware, function(req, res){
 	req.contractInstance.getContractLedger(req.contractAddress, req.page)
 		.then(function(requestResponse){
 			const response = responseHelper.successWithData({
-				contract_transactions: requestResponse
+				contract_transactions: requestResponse,
+				result_type : "contract_transactions"
 			});
 
 			return renderResult(response, res);		

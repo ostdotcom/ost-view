@@ -35,7 +35,8 @@ router.get("/recent/:page",transactionsMiddleware, function(req, res){
 	req.transactionsInstance.getRecentTransactions(req.page)
 		.then(function(requestResponse) {
 			const response = responseHelper.successWithData({
-				recent_transactions : requestResponse
+				recent_transactions : requestResponse,
+				result_type : "recent_transactions"
 			});
 
 			return renderResult(response, res);		 	
@@ -51,7 +52,8 @@ router.get("/pending",transactionsMiddleware, function(req, res){
 	req.transactionsInstance.getPendingTransactions()
 		.then(function(requestResponse) {
 			const response = responseHelper.successWithData({
-				pending_transactions : requestResponse
+				pending_transactions : requestResponse,
+				result_type : "pending_transactions"
 			});
 
 			return renderResult(response, res);		 	

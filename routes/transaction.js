@@ -39,7 +39,8 @@ router.get("/:hash",transactionMiddleware, function(req, res){
 		.then(function(requestResponse) {
 			
 			const response = responseHelper.successWithData({
-				transaction: requestResponse
+				transaction: requestResponse,
+				result_type : "transaction"
 			});
 
 			return renderResult(response, res);		 	
@@ -55,7 +56,8 @@ router.get("/:hash/address_transaction/:page",transactionMiddleware, function(re
 	req.transactionInstance.getAddressTransactions(req.hash, req.page)
 		.then(function(requestResponse) {
 			const response = responseHelper.successWithData({
-				address_transaction: requestResponse
+				address_transaction: requestResponse,
+				result_type : "address_transaction"
 			});
 
 			return renderResult(response, res);	

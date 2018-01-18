@@ -38,7 +38,8 @@ router.get("/:block_number", blockMiddleware, function(req, res){
 		.then(function(requestResponse){
 
 			const response = responseHelper.successWithData({
-				block: requestResponse
+				block: requestResponse,
+				result_type : 'block'
 			});
 
 			return renderResult(response, res);
@@ -57,7 +58,8 @@ router.get("/:block_number/transactions/:page", blockMiddleware, function(req, r
 		.then(function(requestResponse){
 
 			const response = responseHelper.successWithData({
-				transactions: requestResponse
+				transactions: requestResponse,
+				result_type : "transactions"
 			});
 
 			return renderResult(response, res);

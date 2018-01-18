@@ -4,7 +4,7 @@ var router = express.Router({mergeParams: true});
 
 const reqPrefix           = ".."
     , responseHelper      = require(reqPrefix + "/lib/formatter/response" )
-    , coreConfig = require(reqPrefix +  + "/config")
+    , coreConfig = require(reqPrefix + "/config")
     , logger = require(reqPrefix + '/helpers/CustomConsoleLogger')
 ;
 
@@ -65,6 +65,7 @@ router.get('/:address/balance', addressMiddleware, function(req, res){
  		.then(function(requestResponse){
 			const response = responseHelper.successWithData({
 				balance : requestResponse, 
+				result_type : "balance"
 			});
 
 			return renderResult(response, res);	
@@ -82,6 +83,7 @@ router.get('/:address/transactions/:page',addressMiddleware, function(req, res){
  		.then(function(requestResponse){
 			const response = responseHelper.successWithData({
 				transactions : requestResponse, 
+				result_type : "transactions"
 			});
 
 			return renderResult(response, res);	
@@ -99,6 +101,7 @@ router.get('/:address/contract/:contractAddress/:page',addressMiddleware, functi
  		.then(function(requestResponse){
 			const response = responseHelper.successWithData({
 				contract_transactions : requestResponse, 
+				result_type : "contract_transactions"
 			});
 
 			return renderResult(response, res);	
@@ -117,6 +120,7 @@ router.get('/:address/internal_transactions/:page',addressMiddleware, function(r
  		.then(function(requestResponse){
 			const response = responseHelper.successWithData({
 				internal_transactions : requestResponse, 
+				result_type : "internal_transactions"
 			});
 
 			return renderResult(response, res);	
