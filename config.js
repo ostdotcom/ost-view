@@ -13,11 +13,11 @@ const chain_config = {
     	web_rpc       : "http://localhost:8545",
     	cron_interval : 2000,
     	db_config     : {
-    		driver    		: 'mysql',
-		    user      		: 'root',
-		    password  		: 'root',
-		    host      		: 'localhost',
-		    database  		: 'ost_staging_explorer',
+    		driver    		: process.env.OST_EXP_DB_DRIVER,
+		    user      		: process.env.OST_EXP_DB_USER,
+		    password  		: process.env.OST_EXP_DB_PWD,
+		    host      		: process.env.OST_EXP_DB_HOST,
+		    database  		: process.env.OST_EXP_DB_NAME,
 		    blockAttributes : ['miner','difficulty','totalDifficulty','gasLimit','gasUsed'],
 		    txnAttributes   : ['gas', 'gasPrice', 'input','nonce', 'contractAddress']	
     	}
@@ -27,7 +27,7 @@ const chain_config = {
 		chainId       : 142,
     	database_type : "mysql",
 	    web_rpc       : "http://localhost:9546",
-	    cron_interval : 20,
+	    cron_interval : 2000,
     	db_config     : {
     		driver    		: 'mysql',
 		    user      		: 'root',
@@ -37,7 +37,23 @@ const chain_config = {
 		    blockAttributes : ['miner','difficulty','totalDifficulty','gasLimit','gasUsed'],
 		    txnAttributes   : ['gas', 'gasPrice', 'input','nonce', 'contractAddress']	
     	}
-	}
+	},
+
+	'1410': {
+		chainId       : 1410,
+    	database_type : "mysql", 
+    	web_rpc       : "http://localhost:8545",
+    	cron_interval : 1,
+    	db_config     : {
+    		driver    		: 'mysql',
+		    user      		: 'root',
+		    password  		: 'root',
+		    host      		: 'localhost',
+		    database  		: 'ost_explorer_1410',
+		    blockAttributes : ['miner','difficulty','totalDifficulty','gasLimit','gasUsed'],
+		    txnAttributes   : ['gas', 'gasPrice', 'input','nonce', 'contractAddress']	
+    	}
+	},
 }
 
 module.exports = {
