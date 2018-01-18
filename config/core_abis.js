@@ -2,7 +2,7 @@
 
 /*
  * Load all contract abi files
- *
+ * Author: Sachin
  */
 
 const fs = require('fs')

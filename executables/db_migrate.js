@@ -31,6 +31,7 @@ const reset = function() {
 	});
 }
 
+// this runs all pending migrations till this version
 const up = function(version) {
 	initDBConfigFile(this.chainID);
 	console.log("Version migration :", version);
@@ -65,6 +66,7 @@ const initDBConfigFile = function(chainID) {
 	
 	json = JSON.stringify(json);
 	try {
+		// database.json is a temp file used only for migrations purpose
 		fs.writeFileSync('database.json', json, 'utf8');
 	}
 

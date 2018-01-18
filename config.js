@@ -41,6 +41,7 @@ const chain_config = {
 }
 
 module.exports = {
+	
 	getChainConfig(chainId) {
 		return chain_config[chainId];
 	},
