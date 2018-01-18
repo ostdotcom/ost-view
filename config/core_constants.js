@@ -32,8 +32,8 @@ define("TOKEN_TRANSACTION_INDEX_MAP", {'hash':0, 'contract_address':1, 't_from':
 
 define("ENVIRONMENT", process.env.ENVIRONMENT);
 
-define('OSTE_GETH_UTILITY_RPC_PROVIDER', process.env.OSTE_GETH_UTILITY_RPC_PROVIDER);
-define('OSTE_GETH_VALUE_RPC_PROVIDER', process.env.OSTE_GETH_VALUE_RPC_PROVIDER);
+// define('OSTE_GETH_UTILITY_RPC_PROVIDER', process.env.OSTE_GETH_UTILITY_RPC_PROVIDER);
+// define('OSTE_GETH_VALUE_RPC_PROVIDER', process.env.OSTE_GETH_VALUE_RPC_PROVIDER);
 
 //constants
 define('ACCOUNT_HASH_LENGTH',42);

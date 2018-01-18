@@ -128,10 +128,13 @@ DbHelper.prototype = {
 				transactionPromiseList.push(transactionResponse);
 
 				//Format transactions
-				addressTransactionData = oThis.getAddressTransactionData( transactionData );
-				logger.log(addressTransactionData);
+				var txnArray = oThis.getAddressTransactionData( transactionData );
+				txnArray.forEach((addrTxn)=>{
+					addressTransactionData.push(addrTxn);
+				});
 			}
 
+			logger.log(addressTransactionData);
 
 			Promise.all(transactionPromiseList)
 				.then(function(res){
@@ -162,10 +165,13 @@ DbHelper.prototype = {
 				transactionPromiseList.push(transactionResponse);
 
 				//Format token transactions
-				addressTransactionData = oThis.getAddressTokenTransactionData( tokenTransactionData );
-				logger.log(addressTransactionData);
+				var txnArray = oThis.getAddressTokenTransactionData( tokenTransactionData );
+				txnArray.forEach((addrTxn)=>{
+					addressTransactionData.push(addrTxn);
+				});
 			}
 
+			logger.log(addressTransactionData);
 
 			Promise.all(transactionPromiseList)
 				.then(function(res){
@@ -308,6 +314,7 @@ DbHelper.prototype = {
 
 //To create Singleton 
 const dbHelperHandler = (function () {
+
     var dbHelpers = {};
  
     function createInstance( dbconfig ) {
@@ -323,14 +330,15 @@ const dbHelperHandler = (function () {
 
     return {
         getInstance: function ( dbconfig ) {
-            const db = dbconfig.database
-            if (!dbHelpers[db]) {
+            const id = dbconfig.chainId;
+            if (!dbHelpers[id]) {
                 const instance = createInstance( dbconfig );
-                dbHelpers[db] = instance
+                dbHelpers[id] = instance
             }
-            return dbHelpers[db];
+            return dbHelpers[id];
         }
     };
+
 })();
 
 module.exports = dbHelperHandler;
