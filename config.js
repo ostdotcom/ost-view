@@ -47,6 +47,7 @@ const chain_config = {
     	web_rpc       : "http://localhost:8545",
     	cron_interval : 1,
     	db_config     : {
+    		chainId         : 1410,
     		driver    		: 'mysql',
 		    user      		: 'root',
 		    password  		: 'root',

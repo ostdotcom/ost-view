@@ -47,7 +47,7 @@ cliHandler
 if (cliHandler.chainID) {
     state.chainID = cliHandler.chainID;
     if (isNaN(cliHandler.blockNumber)) {
-        state.blockNumber = 0;   
+        state.blockNumber = undefined;   
     } else {    
         state.blockNumber = cliHandler.blockNumber;
     }    
@@ -56,6 +56,7 @@ if (cliHandler.chainID) {
         dbInteract = DbInteract.getInstance(state.config.db_config);
         web3Interact = new Web3Interact(state.config.web_rpc);
         block_fetcher = BlockFetcher.newInstance(web3Interact, dbInteract, false);
+        block_fetcher.state.blockNumber = state.blockNumber;
         logger.log('State Configuration', state);
     } else {
         logger.error('\n\tInvalide chain ID \n');
@@ -69,8 +70,10 @@ if (cliHandler.chainID) {
 dbInteract.getHigestInsertedBlock()
     .then(function(blockNumber){
         logger.log("Higest Block Number ", blockNumber);
-        if (block_fetcher.state.blockNumber == 0 && blockNumber != null) {
+        if (block_fetcher.state.blockNumber == undefined && blockNumber != null) {
             block_fetcher.state.blockNumber = +blockNumber + 1;
+        } else {
+            block_fetcher.state.blockNumber = 0;
         }
         setfetchBlockCron(block_fetcher.state.blockNumber);
     }).catch(function(err){
