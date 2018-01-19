@@ -2,27 +2,43 @@
 
 /*
  * DB interact: Interface File to interact with the DB.
- * Author: Sachin
+ * @module helpers/db/
  */
 
-const MySQL = require('./mysql.js');
-const constants = require('../../config/core_constants.js');
-const logger = require('../CustomConsoleLogger');
+const reqPrefix           = "../.."
+    , MySQL 			  = require( reqPrefix + '/helpers/db/mysql')
+    , constants           = require( reqPrefix + '/config/core_constants');
+    , logger              = require( reqPrefix + '/helpers/CustomConsoleLogger');
 
-const DEFAULT_PAGE_NUMBER = 1;
-const DEFAULT_PAGE_SIZE = 10;
+const DEFAULT_PAGE_NUMBER = constants.DEFAULT_PAGE_NUMBER;
+const DEFAULT_PAGE_SIZE   = constatns.DEFAULT_PAGE_SIZE;
 
+/**
+ * Constructor to create DbHelper object
+ * @param {Object}
+ */
 const DbHelper = function(dbObj){
 	this.dbObject = dbObj;
 } 
 
 DbHelper.prototype = {
 
+	/**
+	 * To Delegate getTransaction call to the DB
+	 * @param  {String}	Transaction hash
+	 * @return {Promise}
+	 */
 	getTransaction: function (transactionHash){
 
 		return this.dbObject.selectTransaction(constants.TRANSACTION_TABLE_NAME, transactionHash);
 	},
 
+	/**
+	 * To Delegate getRecentBlocks call to the DB
+	 * @param  {Integer} pageNumber of the recentBlock List
+	 * @param  {Integer} pageSize of the recentBlock List
+	 * @return {Promise}
+	 */
 	getRecentBlocks: function (pageNumber, pageSize){
 		if(undefined == pageNumber) {
 			pageNumber = DEFAULT_PAGE_NUMBER;
@@ -34,14 +50,24 @@ DbHelper.prototype = {
 		return this.dbObject.selectRecentBlocks(constants.BLOCK_TABLE_NAME, pageNumber, pageSize);
 	},
 
+	/**
+	 * To Delegate getBlock call to the DB
+	 * @param  {Integer} Number of the block
+	 * @return {Promise}
+	 */
 	getBlock : function (blockNumber){
-		if(undefined == blockNumber) {
-			return;
-		}
-
+		
 		return this.dbObject.selectBlock(constants.BLOCK_TABLE_NAME, blockNumber);
 	},
 
+	/**
+	 * To Delegate getAddressLedgerOfContract call to the DB
+	 * @param  {String} Address 
+	 * @param  {String} Contract Address
+	 * @param  {Integer} pageNumber of the ledger List
+	 * @param  {Integer} pageSize of the ledger List
+	 * @return {Promise}
+	 */
 	getAddressLedgerOfContract: function (address, contractAddress, pageNumber, pageSize){
 		if(undefined == pageNumber) {
 			pageNumber = DEFAULT_PAGE_NUMBER;
@@ -53,6 +79,13 @@ DbHelper.prototype = {
 		return this.dbObject.selectAddressLedgerOfContract(constants.ADDRESS_TOKEN_TRANSACTION_TABLE_NAME, address, contractAddress, pageNumber, pageSize);
 	},
 
+	/**
+	 * To Delegate getContractLedger call to the DB
+	 * @param  {String} Contract Address
+	 * @param  {Integer} pageNumber of the ledger List
+	 * @param  {Integer} pageSize of the ledger List
+	 * @return {Promise}
+	 */
 	getContractLedger: function (contractAddress, pageNumber, pageSize){
 		if(undefined == pageNumber) {
 			pageNumber = DEFAULT_PAGE_NUMBER;
@@ -64,10 +97,21 @@ DbHelper.prototype = {
 		return this.dbObject.selectContractLedger(constants.TOKEN_TRANSACTION_TABLE_NAME, contractAddress, pageNumber, pageSize);
 	},
 
+	/**
+	 * To Delegate getHigestInsertedBlock call to the DB
+	 * @param  {Integer} Number of the block
+	 * @return {Promise}
+	 */
 	getHigestInsertedBlock: function ( blockNumber ) {
 		return this.dbObject.selectHigestInsertedBlock(constants.BLOCK_TABLE_NAME);
 	},
 
+	/**
+	 * To Delegate getRecentTransactions call to the DB
+	 * @param  {Integer} pageNumber of the recentTransactoins List
+	 * @param  {Integer} pageSize of the recentTransactoins List
+	 * @return {Promise}
+	 */
 	getRecentTransactions: function ( pageNumber, pageSize) {
 		if(undefined == pageNumber) {
 			pageNumber = DEFAULT_PAGE_NUMBER;
@@ -79,6 +123,13 @@ DbHelper.prototype = {
 		return this.dbObject.selectRecentTransactions(constants.TRANSACTION_TABLE_NAME, pageNumber, pageSize);
 	},
 
+	/**
+	 * To Delegate getBlockTransactions call to the DB
+	 * @param  {Integer} Number of the block
+	 * @param  {Integer} pageNumber of the transaction List
+	 * @param  {Integer} pageSize of the transaction List
+	 * @return {Promise}
+	 */
 	getBlockTransactions: function ( blockNumber, pageNumber, pageSize) {
 		if(undefined == pageNumber) {
 			pageNumber = DEFAULT_PAGE_NUMBER;
@@ -90,6 +141,13 @@ DbHelper.prototype = {
 		return this.dbObject.selectBlockTransactions(constants.TRANSACTION_TABLE_NAME, blockNumber, pageNumber, pageSize);
 	},
 
+	/**
+	 * To Delegate getAddressTransactions call to the DB
+	 * @param  {String} Address 
+	 * @param  {Integer} pageNumber of the ledger List
+	 * @param  {Integer} pageSize of the ledger List
+	 * @return {Promise}
+	 */
 	getAddressTransactions: function( address, pageNumber, pageSize ) {
 		if(undefined == pageNumber) {
 			pageNumber = DEFAULT_PAGE_NUMBER;
@@ -101,6 +159,13 @@ DbHelper.prototype = {
 		return this.dbObject.selectAddressTransactions(constants.ADDRESS_TRANSACTION_TABLE_NAME, address, pageNumber, pageSize);				
 	},
 
+	/**
+	 * To Delegate getAddressTokenTransactions call to the DB
+	 * @param  {String} Address 
+	 * @param  {Integer} pageNumber of the token ledger List
+	 * @param  {Integer} pageSize of the token ledger List
+	 * @return {Promise}
+	 */
 	getAddressTokenTransactions: function( address, pageNumber, pageSize ) {
 		if(undefined == pageNumber) {
 			pageNumber = DEFAULT_PAGE_NUMBER;
@@ -112,10 +177,21 @@ DbHelper.prototype = {
 		return this.dbObject.selectAddressTransactions(constants.ADDRESS_TOKEN_TRANSACTION_TABLE_NAME, address, pageNumber, pageSize);				
 	},
 
+	/**
+	 * To Delegate insertBlock call to the DB
+	 * @param  {Array}	Array of Block Data Content Array
+	 * @return {Promise}
+	 */
 	insertBlock: function( blockDataArray ) {
 		return this.dbObject.insertData(constants.BLOCK_TABLE_NAME, constants.BLOCKS_DATA_SEQUENCE, blockDataArray);				
 	},
 
+	/**
+	 * To Delegate insertTransaction call to the DB
+	 * It also handles insertAddressTransaction call to the DB
+	 * @param  {Array}	Array of Transactions Data Content Array
+	 * @return {Promise}
+	 */
 	insertTransaction: function( transactionDataArray ) {
 		var oThis = this;
 		return new Promise(function(resolve, reject){
@@ -149,10 +225,21 @@ DbHelper.prototype = {
 		});
 	},
 
+	/**
+	 * To Delegate insertAddressTransaction call to the DB
+	 * @param  {Array} Array of Address Transaction Data
+	 * @return {Promise}
+	 */
 	insertAddressTransaction: function( addressTransactionData) {
 		return this.dbObject.insertData(constants.ADDRESS_TRANSACTION_TABLE_NAME, constants.ADDRESS_TRANSACTION_DATA_SEQUENCE, addressTransactionData);
 	},
 
+	/**
+	 * To Delegate insertTokenTransaction call to the DB
+	 * It also handles insertAddressTokenTransaction call to the DB
+	 * @param  {Array}	Array of TokenTransactions Data Content Array
+	 * @return {Promise}
+	 */
 	insertTokenTransaction: function( tokenTransactionDataArray ) {
 		var oThis = this;
 		return new Promise(function(resolve, reject){
@@ -186,9 +273,15 @@ DbHelper.prototype = {
 		});
 	},
 
+	/**
+	 * To Delegate insertAddressTokenTransaction call to the DB
+	 * @param  {Array} Array of Token Address Transaction Data
+	 * @return {Promise}
+	 */
 	insertAddressTokenTransaction: function( addressTokenTransactionData ){
 		return this.dbObject.insertData(constants.ADDRESS_TOKEN_TRANSACTION_TABLE_NAME, constants.ADDRESS_TOKEN_TRANSACTION_DATA_SEQUENCE, addressTokenTransactionData);
 	},
+
 
 	getAddressTransactionData: function( transactionData ) {
 		var addressTxnArray = [];
@@ -265,54 +358,86 @@ DbHelper.prototype = {
 		return addressTxnArray;
 	},
 
+	/**
+	 * To Delegate call deleting all the data of the block .
+	 * @param  {Integer} Number of the block
+	 * @return {Promise}
+	 */
 	deleteBlock: function(blockNumber) {
 		if( blockNumber ) {
 			return this.dbObject.deleteForBlockNumber(constants.BLOCK_TABLE_NAME, 'number', blockNumber);
 		}
-		return null;
+		return Promise.reject(new Error('blockNumber is undefined'));
 
 	},
 
+	/**
+	 * To Delegate deleteAddressTokenTransactions call to DB.
+	 * @param  {Array} Transaction hash array to be deleted
+	 * @return {Promise}
+	 */
 	deleteAddressTokenTransactions: function(txnHashArray) {
 		if (txnHashArray) {
 			return this.dbObject.deleteForTransactions(constants.ADDRESS_TOKEN_TRANSACTION_TABLE_NAME,'transaction_hash', txnHashArray);
 		}
-		return null;
+		return Promise.reject(new Error('txnHashArray is undefined'));
 	},
 
+	/**
+	 * To Delegate deleteTokenTransactions call to DB.
+	 * @param  {Array} Transaction hash array to be deleted
+	 * @return {Promise}
+	 */
 	deleteTokenTransactions: function(txnHashArray) {
 		if (txnHashArray) {
 			return this.dbObject.deleteForTransactions(constants.ADDRESS_TRANSACTION_TABLE_NAME, 'transaction_hash', txnHashArray);
 		}
-		return null;
+		return Promise.reject(new Error('txnHashArray is undefined'));
 	},
 
+	/**
+	 * To Delegate deleteAddressTransactions call to DB.
+	 * @param  {Array} Transaction hash array to be deleted
+	 * @return {Promise}
+	 */
 	deleteAddressTransactions: function(txnHashArray) {
 		if (txnHashArray) {
 			return this.dbObject.deleteForTransactions(constants.TOKEN_TRANSACTION_TABLE_NAME, 'hash', txnHashArray);
 		}
-		return null;
+		return Promise.reject(new Error('txnHashArray is undefined'));
 	},
 
+	/**
+	 * To Delegate deleteTransactions call to DB.
+	 * @param  {Array} Transaction hash array to be deleted
+	 * @return {Promise}
+	 */
 	deleteTransactions: function(txnHashArray) {
 		if (txnHashArray) {
 			return this.dbObject.deleteForTransactions(constants.TRANSACTION_TABLE_NAME, 'hash', txnHashArray);
 		}
-		return null;
+		return Promise.reject(new Error('txnHashArray is undefined'));
 	},
 
+	/**
+	 * To Delegate call to update verify flag of the block data in DB.
+	 * @param  {Integer} Number of the block
+	 * @return {Promise}
+	 */
 	updateVerifiedFlag: function(blockNumber) {
 		if (undefined != blockNumber) {
 			return this.dbObject.updateAttribute(constants.BLOCK_TABLE_NAME, 'verified', true, 'number', blockNumber);
 		}
-		return null;
+		return Promise.reject(new Error('blockNumber is undefined'));
 
 	}
 };
 
 
 
-//To create Singleton 
+/**
+ * To create Singleton instance of DbHelper of repective chainIDs.
+ */
 const dbHelperHandler = (function () {
 
     var dbHelpers = {};

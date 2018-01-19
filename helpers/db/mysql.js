@@ -2,13 +2,21 @@
 
 /*
  * MySQL: Helper file to interact with mysql queries
- * Author: Sachin
+ * @module helpers/db/
  */
 
 
 var mysql = require('mysql');
-const logger = require('../CustomConsoleLogger');
 
+const reqPrefix           = "../.."
+    , logger = require( reqPrefix + '/helpers/CustomConsoleLogger');
+
+
+/**
+ * MySQL contructor to create connnection with the MySql DB.
+ * @param  {JSONObject} DB condig file
+ * @return {Object}
+ */
 var MySQL = module.exports = function(dbconfig){
 	this.con = mysql.createConnection({
   		host: dbconfig.host,
@@ -26,6 +34,12 @@ var MySQL = module.exports = function(dbconfig){
 
 MySQL.prototype = {
 
+    /**
+     * To get transaction based on provided hash.
+     * @param  {String} Table Name
+     * @param  {String} Hash of the transaction 
+     * @return {Promise}
+     */
     selectTransaction: function (tableName, transactionHash){
         var oThis = this;
 
@@ -46,6 +60,13 @@ MySQL.prototype = {
         });
     },
 
+    /**
+     * To get Recent mined blocks
+     * @param  {String} Table Name
+     * @param  {Integer} Page Number
+     * @param  {Integer} Page Size
+     * @return {Promise}
+     */
     selectRecentBlocks: function (tableName, pageNumber, pageSize){
         var oThis = this;
 
@@ -65,7 +86,13 @@ MySQL.prototype = {
         });
     },
 
-	 selectBlock: function (tableName, blockNumber){
+    /**
+     * To get Block based on block Number
+     * @param  {String} Table Name
+     * @param  {Integer}  Block Number
+     * @return {Promise}
+     */
+	  selectBlock: function (tableName, blockNumber){
       var oThis = this;
 
       var query = "SELECT * from " + tableName + " WHERE number="+ blockNumber;
@@ -83,6 +110,11 @@ MySQL.prototype = {
         });
     },
 
+    /**
+     * To get Higest inserted block in the DB.
+     * @param  {String} Table Name
+     * @return {Promise}
+     */
     selectHigestInsertedBlock: function (tableName) {
         var oThis = this;
         logger.log("Getting higest block Number");
@@ -103,6 +135,15 @@ MySQL.prototype = {
     },
     
 
+    /**
+     * To get the Leger transactions of particular contract of provided address
+     * @param  {String} Table Name
+     * @param  {String} Address
+     * @param  {String} Contract Address
+     * @param  {Integer} Page Number
+     * @param  {Integer} Page Size
+     * @return {Promise}
+     */
     selectAddressLedgerOfContract: function (tableName, address, contractAddress, pageNumber, pageSize){
        var oThis = this;
         logger.log("select for address ledger in contract ");
@@ -128,6 +169,14 @@ MySQL.prototype = {
         });
     },
 
+    /**
+     * To get the Ledger transactions of particular contract address 
+     * @param  {String} Table Name
+     * @param  {String} Contract Address
+     * @param  {Integer} Page Number
+     * @param  {Integer} Page Size
+     * @return {Promise}
+     */
     selectContractLedger: function (tableName, contractAddress, pageNumber, pageSize){
        var oThis = this;
         logger.log("select for contract ledger");
@@ -151,7 +200,13 @@ MySQL.prototype = {
         });
     },
 
-
+    /**
+     * To get recent Transactions of the mined blocks.
+     * @param  {String} Table Name
+     * @param  {Integer} Page Number
+     * @param  {Integer} Page Size
+     * @return {Promise}
+     */
     selectRecentTransactions: function (tableName, pageNumber, pageSize) {
         var oThis = this;
         logger.log("select for recent transactions ");
@@ -174,6 +229,14 @@ MySQL.prototype = {
 
     },
 
+    /**
+     * To get List of Transactions of the block based on its provided block number
+     * @param  {String} Table Name
+     * @param  {Integer} Block Number
+     * @param  {Integer} Page Number
+     * @param  {Integer} Page Size
+     * @return {Promise}
+     */
     selectBlockTransactions: function (tableName, blockNumber, pageNumber, pageSize) {
         var oThis = this;
         logger.log("select for transaction in block of blockNumber ", blockNumber);
@@ -195,6 +258,15 @@ MySQL.prototype = {
         });
 
     },
+
+    /**
+     * To get List of Transactions of the provided address.
+     * @param  {String} Table Name
+     * @param  {String} Address
+     * @param  {Integer} Page Number
+     * @param  {Integer} page Size
+     * @return {Promise}
+     */
     selectAddressTransactions: function (tableName, address, pageNumber, pageSize) {
       var oThis = this;
       logger.log("select for transaction address", tableName, address);
@@ -216,6 +288,13 @@ MySQL.prototype = {
       });
     },
 
+    /**
+     * To insert Data into the provided table based on column sequence
+     * @param  {String} Table Name
+     * @param  {String} Column Sequence
+     * @param  {Array} Data
+     * @return {Promise}
+     */
   	insertData: function (tableName, columnsSequence ,data) {
   		var oThis = this;
       logger.log("Insert into table", tableName, data);
@@ -246,6 +325,13 @@ MySQL.prototype = {
       });
   	},
 
+    /**
+     * To delete transaction data of the provided trnasaction hash array
+     * @param  {String} Table Name
+     * @param  {String} Attribute Name
+     * @param  {Array} Transaction Hash Array
+     * @return {Promise}
+     */
     deleteForTransactions: function (tableName, attributName ,txnHashArray) {
         var oThis = this;
         logger.log("Delete in table", tableName, txnHashArray);
@@ -271,6 +357,13 @@ MySQL.prototype = {
         });
     },
 
+    /**
+     * To delete Block Data based on provided block number
+     * @param  {String} Table Name
+     * @param  {String} Attribute Name
+     * @param  {Integer} Block Number
+     * @return {[type]}
+     */
     deleteForBlockNumber: function(tableName, attributName, blockNumber) {
         var oThis = this;
         logger.log("Delete in table", tableName, blockNumber);
@@ -296,6 +389,15 @@ MySQL.prototype = {
         });
     },
 
+    /**
+     * To update attribute of the table based on where attribute.
+     * @param  {String} Table Name
+     * @param  {String} Attribute Name
+     * @param  {String} Value
+     * @param  {String} Where Attribute
+     * @param  {String} Where Attribute Value
+     * @return {Promise}
+     */
     updateAttribute: function(tableName, attributName, value, whereAttribute, whereValue) {
         var oThis = this;
         logger.log("Update in table", tableName, attributName, value);
