@@ -66,7 +66,7 @@ if (cliHandler.chainID) {
 
 /**
  * Methods to set timeout for the verifyBlock api
- * @param {blockNumber} Number of the Block
+ * @param {Integer} Number of the Block
  * @return {null}
  */
 var setBlockVerifier = function(blockNumber) {
@@ -79,6 +79,7 @@ var setBlockVerifier = function(blockNumber) {
                     block_verifier.verifyBlock( state.blockNumber, setBlockVerifier);
                 } else {
                     //Need to set up the cron again.
+                    logger.log("Done verification of all the blocks, Need to run the job again after new block mining.");
                 }
             }).catch(function(err){
                 logger.error('\nNot able to fetch block number)\n', err);

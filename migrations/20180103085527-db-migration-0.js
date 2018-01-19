@@ -8,7 +8,6 @@ const constants = require('../config/core_constants.js');
 /**
   * We receive the dbmigrate dependency from dbmigrate initially.
   * This enables us to not have to rely on NODE_PATH.
-  * Author: Sachin
   */
 exports.setup = function(options, seedLink) {
   dbm = options.dbmigrate;

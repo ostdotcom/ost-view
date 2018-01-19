@@ -7,11 +7,11 @@
 
 const reqPrefix           = "../.."
     , MySQL 			  = require( reqPrefix + '/helpers/db/mysql')
-    , constants           = require( reqPrefix + '/config/core_constants');
+    , constants           = require( reqPrefix + '/config/core_constants')
     , logger              = require( reqPrefix + '/helpers/CustomConsoleLogger');
 
 const DEFAULT_PAGE_NUMBER = constants.DEFAULT_PAGE_NUMBER;
-const DEFAULT_PAGE_SIZE   = constatns.DEFAULT_PAGE_SIZE;
+const DEFAULT_PAGE_SIZE   = constants.DEFAULT_PAGE_SIZE;
 
 /**
  * Constructor to create DbHelper object
