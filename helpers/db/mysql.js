@@ -13,9 +13,10 @@ const reqPrefix           = "../.."
 
 
 /**
+ * @constructor
  * MySQL contructor to create connnection with the MySql DB.
- * @param  {JSONObject} DB condig file
- * @return {Object}
+ * @param  {JSONObject} dbconfig DB config file
+ * @return {Object} MySQL DB object
  */
 var MySQL = module.exports = function(dbconfig){
 	this.con = mysql.createConnection({
@@ -36,8 +37,8 @@ MySQL.prototype = {
 
     /**
      * To get transaction based on provided hash.
-     * @param  {String} Table Name
-     * @param  {String} Hash of the transaction 
+     * @param  {String} tableName Table Name
+     * @param  {String} transactionHash Hash of the transaction 
      * @return {Promise}
      */
     selectTransaction: function (tableName, transactionHash){
@@ -62,9 +63,9 @@ MySQL.prototype = {
 
     /**
      * To get Recent mined blocks
-     * @param  {String} Table Name
-     * @param  {Integer} Page Number
-     * @param  {Integer} Page Size
+     * @param  {String} tableName Table Name
+     * @param  {Integer} pageNumber Page Number
+     * @param  {Integer} pageSize Page Size
      * @return {Promise}
      */
     selectRecentBlocks: function (tableName, pageNumber, pageSize){
@@ -88,8 +89,8 @@ MySQL.prototype = {
 
     /**
      * To get Block based on block Number
-     * @param  {String} Table Name
-     * @param  {Integer}  Block Number
+     * @param  {String} tableName Table Name
+     * @param  {Integer} blockNumber Block Number
      * @return {Promise}
      */
 	  selectBlock: function (tableName, blockNumber){
@@ -112,7 +113,7 @@ MySQL.prototype = {
 
     /**
      * To get Higest inserted block in the DB.
-     * @param  {String} Table Name
+     * @param  {String} tableName Table Name
      * @return {Promise}
      */
     selectHigestInsertedBlock: function (tableName) {
@@ -137,11 +138,11 @@ MySQL.prototype = {
 
     /**
      * To get the Leger transactions of particular contract of provided address
-     * @param  {String} Table Name
-     * @param  {String} Address
-     * @param  {String} Contract Address
-     * @param  {Integer} Page Number
-     * @param  {Integer} Page Size
+     * @param  {String} tableName Table Name
+     * @param  {String} address Address
+     * @param  {String} contractAddress Contract Address
+     * @param  {Integer} pageNumber Page Number
+     * @param  {Integer} pageSize Page Size
      * @return {Promise}
      */
     selectAddressLedgerOfContract: function (tableName, address, contractAddress, pageNumber, pageSize){
@@ -171,10 +172,10 @@ MySQL.prototype = {
 
     /**
      * To get the Ledger transactions of particular contract address 
-     * @param  {String} Table Name
-     * @param  {String} Contract Address
-     * @param  {Integer} Page Number
-     * @param  {Integer} Page Size
+     * @param  {String} tableName Table Name
+     * @param  {String} contractAddress Contract Address
+     * @param  {Integer} pageNumber Page Number
+     * @param  {Integer} pageSize Page Size
      * @return {Promise}
      */
     selectContractLedger: function (tableName, contractAddress, pageNumber, pageSize){
@@ -202,9 +203,9 @@ MySQL.prototype = {
 
     /**
      * To get recent Transactions of the mined blocks.
-     * @param  {String} Table Name
-     * @param  {Integer} Page Number
-     * @param  {Integer} Page Size
+     * @param  {String} tableName Table Name
+     * @param  {Integer} pageNumberPage Number
+     * @param  {Integer} pageSize Page Size
      * @return {Promise}
      */
     selectRecentTransactions: function (tableName, pageNumber, pageSize) {
@@ -231,10 +232,10 @@ MySQL.prototype = {
 
     /**
      * To get List of Transactions of the block based on its provided block number
-     * @param  {String} Table Name
-     * @param  {Integer} Block Number
-     * @param  {Integer} Page Number
-     * @param  {Integer} Page Size
+     * @param  {String} tableName Table Name
+     * @param  {Integer} blockNumber Block Number
+     * @param  {Integer} pageNumber Page Number
+     * @param  {Integer} pageSize Page Size
      * @return {Promise}
      */
     selectBlockTransactions: function (tableName, blockNumber, pageNumber, pageSize) {
@@ -261,10 +262,10 @@ MySQL.prototype = {
 
     /**
      * To get List of Transactions of the provided address.
-     * @param  {String} Table Name
-     * @param  {String} Address
-     * @param  {Integer} Page Number
-     * @param  {Integer} page Size
+     * @param  {String} tableName Table Name
+     * @param  {String} address Address
+     * @param  {Integer} pageNumber Page Number
+     * @param  {Integer} pageSize page Size
      * @return {Promise}
      */
     selectAddressTransactions: function (tableName, address, pageNumber, pageSize) {
@@ -290,9 +291,9 @@ MySQL.prototype = {
 
     /**
      * To insert Data into the provided table based on column sequence
-     * @param  {String} Table Name
-     * @param  {String} Column Sequence
-     * @param  {Array} Data
+     * @param  {String} tableName Table Name
+     * @param  {String} columnsSequence Column Sequence
+     * @param  {Array} data Data
      * @return {Promise}
      */
   	insertData: function (tableName, columnsSequence ,data) {
@@ -327,9 +328,9 @@ MySQL.prototype = {
 
     /**
      * To delete transaction data of the provided trnasaction hash array
-     * @param  {String} Table Name
-     * @param  {String} Attribute Name
-     * @param  {Array} Transaction Hash Array
+     * @param  {String} tableName Table Name
+     * @param  {String} attributeName Attribute Name
+     * @param  {Array} txnHashArray Transaction Hash Array
      * @return {Promise}
      */
     deleteForTransactions: function (tableName, attributName ,txnHashArray) {
@@ -359,9 +360,9 @@ MySQL.prototype = {
 
     /**
      * To delete Block Data based on provided block number
-     * @param  {String} Table Name
-     * @param  {String} Attribute Name
-     * @param  {Integer} Block Number
+     * @param  {String} tableName Table Name
+     * @param  {String} attributeName Attribute Name
+     * @param  {Integer} blockNumber Block Number
      * @return {Promise}
      */
     deleteForBlockNumber: function(tableName, attributName, blockNumber) {
@@ -391,11 +392,11 @@ MySQL.prototype = {
 
     /**
      * To update attribute of the table based on where attribute.
-     * @param  {String} Table Name
-     * @param  {String} Attribute Name
-     * @param  {String} Value
-     * @param  {String} Where Attribute
-     * @param  {String} Where Attribute Value
+     * @param  {String} tableName Table Name
+     * @param  {String} attributeName Attribute Name
+     * @param  {String} value Value
+     * @param  {String} whereAttribute Where Attribute
+     * @param  {String} whereValue Where Attribute Value
      * @return {Promise}
      */
     updateAttribute: function(tableName, attributName, value, whereAttribute, whereValue) {

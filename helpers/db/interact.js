@@ -14,8 +14,9 @@ const DEFAULT_PAGE_NUMBER = constants.DEFAULT_PAGE_NUMBER;
 const DEFAULT_PAGE_SIZE   = constants.DEFAULT_PAGE_SIZE;
 
 /**
+ * @constructor
  * Constructor to create DbHelper object
- * @param {Object}
+ * @param {Object} dbObj DB Object
  */
 const DbHelper = function(dbObj){
 	this.dbObject = dbObj;
