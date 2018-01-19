@@ -18,7 +18,9 @@ function parseFile(filePath, options) {
 const rootPrefix = "../contracts/abi/";
 const rootPostfix = ".abi"
 
-
+/**
+ * 
+ */
 function CoreAbis() {
   this.abiHash = {};
   var jsonFile = ['ERC20Token'];

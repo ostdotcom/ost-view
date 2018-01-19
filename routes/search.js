@@ -18,10 +18,10 @@ const searchMiddleware = function(req,res, next){
 	var chainId = req.params.chainId;
 	var param = req.params.param;
 
-	const webRPC = coreConfig.getWebRPC(chainId);
+	const webRpcUrl = coreConfig.getWebRpcUrl(chainId);
 	const chainDbConfig = coreConfig.getChainDbConfig(chainId);
 
-	req.searchInstance = new search(webRPC, chainDbConfig);
+	req.searchInstance = new search(webRpcUrl, chainDbConfig);
 
 	req.param = param;
 

@@ -72,7 +72,7 @@ module.exports = {
 		return undefined;
 	},
 
-	getWebRPC(chainId){
+	getWebRpcUrl(chainId){
 		if (this.getChainConfig(chainId)) {
 			return this.getChainConfig(chainId).web_rpc;
 		}

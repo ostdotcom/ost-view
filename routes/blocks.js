@@ -18,10 +18,10 @@ const blocksMiddleware = function(req,res, next){
 	var chainId = req.params.chainId;
 	var page = req.params.page;
 
-	const webRPC = coreConfig.getWebRPC(chainId);
+	const webRpcUrl = coreConfig.getWebRpcUrl(chainId);
 	const chainDbConfig = coreConfig.getChainDbConfig(chainId);
 
-	req.blocksInstance = new blocks(webRPC, chainDbConfig);
+	req.blocksInstance = new blocks(webRpcUrl, chainDbConfig);
 
 	req.chainId = chainId;
 	req.page = page;

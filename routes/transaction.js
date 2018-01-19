@@ -21,10 +21,10 @@ const transactionMiddleware = function(req,res, next){
 	var hash = req.params.hash;
 	var page = req.params.page;
 
-	const webRPC = coreConfig.getWebRPC(chainId);
+	const webRpcUrl = coreConfig.getWebRpcUrl(chainId);
 	const chainDbConfig = coreConfig.getChainDbConfig(chainId);
 
-	req.transactionInstance = new transaction(webRPC, chainDbConfig);
+	req.transactionInstance = new transaction(webRpcUrl, chainDbConfig);
 
 	req.hash = hash;
 	req.page = page;
