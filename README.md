@@ -32,7 +32,6 @@ OPENST-EXPLORER
 ```
 
 * Create database entry in config.js
-```
   > under chain_config hash update following values and pest 
 
 	  '<chain_id>': {
@@ -53,21 +52,19 @@ OPENST-EXPLORER
 	    }, 
 
   > save the changes.
-```
 
-* Create tables in database
+* Run migration
 ```
   > cd openst-explorer 
   > node executables/db_migrate.js <up/reset-up/reset/create> --chainID <chain_id>
 ```
 
-* Start web RPC
+* Start GETH 
 
 * Start block fetcher cron
 ```
   > cd openst-explorer 
-  > cd executables
-  > node block_fetcher_cron.js --chainID <chain_id> --blockNumber <block_number>
+  > node executables/block_fetcher_cron.js --chainID <chain_id> --blockNumber <block_number>
 ```
 
 * By this time, your block fetcher start fetching blocks and storeing it in database.
@@ -77,6 +74,5 @@ OPENST-EXPLORER
 * Start block verifier
 ```
   > cd openst-explorer 
-  > cd executables
-  > node block_verifier_cron.js --chainID <chain_id> 
+  > node executables/block_verifier_cron.js --chainID <chain_id> 
 ```
