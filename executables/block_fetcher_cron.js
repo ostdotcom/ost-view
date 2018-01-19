@@ -47,7 +47,7 @@ cliHandler
 if (cliHandler.chainID) {
     state.chainID = cliHandler.chainID;
     if (isNaN(cliHandler.blockNumber)) {
-        state.blockNumber = undefined;   
+        state.blockNumber = 0;   
     } else {    
         state.blockNumber = cliHandler.blockNumber;
     }    
@@ -70,10 +70,8 @@ if (cliHandler.chainID) {
 dbInteract.getHigestInsertedBlock()
     .then(function(blockNumber){
         logger.log("Higest Block Number ", blockNumber);
-        if (block_fetcher.state.blockNumber == undefined && blockNumber != null) {
+        if (block_fetcher.state.blockNumber == 0 && blockNumber != null) {
             block_fetcher.state.blockNumber = +blockNumber + 1;
-        } else {
-            block_fetcher.state.blockNumber = 0;
         }
         setfetchBlockCron(block_fetcher.state.blockNumber);
     }).catch(function(err){
