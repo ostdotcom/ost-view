@@ -20,10 +20,10 @@ const addressMiddleware = function(req,res, next){
 	var page = req.params.page;
 	var contractAddress = req.params.contractAddress;
 
-	const webRPC = coreConfig.getWebRPC(chainId);
+	const webRpcUrl = coreConfig.getWebRpcUrl(chainId);
 	const chainDbConfig = coreConfig.getChainDbConfig(chainId);
 
-	req.addressInstance = new address(webRPC, chainDbConfig);
+	req.addressInstance = new address(webRpcUrl, chainDbConfig);
 
 	req.addressValue = addressValue;
 	req.page = page;

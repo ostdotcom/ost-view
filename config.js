@@ -57,6 +57,23 @@ const chain_config = {
 		    txnAttributes   : ['gas', 'gasPrice', 'input','nonce', 'contractAddress']	
     	}
 	},
+
+	'1409': {
+		chainId       : 1409,
+    	database_type : "mysql", 
+    	web_rpc       : "http://localhost:8545",
+    	cron_interval : 1,
+    	db_config     : {
+    		chainId         : 1409,
+    		driver    		: 'mysql',
+		    user      		: 'root',
+		    password  		: 'root',
+		    host      		: 'localhost',
+		    database  		: 'ost_explorer_test_1410',
+		    blockAttributes : ['miner','difficulty','totalDifficulty','gasLimit','gasUsed'],
+		    txnAttributes   : ['gas', 'gasPrice', 'input','nonce', 'contractAddress']	
+    	}
+	},
 }
 
 module.exports = {

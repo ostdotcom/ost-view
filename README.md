@@ -21,17 +21,62 @@ OPENST-EXPLORER
   > npm install
 ```
 
-* Create DB with name define in dbconfig.json
+* Start MySQL
+
+* Create database in MySQL
+
+* Open config.json
 ```
-  > db-migrate up --config ./config/dbconfig.json --env stage
+  > cd openst-explorer 
+  > vim config.js
 ```
 
-* Start Block fetching Cron Job
+* Create database entry in config.js
 ```
-  > source test/openst_env_vars.sh
+  > under chain_config hash update following values and pest 
+
+	  '<chain_id>': {
+	        chainId       : <chain_id>,
+	        database_type : "mysql",
+	        web_rpc       : "<RPC URL>",
+	        cron_interval : <cron_interval_time>,
+	        db_config     : {
+	                chainId         : <chain_id>,
+               	 driver          : 'mysql',
+                	user            : '<mysql username>',
+                	password        : '<mysql password>',
+                	host            : 'localhost',
+                	database        : '<database name(created in above step)>',
+                    blockAttributes : ['miner','difficulty','totalDifficulty','gasLimit','gasUsed'],
+                    txnAttributes   : ['gas', 'gasPrice', 'input','nonce', 'contractAddress']
+	        }
+	    }, 
+
+  > save the changes.
 ```
 
-* Start Block fetching Cron Job with chainNumber
+* Create tables in database
 ```
-  > ./test/block_fetcher.js
+  > cd openst-explorer 
+  > node executables/db_migrate.js <up/reset-up/reset/create> --chainID <chain_id>
+```
+
+* Start web RPC
+
+* Start block fetcher cron
+```
+  > cd openst-explorer 
+  > cd executables
+  > node block_fetcher_cron.js --chainID <chain_id> --blockNumber <block_number>
+```
+
+* By this time, your block fetcher start fetching blocks and storeing it in database.
+
+### In Terminal 2:
+
+* Start block verifier
+```
+  > cd openst-explorer 
+  > cd executables
+  > node block_verifier_cron.js --chainID <chain_id> 
 ```
