@@ -362,7 +362,7 @@ MySQL.prototype = {
      * @param  {String} Table Name
      * @param  {String} Attribute Name
      * @param  {Integer} Block Number
-     * @return {[type]}
+     * @return {Promise}
      */
     deleteForBlockNumber: function(tableName, attributName, blockNumber) {
         var oThis = this;

@@ -40,14 +40,21 @@
 			<li class="dropdown">
 				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="module-lib_web3_events_formatter.html">lib/web3/events/formatter</a></li><li><a href="module-lib_webInterface_blocks.html">lib/webInterface/blocks</a></li>
+					<li><a href="module-executables_.html">executables/</a></li><li><a href="module-lib_block_utils_.html">lib/block_utils/</a></li><li><a href="module-lib_contract_interact_.html">lib/contract_interact/</a></li><li><a href="module-lib_providers_.html">lib/providers/</a></li><li><a href="module-lib_web3_events_formatter.html">lib/web3/events/formatter</a></li><li><a href="module-lib_web3_interact_.html">lib/web3/interact/</a></li><li><a href="module-lib_webInterface_.html">lib/webInterface/</a></li><li><a href="module-lib_webInterface_blocks.html">lib/webInterface/blocks</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="module-lib_webInterface_-address.html">lib/webInterface/~address</a></li>
 				</ul>
 			</li>
 			
 			<li class="dropdown">
 				<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b class="caret"></b></a>
 				<ul class="dropdown-menu ">
-					<li><a href="global.html#accountLength">accountLength</a></li><li><a href="global.html#contractPageSize">contractPageSize</a></li><li><a href="global.html#transactionLenght">transactionLenght</a></li>
+					<li><a href="global.html#DbHelper">DbHelper</a></li><li><a href="global.html#dbHelperHandler">dbHelperHandler</a></li><li><a href="global.html#MySQL">MySQL</a></li>
 				</ul>
 			</li>
 			
@@ -157,25 +164,18 @@
         <dl>
             
 <hr>
-<dt class="name" id="accountLength">
-    <h4 id="accountLength"><span class="type-signature">&lt;constant> </span>accountLength<span class="type-signature"> :Number</span></h4>
+<dt class="name" id="dbHelperHandler">
+    <h4 id="dbHelperHandler"><span class="type-signature">&lt;constant> </span>dbHelperHandler<span class="type-signature"></span></h4>
 
     
 </dt>
 <dd>
     
-
+    <div class="description">
+        To create Singleton instance of DbHelper of repective chainIDs.
+    </div>
     
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">Number</span>
 
-
-
-            </li>
-        </ul>
     
 
     
@@ -224,92 +224,18 @@
         
             
 <hr>
-<dt class="name" id="contractPageSize">
-    <h4 id="contractPageSize"><span class="type-signature">&lt;constant> </span>contractPageSize<span class="type-signature"> :Number</span></h4>
+<dt class="name" id="MySQL">
+    <h4 id="MySQL"><span class="type-signature"></span>MySQL<span class="type-signature"></span></h4>
 
     
 </dt>
 <dd>
     
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">Number</span>
-
-
-
-            </li>
-        </ul>
+    <div class="description">
+        MySQL contructor to create connnection with the MySql DB.
+    </div>
     
 
-    
-<dl class="details">
-    
-
-	
-
-	
-
-	
-
-    
-
-    
-
-    
-
-    
-
-	
-
-	
-
-	
-
-	
-
-	
-
-
-
-	
-
-	
-
-	
-
-	
-</dl>
-
-
-    
-</dd>
-
-        
-            
-<hr>
-<dt class="name" id="transactionLenght">
-    <h4 id="transactionLenght"><span class="type-signature">&lt;constant> </span>transactionLenght<span class="type-signature"> :Number</span></h4>
-
-    
-</dt>
-<dd>
-    
-
-    
-        <h5>Type:</h5>
-        <ul>
-            <li>
-                
-<span class="param-type">Number</span>
-
-
-
-            </li>
-        </ul>
     
 
     
@@ -358,6 +284,134 @@
         </dl>
     
 
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        <dl>
+            
+<hr>
+<dt>
+    <h4 class="name" id="DbHelper"><span class="type-signature"></span>DbHelper()</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Constructor to create DbHelper object
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        </dl>
     
 
     

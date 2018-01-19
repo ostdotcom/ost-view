@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>Simple Token Foundation Namespace: web3EventsFormatter</title>
+	<title>Simple Token Foundation Module: lib/block_utils/</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -86,17 +86,10 @@
 		<div id="main">
 			
 
-	<h1 class="page-title">Namespace: web3EventsFormatter</h1>
+	<h1 class="page-title">Module: lib/block_utils/</h1>
 <section>
 
 <header>
-    
-        <h2>
-            <span class="ancestors"><a href="module-lib_web3_events_formatter.html">lib/web3/events/formatter</a>~</span>
-        
-        web3EventsFormatter
-        </h2>
-        
     
 </header>
 
@@ -105,7 +98,8 @@
     <div class="container-overview">
     
         
-            <div class="description">Ivent Formatter.</div>
+            <div class="description">File: block_fetcher
+It fetch blocks from the node and feed them into the provided DB.</div>
         
 
         
@@ -171,7 +165,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="perform"><span class="type-signature"></span>perform(formattedTransactionReceipt)</h4>
+    <h4 class="name" id="~BlockFetcher"><span class="type-signature">&lt;inner> </span>BlockFetcher(Web3RPC, DB, verifier)</h4>
     
     
 </dt>
@@ -179,7 +173,7 @@
 
     
     <div class="description">
-        performer
+        Constructor to create object of BlockFetcher
     </div>
     
 
@@ -214,10 +208,16 @@
 
         <tr>
             
-                <td class="name"><code>formattedTransactionReceipt</code></td>
+                <td class="name"><code>Web3RPC</code></td>
             
 
             <td class="type">
+            
+                
+<span class="param-type">Web3Object</span>
+
+
+
             
             </td>
 
@@ -225,7 +225,55 @@
 
             
 
-            <td class="description last"></td>
+            <td class="description last">Object</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>DB</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">object to interact</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>verifier</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">flag</td>
         </tr>
 
     
@@ -285,26 +333,574 @@
     
 
     
-    <h5>Returns:</h5>
+
     
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="~BlockVerifier"><span class="type-signature">&lt;inner> </span>BlockVerifier(Web3RPC, DB)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Constructor to create object of BlockVerifier
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>Web3RPC</code></td>
             
 
+            <td class="type">
+            
+                
+<span class="param-type">Web3Object</span>
 
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Object</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>DB</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">object to interact</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        </dl>
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+	<h1 class="page-title">Module: lib/block_utils/</h1>
+<section>
+
+<header>
+    
+</header>
+
+
+<article>
+    <div class="container-overview">
+    
         
-<span class="param-type">Promise.&lt;{}></span>
+            <div class="description">File: block_verifier
+It provides block verifier object to confirm blocks of the block chain.</div>
+        
+
+        
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
 
 
 
-    </dd>
+	
+
+	
+
+	
+
+	
 </dl>
 
 
         
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        <dl>
+            
+<hr>
+<dt>
+    <h4 class="name" id="~BlockFetcher"><span class="type-signature">&lt;inner> </span>BlockFetcher(Web3RPC, DB, verifier)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Constructor to create object of BlockFetcher
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>Web3RPC</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Web3Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Object</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>DB</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">object to interact</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>verifier</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">flag</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="~BlockVerifier"><span class="type-signature">&lt;inner> </span>BlockVerifier(Web3RPC, DB)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Constructor to create object of BlockVerifier
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>Web3RPC</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Web3Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Object</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>DB</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">object to interact</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
 
     
 </dd>

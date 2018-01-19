@@ -37,6 +37,7 @@ var state = {
  * Methods to set timeout for the fetchBlock api
  * @param  {Integer} Number of the block
  * @return {null}
+ * @method setfetchBlockCron
  */
 var setfetchBlockCron = function(blockNumber) {
     setTimeout(function() {
