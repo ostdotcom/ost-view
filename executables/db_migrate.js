@@ -3,6 +3,7 @@
 
 /**
   * DB-migrate CLI file to handle migration functionality of the databases
+  * @module executables/
   */
 
 const cliHandler  = require('commander')
@@ -15,9 +16,11 @@ const cliHandler  = require('commander')
 ;
 
 /**
-  * To get the chainList of IDs from the object commandline object,
-  * If not present return all the chaidIDs from the config.
-  */
+ * To get the chainList of IDs from the object commandline object,
+ * If not present return all the chaidIDs from the config.
+ * @param  {Object} Object of commander
+ * @return {Array} Array of chainIDs
+ */
 const getChainList = function(obj) {
 	
 	var chainIDs = [];
@@ -31,9 +34,11 @@ const getChainList = function(obj) {
 };
 
 /**
-  *	To create database.json temp file based on chainID provided.
-  * It is used by db-migrate to create object of the same
-  */
+ *	To create database.json temp file based on chainID provided.
+ * It is used by db-migrate to create object of the same
+ * @param  {Integer} chainID
+ * @return {null}
+ */
 const initDBConfigFile = function(chainID) {
 	
 	var db_config = core_config.getChainDbConfig(chainID);
@@ -54,8 +59,9 @@ const initDBConfigFile = function(chainID) {
 }; 
 
 /**
-  * To run migration up all versions after reset
-  */
+ * To run migration up all versions after reset
+ * @return {null}
+ */
 const resetUp = function() {
 	var chainIDs = getChainList(this);
 	
@@ -107,8 +113,10 @@ const reset = function() {
 };
 
 /**
-  *	To runs all pending migrations till provided version or else full version if not provided
-  */
+ * To runs all pending migrations till provided version or else full version if not provided
+ * @param  {String} Name of the version
+ * @return {null}
+ */
 const up = function(version) {
 	var chainIDs = getChainList(this);
 	
@@ -132,8 +140,10 @@ const up = function(version) {
 };
 
 /**
-  * To create migration with provide migration name
-  */
+ * To create migration with provide migration name
+ * @param  {String} Name of the migration to be created
+ * @return {null}
+ */
 const createMigration = function(name) {
 	
 	//Getting chain ID of first config. It is irrelevent in case of mirgration creation.
@@ -157,7 +167,9 @@ const createMigration = function(name) {
 	});
 };
 
-//'Please Specify command  $>node db_migrate.js <Command> --chainID [chain ID]'
+/**
+ * Please Specify command  $>node db_migrate.js <Command> --chainID [chain ID]
+ */
 cliHandler
   .version('1.0')
   .command('reset-up')

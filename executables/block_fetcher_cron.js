@@ -2,9 +2,9 @@
 "use strict"
 
 /**
-  * File: block_fetcher
-  * It creates cron job to fetch blocks from the node and feed them into the provided DB.
-  * Author: Sachin
+  * File: block_fetcher_cron
+  * It creates job to fetch blocks from the node and feed them into the provided DB.
+  * @module executables/
   */
 
 const reqPrefix           = ".."
@@ -22,21 +22,32 @@ var web3Interact;
 
 var block_fetcher;
 
-//State of the fetcher with config details.
+/**
+ * Maintain the state for the block fetcher
+ * @type {hash}
+ */
 var state = {
     chainID     : null,
     blockNumber : 0,
     config      : null,
 };
 
-//Methods to set timeout for the fetchBlock api
+/**
+ * setfetchBlockCron
+ * Methods to set timeout for the fetchBlock api
+ * @param  {Integer} Number of the block
+ * @return {null}
+ */
 var setfetchBlockCron = function(blockNumber) {
     setTimeout(function() {
-        block_fetcher.fetchBlock(blockNumber, setfetchBlockCron);
-    }, state.config.cron_interval );
+        block_fetcher.fetchAndUpdateBlock(blockNumber, setfetchBlockCron);
+    }, state.config.polling_interval );
 }
 
-// To handle command line with format $> node block_fetch.js <chainID> <initial_block_number>
+/**
+ * To handle command line with format $> node block_fetch_cron.js --chainID <chainID> --blockNumber [initial_block_number]
+ * It picks up next last inserted block to start the fetching process if the blockNumber is not provided.
+ */
 cliHandler
   .version('1.0')
   .usage('Please Specify chain ID \n$>node block_fetcher.js <chainID> <blockNumber>(optional)')

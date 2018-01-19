@@ -3,8 +3,8 @@
 
 /**
   * File: block_verifier
-  * It creates cron job to verify blocks from the node and reinsert them if found inconsistent.
-  * Author: Sachin
+  * It creates job to run verify block api.
+  * @module executables/
   */
 
 const reqPrefix           = ".."
@@ -22,14 +22,19 @@ var web3Interact;
 
 var block_verifier;
 
-//State of the fetcher with config details.
+/**
+ * Maintain the state for the block fetcher
+ * @type {hash}
+ */
 var state = {
     blockNumber : 0,
     chainID     : null,
     config      : null,
 };
 
-// To handle command line with format $> node block_fetch.js <chainID>
+/**
+ * To handle command line with format $> node block_verifier_cron.js --chainID <chainID> --blockNumber <initial_block_number>
+ */
 cliHandler
   .version('1.0')
   .usage('Please Specify chain ID \n$>node block_fetcher.js <chainID> ')
@@ -59,7 +64,11 @@ if (cliHandler.chainID) {
     process.exit(1);
 }
 
-//Methods to set timeout for the fetchBlock api
+/**
+ * Methods to set timeout for the verifyBlock api
+ * @param {blockNumber} Number of the Block
+ * @return {null}
+ */
 var setBlockVerifier = function(blockNumber) {
     state.blockNumber = blockNumber;
     setTimeout(function() {
@@ -76,7 +85,7 @@ var setBlockVerifier = function(blockNumber) {
                 process.exit(1);
             }); 
 
-    }, state.config.cron_interval );
+    }, state.config.polling_interval );
 }
 
 setBlockVerifier(state.blockNumber);

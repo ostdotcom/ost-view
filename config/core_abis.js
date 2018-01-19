@@ -43,7 +43,11 @@ CoreAbis.prototype = {
 }
 
 
-
+/**
+ * coreContract
+ * Create Single Instance of coreContract.
+ * @return {[function]}
+ */
 const coreContract = (function(){
     var instance;
 

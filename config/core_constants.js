@@ -1,8 +1,7 @@
 "use strict";
 
-/*
- * Constants file: Load constants
- * Author: Sachin
+/**
+ * Core Constants file 
  */
 
 
@@ -19,7 +18,6 @@ define("TOKEN_TRANSACTION_TABLE_NAME", 'token_transactions');
 define("ADDRESS_TOKEN_TRANSACTION_TABLE_NAME", 'address_token_transactions');
 
 
-// define("blocks_format", '(?,?,?,?,?,?,?,?,?,?)');
 define("BLOCKS_DATA_SEQUENCE", '(number, hash, parent_hash, miner, difficulty, total_difficulty, gas_limit, gas_used, total_transactions, timestamp, verified)');
 define("TRANSACTION_DATA_SEQUENCE", '(hash, block_number, transaction_index, contract_address, t_from, t_to, tokens, gas_used, gas_price, nounce, input_data, logs, timestamp)');
 define("ADDRESS_TRANSACTION_DATA_SEQUENCE", '(address, corresponding_address, tokens, transaction_hash, transaction_fees, inflow, timestamp)');
@@ -31,9 +29,6 @@ define("TRANSACTION_INDEX_MAP", {'hash':0, 'block_number':1, 'transaction_index'
 define("TOKEN_TRANSACTION_INDEX_MAP", {'hash':0, 'contract_address':1, 't_from':2, 't_to':3, 'tokens':4, 'timestamp':5});
 
 define("ENVIRONMENT", process.env.ENVIRONMENT);
-
-// define('OSTE_GETH_UTILITY_RPC_PROVIDER', process.env.OSTE_GETH_UTILITY_RPC_PROVIDER);
-// define('OSTE_GETH_VALUE_RPC_PROVIDER', process.env.OSTE_GETH_VALUE_RPC_PROVIDER);
 
 //constants
 define('ACCOUNT_HASH_LENGTH',42);
