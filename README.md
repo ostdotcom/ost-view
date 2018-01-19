@@ -56,10 +56,10 @@ OPENST-EXPLORER
 * Run migration
 ```
   > cd openst-explorer 
-  > node executables/db_migrate.js <up/reset-up/reset/create> --chainID <chain_id>
+  > node executables/db_migrate.js up --chainID <chain_id>
 ```
 
-* Start GETH 
+* Start Geth console
 
 * Start block fetcher cron
 ```
