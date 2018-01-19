@@ -1,3 +1,8 @@
+
+/**
+ * @module routes/
+ */
+
 var express = require('express');
 var blocks = require('../lib/webInterface/blocks')
 var router = express.Router({mergeParams: true});
@@ -29,6 +34,13 @@ const blocksMiddleware = function(req,res, next){
 	next();
 }
 
+/**
+ * Get recent blocks.
+ * 
+ *@param {Integer} page - Page number for getting data in batch.
+ * 
+ * @return {Object} - return list block data.
+ */
 router.get("/recent/:page",blocksMiddleware, function(req, res){
 
 

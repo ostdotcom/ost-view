@@ -1,7 +1,13 @@
+
+/**
+ * @module routes/
+ */
+
 var express = require('express')
 var address = require('../lib/webInterface/address')
 var router = express.Router({mergeParams: true});
 
+//All modeules required.
 const reqPrefix           = ".."
     , responseHelper      = require(reqPrefix + "/lib/formatter/response" )
     , coreConfig = require(reqPrefix + "/config")
@@ -37,6 +43,13 @@ const transactionsIndex = 1;
 const defaultPageNumber = 1;
 
 
+
+/**
+ * Get account details 
+ * @param  {String} address - Address is of length 42.
+ *
+ * @return {Object} - Object is of type hash, with balance and transactions.
+ */
 router.get('/:address', addressMiddleware, function(req, res){
 
 	var promiseResolvers = [];
@@ -58,7 +71,12 @@ router.get('/:address', addressMiddleware, function(req, res){
 	  });
 });
 
-
+/**
+ * Get account balance 
+ * @param  {String} address - Address is of length 42.
+ *
+ * @return {Object} - return hash.
+ */
 router.get('/:address/balance', addressMiddleware, function(req, res){
 
  	req.addressInstance.getAddressBalance(req.addressValue)
@@ -76,6 +94,14 @@ router.get('/:address/balance', addressMiddleware, function(req, res){
 		});
 });
 
+/**
+ * Get account transactions 
+ * 
+ * @param {String} address - Address is of length 42.
+ * @param {Integer} page - Page number for getting data in batch. 
+ *	
+ * @return {Object} - return list of transactions made by address.
+ */
 router.get('/:address/transactions/:page',addressMiddleware, function(req, res){
 
 
@@ -94,6 +120,15 @@ router.get('/:address/transactions/:page',addressMiddleware, function(req, res){
 		});
 });
 
+/**
+ * Get address transactions in given contract.
+ * 
+ * @param {String} address - Address is of length 42.
+ * @param {String} contractAddress - contractAddress is of length 42.
+ * @param {Integer} page - Page number for getting data in batch. 
+ *	
+ * @return {Object} - return list of transactions made by address.
+ */
 router.get('/:address/contract/:contractAddress/:page',addressMiddleware, function(req, res){
 
 
@@ -112,7 +147,14 @@ router.get('/:address/contract/:contractAddress/:page',addressMiddleware, functi
 		});
 });
 
-
+/**
+ * Get account internal transactions 
+ * 
+ * @param {String} address - Address is of length 42.
+ * @param {Integer} page - Page number for getting data in batch. 
+ *	
+ * @return {Object} - return list of transactions made by address.
+ */
 router.get('/:address/internal_transactions/:page',addressMiddleware, function(req, res){
 
 

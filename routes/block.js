@@ -1,3 +1,8 @@
+
+/**
+ * @module routes/
+ */
+
 var express = require('express');
 var block   = require('../lib/webInterface/block')
 var router = express.Router({mergeParams: true});
@@ -32,6 +37,14 @@ const blockMiddleware = function(req,res, next){
 	next();
 }
 
+
+/**
+ * Get block from block number 
+ * 
+ * @param {String} block_number - number of block need to be fetched.
+ *	
+ * @return {Object} - return hash of block data.
+ */
 router.get("/:block_number", blockMiddleware, function(req, res){
 
 	req.blockInstance.getBlock(req.blockNumber)
@@ -52,6 +65,14 @@ router.get("/:block_number", blockMiddleware, function(req, res){
 });
 
 
+/**
+ * Get block from block number 
+ * 
+ *@param {String} block_number - number of block need to be fetched.
+ *@param {Integer} page - Page number for getting data in batch.
+ * 
+ * @return {Object} - return hash of block data.
+ */
 router.get("/:block_number/transactions/:page", blockMiddleware, function(req, res){
 
 	req.blockInstance.getBlockTransactions(req.blockNumber,req.page)

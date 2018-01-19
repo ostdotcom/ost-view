@@ -1,3 +1,9 @@
+
+/**
+ * @module routes/
+ */
+
+
 var express = require('express');
 var contract = require('../lib/webInterface/contract')
 var router = express.Router({mergeParams: true});
@@ -30,6 +36,14 @@ const contractMiddleware = function(req,res, next){
 	next();
 }
 
+/**
+ * Get transactions in particualr contract address.
+ * 
+ *@param {String} contractAddress - contractAddress is of length 42.
+ *@param {Integer} page - Page number for getting data in batch.
+ * 
+ *@return {Object} - return list block data.
+ */
 router.get("/:contractAddress/:page",contractMiddleware, function(req, res){
 
 	req.contractInstance.getContractLedger(req.contractAddress, req.page)

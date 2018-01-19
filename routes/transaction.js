@@ -1,3 +1,9 @@
+
+/**
+ * @module routes/
+ */
+
+
 var express = require('express');
 var transaction = require('../lib/webInterface/transaction')
 var router = express.Router({mergeParams: true});
@@ -32,7 +38,13 @@ const transactionMiddleware = function(req,res, next){
 	next();
 }
 
-
+/**
+ * Get transaction details from hash
+ * 
+ * @param {String} hash - Address is of length 66.
+ *	
+ * @return {Object} - return transaction.
+ */
 router.get("/:hash",transactionMiddleware, function(req, res){
 	
 	req.transactionInstance.getTransaction(req.hash)
@@ -51,6 +63,14 @@ router.get("/:hash",transactionMiddleware, function(req, res){
  		});
 });
 
+/**
+ * Get transaction ledger in batch.
+ * 
+ * @param {String} hash - hash is of length 42.
+ * @param {Integer} page - Page number for getting data in batch. 
+ *	
+ * @return {Object} - return list of transaction ledger.
+ */
 router.get("/:hash/address_transaction/:page",transactionMiddleware, function(req, res){
 	
 	req.transactionInstance.getAddressTransactions(req.hash, req.page)

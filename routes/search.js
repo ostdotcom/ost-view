@@ -1,3 +1,9 @@
+
+/**
+ * @module routes/
+ */
+
+
 var express = require('express')
 var search 	= require('../lib/webInterface/search')
 var router = express.Router({mergeParams: true});
@@ -28,6 +34,13 @@ const searchMiddleware = function(req,res, next){
 	next();
 }
 
+/**
+ * Get transcion, contract, block.
+ * 
+ *@param {string/Integer} param - param may contains address_hash, transaction_hash or block_number. 
+ * 
+ *@return {Object} - return list block data.
+ */
 router.get('/:param',searchMiddleware, function(req, res){
 
 

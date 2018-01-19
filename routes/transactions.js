@@ -1,3 +1,9 @@
+
+/**
+ * @module routes/
+ */
+
+
 var express = require('express')
 var transactions  = require('../lib/webInterface/transactions')
 var router = express.Router({mergeParams: true});
@@ -29,7 +35,13 @@ const transactionsMiddleware = function(req,res, next){
 }
 
 
-
+/**
+ * Get recent transactions in batch.
+ * 
+ * @param {Integer} page - Page number for getting data in batch. 
+ *	
+ * @return {Object} - return list of transactions made by address.
+ */
 router.get("/recent/:page",transactionsMiddleware, function(req, res){
 
 	req.transactionsInstance.getRecentTransactions(req.page)
@@ -47,6 +59,12 @@ router.get("/recent/:page",transactionsMiddleware, function(req, res){
  		});
 });
 
+/**
+ * Get pending transactions 
+ * 
+ *	
+ * @return {Object} - return list of pending transactions made by address.
+ */
 router.get("/pending",transactionsMiddleware, function(req, res){
 
 	req.transactionsInstance.getPendingTransactions()
