@@ -1,4 +1,3 @@
-
 "use strict";
 
 /*
@@ -6,23 +5,18 @@
  *
  */
 
-//All Module Requires.
+// Load all external modules
 const express = require('express')
   , path = require('path')
-  , favicon = require('serve-favicon')
   , cookieParser = require('cookie-parser')
   , bodyParser = require('body-parser')
-  , basicAuth = require('express-basic-auth')
   , helmet = require('helmet')
   , sanitizer = require('express-sanitized')
   , http = require('http')
   , cluster = require('cluster')
-  // , createNamespace = require('continuation-local-storage').createNamespace
-  // , inputRequest = createNamespace('inputRequest')
-
 ;
 
-//All the requires.
+// Load all required internal files
 const rootPrefix    = "."
   , indexRoutes     = require( rootPrefix + '/routes/index')
   , blockRoutes     = require( rootPrefix + '/routes/block')
@@ -32,13 +26,14 @@ const rootPrefix    = "."
   , addressRoutes   = require( rootPrefix + '/routes/address')
   , searchRoutes   = require( rootPrefix + '/routes/search')
   , contractRoutes = require(rootPrefix + '/routes/contract')
-  , logger = require('./helpers/CustomConsoleLogger')
+  , responseHelper = require(rootPrefix+'/lib/formatter/response')
+  , logger = require('./helpers/custom_console_logger')
 ;
 
 // if the process is a master.
 if (cluster.isMaster) {
   // Set worker process title
-  process.title = "OpenST-Platform node master";
+  process.title = "OpenST Explorer master node";
 
   // Fork workers equal to number of CPUs
   const numWorkers = process.env.WORKERS || require('os').cpus().length;
@@ -90,14 +85,10 @@ if (cluster.isMaster) {
   // if the process is not a master
 
   // Set worker process title
-  process.title = "OpenST-Platform node worker-"+cluster.worker.id;
+  process.title = "OpenST Explorer worker-"+cluster.worker.id;
 
 
   var app = express();
-
-  // view engine setup
-  app.set('views', path.join(__dirname, 'views'));
-  app.set('view engine', 'jade');
 
   // app.use(function(req, res, next) {
   //   inputRequest.run(function() {
@@ -113,12 +104,11 @@ if (cluster.isMaster) {
   app.use(bodyParser.urlencoded({extended: true}));
   app.use(cookieParser());
 
-  //The below peice of code should always be before routes.
+  //The below piece of code should always be before routes.
   //Docs: https://www.npmjs.com/package/express-sanitized
-
   app.use(sanitizer());
 
-  // load index routes
+  // load route files
   app.use('/', indexRoutes);
 
   app.use('/chain-id/:chainId/block', blockRoutes);
@@ -129,6 +119,17 @@ if (cluster.isMaster) {
   app.use('/chain-id/:chainId/search', searchRoutes);
   app.use('/chain-id/:chainId/contract', contractRoutes);
 
+  // catch 404 and forward to error handler
+  app.use(function (req, res, next) {
+    return responseHelper.error('404', 'Not Found').renderResponse(res, 404);
+  });
+
+  // error handler
+  app.use(function (err, req, res, next) {
+    // set locals, only providing error in development
+    logger.error(err);
+    return responseHelper.error('500', 'Something went wrong').renderResponse(res, 500);
+  });
 
   /**
    * Get port from environment and store in Express.

@@ -12,7 +12,7 @@ const cliHandler  = require('commander')
 
 	, rootPrefix  = '..'
 	, core_config = require(rootPrefix + '/config')
-	, logger      = require(rootPrefix + '/helpers/CustomConsoleLogger')
+	, logger      = require(rootPrefix + '/helpers/custom_console_logger')
 ;
 
 /**

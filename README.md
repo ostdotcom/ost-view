@@ -1,13 +1,14 @@
 OPENST-EXPLORER
+============
 
-# Local Development Environment
 
 ## Prerequisite installations 
 
 * Install node version >= 8.7.0
 * Install geth version >= 1.7.2
+* MySQL
 
-## Setup utility and value chains 
+## Setup OpenST utility chains 
 
 ### In Terminal 1:
 
@@ -21,58 +22,45 @@ OPENST-EXPLORER
   > npm install
 ```
 
-* Start MySQL
+* Start MySQL and Geth Node
 
 * Create database in MySQL
 
-* Open config.json
+* Configure database details in config.js
 ```
-  > cd openst-explorer 
   > vim config.js
 ```
-
-* Create database entry in config.js
   > under chain_config hash update following values and pest 
-
-	  '<chain_id>': {
-	        chainId       : <chain_id>,
-	        database_type : "mysql",
-	        web_rpc       : "<RPC URL>",
-	        cron_interval : <cron_interval_time>,
-	        db_config     : {
-	                chainId         : <chain_id>,
-               	 driver          : 'mysql',
-                	user            : '<mysql username>',
-                	password        : '<mysql password>',
-                	host            : 'localhost',
-                	database        : '<database name(created in above step)>',
-                    blockAttributes : ['miner','difficulty','totalDifficulty','gasLimit','gasUsed'],
-                    txnAttributes   : ['gas', 'gasPrice', 'input','nonce', 'contractAddress']
-	        }
-	    }, 
-
-  > save the changes.
+```
+    '<chain_id>': {
+        chainId       : <chain_id>,
+        database_type : "mysql",
+        web_rpc       : "<Geth RPC URL>",
+        cron_interval : <cron_interval_time>,
+        db_config     : {
+            chainId         : <chain_id>,
+            driver          : 'mysql',
+            user            : '<mysql username>',
+            password        : '<mysql password>',
+            host            : '<mysql host>',
+            database        : '<database name (created in above step)>',
+            blockAttributes : ['miner','difficulty','totalDifficulty','gasLimit','gasUsed'], # Block attributes need to be populated in database, other columns will be null
+            txnAttributes   : ['gas', 'gasPrice', 'input','nonce', 'contractAddress'] # Transaction attributes need to be populated in database, other columns will be null
+        }
+    }, 
+```
 
 * Run migration
 ```
-  > cd openst-explorer 
   > node executables/db_migrate.js up --chainID <chain_id>
 ```
 
-* Start Geth console
-
-* Start block fetcher cron
+* Start block fetcher
 ```
-  > cd openst-explorer 
-  > node executables/block_fetcher_cron.js --chainID <chain_id> --blockNumber <block_number>
+  > nohup node executables/block_fetcher_cron.js --chainID <chain_id> >> log/block_fetcher_cron.log &
 ```
-
-* By this time, your block fetcher start fetching blocks and storeing it in database.
-
-### In Terminal 2:
 
 * Start block verifier
 ```
-  > cd openst-explorer 
-  > node executables/block_verifier_cron.js --chainID <chain_id> 
+  > nohup node executables/block_verifier_cron.js --chainID <chain_id> >> log/block_verifier_cron.log &
 ```

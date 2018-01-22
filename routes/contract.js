@@ -1,64 +1,69 @@
-
+"use strict";
 /**
- * @module routes/
+ * Contract related routes.<br><br>
+ * Base url for all routes given below is: <b>base_url = /chain-id/:chainId/contract</b>
+ *
+ * @module Explorer Routes - Contract
  */
+const express = require('express');
 
+// Express router to mount contract related routes
+const router = express.Router({mergeParams: true});
 
-var express = require('express');
-var contract = require('../lib/webInterface/contract')
-var router = express.Router({mergeParams: true});
-
-const reqPrefix           = "../"
-    , responseHelper      = require(reqPrefix + "lib/formatter/response" )
-    , coreConfig = require(reqPrefix + "/config")
-    , logger = require(reqPrefix + '/helpers/CustomConsoleLogger')
+// load all internal dependencies
+const rootPrefix = ".."
+  , contract = require(rootPrefix + '/models/contract')
+  , responseHelper = require(rootPrefix + '/lib/formatter/response')
+  , coreConfig = require(rootPrefix + '/config')
+  , logger = require(rootPrefix + '/helpers/custom_console_logger')
 ;
 
+// Render final response
+const renderResult = function (requestResponse, responseObject) {
+  return requestResponse.renderResponse(responseObject);
+};
 
-const renderResult = function(requestResponse, responseObject) {
-    return requestResponse.renderResponse(responseObject);
-  };
+// define parameters from url, generate web rpc instance and database connect
+const contractMiddleware = function (req, res, next) {
+  const chainId = req.params.chainId
+    , contractAddress = req.params.contractAddress
+    , page = req.params.page
+  ;
+  // Get instance of contract class
+  req.contractInstance = new contract(chainId);
 
+  req.chainId = chainId;
+  req.page = page;
+  req.contractAddress = contractAddress;
 
-const contractMiddleware = function(req,res, next){
-	var chainId = req.params.chainId;
-	var contractAddress = req.params.contractAddress;
-	var page = req.params.page;
-
-	const chainDbConfig = coreConfig.getChainDbConfig(chainId);
-
-	req.contractInstance = new contract(chainDbConfig);
-
-	req.chainId = chainId;
-	req.page = page;
-	req.contractAddress = contractAddress;
-
-	next();
-}
+  next();
+};
 
 /**
- * Get transactions in particualr contract address.
- * 
- *@param {String} contractAddress - contractAddress is of length 42.
- *@param {Integer} page - Page number for getting data in batch.
- * 
- *@return {Object} - return list block data.
+ * Get paginated contract internal transactions by recency
+ *
+ * @name Contract Internal Transactions
+ *
+ * @route {GET} {base_url}/:contractAddress/internal-transactions/:page
+ *
+ * @routeparam {String} :contractAddress - Contract address whose internal transactions need to be fetched (42 chars length)
+ * @routeparam {Integer} :page - Page number for getting data in batch.
  */
-router.get("/:contractAddress/:page",contractMiddleware, function(req, res){
+router.get("/:contractAddress/internal-transactions/:page", contractMiddleware, function (req, res) {
 
-	req.contractInstance.getContractLedger(req.contractAddress, req.page)
-		.then(function(requestResponse){
-			const response = responseHelper.successWithData({
-				contract_transactions: requestResponse,
-				result_type : "contract_transactions"
-			});
+  req.contractInstance.getContractLedger(req.contractAddress, req.page)
+    .then(function (requestResponse) {
+      const response = responseHelper.successWithData({
+        contract_transactions: requestResponse,
+        result_type: "contract_transactions"
+      });
 
-			return renderResult(response, res);		
-		})
-		.catch(function(reason){
-			logger.log("****** contract: /:contractAddress/:page ***** catch ***** "+ reason);
-			return renderResult( responseHelper.error('', reason),res );
-		});
+      return renderResult(response, res);
+    })
+    .catch(function (reason) {
+      logger.log("****** contract: /:contractAddress/internal-transaction/:page ***** catch ***** " + reason);
+      return renderResult(responseHelper.error('', reason), res);
+    });
 });
 
 

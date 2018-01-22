@@ -5,10 +5,10 @@
  * @module helpers/db/
  */
 
-const reqPrefix           = "../.."
-    , MySQL 			  = require( reqPrefix + '/helpers/db/mysql')
-    , constants           = require( reqPrefix + '/config/core_constants')
-    , logger              = require( reqPrefix + '/helpers/CustomConsoleLogger');
+const rootPrefix           = "../.."
+    , MySQL 			  = require( rootPrefix + '/helpers/db/mysql')
+    , constants           = require( rootPrefix + '/config/core_constants')
+    , logger              = require( rootPrefix + '/helpers/custom_console_logger');
 
 const DEFAULT_PAGE_NUMBER = constants.DEFAULT_PAGE_NUMBER;
 const DEFAULT_PAGE_SIZE   = constants.DEFAULT_PAGE_SIZE;

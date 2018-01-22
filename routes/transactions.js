@@ -1,85 +1,90 @@
-
+"use strict";
 /**
- * @module routes/
+ * Transactions related routes.<br><br>
+ * Base url for all routes given below is: <b>base_url = /chain-id/:chainId/transactions</b>
+ *
+ * @module Explorer Routes - Transactions
  */
+const express = require('express');
 
+// Express router to mount search related routes
+const router = express.Router({mergeParams: true});
 
-var express = require('express')
-var transactions  = require('../lib/webInterface/transactions')
-var router = express.Router({mergeParams: true});
-
-
-const reqPrefix           = ".."
-    , responseHelper      = require(reqPrefix + "/lib/formatter/response" )
-    , coreConfig = require(reqPrefix + "/config")
-    , logger = require(reqPrefix + '/helpers/CustomConsoleLogger')
+// load all internal dependencies
+const rootPrefix = ".."
+  , transaction = require(rootPrefix + '/models/transaction')
+  , responseHelper = require(rootPrefix + '/lib/formatter/response')
+  , coreConfig = require(rootPrefix + '/config')
+  , logger = require(rootPrefix + '/helpers/custom_console_logger')
 ;
 
+// Render final response
+const renderResult = function (requestResponse, responseObject) {
+  return requestResponse.renderResponse(responseObject);
+};
 
-const renderResult = function(requestResponse, responseObject) {
-    return requestResponse.renderResponse(responseObject);
-  };
+// define parameters from url, generate web rpc instance and database connect
+const transactionsMiddleware = function (req, res, next) {
+  const chainId = req.params.chainId
+    , page = req.params.page
+  ;
 
-const transactionsMiddleware = function(req,res, next){
-	var chainId = req.params.chainId;
-	var page = req.params.page;
+  // create instance of transactions class
+  req.transactionsInstance = new transaction(chainId);
 
-	const webRpcUrl = coreConfig.getWebRpcUrl(chainId);
-	const chainDbConfig = coreConfig.getChainDbConfig(chainId);
+  req.page = page;
 
-	req.transactionsInstance = new transactions(webRpcUrl, chainDbConfig);
-
-	req.page = page;
-
-	next();
-}
-
+  next();
+};
 
 /**
- * Get recent transactions in batch.
- * 
- * @param {Integer} page - Page number for getting data in batch. 
- *	
- * @return {Object} - return list of transactions made by address.
+ * Get recent transactions
+ *
+ * @name Recent Transactions
+ *
+ * @route {GET} {base_url}/recent/:page
+ *
+ * @routeparam {Integer} :page - Page number for getting data in batch.
  */
-router.get("/recent/:page",transactionsMiddleware, function(req, res){
+router.get("/recent/:page", transactionsMiddleware, function (req, res) {
 
-	req.transactionsInstance.getRecentTransactions(req.page)
-		.then(function(requestResponse) {
-			const response = responseHelper.successWithData({
-				recent_transactions : requestResponse,
-				result_type : "recent_transactions"
-			});
+  req.transactionsInstance.getRecentTransactions(req.page)
+    .then(function (requestResponse) {
+      const response = responseHelper.successWithData({
+        recent_transactions: requestResponse,
+        result_type: "recent_transactions"
+      });
 
-			return renderResult(response, res);		 	
- 		})
- 		.catch(function(reason){
-			logger.log("****** transactions: /recent/:page ***** catch ***** "+reason);
-			return renderResult( responseHelper.error('', reason),res );
- 		});
+      return renderResult(response, res);
+    })
+    .catch(function (reason) {
+      logger.log("****** transactions: /recent/:page ***** catch ***** " + reason);
+      return renderResult(responseHelper.error('', reason), res);
+    });
 });
 
 /**
- * Get pending transactions 
- * 
- *	
- * @return {Object} - return list of pending transactions made by address.
+ * Get pending transactions
+ *
+ * @name Pending Transactions
+ *
+ * @route {GET} {base_url}/pending
  */
-router.get("/pending",transactionsMiddleware, function(req, res){
+router.get("/pending", transactionsMiddleware, function (req, res) {
 
-	req.transactionsInstance.getPendingTransactions()
-		.then(function(requestResponse) {
-			const response = responseHelper.successWithData({
-				pending_transactions : requestResponse,
-				result_type : "pending_transactions"
-			});
+  req.transactionsInstance.getPendingTransactions()
+    .then(function (requestResponse) {
+      const response = responseHelper.successWithData({
+        pending_transactions: requestResponse,
+        result_type: "pending_transactions"
+      });
 
-			return renderResult(response, res);		 	
-		})
- 		.catch(function(reason){
-			logger.log("****** transactions: /pending/:page ***** catch ***** "+reason);
-			return renderResult( responseHelper.error('', reason),res );
- 		});
+      return renderResult(response, res);
+    })
+    .catch(function (reason) {
+      logger.log("****** transactions: /pending ***** catch ***** " + reason);
+      return renderResult(responseHelper.error('', reason), res);
+    });
 });
 
 module.exports = router;

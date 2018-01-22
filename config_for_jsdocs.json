@@ -3,28 +3,36 @@
     "allowUnknownTags": true
   },
   "source": {
-    "include": ["lib","executables","helpers","routes"],
+    "include": [
+      "lib",
+      "executables",
+      "helpers",
+      "routes",
+      "models"
+    ],
     "exclude": [],
     "includePattern": ".+\\.js(doc|x)?$",
     "excludePattern": "(^|\\/|\\\\)_"
   },
-  "plugins": [],
+  "plugins": [
+    "jsdoc-route-plugin"
+  ],
   "recurseDepth": 5,
   "templates": {
-    "systemName"            : "Simple Token Foundation",
-    "footer"                : "<style>.copyright, .jsdoc-message, footer { color: #555555;} footer { border-color:#eeeeee;} }</style>",
-    "copyright"             : "Copyright 2017 OpenST Ltd.",
-    "includeDate"           : false,
-    "theme"                 : "lumen",
-    "navType"               : "vertical",
-    "linenums"              : true,
-    "cleverLinks"           : true,
-    "monospaceLinks"        : true,
+    "systemName": "OpenST Explorer",
+    "footer": "<style>.copyright, .jsdoc-message, footer { color: #555555;} footer { border-color:#eeeeee;} }</style>",
+    "copyright": "Copyright 2017 OpenST Ltd.",
+    "includeDate": false,
+    "theme": "lumen",
+    "navType": "vertical",
+    "linenums": true,
+    "cleverLinks": true,
+    "monospaceLinks": true,
     "default": {
       "outputSourceFiles": true
     }
   },
-    "opts": {
+  "opts": {
     "destination": "./docs/",
     "encoding": "utf8",
     "private": true,

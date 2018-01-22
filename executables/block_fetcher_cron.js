@@ -7,12 +7,12 @@
   * @module executables/
   */
 
-const reqPrefix           = ".."
-    , Web3Interact        = require( reqPrefix + "/lib/web3/interact/rpc_interact")
-    , DbInteract          = require( reqPrefix + "/helpers/db/interact.js")
-    , logger              = require( reqPrefix + "/helpers/CustomConsoleLogger")
-    , core_config         = require( reqPrefix + "/config")
-    , BlockFetcher        = require( reqPrefix + "/lib/block_utils/block_fetcher")
+const rootPrefix           = ".."
+    , Web3Interact        = require( rootPrefix + "/lib/web3/interact/rpc_interact")
+    , DbInteract          = require( rootPrefix + "/helpers/db/interact.js")
+    , logger              = require( rootPrefix + "/helpers/custom_console_logger")
+    , core_config         = require( rootPrefix + "/config")
+    , BlockFetcher        = require( rootPrefix + "/lib/block_utils/block_fetcher")
     , cliHandler          = require('commander');
     ;
 

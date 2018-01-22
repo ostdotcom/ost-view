@@ -1,176 +1,161 @@
-
+"use strict";
 /**
- * @module routes/
+ * Specific address related routes.<br><br>
+ * Base url for all routes given below is: <b>base_url = /chain-id/:chainId/address</b>
+ *
+ * @module Explorer Routes - Address
  */
+const express = require('express');
 
-var express = require('express')
-var address = require('../lib/webInterface/address')
-var router = express.Router({mergeParams: true});
+// Express router to mount address related routes
+const router = express.Router({mergeParams: true});
 
-//All modeules required.
-const reqPrefix           = ".."
-    , responseHelper      = require(reqPrefix + "/lib/formatter/response" )
-    , coreConfig = require(reqPrefix + "/config")
-    , logger = require(reqPrefix + '/helpers/CustomConsoleLogger')
+// load all internal dependencies
+const rootPrefix = ".."
+  , address = require(rootPrefix + '/lib/models/address')
+  , responseHelper = require(rootPrefix + '/lib/formatter/response')
+  , coreConfig = require(rootPrefix + '/config')
+  , logger = require(rootPrefix + '/helpers/custom_console_logger')
 ;
 
+// Class related constants
+const balanceIndex = 0
+  , transactionsIndex = 1
+  , defaultPageNumber = 1;
 
-const renderResult = function(requestResponse, responseObject) {
-    return requestResponse.renderResponse(responseObject);
-  };
+// Render final response
+const renderResult = function (requestResponse, responseObject) {
+  return requestResponse.renderResponse(responseObject);
+};
 
+// define parameters from url, generate web rpc instance and database connect
+const addressMiddleware = function (req, res, next) {
+  const chainId = req.params.chainId
+    , addressValue = req.params.address
+    , page = req.params.page
+    , contractAddress = req.params.contractAddress;
 
-const addressMiddleware = function(req,res, next){
-	var chainId = req.params.chainId;
-	var addressValue = req.params.address;
-	var page = req.params.page;
-	var contractAddress = req.params.contractAddress;
+  // create instance of address class
+  req.addressInstance = new address(chainId);
 
-	const webRpcUrl = coreConfig.getWebRpcUrl(chainId);
-	const chainDbConfig = coreConfig.getChainDbConfig(chainId);
+  req.addressValue = addressValue;
+  req.page = page;
+  req.contractAddress = contractAddress;
 
-	req.addressInstance = new address(webRpcUrl, chainDbConfig);
-
-	req.addressValue = addressValue;
-	req.page = page;
-	req.contractAddress = contractAddress;
-	
-	next();
-}
-
-const balanceIndex = 0;
-const transactionsIndex = 1; 
-const defaultPageNumber = 1;
-
-
+  next();
+};
 
 /**
- * Get account details 
- * @param  {String} address - Address is of length 42.
+ * Get details (balance and transactions) of a given address
  *
- * @return {Object} - Object is of type hash, with balance and transactions.
- */
-router.get('/:address', addressMiddleware, function(req, res){
-
-	var promiseResolvers = [];
-
-  	promiseResolvers.push(req.addressInstance.getAddressBalance(req.addressValue));
-    promiseResolvers.push(req.addressInstance.getAddressTransactions(req.addressValue, defaultPageNumber));        
-
-	  Promise.all(promiseResolvers).then(function(rsp) {
-		
-		const balanceValue = rsp[balanceIndex];
-		const transactionsValue = rsp[transactionsIndex]
-
-		const response = responseHelper.successWithData({
-			balance : balanceValue, 
-			transactions : transactionsValue
-		});
-
-		return renderResult(response, res);
-	  });
-});
-
-/**
- * Get account balance 
- * @param  {String} address - Address is of length 42.
+ * @name Address Details
  *
- * @return {Object} - return hash.
+ * @route {GET} {base_url}/:address
+ *
+ * @routeparam {String} :address - Address whose details need to be fetched (42 chars length)
  */
-router.get('/:address/balance', addressMiddleware, function(req, res){
+router.get('/:address', addressMiddleware, function (req, res) {
 
- 	req.addressInstance.getAddressBalance(req.addressValue)
- 		.then(function(requestResponse){
-			const response = responseHelper.successWithData({
-				balance : requestResponse, 
-				result_type : "balance"
-			});
+  var promiseResolvers = [];
 
-			return renderResult(response, res);	
-		})
-		.catch(function(reason){
-			logger.log("****** address: /:address/balance ***** catch ***** "+reason);
-			return renderResult( responseHelper.error('', reason),res );
-		});
+  promiseResolvers.push(req.addressInstance.getAddressBalance(req.addressValue));
+  promiseResolvers.push(req.addressInstance.getAddressTransactions(req.addressValue, defaultPageNumber));
+
+  Promise.all(promiseResolvers).then(function (rsp) {
+
+    const balanceValue = rsp[balanceIndex];
+    const transactionsValue = rsp[transactionsIndex]
+
+    const response = responseHelper.successWithData({
+      balance: balanceValue,
+      transactions: transactionsValue
+    });
+
+    return renderResult(response, res);
+  });
 });
 
 /**
- * Get account transactions 
- * 
- * @param {String} address - Address is of length 42.
- * @param {Integer} page - Page number for getting data in batch. 
- *	
- * @return {Object} - return list of transactions made by address.
+ * Get balance of a given address
+ *
+ * @name Address Balance
+ *
+ * @route {GET} {base_url}/:address/balance
+ *
+ * @routeparam {String} :address - Address whose balance need to be fetched (42 chars length)
  */
-router.get('/:address/transactions/:page',addressMiddleware, function(req, res){
+router.get('/:address/balance', addressMiddleware, function (req, res) {
 
+  req.addressInstance.getAddressBalance(req.addressValue)
+    .then(function (requestResponse) {
+      const response = responseHelper.successWithData({
+        balance: requestResponse,
+        result_type: "balance"
+      });
 
- 	req.addressInstance.getAddressTransactions(req.addressValue, req.page)
- 		.then(function(requestResponse){
-			const response = responseHelper.successWithData({
-				transactions : requestResponse, 
-				result_type : "transactions"
-			});
-
-			return renderResult(response, res);	
-		})		
- 		.catch(function(reason){
-			logger.log("****** address: /:address/transaction/:page ***** catch ***** "+reason);
-			return renderResult( responseHelper.error('', reason),res );
-		});
+      return renderResult(response, res);
+    })
+    .catch(function (reason) {
+      logger.log("****** address: /:address/balance ***** catch ***** " + reason);
+      return renderResult(responseHelper.error('', reason), res);
+    });
 });
 
 /**
- * Get address transactions in given contract.
- * 
- * @param {String} address - Address is of length 42.
- * @param {String} contractAddress - contractAddress is of length 42.
- * @param {Integer} page - Page number for getting data in batch. 
- *	
- * @return {Object} - return list of transactions made by address.
+ * Get paginated address transactions
+ *
+ * @name Address Transactions
+ *
+ * @route {GET} {base_url}/:address/transactions/:page
+ *
+ * @routeparam {String} :address - Address whose balance need to be fetched (42 chars length)
+ * @routeparam {Integer} :page - Page number for getting data in batch.
  */
-router.get('/:address/contract/:contractAddress/:page',addressMiddleware, function(req, res){
+router.get('/:address/transactions/:page', addressMiddleware, function (req, res) {
 
 
- 	req.addressInstance.getAddressLedgerInContract(req.addressValue, req.contractAddress, req.page)
- 		.then(function(requestResponse){
-			const response = responseHelper.successWithData({
-				contract_transactions : requestResponse, 
-				result_type : "contract_transactions"
-			});
+  req.addressInstance.getAddressTransactions(req.addressValue, req.page)
+    .then(function (requestResponse) {
+      const response = responseHelper.successWithData({
+        transactions: requestResponse,
+        result_type: "transactions"
+      });
 
-			return renderResult(response, res);	
-		})
-		.catch(function(reason){
-			logger.log("****** address: /:address/contract/:contractAddress/:page ***** catch ***** "+reason);
-			return renderResult( responseHelper.error('', reason),res );
-		});
+      return renderResult(response, res);
+    })
+    .catch(function (reason) {
+      logger.log("****** address: /:address/transaction/:page ***** catch ***** " + reason);
+      return renderResult(responseHelper.error('', reason), res);
+    });
 });
 
 /**
- * Get account internal transactions 
- * 
- * @param {String} address - Address is of length 42.
- * @param {Integer} page - Page number for getting data in batch. 
- *	
- * @return {Object} - return list of transactions made by address.
+ * Get paginated address transactions in given contracts
+ *
+ * @name Address Contract Transactions
+ *
+ * @route {GET} {base_url}/:address/contract/:contractAddress/:page
+ *
+ * @routeparam {String} :address - Address whose balance need to be fetched (42 chars length)
+ * @routeparam {String} :contractAddress - Contract address (42 chars length)
+ * @routeparam {Integer} :page - Page number for getting data in batch.
  */
-router.get('/:address/internal_transactions/:page',addressMiddleware, function(req, res){
+router.get('/:address/contract/:contractAddress/:page', addressMiddleware, function (req, res) {
 
 
- 	req.addressInstance.getAddressTransactions(req.addressValue, req.page)
- 		.then(function(requestResponse){
-			const response = responseHelper.successWithData({
-				internal_transactions : requestResponse, 
-				result_type : "internal_transactions"
-			});
+  req.addressInstance.getAddressLedgerInContract(req.addressValue, req.contractAddress, req.page)
+    .then(function (requestResponse) {
+      const response = responseHelper.successWithData({
+        contract_transactions: requestResponse,
+        result_type: "contract_transactions"
+      });
 
-			return renderResult(response, res);	
-		})
-		.catch(function(reason){
-			logger.log("****** address: /:address/internal_transactions/:page ***** catch ***** " + reason);
-			return renderResult( responseHelper.error('', reason),res );
-		});
+      return renderResult(response, res);
+    })
+    .catch(function (reason) {
+      logger.log("****** address: /:address/contract/:contractAddress/:page ***** catch ***** " + reason);
+      return renderResult(responseHelper.error('', reason), res);
+    });
 });
 
 module.exports = router;
