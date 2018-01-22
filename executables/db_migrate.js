@@ -18,8 +18,8 @@ const cliHandler  = require('commander')
 /**
  * To get the chainList of IDs from the object commandline object,
  * If not present return all the chaidIDs from the config.
- * @param  {Object} Object of commander
- * @return {Array} Array of chainIDs
+ * @param  {Object} obj Object of commander
+ * @return {Array} chainIDs Array of chainIDs
  */
 const getChainList = function(obj) {
 	
@@ -114,7 +114,7 @@ const reset = function() {
 
 /**
  * To runs all pending migrations till provided version or else full version if not provided
- * @param  {String} Name of the version
+ * @param  {String} version Name of the version
  * @return {null}
  */
 const up = function(version) {
@@ -141,7 +141,7 @@ const up = function(version) {
 
 /**
  * To create migration with provide migration name
- * @param  {String} Name of the migration to be created
+ * @param  {String} name Name of the migration to be created
  * @return {null}
  */
 const createMigration = function(name) {

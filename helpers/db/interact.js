@@ -26,7 +26,7 @@ DbHelper.prototype = {
 
 	/**
 	 * To Delegate getTransaction call to the DB
-	 * @param  {String}	Transaction hash
+	 * @param  {String}	transactionHash Transaction hash
 	 * @return {Promise}
 	 */
 	getTransaction: function (transactionHash){
@@ -53,7 +53,7 @@ DbHelper.prototype = {
 
 	/**
 	 * To Delegate getBlock call to the DB
-	 * @param  {Integer} Number of the block
+	 * @param  {Integer} blockNumber Number of the block
 	 * @return {Promise}
 	 */
 	getBlock : function (blockNumber){
@@ -63,10 +63,10 @@ DbHelper.prototype = {
 
 	/**
 	 * To Delegate getAddressLedgerOfContract call to the DB
-	 * @param  {String} Address 
-	 * @param  {String} Contract Address
-	 * @param  {Integer} pageNumber of the ledger List
-	 * @param  {Integer} pageSize of the ledger List
+	 * @param  {String} address Address 
+	 * @param  {String} contractAddress Contract Address
+	 * @param  {Integer} pageNumber PageNumber of the ledger List
+	 * @param  {Integer} pageSize PageSize of the ledger List
 	 * @return {Promise}
 	 */
 	getAddressLedgerOfContract: function (address, contractAddress, pageNumber, pageSize){
@@ -82,9 +82,9 @@ DbHelper.prototype = {
 
 	/**
 	 * To Delegate getContractLedger call to the DB
-	 * @param  {String} Contract Address
-	 * @param  {Integer} pageNumber of the ledger List
-	 * @param  {Integer} pageSize of the ledger List
+	 * @param  {String} contractAddress Contract Address
+	 * @param  {Integer} pageNumber PageNumber of the ledger List
+	 * @param  {Integer} pageSize PageSize of the ledger List
 	 * @return {Promise}
 	 */
 	getContractLedger: function (contractAddress, pageNumber, pageSize){
@@ -100,7 +100,7 @@ DbHelper.prototype = {
 
 	/**
 	 * To Delegate getHigestInsertedBlock call to the DB
-	 * @param  {Integer} Number of the block
+	 * @param  {Integer} blockNumber Number of the block
 	 * @return {Promise}
 	 */
 	getHigestInsertedBlock: function ( blockNumber ) {
@@ -109,8 +109,8 @@ DbHelper.prototype = {
 
 	/**
 	 * To Delegate getRecentTransactions call to the DB
-	 * @param  {Integer} pageNumber of the recentTransactoins List
-	 * @param  {Integer} pageSize of the recentTransactoins List
+	 * @param  {Integer} pageNumber PageNumber of the recentTransactoins List
+	 * @param  {Integer} pageSize PageSize of the recentTransactoins List
 	 * @return {Promise}
 	 */
 	getRecentTransactions: function ( pageNumber, pageSize) {
@@ -126,9 +126,9 @@ DbHelper.prototype = {
 
 	/**
 	 * To Delegate getBlockTransactions call to the DB
-	 * @param  {Integer} Number of the block
-	 * @param  {Integer} pageNumber of the transaction List
-	 * @param  {Integer} pageSize of the transaction List
+	 * @param  {Integer} blockNumber Number of the block
+	 * @param  {Integer} pageNumber PageNumber of the transaction List
+	 * @param  {Integer} pageSize PageSize of the transaction List
 	 * @return {Promise}
 	 */
 	getBlockTransactions: function ( blockNumber, pageNumber, pageSize) {
@@ -144,9 +144,9 @@ DbHelper.prototype = {
 
 	/**
 	 * To Delegate getAddressTransactions call to the DB
-	 * @param  {String} Address 
-	 * @param  {Integer} pageNumber of the ledger List
-	 * @param  {Integer} pageSize of the ledger List
+	 * @param  {String} address Address 
+	 * @param  {Integer} pageNumber PageNumber of the ledger List
+	 * @param  {Integer} pageSize PageSize of the ledger List
 	 * @return {Promise}
 	 */
 	getAddressTransactions: function( address, pageNumber, pageSize ) {
@@ -162,9 +162,9 @@ DbHelper.prototype = {
 
 	/**
 	 * To Delegate getAddressTokenTransactions call to the DB
-	 * @param  {String} Address 
-	 * @param  {Integer} pageNumber of the token ledger List
-	 * @param  {Integer} pageSize of the token ledger List
+	 * @param  {String} address Address 
+	 * @param  {Integer} pageNumber PageNumber of the token ledger List
+	 * @param  {Integer} pageSize PageSize of the token ledger List
 	 * @return {Promise}
 	 */
 	getAddressTokenTransactions: function( address, pageNumber, pageSize ) {
@@ -180,7 +180,7 @@ DbHelper.prototype = {
 
 	/**
 	 * To Delegate insertBlock call to the DB
-	 * @param  {Array}	Array of Block Data Content Array
+	 * @param  {Array}	blockDataArray Array of Block Data Content Array
 	 * @return {Promise}
 	 */
 	insertBlock: function( blockDataArray ) {
@@ -190,7 +190,7 @@ DbHelper.prototype = {
 	/**
 	 * To Delegate insertTransaction call to the DB
 	 * It also handles insertAddressTransaction call to the DB
-	 * @param  {Array}	Array of Transactions Data Content Array
+	 * @param  {Array}	transactionDataArray Array of Transactions Data Content Array
 	 * @return {Promise}
 	 */
 	insertTransaction: function( transactionDataArray ) {
@@ -228,7 +228,7 @@ DbHelper.prototype = {
 
 	/**
 	 * To Delegate insertAddressTransaction call to the DB
-	 * @param  {Array} Array of Address Transaction Data
+	 * @param  {Array} addressTransactionData Array of Address Transaction Data
 	 * @return {Promise}
 	 */
 	insertAddressTransaction: function( addressTransactionData) {
@@ -238,7 +238,7 @@ DbHelper.prototype = {
 	/**
 	 * To Delegate insertTokenTransaction call to the DB
 	 * It also handles insertAddressTokenTransaction call to the DB
-	 * @param  {Array}	Array of TokenTransactions Data Content Array
+	 * @param  {Array}	tokenTransactionDataArray Array of TokenTransactions Data Content Array
 	 * @return {Promise}
 	 */
 	insertTokenTransaction: function( tokenTransactionDataArray ) {
@@ -276,7 +276,7 @@ DbHelper.prototype = {
 
 	/**
 	 * To Delegate insertAddressTokenTransaction call to the DB
-	 * @param  {Array} Array of Token Address Transaction Data
+	 * @param  {Array} addressTokenTransactionData Array of Token Address Transaction Data
 	 * @return {Promise}
 	 */
 	insertAddressTokenTransaction: function( addressTokenTransactionData ){
@@ -361,7 +361,7 @@ DbHelper.prototype = {
 
 	/**
 	 * To Delegate call deleting all the data of the block .
-	 * @param  {Integer} Number of the block
+	 * @param  {Integer} blockNumber Number of the block
 	 * @return {Promise}
 	 */
 	deleteBlock: function(blockNumber) {
@@ -374,7 +374,7 @@ DbHelper.prototype = {
 
 	/**
 	 * To Delegate deleteAddressTokenTransactions call to DB.
-	 * @param  {Array} Transaction hash array to be deleted
+	 * @param  {Array} txnHashArray Transaction hash array to be deleted
 	 * @return {Promise}
 	 */
 	deleteAddressTokenTransactions: function(txnHashArray) {
@@ -386,7 +386,7 @@ DbHelper.prototype = {
 
 	/**
 	 * To Delegate deleteTokenTransactions call to DB.
-	 * @param  {Array} Transaction hash array to be deleted
+	 * @param  {Array} txnHashArray Transaction hash array to be deleted
 	 * @return {Promise}
 	 */
 	deleteTokenTransactions: function(txnHashArray) {
@@ -398,7 +398,7 @@ DbHelper.prototype = {
 
 	/**
 	 * To Delegate deleteAddressTransactions call to DB.
-	 * @param  {Array} Transaction hash array to be deleted
+	 * @param  {Array} txnHashArray Transaction hash array to be deleted
 	 * @return {Promise}
 	 */
 	deleteAddressTransactions: function(txnHashArray) {
@@ -410,7 +410,7 @@ DbHelper.prototype = {
 
 	/**
 	 * To Delegate deleteTransactions call to DB.
-	 * @param  {Array} Transaction hash array to be deleted
+	 * @param  {Array} txnHashArray Transaction hash array to be deleted
 	 * @return {Promise}
 	 */
 	deleteTransactions: function(txnHashArray) {
@@ -422,7 +422,7 @@ DbHelper.prototype = {
 
 	/**
 	 * To Delegate call to update verify flag of the block data in DB.
-	 * @param  {Integer} Number of the block
+	 * @param  {Integer} blockNumber Number of the block
 	 * @return {Promise}
 	 */
 	updateVerifiedFlag: function(blockNumber) {

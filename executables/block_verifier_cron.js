@@ -24,7 +24,7 @@ var block_verifier;
 
 /**
  * Maintain the state for the block fetcher
- * @type {hash}
+ * @type {hash} state
  */
 var state = {
     blockNumber : 0,
@@ -66,7 +66,7 @@ if (cliHandler.chainID) {
 
 /**
  * Methods to set timeout for the verifyBlock api
- * @param {Integer} Number of the Block
+ * @param {Integer} blockNumber Number of the Block
  * @return {null}
  */
 var setBlockVerifier = function(blockNumber) {
