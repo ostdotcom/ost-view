@@ -366,7 +366,7 @@ DbHelper.prototype = {
 	 */
 	deleteBlock: function(blockNumber) {
 		if( blockNumber ) {
-			return this.dbObject.deleteForBlockNumber(constants.BLOCK_TABLE_NAME, 'number', blockNumber);
+			return this.dbObject.deleteForBlockNumber(blockNumber);
 		}
 		return Promise.reject(new Error('blockNumber is undefined'));
 

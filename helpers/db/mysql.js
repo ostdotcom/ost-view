@@ -305,7 +305,7 @@ MySQL.prototype = {
      * @param  {Array} data Data
      * @return {Promise}
      */
-  	insertData: function (tableName, columnsSequence ,data) {
+  	insertData: function (tableName, columnsSequence, data) {
   		var oThis = this;
       logger.log("Insert into table", tableName, data);
   			
@@ -369,16 +369,14 @@ MySQL.prototype = {
 
     /**
      * To delete Block Data based on provided block number
-     * @param  {String} tableName Table Name
-     * @param  {String} attributeName Attribute Name
      * @param  {Integer} blockNumber Block Number
      * @return {Promise}
      */
-    deleteForBlockNumber: function(tableName, attributName, blockNumber) {
+    deleteForBlockNumber: function(blockNumber) {
         var oThis = this;
-        logger.log("Delete in table", tableName, blockNumber);
+        logger.log("Delete in table", constants.BLOCK_TABLE_NAME, blockNumber);
           
-        var query = "DELETE  from " + tableName + " WHERE "+ attributName + "=?";
+        var query = "DELETE  from " + constants.BLOCK_TABLE_NAME + " WHERE number=?";
         return new Promise(function(resolve, reject){
             if (blockNumber == undefined) {
                 resolve("Block Number is undefined");
@@ -389,7 +387,7 @@ MySQL.prototype = {
             try {
               oThis.con.query(query, blockNumber, function (err, result) {
                   if (err) throw err;
-                  logger.info("Deletion in " + tableName + " successful");
+                  logger.info("Deletion in " + constants.BLOCK_TABLE_NAME + " successful");
                   resolve(result);
               });
             } catch(err) {
