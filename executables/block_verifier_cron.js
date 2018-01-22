@@ -17,7 +17,7 @@ const cliHandler = require('commander');
 // Load internal files
 const rootPrefix = ".."
   , Web3Interact = require(rootPrefix + "/lib/web3/interact/rpc_interact")
-  , DbInteract = require(rootPrefix + "/helpers/db/interact.js")
+  , DbInteract = require(rootPrefix + "/lib/storage/interact")
   , logger = require(rootPrefix + "/helpers/custom_console_logger")
   , core_config = require(rootPrefix + "/config")
   , BlockVerifier = require(rootPrefix + "/lib/block_utils/block_verifier")

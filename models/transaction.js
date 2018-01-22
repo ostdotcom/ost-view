@@ -8,7 +8,7 @@
 // load all internal dependencies
 const rootPrefix           = ".."
     , rpcInteract = require(rootPrefix + '/lib/web3/interact/rpc_interact')
-    , dbInteract = require(rootPrefix + '/helpers/db/interact')
+    , dbInteract = require(rootPrefix + '/lib/storage/interact')
     , constants = require(rootPrefix + '/config/core_constants')
 	  , coreConfig = require(rootPrefix + '/config')
 ;

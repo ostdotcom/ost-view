@@ -1,7 +1,6 @@
 OPENST-EXPLORER
 ============
 
-
 ## Prerequisite installations 
 
 * Install node version >= 8.7.0
