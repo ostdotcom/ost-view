@@ -95,6 +95,6 @@ var setBlockVerifier = function (blockNumber) {
     });
 
   }, state.config.polling_interval);
-}
+};
 
 setBlockVerifier(state.blockNumber);

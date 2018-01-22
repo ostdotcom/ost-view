@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width">
-	<title>OpenST Explorer Class: transaction</title>
+	<title>OpenST Explorer Class: BlockFetcher</title>
 
 	<!--[if lt IE 9]>
 	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -79,15 +79,15 @@
 		<div id="main">
 			
 
-	<h1 class="page-title">Class: transaction</h1>
+	<h1 class="page-title">Class: BlockFetcher</h1>
 <section>
 
 <header>
     
         <h2>
-            <span class="ancestors"><a href="module-models_transaction.html">models/transaction</a>~</span>
+            <span class="ancestors"><a href="module-lib_block_utils_block_fetcher.html">lib/block_utils/block_fetcher</a>~</span>
         
-        transaction
+        BlockFetcher
         </h2>
         
     
@@ -100,12 +100,16 @@
         
 <hr>
 <dt>
-    <h4 class="name" id="transaction"><span class="type-signature"></span>new transaction(chainId)</h4>
+    <h4 class="name" id="BlockFetcher"><span class="type-signature"></span>new BlockFetcher(web3Interact, dbInteract, verifier)</h4>
     
     
 </dt>
 <dd>
 
+    
+    <div class="description">
+        Constructor to create object of BlockFetcher
+    </div>
     
 
     
@@ -139,13 +143,13 @@
 
         <tr>
             
-                <td class="name"><code>chainId</code></td>
+                <td class="name"><code>web3Interact</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">Integer</span>
+<span class="param-type">Web3Object</span>
 
 
 
@@ -156,7 +160,55 @@
 
             
 
-            <td class="description last">chain id to connect to respective geth node and database instance</td>
+            <td class="description last">Web3RPC Object</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>dbInteract</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">DB object to interact</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>verifier</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">verifier flag</td>
         </tr>
 
     
@@ -233,6 +285,81 @@
 
     
 
+    
+        <h3 class="subsection-title">Members</h3>
+
+        <dl>
+            
+<hr>
+<dt class="name" id="state">
+    <h4 id="state"><span class="type-signature"></span>state<span class="type-signature"> :Object</span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        State of the fetcher with config details.
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Object</span>
+
+
+
+            </li>
+        </ul>
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        </dl>
     
 
     
@@ -242,7 +369,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="getAddressTransactions"><span class="type-signature"></span>getAddressTransactions(address, page)</h4>
+    <h4 class="name" id="errorHandling"><span class="type-signature"></span>errorHandling(err)</h4>
     
     
 </dt>
@@ -250,7 +377,7 @@
 
     
     <div class="description">
-        Get list transactions of a address from database.
+        Function to handle error and call the callback function
     </div>
     
 
@@ -285,13 +412,13 @@
 
         <tr>
             
-                <td class="name"><code>address</code></td>
+                <td class="name"><code>err</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type">ErrorObject</span>
 
 
 
@@ -302,14 +429,138 @@
 
             
 
-            <td class="description last">transaction address.</td>
+            <td class="description last">Error Object</td>
         </tr>
 
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">null</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="fetchAndUpdateBlock"><span class="type-signature"></span>fetchAndUpdateBlock(blockNumber, insertionCompleteCallback)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Method to fetch block using blockNumber
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
     
 
         <tr>
             
-                <td class="name"><code>page</code></td>
+                <td class="name"><code>blockNumber</code></td>
             
 
             <td class="type">
@@ -326,7 +577,31 @@
 
             
 
-            <td class="description last">page number.</td>
+            <td class="description last">Block Number</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>insertionCompleteCallback</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">FunctionCallback</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Insertion Complete Callback</td>
         </tr>
 
     
@@ -389,10 +664,6 @@
     <h5>Returns:</h5>
     
             
-<div class="param-desc">
-    List of transations for address which are available in database.
-</div>
-
 
 
 <dl>
@@ -401,7 +672,7 @@
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;Object></span>
+<span class="param-type">null</span>
 
 
 
@@ -418,7 +689,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="getPendingTransactions"><span class="type-signature"></span>getPendingTransactions()</h4>
+    <h4 class="name" id="formatBlockData"><span class="type-signature"></span>formatBlockData(rawBlockData, verifier)</h4>
     
     
 </dt>
@@ -426,7 +697,7 @@
 
     
     <div class="description">
-        Get list of pending transactions available on utility chain.
+        Format block data as per the data sequence of insertion into DB.
     </div>
     
 
@@ -435,6 +706,80 @@
     
 
     
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>rawBlockData</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Block Data Json Object</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>verifier</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Boolean</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Verifier flag</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
     
 
     
@@ -491,10 +836,6 @@
     <h5>Returns:</h5>
     
             
-<div class="param-desc">
-    List of pending transactions.
-</div>
-
 
 
 <dl>
@@ -503,7 +844,7 @@
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;Object></span>
+<span class="param-type">Array</span>
 
 
 
@@ -520,7 +861,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="getRecentTransactions"><span class="type-signature"></span>getRecentTransactions(page)</h4>
+    <h4 class="name" id="formatTokenTransactionData"><span class="type-signature"></span>formatTokenTransactionData(transaction, decodedContTransactionList)</h4>
     
     
 </dt>
@@ -528,7 +869,7 @@
 
     
     <div class="description">
-        Get list of recent transactions in batches.
+        Format tokenTransaction data as per the data sequence of insertion into DB.
     </div>
     
 
@@ -563,7 +904,227 @@
 
         <tr>
             
-                <td class="name"><code>page</code></td>
+                <td class="name"><code>transaction</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Transaction JSON object</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>decodedContTransactionList</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Decoded Contract Transactions List</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="formatTransactionData"><span class="type-signature"></span>formatTransactionData(transactionRes, receiptRes, timestamp)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Format transaction data as per the data sequence of insertion into DB.
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>transactionRes</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Transaction Data Json Object</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>receiptRes</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Transaction Receipt Json Object</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>timestamp</code></td>
             
 
             <td class="type">
@@ -580,7 +1141,7 @@
 
             
 
-            <td class="description last">page number.</td>
+            <td class="description last">timestamp of the block</td>
         </tr>
 
     
@@ -643,10 +1204,6 @@
     <h5>Returns:</h5>
     
             
-<div class="param-desc">
-    List of recent transactions.
-</div>
-
 
 
 <dl>
@@ -655,7 +1212,7 @@
     </dt>
     <dd>
         
-<span class="param-type">Promise.&lt;Object></span>
+<span class="param-type">Array</span>
 
 
 
@@ -672,7 +1229,7 @@
             
 <hr>
 <dt>
-    <h4 class="name" id="getTransaction"><span class="type-signature"></span>getTransaction(address)</h4>
+    <h4 class="name" id="writeBlockToDB"><span class="type-signature"></span>writeBlockToDB(blockDataResponse)</h4>
     
     
 </dt>
@@ -680,7 +1237,7 @@
 
     
     <div class="description">
-        Get list of transactions for given transaction address.
+        Write Block Json Data object into the provided DB.
     </div>
     
 
@@ -715,13 +1272,13 @@
 
         <tr>
             
-                <td class="name"><code>address</code></td>
+                <td class="name"><code>blockDataResponse</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">String</span>
+<span class="param-type">Object</span>
 
 
 
@@ -732,7 +1289,7 @@
 
             
 
-            <td class="description last">transaction address.</td>
+            <td class="description last">Block Data Json Object</td>
         </tr>
 
     
@@ -795,10 +1352,302 @@
     <h5>Returns:</h5>
     
             
-<div class="param-desc">
-    List of transactions
-</div>
 
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="writeTokenTransactionToDB"><span class="type-signature"></span>writeTokenTransactionToDB(transactionArray)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        To write Token Transactions in to DB from the transaction Array.
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>transactionArray</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Array</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Array of transactions</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Promise</span>
+
+
+
+    </dd>
+</dl>
+
+
+        
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt>
+    <h4 class="name" id="writeTransactionsToDB"><span class="type-signature"></span>writeTransactionsToDB(blockData)</h4>
+    
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        To write transactions data into the DB provided from the blockData
+    </div>
+    
+
+    
+
+    
+
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params table table-striped">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>blockData</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Object</span>
+
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">Block Data Json Object</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
 
 
 <dl>

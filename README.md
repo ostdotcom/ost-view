@@ -10,8 +10,6 @@ OPENST-EXPLORER
 
 ## Setup OpenST utility chains 
 
-### In Terminal 1:
-
 * Go to OpenST Explorer repo directory
 ```
   > cd openst-explorer 
@@ -52,7 +50,7 @@ OPENST-EXPLORER
 
 * Run migration
 ```
-  > node executables/db_migrate.js up --chainID <chain_id>
+  > node executables/db_migrate.js up
 ```
 
 * Start block fetcher

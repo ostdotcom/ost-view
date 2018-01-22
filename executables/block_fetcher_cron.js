@@ -52,7 +52,7 @@ var setFetchBlockCron = function (blockNumber) {
   setTimeout(function () {
     block_fetcher.fetchAndUpdateBlock(blockNumber, setFetchBlockCron);
   }, state.config.polling_interval);
-}
+};
 
 /**
  * To handle command line with format
