@@ -60,7 +60,7 @@ if (cliHandler.chainID) {
         process.exit(1);
     }
 } else {
-    logger.error('\n\tPlease Specify chain ID \n\t$>node block_fetcher.js <chainID>\n');
+    logger.error('\n\tPlease Specify chain ID \n\t$>node block_fetcher.js --chainID <chainID>\n');
     process.exit(1);
 }
 

@@ -31,7 +31,7 @@ DbHelper.prototype = {
 	 */
 	getTransaction: function (transactionHash){
 
-		return this.dbObject.selectTransaction(constants.TRANSACTION_TABLE_NAME, transactionHash);
+		return this.dbObject.selectTransaction(transactionHash);
 	},
 
 	/**
@@ -48,7 +48,7 @@ DbHelper.prototype = {
 			pageSize = DEFAULT_PAGE_SIZE;
 		}
 
-		return this.dbObject.selectRecentBlocks(constants.BLOCK_TABLE_NAME, pageNumber, pageSize);
+		return this.dbObject.selectRecentBlocks(pageNumber, pageSize);
 	},
 
 	/**
@@ -58,7 +58,7 @@ DbHelper.prototype = {
 	 */
 	getBlock : function (blockNumber){
 		
-		return this.dbObject.selectBlock(constants.BLOCK_TABLE_NAME, blockNumber);
+		return this.dbObject.selectBlock(blockNumber);
 	},
 
 	/**
@@ -77,7 +77,7 @@ DbHelper.prototype = {
 			pageSize = DEFAULT_PAGE_SIZE;
 		}
 
-		return this.dbObject.selectAddressLedgerOfContract(constants.ADDRESS_TOKEN_TRANSACTION_TABLE_NAME, address, contractAddress, pageNumber, pageSize);
+		return this.dbObject.selectAddressLedgerOfContract(address, contractAddress, pageNumber, pageSize);
 	},
 
 	/**
@@ -95,7 +95,7 @@ DbHelper.prototype = {
 			pageSize = DEFAULT_PAGE_SIZE;
 		}
 
-		return this.dbObject.selectContractLedger(constants.TOKEN_TRANSACTION_TABLE_NAME, contractAddress, pageNumber, pageSize);
+		return this.dbObject.selectContractLedger(contractAddress, pageNumber, pageSize);
 	},
 
 	/**
@@ -104,7 +104,7 @@ DbHelper.prototype = {
 	 * @return {Promise}
 	 */
 	getHigestInsertedBlock: function ( blockNumber ) {
-		return this.dbObject.selectHigestInsertedBlock(constants.BLOCK_TABLE_NAME);
+		return this.dbObject.selectHigestInsertedBlock();
 	},
 
 	/**
@@ -121,7 +121,7 @@ DbHelper.prototype = {
 			pageSize = DEFAULT_PAGE_SIZE;
 		}
 
-		return this.dbObject.selectRecentTransactions(constants.TRANSACTION_TABLE_NAME, pageNumber, pageSize);
+		return this.dbObject.selectRecentTransactions(pageNumber, pageSize);
 	},
 
 	/**
@@ -139,7 +139,7 @@ DbHelper.prototype = {
 			pageSize = DEFAULT_PAGE_SIZE;
 		}
 
-		return this.dbObject.selectBlockTransactions(constants.TRANSACTION_TABLE_NAME, blockNumber, pageNumber, pageSize);
+		return this.dbObject.selectBlockTransactions(blockNumber, pageNumber, pageSize);
 	},
 
 	/**

@@ -9,6 +9,7 @@
 var mysql = require('mysql');
 
 const reqPrefix           = "../.."
+    , constants           = require( reqPrefix + '/config/core_constants')
     , logger = require( reqPrefix + '/helpers/CustomConsoleLogger');
 
 
@@ -37,18 +38,19 @@ MySQL.prototype = {
 
     /**
      * To get transaction based on provided hash.
-     * @param  {String} tableName Table Name
      * @param  {String} transactionHash Hash of the transaction 
      * @return {Promise}
      */
-    selectTransaction: function (tableName, transactionHash){
+    selectTransaction: function (transactionHash){
         var oThis = this;
 
-        var query = "SELECT * from " + tableName + " WHERE hash=\'"+ transactionHash+"\'";
+        var query = "SELECT * from " + constants.TRANSACTION_TABLE_NAME + " WHERE hash=?";
 
         return new Promise(function(resolve, reject){
             try {
-              oThis.con.query(query, function (err, result, fields) {
+              oThis.con.query(query, 
+                transactionHash, 
+                function (err, result, fields) {
                   if (err) throw err;
                   logger.info(result);
                   console.log(result)
@@ -63,19 +65,20 @@ MySQL.prototype = {
 
     /**
      * To get Recent mined blocks
-     * @param  {String} tableName Table Name
      * @param  {Integer} pageNumber Page Number
      * @param  {Integer} pageSize Page Size
      * @return {Promise}
      */
-    selectRecentBlocks: function (tableName, pageNumber, pageSize){
+    selectRecentBlocks: function (pageNumber, pageSize){
         var oThis = this;
 
-        var query = "SELECT * from " + tableName + " ORDER BY timestamp DESC LIMIT " + ((pageNumber-1)*pageSize) + "," + pageSize;
+        var query = "SELECT * from " + constants.BLOCK_TABLE_NAME + " ORDER BY timestamp DESC LIMIT ?,?";
 
         return new Promise(function(resolve, reject){
             try {
-              oThis.con.query(query, function (err, result, fields) {
+              oThis.con.query(query,
+                [((pageNumber-1)*pageSize), pageSize], 
+                function (err, result, fields) {
                   if (err) throw err;
                   logger.info(result);
                   resolve(result);
@@ -89,17 +92,18 @@ MySQL.prototype = {
 
     /**
      * To get Block based on block Number
-     * @param  {String} tableName Table Name
      * @param  {Integer} blockNumber Block Number
      * @return {Promise}
      */
-	  selectBlock: function (tableName, blockNumber){
+	  selectBlock: function (blockNumber){
       var oThis = this;
 
-      var query = "SELECT * from " + tableName + " WHERE number="+ blockNumber;
+      var query = "SELECT * from " + constants.BLOCK_TABLE_NAME + " WHERE number=?";
        return new Promise(function(resolve, reject){
               try {
-                oThis.con.query(query, function (err, result, fields) {
+                oThis.con.query(query, 
+                  blockNumber,
+                  function (err, result, fields) {
                     if (err) throw err;
                     logger.info(result);
                     resolve(result);
@@ -113,13 +117,12 @@ MySQL.prototype = {
 
     /**
      * To get Higest inserted block in the DB.
-     * @param  {String} tableName Table Name
      * @return {Promise}
      */
-    selectHigestInsertedBlock: function (tableName) {
+    selectHigestInsertedBlock: function () {
         var oThis = this;
         logger.log("Getting higest block Number");
-        var query = "SELECT MAX(number) from " + tableName;
+        var query = "SELECT MAX(number) from " + constants.BLOCK_TABLE_NAME;
 
         return new Promise(function(resolve, reject){
             try {
@@ -138,14 +141,13 @@ MySQL.prototype = {
 
     /**
      * To get the Leger transactions of particular contract of provided address
-     * @param  {String} tableName Table Name
      * @param  {String} address Address
      * @param  {String} contractAddress Contract Address
      * @param  {Integer} pageNumber Page Number
      * @param  {Integer} pageSize Page Size
      * @return {Promise}
      */
-    selectAddressLedgerOfContract: function (tableName, address, contractAddress, pageNumber, pageSize){
+    selectAddressLedgerOfContract: function (address, contractAddress, pageNumber, pageSize){
        var oThis = this;
         logger.log("select for address ledger in contract ");
         logger.log("address ", address) 
@@ -153,12 +155,14 @@ MySQL.prototype = {
         logger.log("PageNumber ", pageNumber); 
         logger.log("PageSize ", pageSize);
 
-        var query = "SELECT * from " + tableName + " WHERE address= \'" + address + "\' AND contract_address=\'"+ contractAddress + "\' ORDER BY timestamp DESC LIMIT " + ((pageNumber-1)*pageSize) + "," + pageSize;
+        var query = "SELECT * from " + constants.ADDRESS_TOKEN_TRANSACTION_TABLE_NAME + " WHERE address=? AND contract_address=? ORDER BY timestamp DESC LIMIT ?,?";
 
         console.log(query);
         return new Promise(function(resolve, reject){
             try {
-              oThis.con.query(query, function (err, result, fields) {
+              oThis.con.query(query, 
+                [address, contractAddress, ((pageNumber-1)*pageSize), pageSize],
+                function (err, result, fields) {
                   if (err) throw err;
                   logger.info(result);
                   resolve(result);
@@ -172,24 +176,25 @@ MySQL.prototype = {
 
     /**
      * To get the Ledger transactions of particular contract address 
-     * @param  {String} tableName Table Name
      * @param  {String} contractAddress Contract Address
      * @param  {Integer} pageNumber Page Number
      * @param  {Integer} pageSize Page Size
      * @return {Promise}
      */
-    selectContractLedger: function (tableName, contractAddress, pageNumber, pageSize){
+    selectContractLedger: function (contractAddress, pageNumber, pageSize){
        var oThis = this;
         logger.log("select for contract ledger");
         logger.log("contractAddress ", contractAddress);
         logger.log("PageNumber ", pageNumber); 
         logger.log("PageSize ", pageSize);
 
-        var query = "SELECT * from " + tableName + " WHERE contract_address=\'"+ contractAddress + "\' ORDER BY timestamp DESC LIMIT " + ((pageNumber-1)*pageSize) + "," + pageSize;
+        var query = "SELECT * from " + constants.TOKEN_TRANSACTION_TABLE_NAME + " WHERE contract_address=? ORDER BY timestamp DESC LIMIT ?,?";
 
         return new Promise(function(resolve, reject){
             try {
-              oThis.con.query(query, function (err, result, fields) {
+              oThis.con.query(query, 
+                [contractAddress, ((pageNumber-1)*pageSize), pageSize],
+                function (err, result, fields) {
                   if (err) throw err;
                   logger.info(result);
                   resolve(result);
@@ -203,21 +208,22 @@ MySQL.prototype = {
 
     /**
      * To get recent Transactions of the mined blocks.
-     * @param  {String} tableName Table Name
      * @param  {Integer} pageNumberPage Number
      * @param  {Integer} pageSize Page Size
      * @return {Promise}
      */
-    selectRecentTransactions: function (tableName, pageNumber, pageSize) {
+    selectRecentTransactions: function (pageNumber, pageSize) {
         var oThis = this;
         logger.log("select for recent transactions ");
         logger.log("PageNumber ", pageNumber) 
         logger.log("PageSize ", pageSize);
-        var query = "SELECT * from " + tableName + " ORDER BY timestamp DESC LIMIT " + ((pageNumber-1)*pageSize) + "," + pageSize;
+        var query = "SELECT * from " + constants.TRANSACTION_TABLE_NAME + " ORDER BY timestamp DESC LIMIT ?,?";
 
         return new Promise(function(resolve, reject){
             try {
-              oThis.con.query(query, function (err, result, fields) {
+              oThis.con.query(query, 
+                [((pageNumber-1)*pageSize), pageSize],
+                function (err, result, fields) {
                   if (err) throw err;
                   logger.info(result);
                   resolve(result);
@@ -232,22 +238,23 @@ MySQL.prototype = {
 
     /**
      * To get List of Transactions of the block based on its provided block number
-     * @param  {String} tableName Table Name
      * @param  {Integer} blockNumber Block Number
      * @param  {Integer} pageNumber Page Number
      * @param  {Integer} pageSize Page Size
      * @return {Promise}
      */
-    selectBlockTransactions: function (tableName, blockNumber, pageNumber, pageSize) {
+    selectBlockTransactions: function (blockNumber, pageNumber, pageSize) {
         var oThis = this;
         logger.log("select for transaction in block of blockNumber ", blockNumber);
         logger.log("PageNumber ", pageNumber) 
         logger.log("PageSize ", pageSize);
-        var query = "SELECT * from " + tableName + " WHERE block_number= " + blockNumber + " LIMIT " + ((pageNumber-1)*pageSize) + "," + pageSize;
+        var query = "SELECT * from " + constants.TRANSACTION_TABLE_NAME + " WHERE block_number=? LIMIT ?,?";
 
         return new Promise(function(resolve, reject){
             try {
-              oThis.con.query(query, function (err, result, fields) {
+              oThis.con.query(query, 
+                [blockNumber, ((pageNumber-1)*pageSize), pageSize],
+                function (err, result, fields) {
                   if (err) throw err;
                   logger.info(result);
                   resolve(result);
@@ -273,11 +280,13 @@ MySQL.prototype = {
       logger.log("select for transaction address", tableName, address);
       logger.log("PageNumber ", pageNumber) 
       logger.log("PageSize ", pageSize);
-      var query = "SELECT * from " + tableName + " WHERE address=\'" + address + "\'" + " LIMIT " + ((pageNumber-1)*pageSize) + "," + pageSize;;
+      var query = "SELECT * from " + tableName + " WHERE address=? LIMIT ?,?";
       
       return new Promise(function(resolve, reject){
           try {
-            oThis.con.query(query, function (err, result, fields) {
+            oThis.con.query(query,
+              [address, ((pageNumber-1)*pageSize), pageSize],
+              function (err, result, fields) {
                 if (err) throw err;
                 logger.info(result);
                 resolve(result);
