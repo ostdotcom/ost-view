@@ -6,7 +6,6 @@
     "include": [
       "lib",
       "executables",
-      "helpers",
       "routes",
       "models"
     ],
