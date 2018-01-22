@@ -12,7 +12,9 @@
  */
 
 // Load external libraries
-const cliHandler = require('commander');
+const cliHandler = require('commander')
+  , ps = require('ps-node')
+;
 
 // Load internal files
 const rootPrefix = ".."
@@ -22,6 +24,8 @@ const rootPrefix = ".."
   , core_config = require(rootPrefix + "/config")
   , BlockFetcher = require(rootPrefix + "/lib/block_utils/block_fetcher")
   , version = require(rootPrefix + '/package.json').version
+  , maxRunTime = (2 * 60 * 60 * 1000) // 2 hrs in milliseconds
+  , startRunTime = (new Date).getTime() // milliseconds since epoch
 ;
 
 // Variables to hold different objects
@@ -44,15 +48,20 @@ var state = {
  *
  * Methods to set timeout for the fetchBlock api
  *
- * @param  {Integer} blockNumber Number of the block
+ * @param {Integer} blockNumber - Number of the block
  * @return {null}
  * @method setFetchBlockCron
  */
 var setFetchBlockCron = function (blockNumber) {
   setTimeout(function () {
-    block_fetcher.fetchAndUpdateBlock(blockNumber, setFetchBlockCron);
+    if ((startRunTime + maxRunTime) > (new Date).getTime()) {
+      block_fetcher.fetchAndUpdateBlock(blockNumber, setFetchBlockCron);
+    } else {
+      process.exit(1);
+    }
   }, state.config.polling_interval);
 };
+
 
 /**
  * To handle command line with format
@@ -65,38 +74,72 @@ cliHandler
   .option('-n, --blockNumber <n>', 'Start parsing from given block number. If not passed, it start from last inserted block number', parseInt)
   .parse(process.argv);
 
-if (cliHandler.chainID) {
-  state.chainID = cliHandler.chainID;
-  if (isNaN(cliHandler.blockNumber)) {
-    state.blockNumber = 0;
-  } else {
-    state.blockNumber = cliHandler.blockNumber;
-  }
-  state.config = core_config.getChainConfig(state.chainID);
-  if (undefined != state.config) {
-    dbInteract = DbInteract.getInstance(state.config.db_config);
-    web3Interact = new Web3Interact(state.config.web_rpc);
-    block_fetcher = BlockFetcher.newInstance(web3Interact, dbInteract, false);
-    block_fetcher.state.blockNumber = state.blockNumber;
-    logger.log('State Configuration', state);
-  } else {
-    logger.error('\n\tInvalid chain ID \n');
-    process.exit(1);
-  }
-} else {
+// Check if chain id exits
+if (!cliHandler.chainID) {
   logger.error('\n\tPlease Specify chain ID \n\t$>node block_fetcher_cron.js -c <chainID>\n');
   process.exit(1);
 }
 
-dbInteract.getHigestInsertedBlock()
-  .then(function (blockNumber) {
-    logger.log("Highest Block Number ", blockNumber);
-    if (block_fetcher.state.blockNumber == 0 && blockNumber != null) {
-      block_fetcher.state.blockNumber = +blockNumber + 1;
-    }
-    setFetchBlockCron(block_fetcher.state.blockNumber);
-  }).catch(function (err) {
-  logger.error('\nNot able to fetch block number)\n', err);
-  process.exit(1);
-});
+// Set chain id and block number
+state.chainID = cliHandler.chainID;
+if (isNaN(cliHandler.blockNumber)) {
+  state.blockNumber = 0;
+} else {
+  state.blockNumber = cliHandler.blockNumber;
+}
 
+// Handle process locking
+const lockProcess = {
+  command: 'node',
+  script: 'block_fetcher_cron.js',
+  arguments: ['-c', state.chainID, '-n', state.blockNumber]
+};
+
+// Check if process with same arguments already running or not
+ps.lookup({
+  command: lockProcess.command,
+  arguments: lockProcess.script + "," + lockProcess.arguments.join(","),
+}, function (err, resultList) {
+  if (err) {
+    throw new Error(err);
+  }
+
+  resultList.forEach(function (r) {
+    if (r) {
+      logger.error('\n Process already exists with same arguments \n');
+      process.exit(1);
+    }
+  });
+
+  // Set process title for locking
+  process.title = lockProcess.command + " " + lockProcess.script + " " + lockProcess.arguments.join(" ");
+  logger.info(process.title);
+
+  state.config = core_config.getChainConfig(state.chainID);
+  if (!state.config) {
+    logger.error('\n\tInvalid chain ID \n');
+    process.exit(1);
+  }
+
+  // Create required connections and objects
+  dbInteract = DbInteract.getInstance(state.config.db_config);
+  web3Interact = new Web3Interact(state.config.web_rpc);
+  block_fetcher = BlockFetcher.newInstance(web3Interact, dbInteract, false);
+  block_fetcher.state.blockNumber = state.blockNumber;
+  logger.log('State Configuration', state);
+
+  // Start processing blocks
+  dbInteract.getHigestInsertedBlock()
+    .then(function (blockNumber) {
+      logger.log("Highest Block Number ", blockNumber);
+      if (block_fetcher.state.blockNumber == 0 && blockNumber != null) {
+        block_fetcher.state.blockNumber = +blockNumber + 1;
+      }
+      setFetchBlockCron(block_fetcher.state.blockNumber);
+    })
+    .catch(function (err) {
+      logger.error('\nNot able to fetch block number)\n', err);
+      process.exit(1);
+    });
+
+});

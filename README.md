@@ -33,7 +33,7 @@ OPENST-EXPLORER
         chainId       : <chain_id>,
         database_type : "mysql",
         web_rpc       : "<Geth RPC URL>",
-        cron_interval : <cron_interval_time>,
+        poll_interval : <chain poll interval in milliseconds>,
         db_config     : {
             chainId         : <chain_id>,
             driver          : 'mysql',
