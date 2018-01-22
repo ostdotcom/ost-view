@@ -10,7 +10,7 @@ var mysql = require('mysql');
 
 const reqPrefix           = "../.."
     , constants           = require( reqPrefix + '/config/core_constants')
-    , logger = require( reqPrefix + '/helpers/CustomConsoleLogger');
+    , logger = require( reqPrefix + '/helpers/custom_console_logger');
 
 
 /**

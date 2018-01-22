@@ -1,9 +1,7 @@
 "use strict";
-
 /**
  * Core Constants file 
  */
-
 
 const constants = {}
 
