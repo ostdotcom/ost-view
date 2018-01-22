@@ -206,7 +206,7 @@ DbHelper.prototype = {
 
 				//Format transactions
 				var txnArray = oThis.getAddressTransactionData( transactionData );
-				txnArray.forEach((addrTxn)=>{
+				txnArray.forEach(function (addrTxn){
 					addressTransactionData.push(addrTxn);
 				});
 			}
@@ -254,7 +254,7 @@ DbHelper.prototype = {
 
 				//Format token transactions
 				var txnArray = oThis.getAddressTokenTransactionData( tokenTransactionData );
-				txnArray.forEach((addrTxn)=>{
+				txnArray.forEach(function (addrTxn){
 					addressTransactionData.push(addrTxn);
 				});
 			}

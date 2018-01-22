@@ -65,19 +65,19 @@ const initDBConfigFile = function(chainID) {
 const resetUp = function() {
 	var chainIDs = getChainList(this);
 	
-	chainIDs.forEach((chainID) => {
+	chainIDs.forEach(function (chainID) {
 
 		initDBConfigFile(chainID);
 
 		// The next step is to get a new instance of DBMigrate
 		var dbmigrate = DBMigrate.getInstance(true);
 
-		dbmigrate.reset((err) => {
+		dbmigrate.reset(function (err) {
 			if(err) {
 				logger.error(err);
 				process.exit(1);
 			}
-		  dbmigrate.up((err) => {
+		  dbmigrate.up(function (err) {
 		  	if(err) {
 				logger.error(err);
 				process.exit(1);
@@ -94,7 +94,7 @@ const resetUp = function() {
 const reset = function() {
 	var chainIDs = getChainList(this);
 	
-	chainIDs.forEach((chainID) => {
+	chainIDs.forEach(function (chainID) {
 		
 		logger.log('Running reset of chainID', chainID);
 		initDBConfigFile(chainID);
@@ -102,7 +102,7 @@ const reset = function() {
 		// The next step is to get a new instance of DBMigrate
 		var dbmigrate = DBMigrate.getInstance(true);
 
-		dbmigrate.reset((err) => {
+		dbmigrate.reset(function (err) {
 			 if(err) {
 				logger.error(err);
 				process.exit(1);
@@ -120,7 +120,7 @@ const reset = function() {
 const up = function(version) {
 	var chainIDs = getChainList(this);
 	
-	chainIDs.forEach((chainID) => {
+	chainIDs.forEach(function (chainID) {
 
 		logger.log('Running reset of chainID', chainID);
 		initDBConfigFile(chainID);
@@ -129,7 +129,7 @@ const up = function(version) {
 		// The next step is to get a new instance of DBMigrate
 		var dbmigrate = DBMigrate.getInstance(true);
 
-		dbmigrate.up(version ,(err) => {
+		dbmigrate.up(version , function(err) {
 			if(err) {
 				logger.error(err);
 				process.exit(1);
@@ -158,7 +158,7 @@ const createMigration = function(name) {
 	// The next step is to get a new instance of DBMigrate
 	var dbmigrate = DBMigrate.getInstance(true);
 
-	dbmigrate.create(name, null, (err) => {
+	dbmigrate.create(name, null, function(err) {
 		if(err) {
 			logger.error(err);
 			process.exit(1);

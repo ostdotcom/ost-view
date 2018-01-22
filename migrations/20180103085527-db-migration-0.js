@@ -17,14 +17,14 @@ exports.setup = function(options, seedLink) {
 
 exports.up = function(db) {
 	return createBlockTable(db)
-  	.then((result)=> { return createTransactionTable(db);})
-  	.then((result)=> { return createHashIndexOnTransactionTable(db);})
-  	.then((result)=> { return createTransactionLedgerTable(db);})
-  	.then((result)=> { return createGroupIndexOnTxnLedgerTable(db);})
-  	.then((result)=> { return createIntTransactionTable(db);})
-  	.then((result)=> { return createIndexOnIntTransactionTable(db);})
-  	.then((result)=> { return createIntTransactionLedgerTable(db);})
-  	.then((result)=> { return createIndexOnIntTxnLedgerTable(db);}
+  	.then(function (result) { return createTransactionTable(db);})
+  	.then(function (result) { return createHashIndexOnTransactionTable(db);})
+  	.then(function (result) { return createTransactionLedgerTable(db);})
+  	.then(function (result) { return createGroupIndexOnTxnLedgerTable(db);})
+  	.then(function (result) { return createIntTransactionTable(db);})
+  	.then(function (result) { return createIndexOnIntTransactionTable(db);})
+  	.then(function (result) { return createIntTransactionLedgerTable(db);})
+  	.then(function (result) { return createIndexOnIntTxnLedgerTable(db);}
   	,
     function(err) {
       return;
@@ -96,7 +96,7 @@ var createTransactionTable = function(db) {
         input_data: { type: 'blob', notNull: false },
         logs: { type: 'blob', notNull: false },
         timestamp: { type: 'int', notNull: true }
-    });   
+    });
 }
 
 var createHashIndexOnTransactionTable = function(db) {
@@ -113,7 +113,7 @@ var createTransactionLedgerTable = function(db) {
         transaction_fees: {type: 'decimal', notNull: true, length: '40,0'},
         inflow: { type: 'boolean', notNull: true},
         timestamp: { type: 'int', notNull: true }
-    }); 
+    });
 }
 
 var createGroupIndexOnTxnLedgerTable = function(db) {
