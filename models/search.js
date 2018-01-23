@@ -7,11 +7,10 @@
 
 // load all internal dependencies
 const rootPrefix = ".."
-  , responseHelper = require(rootPrefix + '/lib/formatter/response')
   , constants = require(rootPrefix + '/config/core_constants')
-  , block = require(rootPrefix + '/models/block')
-  , transaction = require(rootPrefix + '/models/transaction')
-  , address = require(rootPrefix + '/models/address')
+  , coreConfig = require(rootPrefix + '/config')
+  , rpcInteract = require(rootPrefix + '/lib/web3/interact/rpc_interact')
+
 ;
 
 // Class related constants
@@ -25,9 +24,9 @@ const balanceIndex = 0
  */
 
 var search = module.exports = function (chainId) {
-  this._address = new address(chainId);
-  this._block = new block(chainId);
-  this._transaction = new transaction(chainId);
+  
+  this._utilityInteractInstance = new rpcInteract(coreConfig.getWebRpcUrl(chainId));
+
 }
 
 search.prototype = {
@@ -41,68 +40,33 @@ search.prototype = {
    */
   getParamData: function (argument) {
 
-    if (argument == undefined) {
-      reject('invalid input');
-      return;
+    const oThis = this;
 
-    }
-    if (argument.length == constants.ACCOUNT_HASH_LENGTH) {
+    return new Promise(function (resolve, reject) {
 
-      const oThis = this;
+      if (argument == undefined) {
+        reject('invalid input');
+        return;
 
-      return new Promise(function (resolve, reject) {
-        var promiseResolvers = [];
+      }
 
-        promiseResolvers.push(oThis._address.getAddressBalance(argument));
-        promiseResolvers.push(oThis._address.getAddressTransactions(argument, constants.DEFAULT_PAGE_SIZE));
+      if (argument.length === constants.ACCOUNT_HASH_LENGTH) {
+          oThis._utilityInteractInstance.isContract(argument)
+            .then(function(reasponse){
+                resolve("create url for contract");
+            })
+            .catch(function(reason){
+                resolve("create url for account");
+            });
 
-        Promise.all(promiseResolvers).then(function (rsp) {
-
-          const balanceValue = rsp[balanceIndex];
-          const transactionsValue = rsp[transactionsIndex]
-
-          const response = responseHelper.successWithData({
-            balance: balanceValue,
-            transactions: transactionsValue
-          });
-
-          resolve(response);
-        });
-
-      });
-
-    } else if (argument.length == constants.TRANSACTION_HASH_LENGTH) {
-
-      const oThis = this;
-
-      return new Promise(function (resolve, reject) {
-        getTransaction(argument, oThis)
-          .then(function (response) {
-            resolve(responseHelper.successWithData({"transaction": response, "result_type": "transaction"}))
-          })
-      });
-
-    } else if (!isNaN(argument)) {
-      const oThis = this;
-
-      return new Promise(function (resolve, reject) {
-        getBlock(argument, oThis)
-          .then(function (response) {
-            resolve(responseHelper.successWithData({"block": response, "result_type": "block"}))
-          })
-      });
-
-    } else {
-      reject('invalid input');
-    }
+      }else if(argument.length === constants.TRANSACTION_HASH_LENGTH){
+          resolve("create url for transaction");
+      }else if(!isNaN(argument)){
+          resolve("create url for block details");
+      }else{
+          reject('invalid input');
+      }
+    });
   }
+     
 }
-
-function getBlock(block_number, oThis) {
-  return Promise.resolve(oThis._block.getBlock(block_number));
-}
-
-function getTransaction(hash, oThis) {
-  return Promise.resolve(oThis._transaction.getTransaction(hash));
-}
-

@@ -61,7 +61,7 @@ router.get("/:contractAddress/internal-transactions/:page", contractMiddleware, 
       return renderResult(response, res);
     })
     .catch(function (reason) {
-      logger.log("****** contract: /:contractAddress/internal-transaction/:page ***** catch ***** " + reason);
+      logger.log(req.originalUrl + " : " + reason);
       return renderResult(responseHelper.error('', reason), res);
     });
 });

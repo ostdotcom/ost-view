@@ -49,11 +49,15 @@ router.get('/:param', searchMiddleware, function (req, res) {
 
   req.searchInstance.getParamData(req.param)
     .then(function (requestResponse) {
-      console.log("search: inside * this * funciton")
-      return renderResult(requestResponse, res);
+    	const response = responseHelper.successWithData({
+        redirect_url: requestResponse,
+        result_type: "redirect_url"
+      });
+
+      return renderResult(response, res);
     })
     .catch(function (reason) {
-      console.log("****** search: /:param ***** catch ***** " + reason);
+      logger.log(req.originalUrl + " : " + reason);
       return renderResult(responseHelper.error('', reason), res);
 
     });

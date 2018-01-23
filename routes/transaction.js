@@ -61,7 +61,7 @@ router.get("/:hash", transactionMiddleware, function (req, res) {
       return renderResult(response, res);
     })
     .catch(function (reason) {
-      logger.log("****** transaction: /:hash ***** catch ***** " + reason);
+      logger.log(req.originalUrl + " : " + reason);
       return renderResult(responseHelper.error('', reason), res);
     });
 });
@@ -88,7 +88,7 @@ router.get("/:hash/internal-transactions/:page", transactionMiddleware, function
       return renderResult(response, res);
     })
     .catch(function (reason) {
-      logger.log("****** transaction: /:hash/internal-transactions/:page ***** catch ***** " + reason);
+      logger.log(req.originalUrl + " : " + reason);
       return renderResult(responseHelper.error('', reason), res);
     });
 });

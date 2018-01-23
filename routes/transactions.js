@@ -58,7 +58,7 @@ router.get("/recent/:page", transactionsMiddleware, function (req, res) {
       return renderResult(response, res);
     })
     .catch(function (reason) {
-      logger.log("****** transactions: /recent/:page ***** catch ***** " + reason);
+      logger.log(req.originalUrl + " : " + reason);
       return renderResult(responseHelper.error('', reason), res);
     });
 });
@@ -82,7 +82,7 @@ router.get("/pending", transactionsMiddleware, function (req, res) {
       return renderResult(response, res);
     })
     .catch(function (reason) {
-      logger.log("****** transactions: /pending ***** catch ***** " + reason);
+      logger.log(req.originalUrl + " : " + reason);
       return renderResult(responseHelper.error('', reason), res);
     });
 });

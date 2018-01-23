@@ -12,7 +12,7 @@ const router = express.Router({mergeParams: true});
 
 // load all internal dependencies
 const rootPrefix = ".."
-  , address = require(rootPrefix + '/lib/models/address')
+  , address = require(rootPrefix + '/models/address')
   , responseHelper = require(rootPrefix + '/lib/formatter/response')
   , coreConfig = require(rootPrefix + '/config')
   , logger = require(rootPrefix + '/helpers/custom_console_logger')
@@ -96,7 +96,7 @@ router.get('/:address/balance', addressMiddleware, function (req, res) {
       return renderResult(response, res);
     })
     .catch(function (reason) {
-      logger.log("****** address: /:address/balance ***** catch ***** " + reason);
+      logger.log(req.originalUrl + " : " + reason);
       return renderResult(responseHelper.error('', reason), res);
     });
 });
@@ -124,7 +124,7 @@ router.get('/:address/transactions/:page', addressMiddleware, function (req, res
       return renderResult(response, res);
     })
     .catch(function (reason) {
-      logger.log("****** address: /:address/transaction/:page ***** catch ***** " + reason);
+      logger.log(req.originalUrl + " : " + reason);
       return renderResult(responseHelper.error('', reason), res);
     });
 });
@@ -153,7 +153,7 @@ router.get('/:address/contract/:contractAddress/:page', addressMiddleware, funct
       return renderResult(response, res);
     })
     .catch(function (reason) {
-      logger.log("****** address: /:address/contract/:contractAddress/:page ***** catch ***** " + reason);
+      logger.log(req.originalUrl + " : " + reason);
       return renderResult(responseHelper.error('', reason), res);
     });
 });

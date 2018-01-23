@@ -8,7 +8,7 @@
 const express = require('express');
 
 // Express router to mount blocks related routes
-const router = router = express.Router({mergeParams: true});
+const router = express.Router({mergeParams: true});
 
 // load all internal dependencies
 const rootPrefix = ".."
@@ -56,7 +56,7 @@ router.get("/recent/:page", blocksMiddleware, function (req, res) {
       return renderResult(response, res);
     })
     .catch(function (reason) {
-      logger.log("****** blocks: /recent/:page ***** catch ***** " + reason);
+      logger.log(req.originalUrl + " : " + reason);
       return renderResult(responseHelper.error('', reason), res);
     });
 });

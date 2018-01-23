@@ -24,7 +24,7 @@ const renderResult = function (requestResponse, responseObject) {
 
 // define parameters from url, generate web rpc instance and database connect
 const blockMiddleware = function (req, res, next) {
-  const blockNumber = req.params.block_number
+  const blockNumber = req.params.blockNumber
     , chainId = req.params.chainId
     , page = req.params.page;
 
@@ -43,15 +43,14 @@ const blockMiddleware = function (req, res, next) {
  *
  * @name Block Details
  *
- * @route {GET} {base_url}/:block_number
+ * @route {GET} {base_url}/:blockNumber
  *
  * @routeparam {Integer} :block_number - number of block need to be fetched
  */
-router.get("/:block_number", blockMiddleware, function (req, res) {
+router.get("/:blockNumber", blockMiddleware, function (req, res) {
 
   req.blockInstance.getBlock(req.blockNumber)
     .then(function (requestResponse) {
-
       const response = responseHelper.successWithData({
         block: requestResponse,
         result_type: 'block'
@@ -60,7 +59,7 @@ router.get("/:block_number", blockMiddleware, function (req, res) {
       return renderResult(response, res);
     })
     .catch(function (reason) {
-      logger.log("****** block: /:block_number ***** catch ***** " + reason);
+      logger.log(req.originalUrl + ":" + reason);
 
       return renderResult(responseHelper.error('', reason), res);
     });
@@ -89,7 +88,7 @@ router.get("/:block_number/transactions/:page", blockMiddleware, function (req, 
       return renderResult(response, res);
     })
     .catch(function (reason) {
-      logger.log("****** block: /:address/transactions/:page ***** catch ***** " + reason);
+      logger.log(req.originalUrl + " : " + reason);
       return renderResult(responseHelper.error('', reason), res);
     });
 });
