@@ -50,7 +50,7 @@ router.get('/:param', searchMiddleware, function (req, res) {
   req.searchInstance.getParamData(req.param)
     .then(function (requestResponse) {
     	const response = responseHelper.successWithData({
-        redirect_url: requestResponse,
+        redirect_url: "http://"+req.headers.host+"/chain-id/"+req.params.chainId+requestResponse,
         result_type: "redirect_url"
       });
 
@@ -59,9 +59,7 @@ router.get('/:param', searchMiddleware, function (req, res) {
     .catch(function (reason) {
       logger.log(req.originalUrl + " : " + reason);
       return renderResult(responseHelper.error('', reason), res);
-
     });
-
 });
 
 module.exports = router;

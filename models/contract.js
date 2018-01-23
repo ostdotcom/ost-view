@@ -45,7 +45,7 @@ contract.prototype = {
         page = constants.DEFAULT_PAGE_NUMBER;
       }
 
-      oThis._dbInstance.getContractLedger(contractAddress, page, constants.ACCOUNT_HASH_LENGTH)
+      oThis._dbInstance.getContractLedger(contractAddress, page, constants.DEFAULT_PAGE_SIZE)
         .then(function (response) {
           resolve(response);
         })
@@ -54,6 +54,38 @@ contract.prototype = {
         });
 
     });
+  },
+
+  /**
+   * Get list of Contract ledger for given contract address.
+   *
+   * @param {Sting} contractAddress - Contract address
+   * @param {Integer} page  - Page number
+   *
+   * @return {Promise<Object>} List of contract transaction
+   */
+  getContractTransactions: function (contractAddress, page){
+      const oThis = this;
+
+      return new Promise(function (resolve, reject) {
+
+          if (contractAddress == undefined || contractAddress.length != constants.ACCOUNT_HASH_LENGTH) {
+            reject("invalid input");
+            return;
+          }
+
+          if (page == undefined || !page || isNaN(page) || page < 0) {
+            page = constants.DEFAULT_PAGE_NUMBER;
+          }
+
+          oThis._dbInstance.getContractTransactions(contractAddress, page, constants.DEFAULT_PAGE_SIZE)
+            .then(function (response) {
+              resolve(response);
+            })
+            .catch(function (reason) {
+              reject(reason);
+            });
+      });
   }
 
 };

@@ -54,6 +54,60 @@ router.get("/:contractAddress/internal-transactions/:page", contractMiddleware, 
   req.contractInstance.getContractLedger(req.contractAddress, req.page)
     .then(function (requestResponse) {
       const response = responseHelper.successWithData({
+        contract_internal_transactions: requestResponse,
+        result_type: "contract_internal_transactions"
+      });
+
+      return renderResult(response, res);
+    })
+    .catch(function (reason) {
+      logger.log(req.originalUrl + " : " + reason);
+      return renderResult(responseHelper.error('', reason), res);
+    });
+});
+
+
+/**
+ * Get paginated contract transactions by recency
+ *
+ * @name Contract Internal Transactions
+ *
+ * @route {GET} {base_url}/:contractAddress/internal-transactions/:page
+ *
+ * @routeparam {String} :contractAddress - Contract address whose internal transactions need to be fetched (42 chars length)
+ * @routeparam {Integer} :page - Page number for getting data in batch.
+ */
+router.get("/:contractAddress/:page", contractMiddleware, function (req, res) {
+
+  req.contractInstance.getContractTransactions(req.contractAddress, req.page)
+    .then(function (requestResponse) {
+      const response = responseHelper.successWithData({
+        contract_transactions: requestResponse,
+        result_type: "contract_transactions"
+      });
+
+      return renderResult(response, res);
+    })
+    .catch(function (reason) {
+      logger.log(req.originalUrl + " : " + reason);
+      return renderResult(responseHelper.error('', reason), res);
+    });
+});
+
+/**
+ * Get paginated contract transactions by recency
+ *
+ * @name Contract Internal Transactions
+ *
+ * @route {GET} {base_url}/:contractAddress/internal-transactions/:page
+ *
+ * @routeparam {String} :contractAddress - Contract address whose internal transactions need to be fetched (42 chars length)
+ */
+router.get("/:contractAddress", contractMiddleware, function (req, res) {
+
+  req.contractInstance.getContractTransactions(req.contractAddress)
+    .then(function (requestResponse) {
+      const response = responseHelper.successWithData({
         contract_transactions: requestResponse,
         result_type: "contract_transactions"
       });
