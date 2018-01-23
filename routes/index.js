@@ -18,11 +18,9 @@ var router = express.Router();
  * @route {GET} {base_url}
  *
  */
-router.get("/:format?", function(req, res, next){
+router.get("/:format", function(req, res, next){
   if (req.params.format) { 
-  	res.json({title:'Hello World'}); 
-  }else {
-    res.render('index', { title: 'Hello Block Scanner' });
+    res.render('home', { title: 'Hello Block Scanner', body:"Hello" });
   }
 });
 module.exports = router;

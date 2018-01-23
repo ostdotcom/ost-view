@@ -14,6 +14,7 @@ const express = require('express')
   , sanitizer = require('express-sanitized')
   , http = require('http')
   , cluster = require('cluster')
+  , exphbs  = require('express-handlebars')
 ;
 
 // Load all required internal files
@@ -107,6 +108,20 @@ if (cluster.isMaster) {
   //The below piece of code should always be before routes.
   //Docs: https://www.npmjs.com/package/express-sanitized
   app.use(sanitizer());
+
+  //Setting view engine template handlebars
+  app.set('views', path.join(__dirname, 'views'));
+  //Helper is used to ease stringifying JSON
+  app.engine('handlebars', exphbs({
+      defaultLayout: 'main', 
+      helpers: {
+        toJSON : function(object) {
+                  return JSON.stringify(object);
+                }
+      }
+    }));
+  app.set('view engine', 'handlebars');
+  app.use(express.static(path.join(__dirname, 'public')));
 
   // load route files
   app.use('/', indexRoutes);
