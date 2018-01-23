@@ -59,7 +59,7 @@ var setFetchBlockCron = function (blockNumber) {
     } else {
       process.exit(1);
     }
-  }, state.config.polling_interval);
+  }, state.config.poll_interval);
 };
 
 
