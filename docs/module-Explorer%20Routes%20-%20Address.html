@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>OpenST Explorer Module: Explorer Routes - Address</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
+
+	<link type="text/css" rel="stylesheet" href="styles/site.lumen.css">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top ">
+<div class="container">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="index.html">OpenST Explorer</a>
+		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+        </button>
+	</div>
+	<div class="navbar-collapse collapse" id="topNavigation">
+		<ul class="nav navbar-nav">
+			
+			<li class="dropdown">
+				<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="module-executables_block_fetcher_cron.html">executables/block_fetcher_cron</a></li><li><a href="module-executables_block_verifier_cron.html">executables/block_verifier_cron</a></li><li><a href="module-executables_db_migrate.html">executables/db_migrate</a></li><li><a href="module-Explorer%2520Routes%2520-%2520Address.html">Explorer Routes - Address</a></li><li><a href="module-Explorer%2520Routes%2520-%2520Block.html">Explorer Routes - Block</a></li><li><a href="module-Explorer%2520Routes%2520-%2520Blocks.html">Explorer Routes - Blocks</a></li><li><a href="module-Explorer%2520Routes%2520-%2520Contract.html">Explorer Routes - Contract</a></li><li><a href="module-Explorer%2520Routes%2520-%2520Index.html">Explorer Routes - Index</a></li><li><a href="module-Explorer%2520Routes%2520-%2520Search.html">Explorer Routes - Search</a></li><li><a href="module-Explorer%2520Routes%2520-%2520Transaction.html">Explorer Routes - Transaction</a></li><li><a href="module-Explorer%2520Routes%2520-%2520Transactions.html">Explorer Routes - Transactions</a></li><li><a href="module-lib_block_utils_block_fetcher.html">lib/block_utils/block_fetcher</a></li><li><a href="module-lib_block_utils_block_verifier.html">lib/block_utils/block_verifier</a></li><li><a href="module-lib_contract_interact_erc20Token.html">lib/contract_interact/erc20Token</a></li><li><a href="module-lib_formatter_response.html">lib/formatter/response</a></li><li><a href="module-lib_storage_interact.html">lib/storage/interact</a></li><li><a href="module-lib_storage_mysql.html">lib/storage/mysql</a></li><li><a href="module-lib_web3_events_formatter.html">lib/web3/events/formatter</a></li><li><a href="module-lib_web3_interact_rpc_interact.html">lib/web3/interact/rpc_interact</a></li><li><a href="module-lib_web3_providers_rpc_provider.html">lib/web3/providers/rpc_provider</a></li><li><a href="module-models_address.html">models/address</a></li><li><a href="module-models_block.html">models/block</a></li><li><a href="module-models_contract.html">models/contract</a></li><li><a href="module-models_search.html">models/search</a></li><li><a href="module-models_transaction.html">models/transaction</a></li>
+				</ul>
+			</li>
+			
+			<li class="dropdown">
+				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="module-lib_block_utils_block_fetcher-BlockFetcher.html">lib/block_utils/block_fetcher~BlockFetcher</a></li><li><a href="module-lib_block_utils_block_verifier-BlockVerifier.html">lib/block_utils/block_verifier~BlockVerifier</a></li><li><a href="module-lib_contract_interact_erc20Token-ERC20TokenContractInteract.html">lib/contract_interact/erc20Token~ERC20TokenContractInteract</a></li><li><a href="module-lib_formatter_response-ResponseHelper.html">lib/formatter/response~ResponseHelper</a></li><li><a href="module-lib_storage_interact-DbHelper.html">lib/storage/interact~DbHelper</a></li><li><a href="module-lib_storage_mysql-MySQL.html">lib/storage/mysql~MySQL</a></li><li><a href="module-lib_web3_events_formatter-web3EventsFormatter.html">lib/web3/events/formatter~web3EventsFormatter</a></li><li><a href="module-lib_web3_interact_rpc_interact-web3Interact.html">lib/web3/interact/rpc_interact~web3Interact</a></li><li><a href="module-lib_web3_providers_rpc_provider-web3UtilityRpcProvider.html">lib/web3/providers/rpc_provider~web3UtilityRpcProvider</a></li><li><a href="module-models_address-address.html">models/address~address</a></li><li><a href="module-models_block-block.html">models/block~block</a></li><li><a href="module-models_contract-contract.html">models/contract~contract</a></li><li><a href="module-models_search-search.html">models/search~search</a></li><li><a href="module-models_transaction-transaction.html">models/transaction~transaction</a></li>
+				</ul>
+			</li>
+			
+		</ul>
+        
+            <div class="col-sm-3 col-md-3">
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search" name="q" id="search-input">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" id="search-submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        
+	</div>
+
+</div>
+</div>
+
+
+<div class="container" id="toc-content">
+<div class="row">
+
+	
+	<div class="col-md-8">
+	
+		<div id="main">
+			
+
+	<h1 class="page-title">Module: Explorer Routes - Address</h1>
+<section>
+
+<header>
+    
+</header>
+
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description">Specific address related routes.<br><br>
+Base url for all routes given below is: <b>base_url = /chain-id/:chainId/address</b></div>
+        
+
+        
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        <dl>
+            
+<hr>
+<dt class="name" id="AddressBalance">
+    <h4 id="AddressBalance"><span class="type-signature">&lt;route> </span>Address Balance<span class="type-signature"></span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <h5>Route:</h5>
+                            <table class="params">
+                            <thead><tr><th>Method</th><th class="last">Path</th></tr></thead>
+                            <tr>
+                            <td class="type">GET</td>
+                            <td class="name last">{base_url}/:address/balance</td>
+                            </tr>
+                            </table>
+                            Get balance of a given address
+                            <h5>Route Parameters:</h5>
+          <table class="params">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Type</th>
+                
+                
+                <th class="last">Description</th>
+              </tr>
+            </thead>
+            <tr>
+            <td class="name">:address</td>
+            <td class="type">String</td>
+            
+            
+            <td class="description last">Address whose balance need to be fetched (42 chars length)</td>
+          </tr>
+          </table>
+    </div>
+    
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt class="name" id="AddressContractTransactions">
+    <h4 id="AddressContractTransactions"><span class="type-signature">&lt;route> </span>Address Contract Transactions<span class="type-signature"></span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <h5>Route:</h5>
+                            <table class="params">
+                            <thead><tr><th>Method</th><th class="last">Path</th></tr></thead>
+                            <tr>
+                            <td class="type">GET</td>
+                            <td class="name last">{base_url}/:address/contract/:contractAddress/:page</td>
+                            </tr>
+                            </table>
+                            Get paginated address transactions in given contracts
+                            <h5>Route Parameters:</h5>
+          <table class="params">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Type</th>
+                
+                
+                <th class="last">Description</th>
+              </tr>
+            </thead>
+            <tr>
+            <td class="name">:address</td>
+            <td class="type">String</td>
+            
+            
+            <td class="description last">Address whose balance need to be fetched (42 chars length)</td>
+          </tr><tr>
+            <td class="name">:contractAddress</td>
+            <td class="type">String</td>
+            
+            
+            <td class="description last">Contract address (42 chars length)</td>
+          </tr><tr>
+            <td class="name">:page</td>
+            <td class="type">Integer</td>
+            
+            
+            <td class="description last">Page number for getting data in batch.</td>
+          </tr>
+          </table>
+    </div>
+    
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt class="name" id="AddressDetails">
+    <h4 id="AddressDetails"><span class="type-signature">&lt;route> </span>Address Details<span class="type-signature"></span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <h5>Route:</h5>
+                            <table class="params">
+                            <thead><tr><th>Method</th><th class="last">Path</th></tr></thead>
+                            <tr>
+                            <td class="type">GET</td>
+                            <td class="name last">{base_url}/:address</td>
+                            </tr>
+                            </table>
+                            Get details (balance and transactions) of a given address
+                            <h5>Route Parameters:</h5>
+          <table class="params">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Type</th>
+                
+                
+                <th class="last">Description</th>
+              </tr>
+            </thead>
+            <tr>
+            <td class="name">:address</td>
+            <td class="type">String</td>
+            
+            
+            <td class="description last">Address whose details need to be fetched (42 chars length)</td>
+          </tr>
+          </table>
+    </div>
+    
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        
+            
+<hr>
+<dt class="name" id="AddressTransactions">
+    <h4 id="AddressTransactions"><span class="type-signature">&lt;route> </span>Address Transactions<span class="type-signature"></span></h4>
+
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        <h5>Route:</h5>
+                            <table class="params">
+                            <thead><tr><th>Method</th><th class="last">Path</th></tr></thead>
+                            <tr>
+                            <td class="type">GET</td>
+                            <td class="name last">{base_url}/:address/transactions/:page</td>
+                            </tr>
+                            </table>
+                            Get paginated address transactions
+                            <h5>Route Parameters:</h5>
+          <table class="params">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Type</th>
+                
+                
+                <th class="last">Description</th>
+              </tr>
+            </thead>
+            <tr>
+            <td class="name">:address</td>
+            <td class="type">String</td>
+            
+            
+            <td class="description last">Address whose balance need to be fetched (42 chars length)</td>
+          </tr><tr>
+            <td class="name">:page</td>
+            <td class="type">Integer</td>
+            
+            
+            <td class="description last">Page number for getting data in batch.</td>
+          </tr>
+          </table>
+    </div>
+    
+
+    
+
+    
+<dl class="details">
+    
+
+	
+
+	
+
+	
+
+    
+
+    
+
+    
+
+    
+
+	
+
+	
+
+	
+
+	
+
+	
+
+
+
+	
+
+	
+
+	
+
+	
+</dl>
+
+
+    
+</dd>
+
+        </dl>
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+		</div>
+	</div>
+
+	<div class="clearfix"></div>
+
+	
+		<div class="col-md-3">
+			<div id="toc" class="col-md-3 hidden-xs hidden-sm hidden-md"></div>
+		</div>
+	
+
+</div>
+</div>
+
+
+    <div class="modal fade" id="searchResults">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Search results</h4>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div>
+
+
+<footer>
+
+	<style>.copyright, .jsdoc-message, footer { color: #555555;} footer { border-color:#eeeeee;} }</style>
+
+
+	<span class="copyright">
+	Copyright 2017 OpenST Ltd.
+	</span>
+
+<span class="jsdoc-message">
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a>
+	
+	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
+</span>
+</footer>
+
+<script src="scripts/docstrap.lib.js"></script>
+<script src="scripts/toc.js"></script>
+
+    <script type="text/javascript" src="scripts/fulltext-search-ui.js"></script>
+
+
+<script>
+$( function () {
+	$( "[id*='$']" ).each( function () {
+		var $this = $( this );
+
+		$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+	} );
+
+	$( ".tutorial-section pre, .readme-section pre, pre.prettyprint.source" ).each( function () {
+		var $this = $( this );
+
+		var example = $this.find( "code" );
+		exampleText = example.html();
+		var lang = /{@lang (.*?)}/.exec( exampleText );
+		if ( lang && lang[1] ) {
+			exampleText = exampleText.replace( lang[0], "" );
+			example.html( exampleText );
+			lang = lang[1];
+		} else {
+			var langClassMatch = example.parent()[0].className.match(/lang\-(\S+)/);
+			lang = langClassMatch ? langClassMatch[1] : "javascript";
+		}
+
+		if ( lang ) {
+
+			$this
+			.addClass( "sunlight-highlight-" + lang )
+			.addClass( "linenums" )
+			.html( example.html() );
+
+		}
+	} );
+
+	Sunlight.highlightAll( {
+		lineNumbers : true,
+		showMenu : true,
+		enableDoclinks : true
+	} );
+
+	$.catchAnchorLinks( {
+        navbarOffset: 10
+	} );
+	$( "#toc" ).toc( {
+		anchorName  : function ( i, heading, prefix ) {
+			return $( heading ).attr( "id" ) || ( prefix + i );
+		},
+		selectors   : "#toc-content h1,#toc-content h2,#toc-content h3,#toc-content h4",
+		showAndHide : false,
+		smoothScrolling: true
+	} );
+
+	$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+	$( '.dropdown-toggle' ).dropdown();
+
+    $( "table" ).each( function () {
+      var $this = $( this );
+      $this.addClass('table');
+    } );
+
+} );
+</script>
+
+
+
+<!--Navigation and Symbol Display-->
+
+
+<!--Google Analytics-->
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            SearcherDisplay.init();
+        });
+    </script>
+
+
+</body>
+</html>
