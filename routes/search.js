@@ -25,13 +25,13 @@ const renderResult = function (requestResponse, responseObject) {
 // define parameters from url, generate web rpc instance and database connect
 const searchMiddleware = function (req, res, next) {
   const chainId = req.params.chainId
-    , param = req.params.param
+    , q = req.query.q
   ;
 
   // create instance of search class
   req.searchInstance = new search(chainId);
 
-  req.param = param;
+  req.q = q;
 
   next();
 };
@@ -45,9 +45,9 @@ const searchMiddleware = function (req, res, next) {
  *
  * @routeparam {String} :params - search string
  */
-router.get('/:param', searchMiddleware, function (req, res) {
+router.get('/', searchMiddleware, function (req, res) {
 
-  req.searchInstance.getParamData(req.param)
+  req.searchInstance.getParamData(req.q)
     .then(function (requestResponse) {
     	const response = responseHelper.successWithData({
         redirect_url: "http://"+req.headers.host+"/chain-id/"+req.params.chainId+requestResponse,
@@ -57,7 +57,6 @@ router.get('/:param', searchMiddleware, function (req, res) {
       return renderResult(response, res);
     })
     .catch(function (reason) {
-      logger.log(req.originalUrl + " : " + reason);
       return renderResult(responseHelper.error('', reason), res);
     });
 });
