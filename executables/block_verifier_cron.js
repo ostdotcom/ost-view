@@ -136,6 +136,16 @@ ps.lookup({
   block_verifier = BlockVerifier.newInstance(web3Interact, dbInteract);
   logger.log('State Configuration', state);
 
-  setBlockVerifier(state.blockNumber);
-
+  dbInteract.getLowestUnVerifiedBlockNumber()
+    .then(function (blockNumber) {
+      logger.log("Lowest Unverified Block Number ", blockNumber);
+      if (state.blockNumber == 0 && blockNumber != null) {
+        state.blockNumber = +blockNumber;
+      }
+      setBlockVerifier(state.blockNumber);
+    })
+    .catch(function (err) {
+      logger.error('\nNot able to fetch block number)\n', err);
+      process.exit(1);
+    });
 });
