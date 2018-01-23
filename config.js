@@ -20,6 +20,7 @@ const chain_config = {
       password: 'root',
       host: 'localhost',
       database: 'ost_staging_explorer',
+      connectionLimit: 10,
       blockAttributes: ['miner', 'difficulty', 'totalDifficulty', 'gasLimit', 'gasUsed'],
       txnAttributes: ['gas', 'gasPrice', 'input', 'nonce', 'contractAddress']
     }
@@ -37,6 +38,7 @@ const chain_config = {
       password: 'root',
       host: 'localhost',
       database: 'ost_explorer_142',
+      connectionLimit: 10,
       blockAttributes: ['miner', 'difficulty', 'totalDifficulty', 'gasLimit', 'gasUsed'],
       txnAttributes: ['gas', 'gasPrice', 'input', 'nonce', 'contractAddress']
     }
