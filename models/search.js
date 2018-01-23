@@ -25,7 +25,7 @@ const balanceIndex = 0
 
 var search = module.exports = function (chainId) {
   
-  this._utilityInteractInstance = new rpcInteract(coreConfig.getWebRpcUrl(chainId));
+  this._utilityInteractInstance = rpcInteract.getInstance(chainId);
 
 }
 

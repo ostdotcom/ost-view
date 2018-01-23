@@ -19,7 +19,7 @@ const rootPrefix = ".."
  * @param  {Integer} chainId - chain id to connect to respective geth node and database instance
  */
 var block = module.exports = function (chainId) {
-  this._utilityInteractInstance = new rpcInteract(coreConfig.getWebRpcUrl(chainId));
+  this._utilityInteractInstance = rpcInteract.getInstance(chainId);
   this._dbInstance = dbInteract.getInstance(coreConfig.getChainDbConfig(chainId));
 }
 

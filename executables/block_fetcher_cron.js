@@ -123,7 +123,7 @@ ps.lookup({
 
   // Create required connections and objects
   dbInteract = DbInteract.getInstance(state.config.db_config);
-  web3Interact = new Web3Interact(state.config.web_rpc);
+  web3Interact = Web3Interact.getInstance(state.config.chainId);
   block_fetcher = BlockFetcher.newInstance(web3Interact, dbInteract, false);
   block_fetcher.state.blockNumber = state.blockNumber;
   logger.log('State Configuration', state);

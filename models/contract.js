@@ -18,7 +18,7 @@ const rootPrefix = ".."
  * @param {Integer} chainId - chain id to connect to respective geth node and database instance
  */
 var contract = module.exports = function (chainId) {
-  this._dbInstance = dbInteract.getInstance(coreConfig.getChainDbConfig(chainId));
+  this._dbInstance = dbInteract.getInstance(chainId);
 }
 
 contract.prototype = {
