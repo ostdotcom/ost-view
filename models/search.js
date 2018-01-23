@@ -51,18 +51,22 @@ search.prototype = {
       }
 
       if (argument.length === constants.ACCOUNT_HASH_LENGTH) {
-          oThis._utilityInteractInstance.isContract(argument)
-            .then(function(reasponse){
-                resolve("create url for contract");
-            })
-            .catch(function(reason){
-                resolve("create url for account");
-            });
+        oThis._utilityInteractInstance.isContract(argument)
+          .then(function(response){
+            resolve("/contract/"+argument);
+          })
+          .catch(function(reason){
+
+            resolve("/address/"+argument);
+          });
 
       }else if(argument.length === constants.TRANSACTION_HASH_LENGTH){
-          resolve("create url for transaction");
+
+          resolve("/transaction/"+argument);
       }else if(!isNaN(argument)){
-          resolve("create url for block details");
+                          console.log("*** 4 ***");
+
+          resolve("/block/"+argument);
       }else{
           reject('invalid input');
       }
