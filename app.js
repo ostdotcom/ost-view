@@ -27,7 +27,7 @@ const rootPrefix    = "."
   , searchRoutes   = require( rootPrefix + '/routes/search')
   , contractRoutes = require(rootPrefix + '/routes/contract')
   , responseHelper = require(rootPrefix+'/lib/formatter/response')
-  , logger = require('./helpers/custom_console_logger')
+  , logger = require(rootPrefix + '/helpers/custom_console_logger')
 ;
 
 // if the process is a master.
