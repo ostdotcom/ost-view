@@ -1,0 +1,56 @@
+.float_right {
+  float: right;
+}
+
+.center {
+   text-align: center;
+}
+
+.inline_right{
+   display: inline;
+    float:right; 
+}
+
+.inline_block {
+  display:inline-block;
+}
+
+.round_element { 
+  border-radius: 50%;
+}
+
+.break_all {
+  word-break: break-all;
+}
+
+.table_cell {
+  display:table-cell;
+}
+
+.display_table {
+  display: table;
+}
+
+.vertival_align_middle {
+  vertical-align: middle;
+}
+
+.left_seperator {
+  border-left: 1.5px solid rgb(228,228,228);
+}
+
+.right_seperator {
+  border-right: 1.5px solid rgb(228,228,228);
+}
+
+.padding_left {
+  padding-left:5px; 
+}
+
+.margin_top{
+  margin-top: 5px;
+}
+
+.margin_bottom{
+  margin-bottom: 5px;
+}

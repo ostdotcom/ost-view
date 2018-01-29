@@ -1,0 +1,16 @@
+.btx  {
+    font-size: 200%;
+    color: #474D4B;
+    display: inline;
+}
+
+p.about {
+  display: inline;
+  margin-right: 30pt;
+  margin-top : 10pt;
+
+}
+
+.btxImage {
+  margin-left: 30pt;
+}

@@ -29,6 +29,7 @@ const rootPrefix    = "."
   , contractRoutes = require(rootPrefix + '/routes/contract')
   , responseHelper = require(rootPrefix+'/lib/formatter/response')
   , logger = require(rootPrefix + '/helpers/custom_console_logger')
+  , handlebarHelper = require(rootPrefix + '/helpers/handlebar_helper')
 ;
 
 // if the process is a master.
@@ -37,7 +38,7 @@ if (cluster.isMaster) {
   process.title = "OpenST Explorer master node";
 
   // Fork workers equal to number of CPUs
-  const numWorkers = process.env.WORKERS || require('os').cpus().length;
+  const numWorkers = 1;//process.env.WORKERS || require('os').cpus().length;
 
   for (var i = 0; i < numWorkers; i++) {
     // Spawn a new worker process.
@@ -114,12 +115,11 @@ if (cluster.isMaster) {
   //Helper is used to ease stringifying JSON
   app.engine('handlebars', exphbs({
       defaultLayout: 'main', 
-      helpers: {
-        toJSON : function(object) {
-                  return JSON.stringify(object);
-                }
-      }
-    }));
+      helpers: handlebarHelper,
+      partialsDir: [
+        'views/partials/'
+      ]
+  }));
   app.set('view engine', 'handlebars');
   app.use(express.static(path.join(__dirname, 'public')));
 

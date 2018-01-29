@@ -1,12 +1,10 @@
-<!doctype html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title>{{title}}</title>
-</head>
-<body>
+<div class="home container-fluid">
+  <p class="home_title inline_block" >
+      Explore Branded Token
+  </p>
 
-    hi hellow how do you do {{{body}}}
+    {{#each blocks}}
+      {{>tableComponent}}
+    {{/each}}
 
-</body>
-</html>
+</div>

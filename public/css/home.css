@@ -1,0 +1,10 @@
+div.home  {
+  background-color: rgb(240,246,246);
+}
+
+p.home_title {
+  color: rgb(101,136,134);
+  font-size: 26pt;
+  margin-left: 34pt;
+  margin-top: 34pt; 
+}

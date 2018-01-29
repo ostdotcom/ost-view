@@ -48,6 +48,7 @@ router.get("/recent/:page", blocksMiddleware, function (req, res) {
 
   req.blocksInstance.getRecentBlocks(req.page)
     .then(function (requestResponse) {
+
       const response = responseHelper.successWithData({
         blocks: requestResponse,
         result_type: "blocks"

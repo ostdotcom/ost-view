@@ -18,9 +18,52 @@ var router = express.Router();
  * @route {GET} {base_url}
  *
  */
-router.get("/:format", function(req, res, next){
-  if (req.params.format) { 
-    res.render('home', { title: 'Hello Block Scanner', body:"Hello" });
-  }
+router.get("/home", function(req, res, next){
+    res.render('home',{
+          title: "Recent Blocks",
+          //blocks: requestResponse
+      });
+  
 });
+
+router.get('/yell', function (req, res, next) {
+    res.render('yell', {
+        title: '/Yell/title',
+
+        // This `message` will be transformed by our `yell()` helper.
+        message: '/yell/message'
+    });
+});
+
+router.get('/exclaim', function (req, res) {
+    res.render('yell', {
+        title  : 'Exclaim',
+        message: '/yell/message',
+
+        helpers: {
+            yell: function (msg) {
+                return (msg + '!!!');
+            },
+
+            new: function (msg){
+                return (msg+" new !!!");
+            }
+        }
+    });
+});
+
+router.get('/list', function (req, res) {
+    res.render('list', {
+        title  : 'list',
+        message: '/list/message',
+
+        people: [
+          {firstName: "Yehuda", lastName: "Katz"},
+          {firstName: "Carl", lastName: "Lerche"},
+          {firstName: "Alan", lastName: "Johnson"}
+        ],
+        
+    });
+});
+
 module.exports = router;
