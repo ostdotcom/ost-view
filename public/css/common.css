@@ -1,0 +1,161 @@
+.header {
+	margin-top: 30px;
+}
+
+.sub-header {
+	background-color: rgb(240,246,246);
+	min-height: 100px;
+}
+
+/*.container {
+	
+}*/
+.title {
+	font-size: large;
+	font-family: initial;
+}
+.title-h1 {
+	font-size: large;
+	font-family: initial;
+}
+
+.title-h2 {
+	font-size: medium;
+}
+
+.inline-view {
+	display: inline;
+}
+
+.title-align-right {
+	float: right;
+}
+
+
+/*Nav bar simple token*/
+.navbar-simpletoken{
+    border:0;
+    background-color: rgb(240,246,246);
+}
+.navbar-simpletoken .navbar-nav>li>a,.navbar-simpletoken .about-link-mobile{
+    text-transform:uppercase;
+    font-size:16px;
+    font-weight:300;
+    color:#34445b;
+    margin-right:15px
+}
+.navbar-simpletoken .navbar-nav>li>a:hover,.navbar-simpletoken .navbar-nav>li>a:focus,.navbar-simpletoken .about-link-mobile:hover,.navbar-simpletoken .about-link-mobile:focus{
+    outline:0;
+    background-color:inherit;
+   	padding-bottom: 12px;
+    border-bottom:3px solid #34445b
+}
+.navbar-simpletoken .navbar-nav>li>a:active,.navbar-simpletoken .about-link-mobile:active{
+    color:#c0993a;
+    padding-bottom: 12px;
+    border-bottom:3px solid #c0993a
+
+}
+@media(min-width:768px) and (max-width:1024px){
+    .navbar-simpletoken .navbar-nav>li>a,.navbar-simpletoken .about-link-mobile{
+        padding:0;
+        font-size:14px;
+        margin:15px 7px 0
+    }
+}
+@media(min-width:1025px){
+    .navbar-simpletoken .navbar-nav>li>a,.navbar-simpletoken .about-link-mobile{
+        padding:0;
+        margin:15px 15px 0
+    }
+}
+.navbar-simpletoken .navbar-nav>li>a.selected-nav,.navbar-simpletoken .about-link-mobile.selected-nav{
+    color:#c0993a;
+    text-decoration:none
+}
+@media(min-width:768px){
+    .navbar-simpletoken .navbar-nav>li>a.selected-nav,.navbar-simpletoken .about-link-mobile.selected-nav{
+        border-bottom:1px solid #c0993a
+    }
+}
+.navbar-simpletoken .navbar-nav>li>span{
+    font-size:16px;
+    font-weight:300;
+    color:#34445b;
+    margin:15px 15px 0;
+    display:inline-block
+}
+.navbar-simpletoken .navbar-brand{
+    padding:10px 0 0 20px
+}
+.navbar-simpletoken .navbar-toggle .icon-bar{
+    background-color:#34445b
+}
+.navbar-simpletoken .navbar-header .navbar-toggle{
+    background-color:#edfaf1;
+    margin:0;
+    border:0;
+    border-radius:0;
+    padding:18px 18px;
+}
+.navbar-simpletoken .navbar-nav li.dropdown a:hover,.navbar-simpletoken .navbar-nav li.dropdown a:focus{
+    border-bottom:0;
+    background-color:transparent
+}
+.navbar-simpletoken .navbar-nav li.dropdown.open .dropdown-toggle{
+    color:#c0993a;
+    background-color:transparent
+}
+.navbar-simpletoken .navbar-nav li.dropdown.open .dropdown-toggle.selected-nav{
+    border-bottom:1px solid #c0993a
+}
+.navbar-simpletoken .navbar-nav li.dropdown .nav-dropdown-spacer{
+    position:relative;
+    margin-top:15px
+}
+.navbar-simpletoken .navbar-nav li.dropdown .dropdown-menu{
+    padding:8px 10px;
+    width:200px;
+    border:0;
+    box-shadow:0 1px 2px 0 rgba(0,0,0,0.22)
+}
+.navbar-simpletoken .navbar-nav li.dropdown .dropdown-menu li a{
+    padding:5px;
+    white-space:unset;
+    color:#597a84;
+    font-size:12px
+}
+.navbar-simpletoken .navbar-nav li.dropdown .dropdown-menu li a.bg-selected-nav{
+    background-color:#f6f7f7;
+    cursor:default
+}
+.navbar-simpletoken .navbar-nav li.dropdown .dropdown-menu li a:hover{
+    background-color:#f6f7f7
+}
+.navbar-simpletoken .navbar-nav li.dropdown .dropdown-menu li:first-child{
+    margin-bottom:8px
+}
+.navbar-simpletoken .navbar-nav li.dropdown .dropdown-menu li img{
+    display:block;
+    margin-bottom:5px
+}
+.navbar-simpletoken .navbar-nav li.dropdown .dropdown-menu:before{
+    content:"";
+    border-bottom:10px solid #fff;
+    border-right:12px solid transparent;
+    border-left:12px solid transparent;
+    position:absolute;
+    top:-10px;
+    left:25px;
+    z-index:10
+}
+.navbar-simpletoken .navbar-nav li.dropdown .dropdown-menu:after{
+    content:"";
+    border-bottom:10px solid #ccc;
+    border-right:13px solid transparent;
+    border-left:13px solid transparent;
+    position:absolute;
+    top:-11px;
+    left:24px;
+    z-index:8
+}
