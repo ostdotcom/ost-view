@@ -8,7 +8,10 @@ p.about {
   display: inline;
   margin-right: -10pt;
   margin-top : 10pt;
+}
 
+form {
+	margin-top : 10pt;
 }
 
 .btxImage {

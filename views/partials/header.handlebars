@@ -1,8 +1,22 @@
 
 <div class="container">
-  <img class="btxImage" src="/assets/ETH.png" alt="eth" style="width:20px;height:20px;"></img>
-  <p class="btx" onclick="btxTapped()"> BTX</p>
-  <p class="about float_right" onclick="aboutTapped()">ABOUT</p>
+    <div class="row">
+        <div class="col-sm-7">
+            <img class="btxImage" src="/assets/ETH.png" alt="eth" style="width:20px;height:20px;"></img>
+            <p class="btx" onclick="btxTapped()"> BTX</p>
+        </div>
+        <div class="col-sm-4">
+            <form class="navbar-form navbar-right" action="http://www.google.com/search" method="GET">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Token, Transactions, Address or Block#" name="q">
+                </div>
+                <button type="submit" style="display:none;" class="btn btn-default">Submit</button>
+            </form>
+        </div>
+        <div class="col-sm-1">
+            <p class="about float_right" onclick="aboutTapped()">ABOUT</p>
+        </div>
+    </div>
 </div>
 
 
