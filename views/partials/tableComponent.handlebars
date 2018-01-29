@@ -5,48 +5,23 @@
 </tr>
  --}}
 <ul>
-  <div class="container inline_block test_div_color">
+  <div class="container inline_block bottom_seperator">
     <div class="row justify-content-center">
       <div class="col-xs-12 col-sm-2">
         <div class="row align-items-center">
-          <div class="col-xs-4 col-sm-">
-            <img class="" src="/assets/ETH.png" alt="eth" style="width:60px;height:60px;"></img>
-          </div>
+            <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='tokenIcon' style="width: 25%;" />
         
-          <div class="col-xs-8 col-sm-8 break_all font">
-            <p>Frc Coin</p>
-            <p>24h Volume</p>
-            <p>50,000.0000</p>
+          <div class="col-xs-12 col-sm-9 font">
+            <h6 class="default_black_color frcCoin truncate_tail">FRANCHESCO COIN</h6>
+            <span class="default_black_color volume truncate_tail">24h Volume</span> <br />
+            <h6 class="default_black_color frcCoin truncate_tail">50,000.000</h6>
           </div>
          </div>
       </div>
-      <div class="col-xs-12 col-sm-9 font break_all left_seperator right_seperator padding_left margin_bottom margin_top">
-          <p>
-              <span class="tx_key">TX#</span> 
-              <span class="tx_value ">{{hash}} </span>
-          </p>
-          <p>
-              <span class="tx_key">From</span> 
-              <span class="address_value"> 0x2F0876ac3Ac68bd53f74155A368347872b298Db1</span>
-
-              <span class="tx_key">To</span> 
-              <span class="address_value"> 0x2F0876ac3Ac68bd53f74155A368347872b298Db1</span>
-          </p>
-
-          <p>
-              <span class="tx_key">Amount</span> 
-              <span class="amount_coin">100,100,100 FSC</span> 
-
-              <span class="amount_usd">100,100,100 USD</span> 
-              {{toDate timestamp}}
-          </p>
+      <div class="col-xs-12 col-sm-9 font left_seperator padding_left margin_bottom margin_top">
+         {{>homeTransactions}}
       </div>
       
-      <div class="col-xs-12 col-sm-1 align-items-center">
-          <div class="align-items-center vertival_align_middle">
-            <p class="center transform_Y_50 vertival_align_middle"> view Details </p>
-          </div>
-      </div>
     </div>
   </div>
 </ul>

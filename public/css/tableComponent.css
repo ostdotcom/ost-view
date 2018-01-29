@@ -1,44 +1,24 @@
-.test_div_color {
-  background-color: #ffffff
-}
 
 .font{
     font-size: 8px;
 }
 
-span.tx_key {
-  color: rgb(103,107,107);
-
+.rcorners3 {
+    background: #73AD21;
 }
 
-span.tx_value {
-  color: rgb(123,202,189);
+p.frcCoin {
+  font-size: 9px;
+}
+p.volume {
+  font-size: 6px;
 }
 
-span.address_value {
-  color: rgb(164,184,188);
+.tokenIcon {
+  border-radius: 50%;
+  width: 25%;
 }
 
-span.date {
-  color: rgb(151,176,181);
-}  
 
-.transform_Y_50 {
-  transform: translateX(0%) translateY(50%);
-}
-
-.amount_coin {
-  background-color: rgb(160,200,196);
-  color: #ffffff;
-  border-radius: 4px;
-  padding: 2px 2px 2px 2px;
-}
-
-.amount_usd {
-  background-color: rgb(95,121,131);
-  color: #ffffff;
-  border-radius: 4px;
-  padding: 2px 2px 2px 2px;
-}
 
     

@@ -2,13 +2,18 @@
   float: right;
 }
 
+.float_left{
+    float:left; 
+}
+
 .center {
    text-align: center;
 }
 
-.inline_right{
-   display: inline;
-    float:right; 
+
+
+.inline {
+  display: inline;
 }
 
 .inline_block {
@@ -31,7 +36,7 @@
   display: table;
 }
 
-.vertival_align_middle {
+.vertical_align_middle {
   vertical-align: middle;
 }
 
@@ -43,8 +48,12 @@
   border-right: 1.5px solid rgb(228,228,228);
 }
 
+.bottom_seperator {
+  border-bottom: 2px solid #c5d7d8;
+}
+
 .padding_left {
-  padding-left:5px; 
+  padding-left:20px; 
 }
 
 .margin_top{
@@ -111,4 +120,26 @@
     font-weight: 600;
     line-height: 1.43;
     color: #5d6d6e;
+}
+.rectangle-2 {
+  height: 340px;
+  background-color: #f9f8e5;
+}
+
+.default_black_color {
+   color: #5d6d6e;
+}
+
+.default_bright_blue {
+  color: #179eb1;
+}
+
+.default_dark_blue {
+  color: #75a9b0;
+}
+
+.truncate_tail{
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }

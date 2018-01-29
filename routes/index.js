@@ -19,7 +19,7 @@ var router = express.Router();
  *
  */
 router.get("/home", function(req, res, next){
-    res.render('home',{
+    return res.render('home',{
           title: "Recent Blocks",
           //blocks: requestResponse
       });
