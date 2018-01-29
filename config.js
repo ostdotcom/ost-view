@@ -30,7 +30,7 @@ const chain_config = {
     chainId: 142,
     database_type: "mysql",
     web_rpc: "http://localhost:9546",
-    poll_interval: 2000,
+    poll_interval: 2,
     db_config: {
       chainId: 142,
       driver: 'mysql',
