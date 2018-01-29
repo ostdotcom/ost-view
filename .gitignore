@@ -67,3 +67,5 @@ package-lock.json
 # database temp file
 database.json
 
+# docs
+docs/
