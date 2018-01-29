@@ -1,0 +1,59 @@
+<div class="home container-fluid">
+    <div class="container">
+	    <p class="home_title inline_block" >
+	        {{ coin_name }}
+	    </p>
+	</div>
+</div>
+<div class="container">
+	<div class="row token-details">
+		<div class="col-sm-4" >
+			<div class ="row">
+				<div class="col-sm-4">
+					<div class="block">
+		      			<div class="circle">
+		      				<p>FRC</p>	
+		      			</div>
+					</div>
+				</div>
+				<div class="col-sm-8">
+					<span class="token_heading" >
+						{{ coin_name }}
+					</span>
+					<br/>
+					<span >
+						24h Volume
+					</span>
+					<br/>
+					<span >
+						23,659.0304343
+					</span>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-4 left-right-border" >
+			<span class="contract_address" >
+				CONTRACT ADDRESS
+			</span>
+			<br/>
+			<a class="address" href="#">
+				{{contract_address}}
+			</a>
+			<br/>
+			<span class="contract_address" >
+				CREATOR
+			</span>
+			<br/>
+			<a class="address" href="#">
+				{{contract_address}}
+			</a>
+		</div>
+		<div class="col-sm-4" >
+			<p>
+			</p>
+		</div>
+	</div>
+	{{#each token_transactions }}
+      {{ >tableComponent }}
+    {{/each}}    	
+</div>

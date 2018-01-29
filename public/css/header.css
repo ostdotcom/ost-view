@@ -6,11 +6,11 @@
 
 p.about {
   display: inline;
-  margin-right: 30pt;
+  margin-right: -10pt;
   margin-top : 10pt;
 
 }
 
 .btxImage {
-  margin-left: 30pt;
+  margin-left: -10pt;
 }

@@ -51,6 +51,64 @@
   margin-top: 5px;
 }
 
-.margin_bottom{
+.margin_bottom {
   margin-bottom: 5px;
+}
+
+.left-right-border {
+    border-right: solid 2px #e4e4e4;
+    border-left: solid 2px #e4e4e4;
+}
+
+.token-details {
+   margin-top: 20px; 
+}
+
+.contract_address {
+    font-family: SourceSansPro;
+    font-size: 12px;
+    font-weight: normal;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    color: #5d6d6e;
+    letter-spacing: normal;
+}
+
+.address {
+    font-family: SourceSansPro;
+    font-size: 14px;
+    font-weight: 300;
+    letter-spacing: 1px;
+    color: #179eb1;
+}
+
+.block {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.circle {
+    background: grey;
+    border-radius: 90px;
+    color: white;
+    height: 100px;
+    font-weight: bold;
+    width: 100px;
+    display: table;
+    margin: 0px auto;
+}
+.circle p {
+    vertical-align: middle;
+    display: table-cell;
+}
+
+.token_heading {
+    width: 279px;
+    height: 40px;
+    font-family: Quasimoda;
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.43;
+    color: #5d6d6e;
 }

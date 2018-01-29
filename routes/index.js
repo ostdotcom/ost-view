@@ -26,6 +26,15 @@ router.get("/home", function(req, res, next){
   
 });
 
+router.get("/tokendetails", function(req, res, next){
+    res.render('tokendetails', {
+          coin_name: "Frenco Coin",
+          contract_address: "0xt6yg7g7g7ghjh7798yuhhkjhu98987897"
+          //blocks: requestResponse
+      });
+  
+});
+
 router.get('/yell', function (req, res, next) {
     res.render('yell', {
         title: '/Yell/title',
