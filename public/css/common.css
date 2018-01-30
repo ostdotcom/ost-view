@@ -136,8 +136,12 @@
   color: #75a9b0;
 }
 
-.truncate_tail{
+.truncate_tail {
   white-space: nowrap;
   text-overflow: ellipsis;
   overflow: hidden;
+}
+
+.top_border {
+    border-top: 1.5px solid rgb(220, 217, 170);
 }
