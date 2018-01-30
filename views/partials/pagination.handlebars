@@ -1,0 +1,36 @@
+<div class="float_right">
+	<div class="row">
+		<p id= "page" class="badge padding_left padding_top">1</p>
+		<ul class="pagination">
+		    <li class="page-item"><a class="page-link" onClick="prev()">&#60;</a></li>
+		    <li class="page-item"><a class="page-link" onClick="next()">&#62;</a></li>
+		 </ul>
+	</div>
+<div>
+
+ <script type="text/javascript">
+
+	var link = window.location.href;
+	var pageNumber = link.substr(link.lastIndexOf("/") + 1,link.length);
+	document.getElementById('page').innerHTML = pageNumber;
+
+	function prev()	{
+		if (pageNumber > 1) {
+			pageNumber = +pageNumber - 1;
+		} 
+		document.getElementById('page').innerHTML = pageNumber;
+		redirect(pageNumber);
+	}
+
+	function next(){
+		pageNumber = +pageNumber + 1;
+		document.getElementById('page').innerHTML = pageNumber;
+		redirect(pageNumber);
+	}
+
+	function redirect(pageNum) {
+		var link = window.location.href;
+		var redirectLink = link.substr(0,link.lastIndexOf("/")) + "/" + pageNum;
+		window.location.href = redirectLink;
+	}
+ </script>

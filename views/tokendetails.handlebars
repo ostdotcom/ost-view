@@ -53,7 +53,8 @@
 			</p>
 		</div>
 	</div>
-	{{!-- {{#each token_transactions }}
-      {{ >tableComponent }}
-    {{/each}}  --}}   	
+	{{#each contract_internal_transactions}}
+      {{>tableComponent}}
+    {{/each}} 
+    {{>pagination}} 	
 </div>
