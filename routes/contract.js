@@ -19,8 +19,8 @@ const rootPrefix = ".."
 ;
 
 // Render final response
-const renderResult = function (requestResponse, responseObject) {
-  return requestResponse.renderResponse(responseObject);
+const renderResult = function (requestResponse, responseObject, contentType) {
+  return requestResponse.renderResponse(responseObject, 200, contentType);
 };
 
 // define parameters from url, generate web rpc instance and database connect
@@ -57,8 +57,8 @@ router.get("/:contractAddress/internal-transactions/:page", contractMiddleware, 
         contract_internal_transactions: requestResponse,
         result_type: "contract_internal_transactions"
       });
-
-      return renderResult(response, res);
+      logger.log("Request of content-type:", req.headers['content-type']);
+      return renderResult(response, res, req.headers['content-type']);
     })
     .catch(function (reason) {
       logger.log(req.originalUrl + " : " + reason);

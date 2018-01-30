@@ -33,4 +33,7 @@ define('TRANSACTION_HASH_LENGTH', 66);
 define('DEFAULT_PAGE_SIZE', 10);
 define('DEFAULT_PAGE_NUMBER',1);
 
+//template map
+define("contract_internal_transactions", "tokendetails");
+
 module.exports = constants;
