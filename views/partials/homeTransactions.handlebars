@@ -38,15 +38,17 @@
   </div>  
    
 </div>  
-   
-      
+
+
 <script type="text/javascript">
   function transactionHashTapped(transactionAddress) {
-     window.location.href = "/chain-id/142/transaction/"+transactionAddress;
+     //window.location.href = "/chain-id/142/transaction/"+transactionAddress;
+      {{addressTapped transactionAddress}}
   }
 
   function addressTapped(address) {
-     window.location.href = "/chain-id/142/address/"+address;
+     //window.location.href = "/chain-id/142/address/"+address;
+      {{addressTapped transactionAddress}}
   }
 
 </script>

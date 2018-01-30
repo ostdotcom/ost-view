@@ -1,0 +1,88 @@
+<div class="container-fluid">
+    <div class="col-xs-12 col-sm-12 home top_border truncate_tail">
+        <div class="container">
+            <p class="home_title inline_block" >
+                <span class="truncate_tail">Transaction Details </span>
+            </p>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-12">
+        <div class="container">
+            <div class="address_details_container_margine">
+                <div class="row address_details_container_background_color">
+                    <p class="address_details_padding truncate_tail margin_left">
+                        <span class="default_black_color"> TX# </span>
+                        <span class="address_title_color"> {{hash}} </span>
+                    </p>
+                </div>
+            </div>
+
+
+            <div class="row border_bottom_e4 align-items-center">
+                <div class="col-xs-4 col-sm-3 top_margin">
+                    <div class="right_seperator">
+                        <p class="address_details_padding ">
+                            <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='transfer_icon' />
+                            <span class="amount_coin truncate_tail">{{tokens}} FSC</span>
+                            <span class="amount_usd">100 USD</span>
+                        </p>
+                    </div>
+                </div>
+                <div class="col-xs-4 col-sm-6">
+                    <p class="address_details_padding">
+                        <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='token_icon' />
+                        <span class="default_black_color">FRC Coin</span>
+                    </p>
+                </div>
+                <div class="col-xs-4 col-sm-3">
+                    <p class="address_details_padding">
+                        <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='transfer_icon' />
+                        {{toDate timestamp}}
+                    </p>
+                </div>
+            </div>
+
+            <div class="row border_bottom_e4 align-items-center">
+                <p class="address_details_padding truncate_tail margin_left">
+
+                    <span class="default_black_color"> From </span>
+
+                    <a href= "/chain-id/1410/address/{{t_from}}">
+                        <span class="default_dark_blue"> {{t_from}} </span>
+                    </a>
+
+                    <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='token_icon' />
+
+                    <span class="default_black_color"> To </span>
+
+                    <a href= "/chain-id/1410/address/{{t_to}}">
+                        <span class="default_dark_blue"> {{t_to}} </span>
+                    </a>
+                </p>
+            </div>
+
+            <div class="row border_bottom_e4 align-items-center">
+                <p class="address_details_padding truncate_tail margin_left">
+
+                    <span class="default_black_color"> BLOCK # </span>
+
+                    <a href= "/chain-id/1410/block/{{block_number}}">
+                        <span class="default_dark_blue"> {{block_number}} </span>
+                    </a>
+                </p>
+            </div>
+
+            <div class="row border_bottom_e4 align-items-center">
+                <p class="address_details_padding truncate_tail margin_left">
+
+                    <span class="default_black_color"> BLOCK # </span>
+
+                    <a href= "/chain-id/1410/block/{{block_number}}">
+                        <span class="default_dark_blue"> {{block_number}} </span>
+                    </a>
+                </p>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -42,6 +42,23 @@ const chain_config = {
       blockAttributes: ['miner', 'difficulty', 'totalDifficulty', 'gasLimit', 'gasUsed'],
       txnAttributes: ['gas', 'gasPrice', 'input', 'nonce', 'contractAddress']
     }
+  },
+  '1410': {
+      chainId: 1410,
+      database_type: "mysql",
+      web_rpc: "http://localhost:9546",
+      poll_interval: 2000,
+      db_config: {
+        chainId: 1410,
+        driver: 'mysql',
+        user: 'root',
+        password: 'root',
+        host: 'localhost',
+        database: 'ost_explorer_1410',
+        connectionLimit: 10,
+        blockAttributes: ['miner', 'difficulty', 'totalDifficulty', 'gasLimit', 'gasUsed'],
+        txnAttributes: ['gas', 'gasPrice', 'input', 'nonce', 'contractAddress']
+      }
   }
 }
 

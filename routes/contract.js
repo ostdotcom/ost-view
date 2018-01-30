@@ -62,7 +62,7 @@ router.get("/:contractAddress/internal-transactions/:page", contractMiddleware, 
     })
     .catch(function (reason) {
       logger.log(req.originalUrl + " : " + reason);
-      return renderResult(responseHelper.error('', reason), res);
+      return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
     });
 });
 
@@ -86,11 +86,11 @@ router.get("/:contractAddress/:page", contractMiddleware, function (req, res) {
         result_type: "contract_transactions"
       });
 
-      return renderResult(response, res);
+      return renderResult(response, res, req.headers['content-type']);
     })
     .catch(function (reason) {
       logger.log(req.originalUrl + " : " + reason);
-      return renderResult(responseHelper.error('', reason), res);
+      return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
     });
 });
 
@@ -112,11 +112,11 @@ router.get("/:contractAddress", contractMiddleware, function (req, res) {
         result_type: "contract_transactions"
       });
 
-      return renderResult(response, res);
+      return renderResult(response, res, req.headers['content-type']);
     })
     .catch(function (reason) {
       logger.log(req.originalUrl + " : " + reason);
-      return renderResult(responseHelper.error('', reason), res);
+      return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
     });
 });
 

@@ -1,9 +1,25 @@
 <div class="container-fluid">
-    <div class="col-xs-12 col-sm-12 home">
+    <div class="col-xs-12 col-sm-12 home top_border truncate_tail">
         <div class="container">
             <p class="home_title inline_block" >
-                {{title}}
+                <span class="truncate_tail">Address Details </span>
             </p>
+        </div>
+    </div>
+    <div class="col-xs-12 col-sm-12">
+        <div class="container address_details_container_background_color address_details_container_margine">
+            <p class="address_details_padding truncate_tail">
+                <span class="default_black_color"> Address Details </span>
+                <span class="address_title_color"> {{data.address}} </span>
+            </p>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-12">
+            {{#each data.transactions}}
+                {{>addressTransactions}}
+            {{/each}}
         </div>
     </div>
 

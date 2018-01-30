@@ -39,15 +39,19 @@
 }
 
 .left_seperator {
-  border-left: 1.5px solid rgb(228,228,228);
+  border-left: 1.5px solid #e4e4e4;
 }
 
 .right_seperator {
-  border-right: 1.5px solid rgb(228,228,228);
+  border-right: 1.5px solid #e4e4e4;
+}
+
+.border_bottom_e4 {
+    border-bottom: 1px solid #e4e4e4;
 }
 
 .bottom_seperator {
-  border-bottom: 2px solid #c5d7d8;
+  border-bottom: 1.5px solid #c5d7d8;
 }
 
 .padding_left {
@@ -144,4 +148,8 @@
 
 .top_border {
     border-top: 1.5px solid rgb(220, 217, 170);
+}
+
+.margin_left {
+    margin-left: 10px;
 }

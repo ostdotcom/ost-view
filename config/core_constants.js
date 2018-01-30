@@ -35,5 +35,7 @@ define('DEFAULT_PAGE_NUMBER',1);
 
 //template map
 define("contract_internal_transactions", "tokendetails");
+define("blocks", "home");
+define("transaction", "transactionDetails");
 
 module.exports = constants;

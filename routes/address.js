@@ -20,12 +20,12 @@ const rootPrefix = ".."
 
 // Class related constants
 const balanceIndex = 0
-  , transactionsIndex = 1
+  , transactionsIndex = 0
   , defaultPageNumber = 1;
 
 // Render final response
-const renderResult = function (requestResponse, responseObject) {
-  return requestResponse.renderResponse(responseObject);
+const renderResult = function (requestResponse, responseObject, contentType) {
+  return requestResponse.renderResponse(responseObject, 200, contentType);
 };
 
 // define parameters from url, generate web rpc instance and database connect
@@ -58,20 +58,26 @@ router.get('/:address', addressMiddleware, function (req, res) {
 
   var promiseResolvers = [];
 
-  promiseResolvers.push(req.addressInstance.getAddressBalance(req.addressValue));
+  //promiseResolvers.push(req.addressInstance.getAddressBalance(req.addressValue));
   promiseResolvers.push(req.addressInstance.getAddressTransactions(req.addressValue, defaultPageNumber));
 
   Promise.all(promiseResolvers).then(function (rsp) {
 
-    const balanceValue = rsp[balanceIndex];
+    //const balanceValue = rsp[balanceIndex];
     const transactionsValue = rsp[transactionsIndex]
 
     const response = responseHelper.successWithData({
-      balance: balanceValue,
-      transactions: transactionsValue
+      //balance: balanceValue,
+      transactions: transactionsValue,
+      address: req.addressValue,
     });
 
-    return renderResult(response, res);
+    res.render('addressDetails', response);
+
+    //return renderResult(response, res, req.headers['content-type']);
+  })
+    .catch(function (reason){
+
   });
 });
 
@@ -93,11 +99,11 @@ router.get('/:address/balance', addressMiddleware, function (req, res) {
         result_type: "balance"
       });
 
-      return renderResult(response, res);
+      return renderResult(response, res, req.headers['content-type']);
     })
     .catch(function (reason) {
       logger.log(req.originalUrl + " : " + reason);
-      return renderResult(responseHelper.error('', reason), res);
+      return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
     });
 });
 
@@ -121,11 +127,11 @@ router.get('/:address/transactions/:page', addressMiddleware, function (req, res
         result_type: "transactions"
       });
 
-      return renderResult(response, res);
+      return renderResult(response, res, req.headers['content-type']);
     })
     .catch(function (reason) {
       logger.log(req.originalUrl + " : " + reason);
-      return renderResult(responseHelper.error('', reason), res);
+      return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
     });
 });
 
@@ -150,11 +156,11 @@ router.get('/:address/contract/:contractAddress/:page', addressMiddleware, funct
         result_type: "contract_transactions"
       });
 
-      return renderResult(response, res);
+      return renderResult(response, res, req.headers['content-type']);
     })
     .catch(function (reason) {
       logger.log(req.originalUrl + " : " + reason);
-      return renderResult(responseHelper.error('', reason), res);
+      return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
     });
 });
 

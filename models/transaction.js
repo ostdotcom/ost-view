@@ -45,7 +45,7 @@ transaction.prototype = {
 			
 			oThis._dbInstance.getTransaction(address)
 				.then(function(response){
-					resolve(response);
+					resolve(response[0]);
 				})
 				.catch(function(reason){
 					reject(reason);
