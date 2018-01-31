@@ -28,21 +28,48 @@ block.prototype = {
   /**
    * Fetches block details for requested block number.
    *
-   * @param {Integer} block_number - Number of block to be fetched.
+   * @param {Integer} blockNumber - Number of block to be fetched.
    *
    * @return {Promise<Object>} A hash of block data.
    */
-  getBlock: function (block_number) {
+  getBlockFromBlockNumber: function (blockNumber) {
 
     const oThis = this;
 
     return new Promise(function (resolve, reject) {
-      if (block_number == undefined || isNaN(block_number)) {
+      if (blockNumber == undefined || isNaN(blockNumber)) {
         reject("invalid input");
         return;
       }
 
-      oThis._dbInstance.getBlock(block_number)
+      oThis._dbInstance.getBlockFromBlockNumber(blockNumber)
+        .then(function (response) {
+          resolve(response[0]);
+        })
+        .catch(function (reason) {
+          reject(reason);
+        });
+    });
+  }
+
+  /**
+   * Fetches block details for requested block hash.
+   *
+   * @param {Integer} blockHash - hash of block to be fetched.
+   *
+   * @return {Promise<Object>} A hash of block data.
+   */
+  , getBlockFromBlockHash: function (blockHash) {
+
+    const oThis = this;
+
+    return new Promise(function (resolve, reject) {
+      if (!blockHash.startsWith("0x")) {
+        reject("invalid input");
+        return;
+      }
+
+      oThis._dbInstance.getBlockFromBlockHash(blockHash)
         .then(function (response) {
           resolve(response[0]);
         })

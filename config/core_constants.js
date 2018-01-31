@@ -38,8 +38,7 @@ define("contract_internal_transactions", "transactionList");
 define("token_details", "tokendetails");
 define("blocks", "home");
 define("transaction", "transactionDetails");
-define("block","blocks");
-define("block_transactions","blocks");
-define("home","blocks");
+define("block","blockDetail");
+define("block_transactions","blockTransactionList");
 
 module.exports = constants;

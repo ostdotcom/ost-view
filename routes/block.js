@@ -50,21 +50,46 @@ const blockMiddleware = function (req, res, next) {
  */
 router.get("/:blockNumber", blockMiddleware, function (req, res) {
 
-  req.blockInstance.getBlock(req.blockNumber)
-    .then(function (requestResponse) {
-      const response = responseHelper.successWithData({
-        block: requestResponse,
-        result_type: 'block'
+  if(req.blockNumber.startsWith("0x")){
+
+    console.log("# is hash ::",req.blockNumber);
+    req.blockInstance.getBlockFromBlockHash(req.blockNumber)
+      .then(function (requestResponse) {
+        processBlockResponse(requestResponse, req, res);
+      })
+      .catch(function (reason) {
+        processBlockError(reason, req, res);
       });
+  }else{
 
-      return renderResult(response, res, req.headers['content-type']);
-    })
-    .catch(function (reason) {
-      logger.log(req.originalUrl + ":" + reason);
+    console.log("# is number ::",req.blockNumber);
+    req.blockInstance.getBlockFromBlockNumber(req.blockNumber)
+      .then(function (requestResponse) {
+        processBlockResponse(requestResponse, req, res);
+      })
+      .catch(function (reason) {
+        processBlockError(reason, req, res);
+      });
+  }
 
-      return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
-    });
+
 });
+
+function processBlockResponse (blockHash, req, res){
+  const response = responseHelper.successWithData({
+    block: blockHash,
+    transaction_url:"http://localhost:3000/chain-id/"+req.chainId+"/block/"+req.blockNumber+"/transactions/1",
+    result_type: 'block'
+  });
+
+  return renderResult(response, res, req.headers['content-type']);
+}
+
+function processBlockError(reason, req, res){
+  logger.log(req.originalUrl + ":" + reason);
+
+  return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
+}
 
 /**
  * Get paginated transactions for a given block number
@@ -83,7 +108,8 @@ router.get("/:blockNumber/transactions/:page", blockMiddleware, function (req, r
 
       const response = responseHelper.successWithData({
         block_transactions: requestResponse,
-        result_type: "block_transactions"
+        result_type: "block_transactions",
+        layout:'empty'
       });
 
       return renderResult(response, res, req.headers['content-type']);
