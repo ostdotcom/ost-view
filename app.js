@@ -122,6 +122,22 @@ if (cluster.isMaster) {
       ]
   }));
   app.set('view engine', 'handlebars');
+
+  var connectAssets = require("connect-assets")({
+    paths: [
+      path.join(__dirname, 'public/css'),
+      path.join(__dirname, 'public/js')
+    ],
+    servePath: "assets"
+  });
+  app.use(connectAssets);
+
+  var hbs = require('handlebars');
+  hbs.registerHelper('css', function() {
+    var css = connectAssets.options.helperContext.css.apply(this, arguments);
+    return new hbs.SafeString(css);
+  });
+
   app.use(express.static(path.join(__dirname, 'public')));
 
   // load route files

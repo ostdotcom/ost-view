@@ -11,6 +11,7 @@
     "body-parser": "~1.18.2",
     "cluster": "^0.7.7",
     "commander": "^2.13.0",
+    "connect-assets": "^5.4.0",
     "continuation-local-storage": "^3.2.1",
     "cookie-parser": "~1.4.3",
     "db-migrate": "^0.10.2",
