@@ -11,14 +11,14 @@
       <div class="col-xs-6 col-sm-6">
         <div class="truncate_tail">
           <span class="tx_key default_black_color">From</span> 
-          <span class="address_value truncate_tail" onclick="addressTapped('0x2F0876ac3Ac68bd53f74155A368347872b298Db1')"> 0x2F0876ac3Ac68bd53f74155A368347872b298Db1</span>
+          <span class="address_value truncate_tail"> 0x2F0876ac3Ac68bd53f74155A368347872b298Db1</span>
         </div>
       </div>
 
       <div class="col-xs-6 col-sm-6">
         <div class="truncate_tail">
           <span class="tx_key default_black_color">To</span> 
-          <span class="address_value truncate_tail" onclick="addressTapped('0x2F0876ac3Ac68bd53f74155A368347872b298Db1')"> 0x2F0876ac3Ac68bd53f74155A368347872b298Db1</span>
+          <span class="address_value truncate_tail"> 0x2F0876ac3Ac68bd53f74155A368347872b298Db1</span>
         </div>
       </div>
     </div>
@@ -38,17 +38,3 @@
   </div>  
    
 </div>  
-
-
-<script type="text/javascript">
-  function transactionHashTapped(transactionAddress) {
-     //window.location.href = "/chain-id/142/transaction/"+transactionAddress;
-      {{addressTapped transactionAddress}}
-  }
-
-  function addressTapped(address) {
-     //window.location.href = "/chain-id/142/address/"+address;
-      {{addressTapped transactionAddress}}
-  }
-
-</script>
