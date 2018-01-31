@@ -37,5 +37,8 @@ define('DEFAULT_PAGE_NUMBER',1);
 define("contract_internal_transactions", "tokendetails");
 define("blocks", "home");
 define("transaction", "transactionDetails");
+define("block","blocks");
+define("block_transactions","blocks");
+define("home","blocks");
 
 module.exports = constants;

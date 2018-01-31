@@ -76,14 +76,14 @@ router.get("/:blockNumber", blockMiddleware, function (req, res) {
  * @routeparam {Integer} :block_number - number of block need to be fetched
  * @routeparam {Integer} :page - Page number for getting data in batch.
  */
-router.get("/:block_number/transactions/:page", blockMiddleware, function (req, res) {
+router.get("/:blockNumber/transactions/:page", blockMiddleware, function (req, res) {
 
   req.blockInstance.getBlockTransactions(req.blockNumber, req.page)
     .then(function (requestResponse) {
 
       const response = responseHelper.successWithData({
-        transactions: requestResponse,
-        result_type: "transactions"
+        block_transactions: requestResponse,
+        result_type: "block_transactions"
       });
 
       return renderResult(response, res, req.headers['content-type']);

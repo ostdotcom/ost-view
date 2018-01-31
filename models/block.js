@@ -63,8 +63,8 @@ block.prototype = {
   , getBlockTransactions: function (block_number, page) {
     const oThis = this;
     return new Promise(function (resolve, reject) {
-
-      if (block_number == undefined || isNaN(page)) {
+      console.log("#block_number = ",block_number);
+      if (block_number == undefined || isNaN(block_number)) {
         reject("invalid input");
         return;
       }
