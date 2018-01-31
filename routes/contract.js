@@ -55,7 +55,8 @@ router.get("/:contractAddress/internal-transactions/:page", contractMiddleware, 
     .then(function (requestResponse) {
       const response = responseHelper.successWithData({
         contract_internal_transactions: requestResponse,
-        result_type: "contract_internal_transactions"
+        result_type: "contract_internal_transactions",
+        layout : 'empty'
       });
       logger.log("Request of content-type:", req.headers['content-type']);
       return renderResult(response, res, req.headers['content-type']);

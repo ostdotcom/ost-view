@@ -1,7 +1,25 @@
+<script type="text/javascript">
+	$(document).ready(function() {
+        var transaction_url = document.getElementById('transaction_url').innerHTML;
+        var transaction_table = document.getElementById('transaction_table');
+        $.ajax({
+            url: transaction_url,
+            contentType: 'application',
+            type: 'GET',
+            success: function (data, status) {
+                console.log("success",data);
+                transaction_table.innerHTML = data;
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log("Error Data: " + XMLHttpRequest + "\nStatus: " + textStatus)
+            }
+        });
+    });
+</script>
 <div class="home container-fluid">
     <div class="container">
 	    <p class="home_title inline_block" >
-	        {{ coin_name }}
+	        {{ token_details.coin_name }}
 	    </p>
 	</div>
 </div>
@@ -37,7 +55,7 @@
 			</span>
 			<br/>
 			<a class="address" href="#">
-				{{contract_address}}
+				{{token_details.contract_address}}
 			</a>
 			<br/>
 			<span class="contract_address" >
@@ -45,7 +63,7 @@
 			</span>
 			<br/>
 			<a class="address" href="#">
-				{{contract_address}}
+				{{token_details.contract_address}}
 			</a>
 		</div>
 		<div class="col-sm-4" >
@@ -53,8 +71,9 @@
 			</p>
 		</div>
 	</div>
-	{{#each contract_internal_transactions}}
-      {{>tableComponent}}
-    {{/each}} 
-    {{>pagination}} 	
+	<p id="transaction_url" style="display:none">
+        {{ token_details.transaction_url }}
+    </p>
+    <div id="transaction_table">
+	</div>
 </div>

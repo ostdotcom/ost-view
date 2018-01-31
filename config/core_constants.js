@@ -34,7 +34,8 @@ define('DEFAULT_PAGE_SIZE', 10);
 define('DEFAULT_PAGE_NUMBER',1);
 
 //template map
-define("contract_internal_transactions", "tokendetails");
+define("contract_internal_transactions", "transactionList");
+define("token_details", "tokendetails");
 define("blocks", "home");
 define("transaction", "transactionDetails");
 define("block","blocks");

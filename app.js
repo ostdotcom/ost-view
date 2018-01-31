@@ -30,6 +30,7 @@ const rootPrefix    = "."
   , responseHelper = require(rootPrefix+'/lib/formatter/response')
   , logger = require(rootPrefix + '/helpers/custom_console_logger')
   , handlebarHelper = require(rootPrefix + '/helpers/handlebar_helper')
+  , tokenDetailsRoutes = require(rootPrefix + '/routes/tokenDetails')
 ;
 
 // if the process is a master.
@@ -47,27 +48,27 @@ if (cluster.isMaster) {
 
   // Worker started listening and is ready
   cluster.on('listening', function(worker, address) {
-    logger.info(`[worker-${worker.id} ] is listening to ${address.address}:${address.port}`);
+    logger.info('[worker-${worker.id} ] is listening to ${address.address}:${address.port}');
   });
 
   // Worker came online. Will start listening shortly
   cluster.on('online', function(worker) {
-    logger.info(`[worker-${worker.id}] is online`);
+    logger.info('[worker-${worker.id}] is online');
   });
 
   //  Called when all workers are disconnected and handles are closed.
   cluster.on('disconnect', function(worker) {
-    logger.error(`[worker-${worker.id}] is disconnected`);
+    logger.error('[worker-${worker.id}] is disconnected');
   });
 
   // When any of the workers die the cluster module will emit the 'exit' event.
   cluster.on('exit', function(worker, code, signal) {
     if (worker.exitedAfterDisconnect === true) {
       // don't restart worker as voluntary exit
-      logger.info(`[worker-${worker.id}] voluntary exit. signal: ${signal}. code: ${code}`);
+      logger.info('[worker-${worker.id}] voluntary exit. signal: ${signal}. code: ${code}');
     } else {
       // restart worker as died unexpectedly
-      logger.error(`[worker-${worker.id}] restarting died. signal: ${signal}. code: ${code}`, worker.id, signal, code);
+      logger.error('[worker-${worker.id}] restarting died. signal: ${signal}. code: ${code}', worker.id, signal, code);
       cluster.fork();
     }
   });
@@ -133,6 +134,7 @@ if (cluster.isMaster) {
   app.use('/chain-id/:chainId/address', addressRoutes);
   app.use('/chain-id/:chainId/search', searchRoutes);
   app.use('/chain-id/:chainId/contract', contractRoutes);
+  app.use('/chain-id/:chainId/tokendetails', tokenDetailsRoutes);
 
   // catch 404 and forward to error handler
   app.use(function (req, res, next) {
