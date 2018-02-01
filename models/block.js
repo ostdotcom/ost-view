@@ -82,33 +82,47 @@ block.prototype = {
   /**
    * Get list of transactions available in a given block number.
    *
-   * @param {Integer} block_number - block number
+   * @param {Integer} blockNumber - block number
    * @param {Integer} page - page number
    *
    * @return {Promise<Object>} List of transactions available in database for particular batch.
    */
-  , getBlockTransactions: function (block_number, page) {
-    const oThis = this;
-    return new Promise(function (resolve, reject) {
-      console.log("#block_number = ",block_number);
-      if (block_number == undefined || isNaN(block_number)) {
-        reject("invalid input");
-        return;
-      }
+  , getBlockTransactions: function (blockNumber, page) {
+      const oThis = this;
+      return new Promise(function (resolve, reject) {
+        console.log("#block_number = ", blockNumber);
+        if (blockNumber == undefined) {
 
-      if (page == undefined || !page || page < 0) {
-        page = constants.DEFAULT_PAGE_NUMBER;
-      }
+          reject("invalid input");
+          return;
+        }
 
-      oThis._dbInstance.getBlockTransactions(block_number, page, constants.ACCOUNT_HASH_LENGTH)
-        .then(function (response) {
-          resolve(response);
-        })
-        .catch(function (reason) {
-          reject(reason);
-        });
-    })
+        if (page == undefined || !page || page < 0) {
+          page = constants.DEFAULT_PAGE_NUMBER;
+        }
+
+
+
+        if (blockNumber.startsWith("0x")) {
+          oThis._dbInstance.getBlockTransactionsFromBlockHash(blockNumber, page, constants.DEFAULT_PAGE_SIZE)
+            .then(function (response) {
+              resolve(response);
+            })
+            .catch(function (reason) {
+              reject(reason);
+            });
+        } else {
+          oThis._dbInstance.getBlockTransactionsFromBlockNumber(blockNumber, page, constants.DEFAULT_PAGE_SIZE)
+            .then(function (response) {
+              resolve(response);
+            })
+            .catch(function (reason) {
+              reject(reason);
+            });
+        }
+      });
   }
+
 
   /**
    * Get list of recent blocks for given page number.
@@ -138,6 +152,5 @@ block.prototype = {
         });
     });
   }
-
 };
 

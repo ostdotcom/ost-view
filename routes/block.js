@@ -102,7 +102,6 @@ function processBlockError(reason, req, res){
  * @routeparam {Integer} :page - Page number for getting data in batch.
  */
 router.get("/:blockNumber/transactions/:page", blockMiddleware, function (req, res) {
-
   req.blockInstance.getBlockTransactions(req.blockNumber, req.page)
     .then(function (requestResponse) {
 
@@ -111,7 +110,6 @@ router.get("/:blockNumber/transactions/:page", blockMiddleware, function (req, r
         result_type: "block_transactions",
         layout:'empty'
       });
-
       return renderResult(response, res, req.headers['content-type']);
     })
     .catch(function (reason) {
