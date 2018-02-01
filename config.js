@@ -60,7 +60,7 @@ const chain_config = {
         txnAttributes: ['gas', 'gasPrice', 'input', 'nonce', 'contractAddress']
       }
   }
-}
+};
 
 module.exports = {
 
