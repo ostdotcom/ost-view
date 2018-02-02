@@ -24,7 +24,11 @@ exports.up = function(db) {
   	.then(function (result) { return createIntTransactionTable(db);})
   	.then(function (result) { return createIndexOnIntTransactionTable(db);})
   	.then(function (result) { return createIntTransactionLedgerTable(db);})
-  	.then(function (result) { return createIndexOnIntTxnLedgerTable(db);}
+  	.then(function (result) { return createIndexOnIntTxnLedgerTable(db);})
+    .then(function (result) { return createAggregateTable(db);})
+    .then(function (result) { return createAggregateIndexTable(db);})
+    .then(function (result) { return createCompanyTable(db);})
+    .then(function (result) { return createTransactionTypeTable(db);}
   	,
     function(err) {
 
@@ -172,4 +176,36 @@ var createIntTransactionLedgerTable = function(db) {
 var createIndexOnIntTxnLedgerTable = function(db) {
 	db.addIndex(constants.ADDRESS_TOKEN_TRANSACTION_TABLE_NAME, 'a_index', ['address', 'timestamp'], false);
 	db.addIndex(constants.ADDRESS_TOKEN_TRANSACTION_TABLE_NAME, 'a_c_t_index', ['address', 'contract_address', 'timestamp'], false);
+};
+
+var createAggregateTable = function (db) {
+    db.createTable(constants.AGGREGATE_TABLE, {
+        id: {type: 'int', notNull: true, primaryKey: true, autoIncrement: true},
+        total_transactions: { type: 'int', notNull: false, default: 0 },
+        total_transfers: { type: 'int', notNull: false, default: 0 },
+        total_transfer_value: { type: 'int', notNull: false, default: 0 },
+        transaction_type: { type: 'int', notNull: false, default: 0 },
+        company_id: { type: 'int', notNull: false, default: 0 },
+        time_id: { type: 'int', notNull: false, default: 0 }
+    });
+};
+
+var createAggregateIndexTable = function (db) {
+    db.addIndex(constants.AGGREGATE_TABLE, 'aggregate_index', ['time_id', 'company_id', 'transaction_type'], true);
+};
+
+var createCompanyTable = function (db) {
+    db.createTable(constants.COMPANY_TABLE, {
+        id: {type: 'int', notNull: true, primaryKey: true, autoIncrement: true},
+        company_name: { type: 'string', notNull: true , length: 20},
+        contract_address: { type: 'string', notNull: true , length: 42},
+        company_symbol: { type: 'string', notNull: true , length: 8}
+    });
+};
+
+var createTransactionTypeTable = function (db) {
+    db.createTable(constants.TRANSACTION_TYPE_TABLE, {
+        id: {type: 'int', notNull: true, primaryKey: true, autoIncrement: true},
+        type: { type: 'string', notNull: true , length: 20}
+    });
 };

@@ -98,7 +98,7 @@ const lockProcess = {
 // Check if process with same arguments already running or not
 ps.lookup({
   command: lockProcess.command,
-  arguments: lockProcess.script + "," + lockProcess.arguments.join(","),
+  arguments: lockProcess.script + "," + lockProcess.arguments.join(",")
 }, function (err, resultList) {
   if (err) {
     throw new Error(err);

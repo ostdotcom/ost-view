@@ -15,6 +15,9 @@ define("TRANSACTION_TABLE_NAME", 'transactions');
 define("ADDRESS_TRANSACTION_TABLE_NAME", 'address_transactions');
 define("TOKEN_TRANSACTION_TABLE_NAME", 'token_transactions');
 define("ADDRESS_TOKEN_TRANSACTION_TABLE_NAME", 'address_token_transactions');
+define("AGGREGATE_TABLE", 'aggregate');
+define("COMPANY_TABLE", 'company');
+define("TRANSACTION_TYPE_TABLE", 'transaction_type');
 
 // Available columns in tables
 define("BLOCKS_DATA_SEQUENCE", '(block_number, block_hash, parent_hash, miner, difficulty, total_difficulty, gas_limit, gas_used, total_transactions, timestamp, verified, nonce, sha3_uncles, uncles, logs_bloom, transactions_root, transactions, state_root, receipt_root, size, extra_data, mix_hash)');
@@ -32,6 +35,7 @@ define('ACCOUNT_HASH_LENGTH',42);
 define('TRANSACTION_HASH_LENGTH', 66);
 define('DEFAULT_PAGE_SIZE', 10);
 define('DEFAULT_PAGE_NUMBER',1);
+define('AGGREGATE_CONSTANT', 5*60);
 
 //template map
 define("contract_internal_transactions", "transactionList");
