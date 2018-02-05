@@ -194,9 +194,9 @@ var createAggregateTable = function (db) {
     db.createTable(constants.AGGREGATE_TABLE_NAME, {
         id: {type: 'int', notNull: true, primaryKey: true, autoIncrement: true},
         total_transactions: { type: 'int', notNull: false, default: 0 },
-        total_transaction_value: { type: 'int', notNull: false, default: 0 },
+        total_transaction_value: {type: 'decimal', notNull: true, length: '40,0'},
         total_transfers: { type: 'int', notNull: false, default: 0 },
-        total_transfer_value: { type: 'int', notNull: false, default: 0 },
+        total_transfer_value: {type: 'decimal', notNull: true, length: '40,0'},
         transaction_type: { type: 'int', notNull: false, default: 0 },
         company_token_id: { type: 'int', notNull: false, default: 0 },
         time_id: { type: 'int', notNull: false, default: 0 }
