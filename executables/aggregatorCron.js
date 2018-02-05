@@ -21,6 +21,7 @@ const rootPrefix = ".."
     , DbInteract = require(rootPrefix + "/lib/storage/interact")
     , logger = require(rootPrefix + "/helpers/custom_console_logger")
     , core_config = require(rootPrefix + "/config")
+    , constants = require(rootPrefix + "/config/core_constants")
     , DataAggregator = require(rootPrefix + "/lib/block_utils/dataAggregator")
     , version = require(rootPrefix + '/package.json').version
     , maxRunTime = (2 * 60 * 60 * 1000) // 2 hrs in milliseconds
@@ -41,26 +42,26 @@ var state = {
 };
 
 /**
- * Methods to set timeout for the verifyBlock api
+ * Methods to set timeout for the aggregate data api
  *
- * @param {Integer} blockNumber - Number of the Block
+ * @param {Integer} timeId - timeId
  * @return {null}
  */
-var aggregateData = function (blockNumber) {
+var aggregateByTimeId = function ( timeId ) {
     setTimeout(function () {
         if ((startRunTime + maxRunTime) > (new Date).getTime()) {
-            dbInteract.getHigestInsertedBlock()
-                .then(function (resBlockNumber) {
-                    logger.log("Higest Block Number ", resBlockNumber);
-                    if (resBlockNumber != null && +resBlockNumber - 10 > state.blockNumber) {
-                        block_verifier.verifyBlock(blockNumber, aggregateData);
+            dbInteract.getLastVerifiedBlockTimestamp()
+                .then(function (timestamp) {
+                    logger.log("Verified Block Timestamp ", timestamp);
+                    if (timestamp != null && +timestamp - timeId >= constants.AGGREGATE_CONSTANT) {
+                        dataAggregator.aggregateData( timeId, aggregateByTimeId );
                     } else {
                         //Need to set up the cron again.
-                        logger.log("Done verification of all the blocks, Need to run the job again after new block mining.");
+                        logger.log("Done aggregation of all the blocks, Need to run the job again after new block verification.");
                     }
                 })
                 .catch(function (err) {
-                    logger.error('\nNot able to fetch block number\n', err);
+                    logger.error('\nNot able to fetch block timestamp\n', err);
                     process.exit(1);
                 });
         } else {
@@ -74,30 +75,24 @@ var aggregateData = function (blockNumber) {
  */
 cliHandler
     .version(version)
-    .usage('Please Specify chain ID \n$>node block_verifier_cron.js -c <chainID> ')
+    .usage('Please Specify chain ID \n$>aggregatorCron.js -c <chainID> ')
     .option('-c, --chainID <n>', 'Id of the chain', parseInt)
-    .option('-n, --blockNumber <n>', 'Start parsing from given block number. If not passed, it start from last inserted block number', parseInt)
     .parse(process.argv);
 
 // Check if chain id exits
 if (!cliHandler.chainID) {
-    logger.error('\n\tPlease Specify chain ID \n\t$>node block_verifier_cron.js -c <chainID>\n');
+    logger.error('\n\tPlease Specify chain ID \n\t$>aggregatorCron.js -c <chainID>\n');
     process.exit(1);
 }
 
 // Set chain id and block number
 state.chainID = cliHandler.chainID;
-if (isNaN(cliHandler.blockNumber)) {
-    state.blockNumber = 0;
-} else {
-    state.blockNumber = cliHandler.blockNumber;
-}
 
 // Handle process locking
 const lockProcess = {
     command: 'node',
     script: 'aggregatorCron.js',
-    arguments: ['-c', state.chainID]
+    arguments: ['-p', state.chainID]
 };
 
 // Check if process with same arguments already running or not
@@ -131,13 +126,22 @@ ps.lookup({
     dataAggregator = DataAggregator.newInstance( dbInteract, state.config.chainId);
     logger.log('State Configuration', state);
 
-    dbInteract.getLastAggregatedBlockNumber()
-        .then(function (blockNumber) {
-            logger.log("Last Aggregated Block Number ", blockNumber);
-            aggregateData(blockNumber );
+    dbInteract.getLastInsertedTimeId()
+        .then(function (timeId) {
+            logger.log("Last Aggregated time_id ", timeId);
+            if ( null === timeId ) {
+                dbInteract.getBlock(1)
+                    .then( function( block ) {
+                        timeId = block.timestamp - (block.timestamp % constants.AGGREGATE_CONSTANT);
+                        logger.log("First timeId ", timeId);
+                        aggregateByTimeId( timeId );
+                    })
+            } else {
+                aggregateByTimeId(timeId + constants.AGGREGATE_CONSTANT);
+            }
         })
         .catch(function (err) {
-            logger.error('\nNot able to fetch block number)\n', err);
+            logger.error('\nNot able to fetch last aggregated timestamp)\n', err);
             process.exit(1);
         });
 });

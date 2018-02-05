@@ -53,7 +53,19 @@ exports.down = function(db) {
   .then(
   	function(result) {
   		db.dropTable(constants.ADDRESS_TOKEN_TRANSACTION_TABLE_NAME);
-  	},
+  	})
+  .then(
+    function(result) {
+        db.dropTable(constants.AGGREGATE_TABLE_NAME);
+    })
+  .then(
+    function(result) {
+        db.dropTable(constants.COMPANY_TABLE_NAME);
+    })
+  .then(
+    function(result) {
+        db.dropTable(constants.TRANSACTION_TYPE_TABLE_NAME);
+    },
     function(err) {
       return;
     }
@@ -179,23 +191,24 @@ var createIndexOnIntTxnLedgerTable = function(db) {
 };
 
 var createAggregateTable = function (db) {
-    db.createTable(constants.AGGREGATE_TABLE, {
+    db.createTable(constants.AGGREGATE_TABLE_NAME, {
         id: {type: 'int', notNull: true, primaryKey: true, autoIncrement: true},
         total_transactions: { type: 'int', notNull: false, default: 0 },
+        total_transaction_value: { type: 'int', notNull: false, default: 0 },
         total_transfers: { type: 'int', notNull: false, default: 0 },
         total_transfer_value: { type: 'int', notNull: false, default: 0 },
         transaction_type: { type: 'int', notNull: false, default: 0 },
-        company_id: { type: 'int', notNull: false, default: 0 },
+        company_token_id: { type: 'int', notNull: false, default: 0 },
         time_id: { type: 'int', notNull: false, default: 0 }
     });
 };
 
 var createAggregateIndexTable = function (db) {
-    db.addIndex(constants.AGGREGATE_TABLE, 'aggregate_index', ['time_id', 'company_id', 'transaction_type'], true);
+    db.addIndex(constants.AGGREGATE_TABLE_NAME, 'aggregate_index', ['time_id', 'company_token_id', 'transaction_type'], true);
 };
 
 var createCompanyTable = function (db) {
-    db.createTable(constants.COMPANY_TABLE, {
+    db.createTable(constants.COMPANY_TABLE_NAME, {
         id: {type: 'int', notNull: true, primaryKey: true, autoIncrement: true},
         company_name: { type: 'string', notNull: true , length: 20},
         contract_address: { type: 'string', notNull: true , length: 42},
@@ -204,8 +217,9 @@ var createCompanyTable = function (db) {
 };
 
 var createTransactionTypeTable = function (db) {
-    db.createTable(constants.TRANSACTION_TYPE_TABLE, {
-        id: {type: 'int', notNull: true, primaryKey: true, autoIncrement: true},
-        type: { type: 'string', notNull: true , length: 20}
+    db.createTable(constants.TRANSACTION_TYPE_TABLE_NAME, {
+        transaction_hash: { type: 'string', primaryKey: true , length: 66},
+        transaction_id: { type: 'int', notNull: false, default: 0 },
+        transaction_type: { type: 'string', notNull: true , length: 20}
     });
 };

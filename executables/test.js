@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 "use strict";
 
 // Load external libraries
@@ -8,6 +10,7 @@ const reqPrefix = ".."
     , constants = require(reqPrefix + '/config/core_constants')
     , logger = require(reqPrefix + '/helpers/custom_console_logger')
     , core_config = require(reqPrefix + "/config")
+    , MAIN_MySQL = require(reqPrefix + "/lib/storage/mysql")
     , NUMBER_OF_REC = 5000
     ;
 
@@ -139,6 +142,7 @@ const mysqlObj = new MySQL(db_config);
 var selectExecute = function (mysqlObj) {
     var promise = [];
     var d = new Date();
+    var time1 = d.getTime();
     for (var i =0 ;i< 100;i++) {
         promise.push(mysqlObj.selectTransactions(i*20,i*20 + 20));
     }
@@ -150,8 +154,14 @@ var selectExecute = function (mysqlObj) {
         });
 
 };
-var d = new Date();
-var time1 = d.getTime();
-setTimeout(function(){
-    selectExecute(mysqlObj);
-}, 2);
+//selectExecute(mysqlObj);
+var executeMysql = function ( mysqlObj ) {
+    mysqlObj.selectTransaction('transactions','0x31824e52549b919746a3a110be47a161608546d19247ad5025af54859ffe232c')
+        .then(function(res){
+            console.log( res[0].logs.toString('utf-8') );
+        })
+        .catch(function(res){
+            console.log(res);
+        });
+};
+executeMysql(new MAIN_MySQL(db_config));
