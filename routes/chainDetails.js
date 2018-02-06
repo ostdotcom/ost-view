@@ -1,7 +1,7 @@
 "use strict";
 /**
- * Token details related routes.<br><br>
- * Base url for all routes given below is: <b>base_url = /chain-id/:chainId/tokenDetails</b>
+ * Chain details related routes.<br><br>
+ * Base url for all routes given below is: <b>base_url = /chain-id/:chainId/chainDetails</b>
  *
  * @module Explorer Routes - Token Details
  */
@@ -12,33 +12,33 @@ const router = express.Router({mergeParams: true});
 
 // load all internal dependencies
 const rootPrefix = ".."
-  , contract = require(rootPrefix + '/models/contract')
-  , responseHelper = require(rootPrefix + '/lib/formatter/response')
-  , coreConfig = require(rootPrefix + '/config')
-  , logger = require(rootPrefix + '/helpers/custom_console_logger')
-;
+    , contract = require(rootPrefix + '/models/contract')
+    , responseHelper = require(rootPrefix + '/lib/formatter/response')
+    , coreConfig = require(rootPrefix + '/config')
+    , logger = require(rootPrefix + '/helpers/custom_console_logger')
+    ;
 
 // Render final response
 const renderResult = function (requestResponse, responseObject, contentType) {
-  return requestResponse.renderResponse(responseObject, 200, contentType);
+    return requestResponse.renderResponse(responseObject, 200, contentType);
 };
 
 // define parameters from url, generate web rpc instance and database connect
 const contractMiddleware = function (req, res, next) {
-  const chainId = req.params.chainId
-    , contractAddress = req.params.contractAddress
-  ;
-  // Get instance of contract class
-  req.contractInstance = new contract(chainId);
+    const chainId = req.params.chainId
+        , contractAddress = req.params.contractAddress
+        ;
+    // Get instance of contract class
+    req.contractInstance = new contract(chainId);
 
-  req.chainId = chainId;
-  req.contractAddress = contractAddress;
+    req.chainId = chainId;
+    req.contractAddress = contractAddress;
 
-  next();
+    next();
 };
 
 /**
- * Get contract details
+ * Get chain basic details
  *
  * @name Contract Internal Transactions
  *
@@ -47,20 +47,7 @@ const contractMiddleware = function (req, res, next) {
  * @routeparam {String} :contractAddress - Contract address whose internal transactions need to be fetched (42 chars length)
  * @routeparam {Integer} :page - Page number for getting data in batch.
  */
-router.get("/:contractAddress", contractMiddleware, function (req, res) {
-  
-  const response = responseHelper.successWithData({
-        token_details : { coin_name: 'Frenco Coin',
-          contract_address: req.contractAddress,
-          transaction_url:'http://localhost:3000/chain-id/'+req.chainId+'/contract/'+req.contractAddress+'/internal-transactions/1'
-        },
-        result_type: "token_details"
-      });
-      logger.log("Request of content-type:", req.headers['content-type']);
-      renderResult(response, res, req.headers['content-type']);
-});
-
-router.get("/:contractAddress/graph/tokenTransfers/:size", contractMiddleware, function (req, res) {
+router.get("/", contractMiddleware, function (req, res) {
 
     const response = responseHelper.successWithData({
         token_details : { coin_name: 'Frenco Coin', contract_address: req.contractAddress, transaction_url:'http://localhost:3000/chain-id/141/contract/0x9B3d6cCd2Db9A911588bC1715F91320C8Ce28c9e/internal-transactions/1' },
@@ -70,7 +57,7 @@ router.get("/:contractAddress/graph/tokenTransfers/:size", contractMiddleware, f
     renderResult(response, res, req.headers['content-type']);
 });
 
-router.get("/:contractAddress/graph/volume/:size", contractMiddleware, function (req, res) {
+router.get("/graph/tokenTransfers/:size", contractMiddleware, function (req, res) {
 
     const response = responseHelper.successWithData({
         token_details : { coin_name: 'Frenco Coin', contract_address: req.contractAddress, transaction_url:'http://localhost:3000/chain-id/141/contract/0x9B3d6cCd2Db9A911588bC1715F91320C8Ce28c9e/internal-transactions/1' },
@@ -80,7 +67,7 @@ router.get("/:contractAddress/graph/volume/:size", contractMiddleware, function 
     renderResult(response, res, req.headers['content-type']);
 });
 
-router.get("/:contractAddress/graph/transactions/:size", contractMiddleware, function (req, res) {
+router.get("/graph/volume/:size", contractMiddleware, function (req, res) {
 
     const response = responseHelper.successWithData({
         token_details : { coin_name: 'Frenco Coin', contract_address: req.contractAddress, transaction_url:'http://localhost:3000/chain-id/141/contract/0x9B3d6cCd2Db9A911588bC1715F91320C8Ce28c9e/internal-transactions/1' },
@@ -89,5 +76,16 @@ router.get("/:contractAddress/graph/transactions/:size", contractMiddleware, fun
     logger.log("Request of content-type:", req.headers['content-type']);
     renderResult(response, res, req.headers['content-type']);
 });
+
+router.get("/graph/transactions/:size", contractMiddleware, function (req, res) {
+
+    const response = responseHelper.successWithData({
+        token_details : { coin_name: 'Frenco Coin', contract_address: req.contractAddress, transaction_url:'http://localhost:3000/chain-id/141/contract/0x9B3d6cCd2Db9A911588bC1715F91320C8Ce28c9e/internal-transactions/1' },
+        result_type: "token_details"
+    });
+    logger.log("Request of content-type:", req.headers['content-type']);
+    renderResult(response, res, req.headers['content-type']);
+});
+
 
 module.exports = router;
