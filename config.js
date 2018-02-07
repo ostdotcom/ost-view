@@ -24,6 +24,7 @@ const chain_config = {
       blockAttributes: ['miner', 'difficulty', 'totalDifficulty', 'gasLimit', 'gasUsed'],
       txnAttributes: ['gas', 'gasPrice', 'input', 'nonce', 'contractAddress']
     },
+    //company_token id should be in consecutive order as per the index
     company_token_addresses: [
       {
         id: 1,
@@ -37,8 +38,6 @@ const chain_config = {
         total_supply:0
       }
     ]
-
-
   },
 
   '142': {
