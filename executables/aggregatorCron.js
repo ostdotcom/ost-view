@@ -58,6 +58,7 @@ var aggregateByTimeId = function ( timeId ) {
                     } else {
                         //Need to set up the cron again.
                         logger.log("Done aggregation of all the blocks, Need to run the job again after new block verification.");
+                        dataAggregator.setUpCacheData();
                     }
                 })
                 .catch(function (err) {

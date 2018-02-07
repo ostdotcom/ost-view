@@ -164,4 +164,5 @@ var executeMysql = function ( mysqlObj ) {
             console.log(res);
         });
 };
-executeMysql(new MAIN_MySQL(db_config));
+//executeMysql(new MAIN_MySQL(db_config));
+//console.log(JSON.stringify(core_config.getContractIdMap(142)));

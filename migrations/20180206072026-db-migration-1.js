@@ -50,7 +50,7 @@ exports.down = function(db) {
 };
 
 exports._meta = {
-  "version": 1
+  "version": 2
 };
 
 /**************************** Helper methods *****************************/
@@ -82,9 +82,10 @@ var createCompanyTokenTable = function (db) {
     market_cap: {type: 'decimal', notNull: true, length: '40,0'},
     circulation: {type: 'decimal', notNull: true, length: '40,0'},
     total_supply: {type: 'decimal', notNull: true, length: '40,0'},
-    token_transfers_data: { type: 'blob', notNull: false },
-    volume_data: { type: 'blob', notNull: false },
-    transactions_data: { type: 'blob', notNull: false }
+    transactions_data: { type: 'blob', notNull: false},
+    transactions_volume_data: { type: 'blob', notNull: false },
+    tokens_transfer_data: { type: 'blob', notNull: false },
+    tokens_volume_data: { type: 'blob', notNull: false }
   });
 };
 
