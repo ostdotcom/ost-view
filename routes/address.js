@@ -69,7 +69,7 @@ router.get('/:address', addressMiddleware, function (req, res) {
     const response = responseHelper.successWithData({
       //balance: balanceValue,
       transactions: transactionsValue,
-      address: req.addressValue,
+      address: req.addressValue
     });
 
     res.render('addressDetails', response);

@@ -131,6 +131,7 @@ module.exports = {
         this.getChainConfig(chainId).company_token_addresses.forEach(function(addresses){
           map[addresses.contract_address] = addresses.id;
         });
+        map[0] = 0; //For no contract address
         return map;
       }
       return null;

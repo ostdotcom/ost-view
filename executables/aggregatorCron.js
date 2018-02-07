@@ -18,6 +18,7 @@ const cliHandler = require('commander')
 
 // Load internal files
 const rootPrefix = ".."
+    , Web3Interact = require(rootPrefix + "/lib/web3/interact/rpc_interact")
     , DbInteract = require(rootPrefix + "/lib/storage/interact")
     , logger = require(rootPrefix + "/helpers/custom_console_logger")
     , core_config = require(rootPrefix + "/config")
@@ -30,6 +31,7 @@ const rootPrefix = ".."
 
 // Variables to hold different objects
 var dbInteract
+    , web3Interact
     , dataAggregator;
 
 /**
@@ -52,12 +54,13 @@ var aggregateByTimeId = function ( timeId ) {
         if ((startRunTime + maxRunTime) > (new Date).getTime()) {
             dbInteract.getLastVerifiedBlockTimestamp()
                 .then(function (timestamp) {
-                    logger.log("Verified Block Timestamp ", timestamp);
+                    logger.log("Last Verified Block Timestamp ", timestamp);
                     if (timestamp != null && +timestamp - timeId >= constants.AGGREGATE_CONSTANT) {
                         dataAggregator.aggregateData( timeId, aggregateByTimeId );
                     } else {
                         //Need to set up the cron again.
                         logger.log("Done aggregation of all the blocks, Need to run the job again after new block verification.");
+                        logger.log("Setting Up the CompanyData Cache");
                         dataAggregator.setUpCacheData();
                     }
                 })
@@ -124,7 +127,8 @@ ps.lookup({
 
     // Create required connections and objects
     dbInteract = DbInteract.getInstance(state.config.db_config);
-    dataAggregator = DataAggregator.newInstance( dbInteract, state.config.chainId);
+    web3Interact = Web3Interact.getInstance(state.config.chainId);
+    dataAggregator = DataAggregator.newInstance(web3Interact, dbInteract, state.config.chainId);
     logger.log('State Configuration', state);
 
     dbInteract.getLastInsertedTimeId()
