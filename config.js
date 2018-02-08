@@ -66,7 +66,7 @@ const chain_config = {
         token_holders: 0,
         market_cap: 0,
         circulation: 0,
-        total_supply:0
+        total_supply:800000000000000000000000000
       }
     ]
   },

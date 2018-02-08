@@ -83,9 +83,9 @@ address.prototype = {
   /**
    * Fetches transactions from database done from particular user in given contract in batches.
    *
-   * @param  {Sting} address - address
-   * @param  {Sting} contractAddress - Contract address
-   * @param  {interger} page - page number
+   * @param  {String} address - address
+   * @param  {String} contractAddress - Contract address
+   * @param  {Integer} page - page number
    *
    * @return {promise<Object>}  List of transactions available in database for particular batch.
    */
@@ -118,8 +118,8 @@ address.prototype = {
   /**
    * Fetches token transactions from database done from particular address in batches.
    *
-   * @param  {Sting} address - address
-   * @param  {Interger} page - page number
+   * @param  {String} address - address
+   * @param  {Integer} page - page number
    *
    * @return {promise<Object>}  list of token transactions available in database for particular batch.
    */
