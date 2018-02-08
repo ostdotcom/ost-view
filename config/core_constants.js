@@ -26,7 +26,7 @@ define("TRANSACTION_DATA_SEQUENCE", '(transaction_hash, block_number, transactio
 define("ADDRESS_TRANSACTION_DATA_SEQUENCE", '(address, corresponding_address, tokens, transaction_hash, transaction_fees, inflow, timestamp)');
 define("TOKEN_TRANSACTION_DATA_SEQUENCE", '(transaction_hash, contract_address, t_from, t_to, tokens, timestamp)');
 define("ADDRESS_TOKEN_TRANSACTION_DATA_SEQUENCE", '(address, corresponding_address, tokens, contract_address, transaction_hash, inflow, timestamp)');
-define("AGGREGATE_DATA_SEQUENCE", '(total_transactions, total_transaction_value, total_transfers, total_transfer_value, transaction_type, company_token_id, time_id)');
+define("AGGREGATE_DATA_SEQUENCE", '(total_transactions, total_transaction_value, total_transfers, total_transfer_value, transaction_type_id, company_token_id, time_id)');
 define("ADDRESS_DATA_SEQUENCE", '(address.address, address.company_token_id, address.tokens, address.total_transactions)');
 define("COMPANY_TOKEN_DATA_SEQUENCE", '(company_token.id, company_token.company_name, company_token.contract_address, company_token.company_symbol, company_token.price, company_token.token_holders, company_token.market_cap, company_token.circulation, company_token.total_supply, company_token.transactions_data, company_token.transactions_volume_data, company_token.tokens_transfer_data, company_token.tokens_volume_data)');
 

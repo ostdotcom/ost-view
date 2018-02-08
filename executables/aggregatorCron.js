@@ -131,7 +131,7 @@ ps.lookup({
     dataAggregator = DataAggregator.newInstance(web3Interact, dbInteract, state.config.chainId);
     logger.log('State Configuration', state);
 
-    dbInteract.getLastInsertedTimeId()
+    dbInteract.getAggregateLastInsertedTimeId()
         .then(function (timeId) {
             logger.log("Last Aggregated time_id ", timeId);
             if ( null === timeId ) {

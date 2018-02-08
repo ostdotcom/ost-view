@@ -61,14 +61,14 @@ var createAggregateTable = function (db) {
     total_transaction_value: {type: 'decimal', notNull: true, length: '40,0'},
     total_transfers: { type: 'int', notNull: false, default: 0 },
     total_transfer_value: {type: 'decimal', notNull: true, length: '40,0'},
-    transaction_type: { type: 'int', notNull: false, default: 0 },
+    transaction_type_id: { type: 'int', notNull: false, default: 0 },
     company_token_id: { type: 'int', notNull: false, default: 0 },
     time_id: { type: 'int', notNull: false, default: 0 }
   });
 };
 
 var createAggregateIndexTable = function (db) {
-  db.addIndex(constants.AGGREGATE_TABLE_NAME, 'aggregate_index', ['time_id', 'company_token_id', 'transaction_type'], true);
+  db.addIndex(constants.AGGREGATE_TABLE_NAME, 'aggregate_index', ['time_id', 'company_token_id', 'transaction_type_id'], true);
 };
 
 var createCompanyTokenTable = function (db) {
@@ -91,8 +91,8 @@ var createCompanyTokenTable = function (db) {
 
 var createTransactionTypeTable = function (db) {
   db.createTable(constants.TRANSACTION_TYPE_TABLE_NAME, {
-    transaction_hash: { type: 'string', primaryKey: true , length: 66},
-    transaction_id: { type: 'int', notNull: false, default: 0 },
+    transaction_hash: { type: 'string', notNull: true , length: 66},
+    transaction_type_id: { type: 'int', notNull: false, default: 0 },
     transaction_type: { type: 'string', notNull: true , length: 20}
   });
 };
