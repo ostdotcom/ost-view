@@ -1,45 +1,40 @@
-<div class="container address_details_container_background_color ">
-    <div class="address_details_container_background_color address_details_container_margine">
+<tbody class=" transactions_font transactions_background_color">
+<tr>
+    <td class="tableRowOtherComponentWidth text-truncate">
+        <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='transactions_token_icon' />
+        <span class="address_title_color "> FRC coin </span>
+    </td>
 
-        <div class="row border_bottom_e4 align-items-center">
-            <div class="col-xs-4 col-sm-3 top_margin">
-                <div class="right_seperator">
-                    <p class="address_details_padding ">
-                        <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='transfer_icon' />
-                        <span class="amount_coin truncate_tail">{{tokens}} FSC</span>
-                        <span class="amount_usd">100 USD</span>
-                    </p>
-                </div>
-            </div>
-            <div class="col-xs-4 col-sm-6">
-                <p class="address_details_padding">
-                    <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='token_icon' />
-                    <span class="default_black_color">FRC Coin</span>
-                </p>
-            </div>
-            <div class="col-xs-4 col-sm-3">
-                <p class="address_details_padding">
-                    <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='transfer_icon' />
-                    {{toDate timestamp}}
-                </p>
-            </div>
+    <td class="tableRowOtherComponentWidth text-truncate">
+        <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='tokenIcon' />
+        <span class="amount_coin">{{tokens}} FRC </span>
+    </td>
+
+    <td class="tableRowOtherComponentWidth text-truncate ">
+        <div class="tableBorderRight">
+            <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='tokenIcon' />
+            <span class=""> {{toTimeAgo timestamp}} </span>
         </div>
-        <div class="align-items-center">
-            <p class="address_details_padding truncate_tail">
 
-                <span class="default_black_color"> From </span>
-                <a href= "/chain-id/1410/address/{{t_from}}">
-                    <span class="default_dark_blue"> {{t_from}} </span>
-                </a>
+    </td>
 
-                <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='token_icon' />
+    <td class="tableRowHashWidth text-truncate">
+        <span class="address_title_color"> TX#</span>
+        <span class="default_bright_blue"> {{hash}} </span>
+    </td>
 
-                <span class="default_black_color"> To </span>
-                <a href= "/chain-id/1410/address/{{t_to}}">
-                    <span class="default_dark_blue"> {{t_to}} </span>
-                </a>
+    <td class="tableRowHashWidth text-truncate">
+        <span class="address_title_color"> From </span>
+        <span class="default_bright_blue"> {{t_from}} </span>
+    </td>
 
-            </p>
-        </div>
-    </div>
-</div>
+    <td class="tableRowTransaferArrowComponentWidth">
+        <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='tokenIcon' />
+    </td>
+
+    <td class="tableRowHashWidth text-truncate">
+        <span class="address_title_color"> To </span>
+        <span class="default_bright_blue"> {{t_to}} </span>
+    </td>
+</tr>
+</tbody>

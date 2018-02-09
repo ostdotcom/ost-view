@@ -51,15 +51,32 @@ const contractMiddleware = function (req, res, next) {
  */
 router.get("/:contractAddress/internal-transactions/:page", contractMiddleware, function (req, res) {
 
-  req.contractInstance.getContractLedger(req.contractAddress, req.page)
+  const pageNumber = req.query.start/req.query.length;
+
+  req.contractInstance.getContractLedger(req.contractAddress, pageNumber)
     .then(function (requestResponse) {
+
+      var previousPage,previousPageStatus;
+       if(Number(req.page) === 1){
+         previousPage = "";
+         previousPageStatus = "disabled"
+      }else{
+         previousPage = req.page-1;
+         previousPageStatus = "active"
+      }
+
+      const nextPageNumber = Number(req.page)+Number(1);
       const response = responseHelper.successWithData({
         contract_internal_transactions: requestResponse,
         result_type: "contract_internal_transactions",
-        layout : 'empty'
+        layout : 'empty',
+        draw : req.query.draw,
+        recordsTotal : 120,
+
       });
-      logger.log("Request of content-type:", req.headers['content-type']);
-      return renderResult(response, res, req.headers['content-type']);
+
+        logger.log("Request of content-type:", req.headers['content-type']);
+      return renderResult(response, res, 'application/json');
     })
     .catch(function (reason) {
       logger.log(req.originalUrl + " : " + reason);

@@ -1,0 +1,1 @@
+$(document).ready(function(){var n=document.getElementById("block_transaction_url").innerHTML,t=document.getElementById("transaction_table");$.ajax({url:n,contentType:"application",type:"GET",success:function(n,e){console.log("success",n),t.innerHTML=n},error:function(n,t,e){console.log("Error Data: "+n+"\nStatus: "+t)}})});

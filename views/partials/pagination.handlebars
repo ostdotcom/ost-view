@@ -1,36 +1,38 @@
 <div class="float_right">
-	<div class="row">
-		<p id= "page" class="badge padding_left padding_top">1</p>
-		<ul class="pagination">
-		    <li class="page-item"><a class="page-link" onClick="prev()">&#60;</a></li>
-		    <li class="page-item"><a class="page-link" onClick="next()">&#62;</a></li>
-		 </ul>
-	</div>
+    <ul class="pagination pagination-sm">
+
+        <span class="paddingRight paddingTop">
+            20 of 200
+        </span>
+        <li class="page-item {{prevPageStatus}}">
+
+            <span class="page-link" aria-hidden="true"> < </span>
+
+        </li>
+        <li class="page-item {{nextPageStatus}}" onclick="actionHandler()">
+            <span class="page-link" aria-hidden="true" > > </span>
+        </li>
+    </ul>
 </div>
 
  <script type="text/javascript">
+     var transactionTable = document.getElementById('transactionTable');
 
-	var link = window.location.href;
-	var pageNumber = link.substr(link.lastIndexOf("/") + 1,link.length);
-	document.getElementById('page').innerHTML = pageNumber;
+     function actionHandler () {
 
-	function prev()	{
-		if (pageNumber > 1) {
-			pageNumber = +pageNumber - 1;
-		} 
-		document.getElementById('page').innerHTML = pageNumber;
-		redirect(pageNumber);
-	}
+          console.log("******* 12 transaction_url", transactionUrl);
+          $.ajax({
+              url: transactionUrl,
+              contentType: 'application',
+              type: 'GET',
+              success: function (data, status) {
+                  console.log("success", data);
+                  transactionTable.innerHTML = data;
+              },
+              error: function (XMLHttpRequest, textStatus, errorThrown) {
+                  console.log("Error Data: " + XMLHttpRequest + "\nStatus: " + textStatus)
+              }
+          });
+      }
 
-	function next(){
-		pageNumber = +pageNumber + 1;
-		document.getElementById('page').innerHTML = pageNumber;
-		redirect(pageNumber);
-	}
-
-	function redirect(pageNum) {
-		var link = window.location.href;
-		var redirectLink = link.substr(0,link.lastIndexOf("/")) + "/" + pageNum;
-		window.location.href = redirectLink;
-	}
  </script>

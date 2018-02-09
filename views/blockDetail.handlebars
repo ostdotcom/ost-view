@@ -1,54 +1,83 @@
+{{{js 'mBlockDetails.js' }}}
+{{{css 'mBlockDetails.css'}}}
+
 <div class="container-fluid">
-    <div class="col-xs-12 col-sm-12 home top_border truncate_tail">
-        <div class="container">
-            <p class="home_title inline_block" >
-                <span class="truncate_tail">Block Details </span>
-            </p>
-        </div>
-    </div>
-    <div class="container address_details_container_background_color address_details_container_margine">
-        <p class="address_details_padding truncate_tail">
-            <span class="default_black_color">Block </span>
-            <span class="address_title_color"> {{block.number}} </span>
-        </p>
-    </div>
 
-    <div class="container">
-        <div class="row border_bottom_e4 align-items-center">
-            <p class="address_details_padding truncate_tail margin_left">
+    {{>pageTitle title="Block Details"}}
 
-                <span class="default_black_color"> Block # </span>
-                <a href= "/chain-id/1410/block/{{block.hash}}">
-                    <span class="default_dark_blue"> {{block.hash}} </span>
-                </a>
-            </p>
-        </div>
+    <div class="container ">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12">
+                <div class="blockDetailsContainerBackgroundColor blockDetailsContainerMargineTop blockDetailsPadding text-truncate">
+                    <span class="default_black_color"> BLOCK # </span>
+                    <span class="blockDetailsColora84"> {{block.number}} </span>
+                </div>
 
-        <div class="row align-items-center">
-            <p id="block_transactions_url" style="display:none">
-                {{transaction_url}}
-            </p>
-            <div id="transaction_table">
+                <div class="blockDetailsContainerMargineTop">
+                    <div class="blockDetailsBorder">
+
+                        <div class="blockDetailsPadding">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <span class="default_black_color"> Chain Id</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="blockDetailsPadding blockDetailsContainerBackgroundColor">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <span class="default_black_color"> Time &nbsp</span>
+                                    <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='tokenIcon' />
+                                    <span class="blockDetailsColora84">  {{toDate block.timestamp}} </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="blockDetailsPadding ">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <span class="default_black_color"> Block Hash &nbsp</span>
+                                    <span class="blockDetailsColora84">  {{block.hash}} </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="blockDetailsPadding blockDetailsContainerBackgroundColor">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <span class="default_black_color"> Total Transactions &nbsp</span>
+                                    <span class="blockDetailsColora84">  {{block.total_transactions}} </span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="blockDetailsPadding">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <span class="default_black_color"> Gas Used &nbsp</span>
+                                    <span class="blockDetailsColora84">  {{block.gas_used}} </span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="blockDetailsContainerMargineTop">
+                    <h4 class="blockDetailsTransactionsColorbad blockDetailsPadding">
+                        Transactions
+                    </h4>
+                    <p id="block_transaction_url" style="display:none">
+                        {{transaction_url}}
+                    </p>
+                    <div id="transaction_table">
+
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
-</div>
 
-<script type="text/javascript">
-    $(document).ready(function() {
-        var transaction_url = document.getElementById('block_transactions_url').innerHTML;
-        var transaction_table = document.getElementById('transaction_table');
-        $.ajax({
-            url: transaction_url,
-            contentType: 'application',
-            type: 'GET',
-            success: function (data, status) {
-                console.log("success",data);
-                transaction_table.innerHTML = data;
-            },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                console.log("Error Data: " + XMLHttpRequest + "\nStatus: " + textStatus)
-            }
-        });
-    });
-</script>
+</div>

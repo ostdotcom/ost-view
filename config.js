@@ -46,8 +46,8 @@ const chain_config = {
   '1410': {
       chainId: 1410,
       database_type: "mysql",
-      web_rpc: "http://localhost:9546",
-      poll_interval: 2000,
+      web_rpc: "http://127.0.0.1:8545",
+      poll_interval: 1,
       db_config: {
         chainId: 1410,
         driver: 'mysql',

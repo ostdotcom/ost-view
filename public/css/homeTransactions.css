@@ -14,12 +14,6 @@ span.date {
   color: rgb(151,176,181);
 }  
 
-.amount_coin {
-  background-color: rgb(160,200,196);
-  color: #ffffff;
-  border-radius: 4px;
-  padding: 2px 2px 2px 2px;
-}
 
 .amount_usd {
   background-color: rgb(95,121,131);

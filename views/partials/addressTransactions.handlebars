@@ -1,65 +1,48 @@
-<div class="container address_details_container_background_color ">
-    <div class="address_details_container_background_color address_details_container_margine">
+<div class="row">
+    <div class="col-xs-12 col-sm-12">
+        <div class="transactions_background_color address_details_padding transactions_bottom_margine transactions_padding_right transactions_font">
+            <div class="row">
+                <div class="col-xs-2 col-sm-2">
+                    <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='transactions_token_icon' />
+                    <span class="address_title_color "> FRC coin </span>
+                </div>
 
-        <div class="row border_bottom_e4 align-items-center">
-            <div class="col-xs-4 col-sm-3 top_margin">
-                <div class="right_seperator">
-                    <p class="address_details_padding ">
-                        <span class="default_black_color">
-                            {{#if inflow}}
-                                Receive
-                            {{else}}
-                                Sent
-                            {{/if}}
-                        </span>
+                <div class="col-xs-2 col-sm-2 ">
+                    <div class="transactions_left_padding truncate_tail">
+                        <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='tokenIcon' />
+                        <span class="amount_coin">{{tokens}} FRC </span>
+                    </div>
+                </div>
 
-                        <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='transfer_icon' />
-                        <span class="amount_coin truncate_tail">{{tokens}} FSC</span>
-                        <span class="amount_usd">100 USD</span>
-                    </p>
+                <div class="col-xs-2 col-sm-2">
+                    <div class="transactions_left_padding truncate_tail transactions_right_seperator">
+                        <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='tokenIcon' />
+                        <span class=""> {{toTimeAgo timestamp}} </span>
+                    </div>
+                </div>
+
+                <div class="col-xs-2 col-sm-2">
+                    <div class="truncate_tail">
+                        <span class="address_title_color"> TX#</span>
+                        <span class="default_bright_blue"> {{transaction_hash}} </span>
+                    </div>
+                </div>
+
+                <div class="col-xs-2 col-sm-2">
+                    <div class="truncate_tail">
+                        <span class="address_title_color"> From </span>
+                        <span class="default_bright_blue"> {{address}} </span>
+                    </div>
+                </div>
+
+                <div class="col-xs-2 col-sm-2">
+                    <div class="truncate_tail">
+                        <span class="address_title_color"> To </span>
+                        <span class="default_bright_blue"> {{corresponding_address}} </span>
+                    </div>
                 </div>
             </div>
-            <div class="col-xs-4 col-sm-6">
-                <p class="address_details_padding">
-                    <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='token_icon' />
-                    <span class="default_black_color">FRC Coin</span>
-                </p>
-            </div>
-            <div class="col-xs-4 col-sm-3">
-                <p class="address_details_padding">
-                    <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='transfer_icon' />
-                    {{toDate timestamp}}
-                </p>
-            </div>
-        </div>
-        <div class="align-items-center">
-            <p class="address_details_padding truncate_tail">
 
-                <span class="default_black_color"> From </span>
-
-                {{#if inflow}}
-                    <a href= "/chain-id/1410/address/{{corresponding_address}}">
-                    <span class="default_dark_blue"> {{corresponding_address}} </span>
-                    </a>
-                {{else}}
-                    <a href= "/chain-id/1410/address/{{address}}">
-                        <span class="default_dark_blue"> {{address}} </span>
-                    </a>
-                {{/if}}
-
-                <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='token_icon' />
-
-                <span class="default_black_color"> To </span>
-                {{#if inflow}}
-                    <a href= "/chain-id/1410/address/{{address}}">
-                        <span class="default_dark_blue"> {{address}} </span>
-                    </a>
-                {{else}}
-                    <a href= "/chain-id/1410/address/{{corresponding_address}}">
-                        <span class="default_dark_blue"> {{corresponding_address}} </span>
-                    </a>
-                {{/if}}
-            </p>
         </div>
     </div>
 </div>

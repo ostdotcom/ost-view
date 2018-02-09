@@ -50,7 +50,10 @@ const contractMiddleware = function (req, res, next) {
 router.get("/:contractAddress", contractMiddleware, function (req, res) {
   
   const response = responseHelper.successWithData({
-        token_details : { coin_name: 'Frenco Coin', contract_address: req.contractAddress, transaction_url:'http://localhost:3000/chain-id/141/contract/0x9B3d6cCd2Db9A911588bC1715F91320C8Ce28c9e/internal-transactions/1' },
+        token_details : { coin_name: 'Frenco Coin',
+          contract_address: req.contractAddress,
+          transaction_url:'http://localhost:3000/chain-id/'+req.chainId+'/contract/'+req.contractAddress+'/internal-transactions/1'
+        },
         result_type: "token_details"
       });
       logger.log("Request of content-type:", req.headers['content-type']);

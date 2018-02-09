@@ -126,8 +126,9 @@ if (cluster.isMaster) {
   var connectAssets = require("connect-assets")({
     paths: [
       path.join(__dirname, 'public/css'),
-      path.join(__dirname, 'public/js')
+      path.join(__dirname, 'public/javascript')
     ],
+    fingerprinting: true,
     servePath: "assets"
   });
   app.use(connectAssets);
@@ -136,6 +137,11 @@ if (cluster.isMaster) {
   hbs.registerHelper('css', function() {
     var css = connectAssets.options.helperContext.css.apply(this, arguments);
     return new hbs.SafeString(css);
+  });
+
+  hbs.registerHelper('js', function() {
+    var js = connectAssets.options.helperContext.js.apply(this, arguments);
+    return new hbs.SafeString(js);
   });
 
   app.use(express.static(path.join(__dirname, 'public')));

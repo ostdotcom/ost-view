@@ -1,79 +1,355 @@
-<script type="text/javascript">
-	$(document).ready(function() {
-        var transaction_url = document.getElementById('transaction_url').innerHTML;
-        var transaction_table = document.getElementById('transaction_table');
-        $.ajax({
-            url: transaction_url,
-            contentType: 'application',
-            type: 'GET',
-            success: function (data, status) {
-                console.log("success",data);
-                transaction_table.innerHTML = data;
-            },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                console.log("Error Data: " + XMLHttpRequest + "\nStatus: " + textStatus)
-            }
-        });
-    });
-</script>
-<div class="home container-fluid">
-    <div class="container">
-	    <p class="home_title inline_block" >
-	        {{ token_details.coin_name }}
-	    </p>
-	</div>
-</div>
-<div class="container">
-	<div class="row token-details">
-		<div class="col-sm-4" >
-			<div class ="row">
-				<div class="col-sm-4">
-					<div class="block">
-		      			<div class="circle">
-		      				<p>FRC</p>	
-		      			</div>
-					</div>
-				</div>
-				<div class="col-sm-8">
-					<span class="token_heading" >
-						{{ coin_name }}
-					</span>
-					<br/>
-					<span >
-						24h Volume
-					</span>
-					<br/>
-					<span >
-						23,659.0304343
-					</span>
-				</div>
-			</div>
-		</div>
-		<div class="col-sm-4 left-right-border" >
-			<span class="contract_address" >
-				CONTRACT ADDRESS
-			</span>
-			<br/>
-			<a class="address" href="#">
-				{{token_details.contract_address}}
-			</a>
-			<br/>
-			<span class="contract_address" >
-				CREATOR
-			</span>
-			<br/>
-			<a class="address" href="#">
-				{{token_details.contract_address}}
-			</a>
-		</div>
-		<div class="col-sm-4" >
-			<p>
-			</p>
-		</div>
-	</div>
-	<p id="transaction_url" style="display:none">
-        {{ token_details.transaction_url }}
-    </p>
-    <div id="transaction_table">
-	</div>
+{{{css 'mTokenDetails.css'}}}
+{{{js 'mTokenDetails.js' }}}
+
+<div class="container-fluid">
+
+    {{>pageTitle title=token_details.coin_name}}
+
+    <div class="container ">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12">
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="tokenDetailsPadding tokenDetailsContainerBorderBottom">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="tokenDetailsIconPaddingLeft">
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='tokenDetailsCoinIcon'/>
+                                            </div>
+
+                                            <div class="col-sm-8">
+                                                <div class="row">
+                                                    <div class="col-sm-12">
+                                                        <div class="tokenDetailsContractDetails">
+                                                            <div>
+                                                     <span class="tokenDetailsCoinDetails">
+                                                         FRANCHESCO COIN
+                                                     </span>
+                                                            </div>
+                                                            <div class="tokenDetailsPriceInAlphaMargineTop">
+                                                    <span class="tokenDetailsCoinDetails tokenDetailsPriceInAlphaFont ">
+                                                        Price Token in OST α
+                                                    </span>
+                                                                <br/>
+                                                    <span class="tokenDetailsCoinDetails">
+                                                        0.3
+                                                    </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <div class="tokenDetailsBorderLeft">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="tokenDetailsContractDetails">
+                                                    <span class="tokenDetailsColora84">
+                                                        CONTRACT ADDRESS
+                                                    </span>
+                                                            <br/>
+                                                     <span class="default_bright_blue">
+                                                        0XCAD42B64891F72BCB250E673….
+                                                    </span>
+                                                </div>
+
+                                                <div class="tokenDetailsContractDetails tokenDetailsTokenUIDPaddingTop">
+                                                    <span class="tokenDetailsColora84">
+                                                        TOKEN UID
+                                                    </span>
+                                                            <br/>
+                                                    <span class="default_bright_blue">
+                                                        89898088989
+                                                    </span>
+                                                </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                </div>
+                                <div class="col-sm-4">
+                                    <div class="tokenDetailsBorderLeft">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="tokenDetailsContractDetails">
+                                                    <span class="tokenDetailsColora84">
+                                                        # TOKEN HOLDERS
+                                                    </span>
+                                                    <br/>
+                                                     <span class="default_bright_blue">
+                                                        122324
+                                                     </span>
+                                                </div>
+
+                                                <div class="tokenDetailsContractDetails tokenDetailsTokenUIDPaddingTop">
+                                                    <span class="tokenDetailsColora84">
+                                                        CREATION DATE
+                                                    </span>
+                                                    <br/>
+                                                    <span class="default_bright_blue">
+                                                        12/08/2018
+                                                    </span>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="tokenDetailsCoinStatsPadding">
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="tokenDetailsContainerBackgroundColor tokenDetailsCoinStatsPadding">
+                                                <span class="tokenDetailsStatsTitleColorbad">
+                                                    MARKET CAP (OST α)
+                                                </span>
+                                                <br/>
+                                                 <span class="tokenDetailsStatsValueColor030">
+                                                    4213232
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-sm-4">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="tokenDetailsContainerBackgroundColor tokenDetailsCoinStatsPadding">
+                                                <span class="tokenDetailsStatsTitleColorbad">
+                                                    CIRCULATING SUPPLY
+                                                </span>
+                                                <br/>
+                                                 <span class="tokenDetailsStatsValueColor030">
+                                                    40,000
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="col-sm-4">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <div class="tokenDetailsContainerBackgroundColor tokenDetailsCoinStatsPadding">
+                                                <span class="tokenDetailsStatsTitleColorbad">
+                                                    TOTAL SUPPLY
+                                                </span>
+                                                <br/>
+                                                 <span class="tokenDetailsStatsValueColor030">
+                                                    150,0009
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="tokenDetailsCoinStatsPadding">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="tokenDetailsGraphTitlePaddingLeft tokenDetailsGraphContainerBorder">
+                                        <span class="tokenDetailsStatsTitleColorbad">
+                                            TOTAL N  OF TOKEN TRANSFERS
+                                        </span>
+
+                                        <div class="tokenDetailsGraphSubTitleMargineTop">
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <div class="tokenDetailsGraphSubTitleBorder">
+                                                        <div class="row">
+                                                            <div class="col-sm-8">
+                                                                <div class="tokenDetailsGraphSubTitleBorderRight">
+                                                                     <span class="tokenDetailsStatsTitleColorbad">
+                                                                         Token Transfers
+                                                                     </span>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <div class="row">
+                                                                    <div class="tokenDetailsGraphTimeFilterMargineLeft">
+                                                                        <div class="col-sm-2">
+                                                                         <span class="tokenDetailsStatsTitleColorbad">
+                                                                            1H
+                                                                         </span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="tokenDetailsGraphTimeFilterMargineLeft">
+                                                                        <div class="col-sm-2">
+                                                                              <span class="tokenDetailsStatsTitleColorbad">
+                                                                                1D
+                                                                             </span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="tokenDetailsGraphTimeFilterMargineLeft">
+                                                                        <div class="col-sm-2">
+                                                                              <span class="tokenDetailsStatsTitleColorbad">
+                                                                                1W
+                                                                             </span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="tokenDetailsGraphTimeFilterMargineLeft">
+                                                                        <div class="col-sm-2">
+                                                                              <span class="tokenDetailsStatsTitleColorbad">
+                                                                                1M
+                                                                             </span>
+
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="tokenDetailsGraphTimeFilterMargineLeft">
+                                                                        <div class="col-sm-2">
+                                                                              <span class="tokenDetailsStatsTitleColorbad">
+                                                                                1Y
+                                                                             </span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="tokenDetailsGraphTimeFilterMargineLeft">
+                                                                        <div class="col-sm-2">
+                                                                              <span class="tokenDetailsStatsTitleColorbad">
+                                                                                All
+                                                                             </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-sm-6">
+                                    <div class="tokenDetailsGraphTitlePaddingLeft tokenDetailsGraphContainerBorder">
+                                        <span class="tokenDetailsStatsTitleColorbad">
+                                            VOLUME OSTα
+                                        </span>
+
+                                        <div class="tokenDetailsGraphSubTitleMargineTop">
+                                            <div class="row">
+                                                <div class="col-sm-12">
+                                                    <div class="tokenDetailsGraphSubTitleBorder">
+                                                        <div class="row">
+                                                            <div class="col-sm-8">
+                                                                <div class="tokenDetailsGraphSubTitleBorderRight">
+                                                                 <span class="tokenDetailsStatsTitleColorbad">
+                                                                     Volume
+                                                                 </span>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <div class="row">
+                                                                    <div class="tokenDetailsGraphTimeFilterMargineLeft">
+                                                                        <div class="col-sm-2">
+                                                                     <span class="tokenDetailsStatsTitleColorbad">
+                                                                        1H
+                                                                     </span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="tokenDetailsGraphTimeFilterMargineLeft">
+                                                                        <div class="col-sm-2">
+                                                                          <span class="tokenDetailsStatsTitleColorbad">
+                                                                            1D
+                                                                         </span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="tokenDetailsGraphTimeFilterMargineLeft">
+                                                                        <div class="col-sm-2">
+                                                                          <span class="tokenDetailsStatsTitleColorbad">
+                                                                            1W
+                                                                         </span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="tokenDetailsGraphTimeFilterMargineLeft">
+                                                                        <div class="col-sm-2">
+                                                                          <span class="tokenDetailsStatsTitleColorbad">
+                                                                            1M
+                                                                         </span>
+
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="tokenDetailsGraphTimeFilterMargineLeft">
+                                                                        <div class="col-sm-2">
+                                                                          <span class="tokenDetailsStatsTitleColorbad">
+                                                                            1Y
+                                                                         </span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="tokenDetailsGraphTimeFilterMargineLeft">
+                                                                        <div class="col-sm-2">
+                                                                          <span class="tokenDetailsStatsTitleColorbad">
+                                                                            All
+                                                                         </span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tokenDetailsTransactionsMargineTop">
+                    <div class="row">
+                        <div class="col-12">
+                           
+                            <p id="transactionUrl" style="display:none">
+                                {{token_details.transaction_url}}
+                            </p>
+
+                            <table id="tokenDetailsRecentTrans" class="table borderless borderBottomNone">
+                                <thead class="dataTablesWrapper">
+
+                                </thead>
+                                <tfoot class="dataTablesWrapper">
+
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

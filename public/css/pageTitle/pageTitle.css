@@ -1,0 +1,16 @@
+.pageTitleBackgroundColor  {
+    background-color: #f9f8e5;
+}
+
+.page_title_top_border {
+
+    border-top: 1.5px solid rgb(220, 217, 170);
+}
+
+.page_title_text_color {
+    color: #438bad;
+}
+
+.page_title_margine{
+    margin: 20px 0px 20px 0px;
+}

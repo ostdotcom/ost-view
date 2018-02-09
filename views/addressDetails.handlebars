@@ -1,26 +1,63 @@
+{{{css 'mAddressDetails.css'}}}
+{{{js 'mAddressDetails.js'}}}
+
 <div class="container-fluid">
-    <div class="col-xs-12 col-sm-12 home top_border truncate_tail">
-        <div class="container">
-            <p class="home_title inline_block" >
-                <span class="truncate_tail">Address Details </span>
-            </p>
-        </div>
-    </div>
-    <div class="col-xs-12 col-sm-12">
-        <div class="container address_details_container_background_color address_details_container_margine">
-            <p class="address_details_padding truncate_tail">
-                <span class="default_black_color"> Address Details </span>
-                <span class="address_title_color"> {{data.address}} </span>
-            </p>
-        </div>
-    </div>
 
-    <div class="row">
-        <div class="col-xs-12 col-sm-12">
-            {{#each data.transactions}}
-                {{>addressTransactions}}
-            {{/each}}
+    {{>pageTitle title="Address"}}
+
+    <div class="container ">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12">
+                <div class="addressDetailsContainerBackgroundColor addressDetailsContainerMargineTop addressDetailsPadding text-truncate">
+                    <span class="default_black_color"> Address </span>
+                    <span class="addressDetailsTitleColora84"> {{data.address}} </span>
+                </div>
+
+                <div class="addressDetailsContainerMargineTop">
+                    <div class="addressDetailsBorder">
+
+                        <div class="addressDetailsPadding">
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    <span class="default_black_color"> Amount </span>
+                                </div>
+                                <div class="col-sm-10">
+                                    <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='tokenIcon' />
+                                    <span class="addressDetailsCoinAmount"> 100 FRC </span>
+                                    &nbsp(10 OST)
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="addressDetailsPadding addressDetailsContainerBackgroundColor">
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    <span class="default_black_color"> Total Transactions </span>
+                                </div>
+                                <div class="col-sm-10">
+                                   <span class="default_bright_blue"> 100 </span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="addressDetailsTransactionsMargineTop">
+                    <h4 class="addressDetailsTransactionsColorbad addressDetailsPadding">
+                        Transactions
+                    </h4>
+                    <!--<div>-->
+                        <table class="table borderless text-truncate tableLayoutFix tableVarticleAlignCenter">
+                            {{#each data.transactions}}
+                                {{>transactions}}
+                            {{/each}}
+                        </table>
+                    <!--</div>-->
+                </div>
+
+            </div>
         </div>
     </div>
-
 </div>
