@@ -27,6 +27,17 @@ const chain_config = {
     //company_token id should be in consecutive order as per the index
     company_token_addresses: [
       {
+        id: 0,
+        company_name: 'OST',
+        contract_address: '0',
+        company_symbol: 'OST',
+        price: 1,
+        token_holders: 0,
+        market_cap: 0,
+        circulation: 0,
+        total_supply:0
+      },
+      {
         id: 1,
         company_name: 'Pepo',
         contract_address: '0x89AFC2d64c22e555c46345cE31c4Bb6de398a50b',
@@ -57,6 +68,17 @@ const chain_config = {
       txnAttributes: ['gas', 'gasPrice', 'input', 'nonce', 'contractAddress']
     },
     company_token_addresses: [
+      {
+        id: 0,
+        company_name: 'OST',
+        contract_address: '0',
+        company_symbol: 'OST',
+        price: 0,
+        token_holders: 0,
+        market_cap: 0,
+        circulation: 0,
+        total_supply:0
+      },
       {
         id: 1,
         company_name: 'Pepo',

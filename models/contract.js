@@ -19,14 +19,14 @@ const rootPrefix = ".."
  */
 var contract = module.exports = function (chainId) {
   this._dbInstance = dbInteract.getInstance(coreConfig.getChainDbConfig(chainId));
-}
+};
 
 contract.prototype = {
 
   /**
    * Get list of Contract ledger for given contract address.
    *
-   * @param {Sting} contractAddress - Contract address
+   * @param {String} contractAddress - Contract address
    * @param {Integer} page  - Page number
    *
    * @return {Promise<Object>} List of contract internal transaction

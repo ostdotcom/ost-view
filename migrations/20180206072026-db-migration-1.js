@@ -73,7 +73,7 @@ var createAggregateIndexTable = function (db) {
 
 var createCompanyTokenTable = function (db) {
   db.createTable(constants.COMPANY_TOKEN_TABLE_NAME, {
-    id: {type: 'int', notNull: true, primaryKey: true, autoIncrement: true},
+    id: {type: 'int', notNull: true, primaryKey: true},
     company_name: { type: 'string', notNull: true , length: 20},
     contract_address: { type: 'string', notNull: true , length: 42},
     company_symbol: { type: 'string', notNull: true , length: 8},

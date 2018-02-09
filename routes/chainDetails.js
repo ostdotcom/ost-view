@@ -16,6 +16,7 @@ const rootPrefix = ".."
     , responseHelper = require(rootPrefix + '/lib/formatter/response')
     , coreConfig = require(rootPrefix + '/config')
     , logger = require(rootPrefix + '/helpers/custom_console_logger')
+    , Company = require(rootPrefix + '/models/company')
     ;
 
 // Render final response
@@ -27,12 +28,12 @@ const renderResult = function (requestResponse, responseObject, contentType) {
 const contractMiddleware = function (req, res, next) {
     const chainId = req.params.chainId
         , contractAddress = req.params.contractAddress
+        , type=req.params.type
         ;
     // Get instance of contract class
-    req.contractInstance = new contract(chainId);
-
+    req.companyInstance = Company.newInstance(chainId);
     req.chainId = chainId;
-    req.contractAddress = contractAddress;
+    req.type = type;
 
     next();
 };
@@ -57,7 +58,24 @@ router.get("/", contractMiddleware, function (req, res) {
     renderResult(response, res, req.headers['content-type']);
 });
 
-router.get("/graph/tokenTransfers/:size", contractMiddleware, function (req, res) {
+router.get("/graph/tokenTransfers/:type", contractMiddleware, function (req, res) {
+
+    var oThis = this;
+    logger.log("Request type", req.type);
+
+    req.companyInstance.getTokenTransfersGraph(req.type)
+        .then(function(result){
+            const response = responseHelper.successWithData({
+                result_type: "token_details",
+                token_details : result
+            });
+            logger.log("Request of content-type:", req.headers['content-type']);
+            renderResult(response, res, 'application/json');
+        });
+
+});
+
+router.get("/graph/volume/:type", contractMiddleware, function (req, res) {
 
     const response = responseHelper.successWithData({
         token_details : { coin_name: 'Frenco Coin', contract_address: req.contractAddress, transaction_url:'http://localhost:3000/chain-id/141/contract/0x9B3d6cCd2Db9A911588bC1715F91320C8Ce28c9e/internal-transactions/1' },
@@ -67,24 +85,20 @@ router.get("/graph/tokenTransfers/:size", contractMiddleware, function (req, res
     renderResult(response, res, req.headers['content-type']);
 });
 
-router.get("/graph/volume/:size", contractMiddleware, function (req, res) {
+router.get("/graph/transactions/:type", contractMiddleware, function (req, res) {
 
-    const response = responseHelper.successWithData({
-        token_details : { coin_name: 'Frenco Coin', contract_address: req.contractAddress, transaction_url:'http://localhost:3000/chain-id/141/contract/0x9B3d6cCd2Db9A911588bC1715F91320C8Ce28c9e/internal-transactions/1' },
-        result_type: "token_details"
-    });
-    logger.log("Request of content-type:", req.headers['content-type']);
-    renderResult(response, res, req.headers['content-type']);
-});
+    var oThis = this;
+    logger.log("Request type", req.type);
 
-router.get("/graph/transactions/:size", contractMiddleware, function (req, res) {
-
-    const response = responseHelper.successWithData({
-        token_details : { coin_name: 'Frenco Coin', contract_address: req.contractAddress, transaction_url:'http://localhost:3000/chain-id/141/contract/0x9B3d6cCd2Db9A911588bC1715F91320C8Ce28c9e/internal-transactions/1' },
-        result_type: "token_details"
-    });
-    logger.log("Request of content-type:", req.headers['content-type']);
-    renderResult(response, res, req.headers['content-type']);
+    req.companyInstance.getTokenTr(req.type)
+        .then(function(result){
+            const response = responseHelper.successWithData({
+                result_type: "token_details",
+                token_details : result
+            });
+            logger.log("Request of content-type:", req.headers['content-type']);
+            renderResult(response, res, 'application/json');
+        });
 });
 
 
