@@ -67,8 +67,11 @@ router.get("/:contractAddress/graph/numberOfTransactions/:duration", contractMid
     req.contractInstance.getGraphDataOfNumberOfBrandedTokenTransactions(req.contractAddress,req.duration)
     .then (function(response){
     const responseData = responseHelper.successWithData({
-      result_type: "numberOfTransactions",
-      numberOfTransactions :response
+      result_type: "number_of_transactions",
+      number_of_transactions :response,
+      meta:{
+        duaration:req.duration
+      }
     });
     logger.log("Request of content-type:", req.headers['content-type']);
     renderResult(responseData, res, req.headers['content-type']);
@@ -85,8 +88,11 @@ router.get("/:contractAddress/graph/valueOfTransactions/:duration", contractMidd
   req.contractInstance.getGraphDataOfBrandedTokenValueTransactions(req.contractAddress,req.duration)
       .then (function(response){
     const responseData = responseHelper.successWithData({
-      result_type: "valueOfTransactions",
-      valueOfTransactions :response
+      result_type: "value_of_transactions",
+      value_of_transactions :response,
+      meta:{
+        duaration:req.duration
+      }
     });
     logger.log("Request of content-type:", req.headers['content-type']);
     renderResult(responseData, res, req.headers['content-type']);
@@ -122,7 +128,10 @@ router.get("/:contractAddress/topUsers", contractMiddleware, function (req, res)
     .then (function(response) {
       const responseData = responseHelper.successWithData({
         top_users :response,
-        result_type: "top_users"
+        result_type: "top_users",
+        meta :{
+          user_url_templete:""
+        }
       });
       logger.log("Request of content-type:", req.headers['content-type']);
       renderResult(responseData, res, req.headers['content-type']);
