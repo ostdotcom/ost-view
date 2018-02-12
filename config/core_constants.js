@@ -28,7 +28,10 @@ define("TOKEN_TRANSACTION_DATA_SEQUENCE", '(transaction_hash, contract_address, 
 define("ADDRESS_TOKEN_TRANSACTION_DATA_SEQUENCE", '(address, corresponding_address, tokens, contract_address, transaction_hash, inflow, timestamp)');
 define("AGGREGATE_DATA_SEQUENCE", '(total_transactions, total_transaction_value, total_transfers, total_transfer_value, transaction_type_id, branded_token_id, time_id)');
 define("ADDRESS_DATA_SEQUENCE", '(address.address, address.branded_token_id, address.tokens, address.total_transactions)');
-define("BRANDED_TOKEN_DATA_SEQUENCE", '(branded_token.id, branded_token.company_name, branded_token.contract_address, branded_token.company_symbol, branded_token.uuid, branded_token.price, branded_token.token_holders, branded_token.market_cap, branded_token.circulation, branded_token.total_supply, branded_token.transactions_data, branded_token.transactions_volume_data, branded_token.tokens_transfer_data, branded_token.tokens_volume_data)');
+define("BRANDED_TOKEN_DATA_SEQUENCE", '(branded_token.id, branded_token.company_name, branded_token.contract_address, branded_token.company_symbol, ' +
+'branded_token.uuid, branded_token.price, branded_token.token_holders, branded_token.market_cap, branded_token.circulation, branded_token.total_supply, ' +
+'branded_token.transactions_data, branded_token.transactions_volume_data, branded_token.tokens_transfer_data, branded_token.tokens_volume_data, ' +
+'branded_token.transaction_type_data)');
 
 // Index Map
 define("TRANSACTION_INDEX_MAP", {'transaction_hash':0, 'block_number':1, 'transaction_index':2, 'contract_address':3, 't_from':4, 't_to':5, 'tokens':6, 'gas_used':7, 'gas_price':8, 'nounce':9, 'input_data': 10, 'logs':11, 'timestamp':12});

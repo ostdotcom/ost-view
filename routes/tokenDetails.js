@@ -102,8 +102,9 @@ router.get("/:contractAddress/graph/transactionsByType/:duration", contractMiddl
   req.contractInstance.getGraphDataForBrandedTokenTransactionsByType(req.contractAddress,req.duration)
     .then (function(response){
     const responseData = responseHelper.successWithData({
-      transaction_type :response,
-      result_type: "transaction_type"
+      result_type: "transaction_type",
+      transaction_type :response
+
     });
     logger.log("Request of content-type:", req.headers['content-type']);
     renderResult(responseData, res, req.headers['content-type']);
