@@ -145,6 +145,10 @@ if (cluster.isMaster) {
     return new hbs.SafeString(js);
   });
 
+  hbs.registerHelper('with', function(context, options) {
+    return options.fn(context);
+  });
+
   app.use(express.static(path.join(__dirname, 'public')));
 
   // load route files

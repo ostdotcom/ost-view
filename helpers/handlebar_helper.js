@@ -5,14 +5,9 @@ const preRoot = "../",
 
 
 module.exports = {
-  list: function (items) {
-    var out = "<ul>";
 
-    for (var i = 0, l = items.length; i < l; i++) {
-      out = out + "<li>" + items[i].firstName + " " + items[i].lastName + "</li>";
-    }
-
-    return out + "</ul>";
+  getMethodNameFromInputData: function (inputData){
+    return erc20Tokens.decodeMethodFromInputData(inputData);
   },
 
   toJSON: function (object) {
@@ -30,8 +25,6 @@ module.exports = {
     return formattedDate;
   },
 
-  decodeInputData: function (inputData){
-    return erc20Tokens.decodeMethodFromInputData(inputData);
-  }
+
 
 }

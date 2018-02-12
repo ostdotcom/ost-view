@@ -73,14 +73,28 @@ table.dataTable tbody tr{
     padding: 20px;
 }
 
+.tokenDetailsCoinStatsMargineTop{
+    margin-top: -20px;
+}
+
 .tokenDetailsStatsTitleColorbad{
     color: #438bad;
+    font-size: 12px;
+}
+
+.tokenDetailsStatsValueColora84{
+    color: #597a84;
     font-size: 12px;
 }
 
 .tokenDetailsStatsValueColor030{
     color: #e4b030;
     font-size: 12px;
+}
+
+.tokenDetailsStatsImage{
+    border-radius: 50%;
+    width: 20%;
 }
 
 .tokenDetailsGraphPadding{
@@ -120,6 +134,18 @@ table.dataTable tbody tr{
 
 }
 
-.tokenDetails{
+.tokenDetailsGraphMargin{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
 
+
+.tokenDetailsCoinAmount {
+    background-color: rgb(160,200,196);
+    color: #ffffff;
+    border-radius: 4px;
+    padding: 2px 2px 2px 2px;
+}
+
+.tokenDetails{
 }
