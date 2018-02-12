@@ -27,7 +27,7 @@ const renderResult = function (requestResponse, responseObject, contentType) {
 const contractMiddleware = function (req, res, next) {
   const chainId = req.params.chainId
     , contractAddress = req.params.contractAddress
-    , duration = req.params.duration;
+    , duration = req.params.duration
   ;
   // Get instance of contract class
   req.contractInstance = new contract(chainId);
@@ -62,49 +62,13 @@ router.get("/:contractAddress", contractMiddleware, function (req, res) {
       renderResult(response, res, req.headers['content-type']);
 });
 
-/**
- * Get token transactions
- *
- * @name branded token details
- *
- *
- */
+router.get("/:contractAddress/graph/numberOfTransactions/:duration", contractMiddleware, function (req, res) {
 
-router.get("/:contractAddress/graph/tokenTransactions/:duration", contractMiddleware, function (req, res) {
-
-
-  const promiseResolver = [];
-
-  promiseResolver.push(req.contractInstance.getGraphDataOfBrandedTokenValueTransactions(req.contractAddress,req.duration)) ;
-  promiseResolver.push(req.contractInstance.getGraphDataOfNumberOfBrandedTokenTransactions(req.contractAddress,req.duration)) ;
-
-  Promise.all(promiseResolver).then(function (rsp) {
-        const valueOfTransactions = rsp[0];
-        const NoOfTransactions = rsp[1];
-
-        const responseData = responseHelper.successWithData({
-          valueOfTransactions: valueOfTransactions,
-          NOfTransactions: NoOfTransactions,
-          result_type: "graphData"
-        });
-        renderResult(responseData, res, req.headers['content-type']);
-    })
-
-    .catch(function(reason){
-      logger.log(req.originalUrl + " : " + reason);
-      return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
-
-    });
-
-});
-
-router.get("/:contractAddress/graph/valueOfTransactions/:duration", contractMiddleware, function (req, res) {
-
-  req.contractInstance.getGraphDataForContractValueOfTransactions(req.contractAddress,req.size)
+    req.contractInstance.getGraphDataOfNumberOfBrandedTokenTransactions(req.contractAddress,req.duration)
     .then (function(response){
     const responseData = responseHelper.successWithData({
-      valueOfTransactions :response,
-      result_type: "valueOfTransactions"
+      result_type: "numberOfTransactions",
+      numberOfTransactions :response
     });
     logger.log("Request of content-type:", req.headers['content-type']);
     renderResult(responseData, res, req.headers['content-type']);
@@ -116,9 +80,26 @@ router.get("/:contractAddress/graph/valueOfTransactions/:duration", contractMidd
 
 });
 
+router.get("/:contractAddress/graph/valueOfTransactions/:duration", contractMiddleware, function (req, res) {
+
+  req.contractInstance.getGraphDataOfBrandedTokenValueTransactions(req.contractAddress,req.duration)
+      .then (function(response){
+    const responseData = responseHelper.successWithData({
+      result_type: "valueOfTransactions",
+      valueOfTransactions :response
+    });
+    logger.log("Request of content-type:", req.headers['content-type']);
+    renderResult(responseData, res, req.headers['content-type']);
+    }).catch(function(reason){
+        logger.log(req.originalUrl + " : " + reason);
+        return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
+      });
+
+});
+
 router.get("/:contractAddress/graph/transactionsByType/:duration", contractMiddleware, function (req, res) {
 
-  req.contractInstance.getGraphDataForContractTransactionsByType(req.contractAddress,req.size)
+  req.contractInstance.getGraphDataForBrandedTokenTransactionsByType(req.contractAddress,req.duration)
     .then (function(response){
     const responseData = responseHelper.successWithData({
       graphData :response,
@@ -136,7 +117,7 @@ router.get("/:contractAddress/graph/transactionsByType/:duration", contractMiddl
 
 router.get("/:contractAddress/topUsers", contractMiddleware, function (req, res) {
 
-  req.contractInstance.getTopUsers(contractAddress)
+  req.contractInstance.getBrandedTokenTopUsers(contractAddress)
     .then (function(response){
       const responseData = responseHelper.successWithData({
         topUsers :response,

@@ -59,7 +59,7 @@ contract.prototype = {
   /**
    * Get list of Contract ledger for given contract address.
    *
-   * @param {Sting} contractAddress - Contract address
+   * @param {String} contractAddress - Contract address
    * @param {Integer} page  - Page number
    *
    * @return {Promise<Object>} List of contract transaction
@@ -91,7 +91,7 @@ contract.prototype = {
   /**
    * Get graph data for value of transactions.
    *
-   * @param {Sting} contractAddress - Contract address
+   * @param {String} contractAddress - Contract address
    * @param {Integer} duration  - duration
    *
    * @return {Promise<Object>} List of contract value of transactions
@@ -124,7 +124,7 @@ contract.prototype = {
   /**
    * Get graph data for number of transactions.
    *
-   * @param {Sting} contractAddress - Contract address
+   * @param {String} contractAddress - Contract address
    * @param {Integer} duration  - duration
    *
    * @return {Promise<Object>} List of contract value of transactions
@@ -156,17 +156,17 @@ contract.prototype = {
   /**
    * Get graph data for transaction by type.
    *
-   * @param {Sting} contractAddress - Contract address
+   * @param {String} contractAddress - Contract address
    * @param {Integer} duration  - duration
    *
    * @return {Promise<Object>} List of contract transactions by type
    */
-  getGraphDataForContractTransactionsByType: function(contractAddress, duration){
+  getGraphDataForBrandedTokenTransactionsByType: function(contractAddress, duration){
     const oThis = this;
 
     return new Promise(function (resolve, reject) {
 
-      if (contractAddress == undefined || contractAddress.length != constants.ACCOUNT_HASH_LENGTH) {
+      if (contractAddress == undefined) {
         reject("invalid input");
         return;
       }
@@ -175,9 +175,9 @@ contract.prototype = {
         duration = "All";
       }
 
-      oThis._dbInstance.getGraphDataForContractTransactionsByType(contractAddress, duration)
+      oThis._dbInstance.getGraphDataForBrandedTokenTransactionsByType(contractAddress)
         .then(function (response) {
-          resolve(response);
+          resolve(response[duration]);
         })
         .catch(function (reason) {
           reject(reason);
@@ -191,12 +191,12 @@ contract.prototype = {
    * @return {Promise<Object>} List of top users in contract address
    *
    */
-  getTopUsers: function(contractAddress){
+  getBrandedTokenTopUsers: function(contractAddress){
     const oThis = this;
 
     return new Promise(function (resolve, reject) {
 
-      oThis._dbInstance.getTopUsers(contractAddress)
+      oThis._dbInstance.getBrandedTokenTopUsers(contractAddress)
         .then(function (response) {
           resolve(response);
         })
