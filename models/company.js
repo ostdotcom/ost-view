@@ -39,9 +39,9 @@ Company.prototype = {
          * @return {Promise<Object>} List of contract internal transaction
          */
         getTokenTransfersGraph: function (type) {
-                const oThis = this;
+            const oThis = this;
 
-                return Promise.resolve(oThis.totalTransactionsData[type]);
+            return Promise.resolve(oThis.totalTransactionsData[type]);
         },
 
         /**

@@ -27,12 +27,14 @@ const renderResult = function (requestResponse, responseObject, contentType) {
 const contractMiddleware = function (req, res, next) {
   const chainId = req.params.chainId
     , contractAddress = req.params.contractAddress
+    , duration = req.params.duration;
   ;
   // Get instance of contract class
   req.contractInstance = new contract(chainId);
 
   req.chainId = chainId;
   req.contractAddress = contractAddress;
+  req.duration = duration;
 
   next();
 };
@@ -60,34 +62,112 @@ router.get("/:contractAddress", contractMiddleware, function (req, res) {
       renderResult(response, res, req.headers['content-type']);
 });
 
-router.get("/:contractAddress/graph/tokenTransfers/:size", contractMiddleware, function (req, res) {
+/**
+ * Get token transactions
+ *
+ * @name branded token details
+ *
+ *
+ */
 
-    const response = responseHelper.successWithData({
-        token_details : { coin_name: 'Frenco Coin', contract_address: req.contractAddress, transaction_url:'http://localhost:3000/chain-id/141/contract/0x9B3d6cCd2Db9A911588bC1715F91320C8Ce28c9e/internal-transactions/1' },
-        result_type: "token_details"
+router.get("/:contractAddress/graph/tokenTransactions/:duration", contractMiddleware, function (req, res) {
+
+
+  const promiseResolver = [];
+
+  promiseResolver.push(req.contractInstance.getGraphDataForContractValueOfTransactions(req.contractAddress,req.duration)) ;
+  promiseResolver.push(req.contractInstance.getGraphDataForContractNoOfTransactions(req.contractAddress,req.duration)) ;
+
+  Promise.all(promiseResolver).then(function (rsp) {
+        const valueOfTransactions = rsp[0];
+        const NOfTransactions = rsp[1];
+
+        const responseData = responseHelper.successWithData({
+          valueOfTransactions: valueOfTransactions,
+          NOfTransactions: NOfTransactions,
+          result_type: "graphData"
+        });
+        renderResult(responseData, res, req.headers['content-type']);
+    })
+
+    .catch(function(reason){
+      logger.log(req.originalUrl + " : " + reason);
+      return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
+
     });
-    logger.log("Request of content-type:", req.headers['content-type']);
-    renderResult(response, res, req.headers['content-type']);
+
 });
 
-router.get("/:contractAddress/graph/volume/:size", contractMiddleware, function (req, res) {
+router.get("/:contractAddress/graph/valueOfTransactions/:duration", contractMiddleware, function (req, res) {
 
-    const response = responseHelper.successWithData({
-        token_details : { coin_name: 'Frenco Coin', contract_address: req.contractAddress, transaction_url:'http://localhost:3000/chain-id/141/contract/0x9B3d6cCd2Db9A911588bC1715F91320C8Ce28c9e/internal-transactions/1' },
-        result_type: "token_details"
+  req.contractInstance.getGraphDataForContractValueOfTransactions(req.contractAddress,req.size)
+    .then (function(response){
+    const responseData = responseHelper.successWithData({
+      valueOfTransactions :response,
+      result_type: "valueOfTransactions"
     });
     logger.log("Request of content-type:", req.headers['content-type']);
-    renderResult(response, res, req.headers['content-type']);
+    renderResult(responseData, res, req.headers['content-type']);
+  })
+    .catch(function(reason){
+      logger.log(req.originalUrl + " : " + reason);
+      return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
+    });
+
 });
 
-router.get("/:contractAddress/graph/transactions/:size", contractMiddleware, function (req, res) {
+router.get("/:contractAddress/graph/transactionsByType/:duration", contractMiddleware, function (req, res) {
 
-    const response = responseHelper.successWithData({
-        token_details : { coin_name: 'Frenco Coin', contract_address: req.contractAddress, transaction_url:'http://localhost:3000/chain-id/141/contract/0x9B3d6cCd2Db9A911588bC1715F91320C8Ce28c9e/internal-transactions/1' },
-        result_type: "token_details"
+  req.contractInstance.getGraphDataForContractTransactionsByType(req.contractAddress,req.size)
+    .then (function(response){
+    const responseData = responseHelper.successWithData({
+      graphData :response,
+      result_type: "graphData"
     });
     logger.log("Request of content-type:", req.headers['content-type']);
-    renderResult(response, res, req.headers['content-type']);
+    renderResult(responseData, res, req.headers['content-type']);
+  })
+    .catch(function(reason){
+      logger.log(req.originalUrl + " : " + reason);
+      return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
+    });
+
+});
+
+router.get("/:contractAddress/topUsers", contractMiddleware, function (req, res) {
+
+  req.contractInstance.getTopUsers(contractAddress)
+    .then (function(response){
+      const responseData = responseHelper.successWithData({
+        topUsers :response,
+        result_type: "topUsers"
+      });
+      logger.log("Request of content-type:", req.headers['content-type']);
+      renderResult(responseData, res, req.headers['content-type']);
+    })
+    .catch(function(reason){
+      logger.log(req.originalUrl + " : " + reason);
+      return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
+    });
+
+});
+
+router.get("/:contractAddress/ostSupply", contractMiddleware, function (req, res) {
+
+  req.contractInstance.getOstSupply(contractAddress)
+    .then (function(response){
+    const responseData = responseHelper.successWithData({
+      ostSupply :response,
+      result_type: "ostSupply"
+    });
+    logger.log("Request of content-type:", req.headers['content-type']);
+    renderResult(responseData, res, req.headers['content-type']);
+  })
+    .catch(function(reason){
+      logger.log(req.originalUrl + " : " + reason);
+      return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
+    });
+
 });
 
 module.exports = router;
