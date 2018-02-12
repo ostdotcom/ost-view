@@ -102,8 +102,8 @@ router.get("/:contractAddress/graph/transactionsByType/:duration", contractMiddl
   req.contractInstance.getGraphDataForBrandedTokenTransactionsByType(req.contractAddress,req.duration)
     .then (function(response){
     const responseData = responseHelper.successWithData({
-      graphData :response,
-      result_type: "graphData"
+      transaction_type :response,
+      result_type: "transaction_type"
     });
     logger.log("Request of content-type:", req.headers['content-type']);
     renderResult(responseData, res, req.headers['content-type']);
@@ -120,8 +120,8 @@ router.get("/:contractAddress/topUsers", contractMiddleware, function (req, res)
   req.contractInstance.getBrandedTokenTopUsers(contractAddress)
     .then (function(response){
       const responseData = responseHelper.successWithData({
-        topUsers :response,
-        result_type: "topUsers"
+        top_users :response,
+        result_type: "top_users"
       });
       logger.log("Request of content-type:", req.headers['content-type']);
       renderResult(responseData, res, req.headers['content-type']);
