@@ -6,6 +6,7 @@
     "start": "node app.js"
   },
   "dependencies": {
+    "@openstfoundation/openst-notification": "^1.0.0-beta.1",
     "abi-decoder": "1.0.9",
     "bignumber.js": "4.1.0",
     "body-parser": "~1.18.2",

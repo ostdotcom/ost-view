@@ -33,7 +33,7 @@ exports.down = function(db) {
   return db.dropTable(constants.AGGREGATE_TABLE_NAME)
       .then(
       function(result) {
-        db.dropTable(constants.COMPANY_TOKEN_TABLE_NAME);
+        db.dropTable(constants.BRANDED_TOKEN_TABLE_NAME);
       })
       .then(
       function(result) {
@@ -62,17 +62,17 @@ var createAggregateTable = function (db) {
     total_transfers: { type: 'int', notNull: false, default: 0 },
     total_transfer_value: {type: 'decimal', notNull: true, length: '40,0'},
     transaction_type_id: { type: 'int', notNull: false, default: 0 },
-    company_token_id: { type: 'int', notNull: false, default: 0 },
+    branded_token_id: { type: 'int', notNull: false, default: 0 },
     time_id: { type: 'int', notNull: false, default: 0 }
   });
 };
 
 var createAggregateIndexTable = function (db) {
-  db.addIndex(constants.AGGREGATE_TABLE_NAME, 'aggregate_index', ['time_id', 'company_token_id', 'transaction_type_id'], true);
+  db.addIndex(constants.AGGREGATE_TABLE_NAME, 'aggregate_index', ['time_id', 'branded_token_id', 'transaction_type_id'], true);
 };
 
 var createCompanyTokenTable = function (db) {
-  db.createTable(constants.COMPANY_TOKEN_TABLE_NAME, {
+  db.createTable(constants.BRANDED_TOKEN_TABLE_NAME, {
     id: {type: 'int', notNull: true, primaryKey: true},
     company_name: { type: 'string', notNull: true , length: 20},
     contract_address: { type: 'string', notNull: true , length: 42},
@@ -101,12 +101,12 @@ var createAddressTable = function (db) {
     db.createTable(constants.ADDRESS_TABLE_NAME, {
         id: {type: 'int', notNull: true, primaryKey: true, autoIncrement: true},
         address: { type: 'string', notNull: true , length: 42},
-        company_token_id: { type: 'int', notNull: true, default: 0 },
+        branded_token_id: { type: 'int', notNull: true, default: 0 },
         tokens: {type: 'decimal', notNull: true, length: '40,0'},
         total_transactions: { type: 'int', notNull: true, default: 0 }
     });
 };
 
 var createAddressIndexTable = function (db) {
-    db.addIndex(constants.ADDRESS_TABLE_NAME, 'address_index', ['address', 'company_token_id'], true);
+    db.addIndex(constants.ADDRESS_TABLE_NAME, 'address_index', ['address', 'branded_token_id'], true);
 };

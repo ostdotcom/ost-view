@@ -16,7 +16,7 @@ define("ADDRESS_TRANSACTION_TABLE_NAME", 'address_transactions');
 define("TOKEN_TRANSACTION_TABLE_NAME", 'token_transactions');
 define("ADDRESS_TOKEN_TRANSACTION_TABLE_NAME", 'address_token_transactions');
 define("AGGREGATE_TABLE_NAME", 'aggregate');
-define("COMPANY_TOKEN_TABLE_NAME", 'company_token');
+define("BRANDED_TOKEN_TABLE_NAME", 'branded_token');
 define("TRANSACTION_TYPE_TABLE_NAME", 'transaction_type');
 define("ADDRESS_TABLE_NAME", 'address');
 
@@ -26,9 +26,9 @@ define("TRANSACTION_DATA_SEQUENCE", '(transaction_hash, block_number, transactio
 define("ADDRESS_TRANSACTION_DATA_SEQUENCE", '(address, corresponding_address, tokens, transaction_hash, transaction_fees, inflow, timestamp)');
 define("TOKEN_TRANSACTION_DATA_SEQUENCE", '(transaction_hash, contract_address, t_from, t_to, tokens, timestamp)');
 define("ADDRESS_TOKEN_TRANSACTION_DATA_SEQUENCE", '(address, corresponding_address, tokens, contract_address, transaction_hash, inflow, timestamp)');
-define("AGGREGATE_DATA_SEQUENCE", '(total_transactions, total_transaction_value, total_transfers, total_transfer_value, transaction_type_id, company_token_id, time_id)');
-define("ADDRESS_DATA_SEQUENCE", '(address.address, address.company_token_id, address.tokens, address.total_transactions)');
-define("COMPANY_TOKEN_DATA_SEQUENCE", '(company_token.id, company_token.company_name, company_token.contract_address, company_token.company_symbol, company_token.price, company_token.token_holders, company_token.market_cap, company_token.circulation, company_token.total_supply, company_token.transactions_data, company_token.transactions_volume_data, company_token.tokens_transfer_data, company_token.tokens_volume_data)');
+define("AGGREGATE_DATA_SEQUENCE", '(total_transactions, total_transaction_value, total_transfers, total_transfer_value, transaction_type_id, branded_token_id, time_id)');
+define("ADDRESS_DATA_SEQUENCE", '(address.address, address.branded_token_id, address.tokens, address.total_transactions)');
+define("BRANDED_TOKEN_DATA_SEQUENCE", '(branded_token.id, branded_token.company_name, branded_token.contract_address, branded_token.company_symbol, branded_token.price, branded_token.token_holders, branded_token.market_cap, branded_token.circulation, branded_token.total_supply, branded_token.transactions_data, branded_token.transactions_volume_data, branded_token.tokens_transfer_data, branded_token.tokens_volume_data)');
 
 // Index Map
 define("TRANSACTION_INDEX_MAP", {'transaction_hash':0, 'block_number':1, 'transaction_index':2, 'contract_address':3, 't_from':4, 't_to':5, 'tokens':6, 'gas_used':7, 'gas_price':8, 'nounce':9, 'input_data': 10, 'logs':11, 'timestamp':12});

@@ -24,8 +24,8 @@ const chain_config = {
       blockAttributes: ['miner', 'difficulty', 'totalDifficulty', 'gasLimit', 'gasUsed'],
       txnAttributes: ['gas', 'gasPrice', 'input', 'nonce', 'contractAddress']
     },
-    //company_token id should be in consecutive order as per the index
-    company_token_addresses: [
+    //branded_token id should be in consecutive order as per the index
+    branded_token_addresses: [
       {
         id: 0,
         company_name: 'OST',
@@ -67,7 +67,7 @@ const chain_config = {
       blockAttributes: ['miner', 'difficulty', 'totalDifficulty', 'gasLimit', 'gasUsed'],
       txnAttributes: ['gas', 'gasPrice', 'input', 'nonce', 'contractAddress']
     },
-    company_token_addresses: [
+    branded_token_addresses: [
       {
         id: 0,
         company_name: 'OST',
@@ -108,7 +108,7 @@ const chain_config = {
         blockAttributes: ['miner', 'difficulty', 'totalDifficulty', 'gasLimit', 'gasUsed'],
         txnAttributes: ['gas', 'gasPrice', 'input', 'nonce', 'contractAddress']
       },
-      company_token_addresses: [
+      branded_token_addresses: [
         {
           id: 1,
           company_name: 'Pepo',
@@ -149,7 +149,7 @@ module.exports = {
   getContractIdMap: function(chainId) {
       if(this.getChainConfig(chainId)) {
         var map = {};
-        this.getChainConfig(chainId).company_token_addresses.forEach(function(addresses){
+        this.getChainConfig(chainId).branded_token_addresses.forEach(function(addresses){
           map[addresses.contract_address] = addresses.id;
         });
         map[0] = 0; //For no contract address

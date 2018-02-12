@@ -1,11 +1,40 @@
 #!/usr/bin/env node
 "use strict";
 
+/**
+ * Job to listen notification from notification service.
+ *
+ * @example
+ * ./executables/notificationListener.js -c 1141
+ *
+ * @module executables/notificationListener.js
+ */
 
-const rootPrefix = "../..",
-    notification = require(rootPrefix + "/openst-notification/index");
+const openSTNotification = require('@openstfoundation/openst-notification');
 
-console.log("made connection");
-notification.subscribe_event.rabbit(["events.transfer"], function (event){
-   console.log("Event received :", event);
-});
+const rootPrefix = ".."
+    , logger = require(rootPrefix + '/helpers/custom_console_logger');
+
+
+function subscribe(){
+    openSTNotification.subscribeEvent.rabbit(
+        ['#'],
+        {queue: 'OpenST-Explorer-Notification-Listener'},
+        function(msgContent){
+            logger.info('[RECEIVED]', msgContent, '\n');
+            processNotification(msgContent);
+        }
+    ).catch(function (err) {logger.error(err);});
+}
+
+// Start
+logger.step("* Started the OpenST Notifications");
+subscribe();
+
+/**
+ *
+ * @param msgContent
+ */
+var processNotification = function (msgContent) {
+
+};
