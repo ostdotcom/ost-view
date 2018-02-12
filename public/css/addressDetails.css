@@ -1,0 +1,32 @@
+.address_title_color {
+    color: #597a84;
+}
+
+.address_details_container_background_color {
+    background-color: #f1f5f8;
+}
+
+.address_details_padding{
+    padding: 10px 0px 10px 10px;
+}
+
+.address_details_border {
+    border: 1px solid #cdd7da;
+}
+
+
+.top_margin {
+    margin-top: 8px;
+}
+
+.address_details_container_margine{
+    margin-top: 20px;
+}
+
+.address_details_Transactions_top_maargine {
+    margin-top: 50px;
+}
+
+.address_details_Transactions_color {
+    color: #438bad;
+}

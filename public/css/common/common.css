@@ -164,3 +164,7 @@
 table.transactionsBackgroundColor {
     background-color: #fafcfd;
 }
+
+.alignItemCenter{
+    align-items: center;
+}

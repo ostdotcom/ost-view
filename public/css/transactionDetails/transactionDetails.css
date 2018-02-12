@@ -1,0 +1,53 @@
+.transactionDetailsContainerBackgroundColor {
+    background-color: #f1f5f8;
+}
+
+.transactionDetailsContainerMarginTop{
+    margin-top: 20px;
+}
+
+.transactionDetailsPadding{
+    padding: 10px 0px 10px 10px;
+}
+
+.transactionDetailsTitleColora84 {
+    color: #597a84;
+}
+
+.transactionDetailsBorder {
+    border: 1px solid #cdd7da;
+}
+
+
+.transactionDetailsStatusColor{
+    color: #78a124;
+}
+
+.transactionDetailsInputDataBreakAll{
+    word-break: break-all;
+}
+
+.transactionDetailsInputDataPadding{
+    padding: 20px 20px 20px 20px;
+}
+
+.transactionDetailsTokenIcon {
+    border-radius: 50%;
+    width: 20px;
+}
+
+
+.transactionDetailsCoinAmount {
+    background-color: rgb(160,200,196);
+    color: #ffffff;
+    border-radius: 4px;
+    padding: 2px 2px 2px 2px;
+}
+
+.transactionDetailsInputDataMarginLeft {
+    margin-left:-40px;
+}
+
+.transactionDetails{
+
+}

@@ -1,3 +1,5 @@
+{{{css 'mTransactionDetails.css'}}}
+
 <div class="container-fluid">
 
     {{>pageTitle title="Transaction Details"}}
@@ -5,58 +7,58 @@
     <div class="container ">
         <div class="row">
             <div class="col-xs-12 col-sm-12">
-                <div class="address_details_container_background_color address_details_container_margine address_details_padding truncate_tail">
+                <div class="transactionDetailsContainerBackgroundColor transactionDetailsContainerMarginTop transactionDetailsPadding text-truncate">
                     <span class="default_black_color"> TX# </span>
-                    <span class="address_title_color"> {{transaction.hash}} </span>
+                    <span class="transactionDetailsTitleColora84"> {{transaction.hash}} </span>
                 </div>
 
-                <div class="address_details_container_margine">
-                    <div class="address_details_border">
-                        <div class="address_details_padding">
+                <div class="transactionDetailsContainerMarginTop">
+                    <div class="transactionDetailsBorder">
+                        <div class="transactionDetailsPadding">
                             <div class="row">
                                 <div class="col-sm-12">
                                     <span class="default_black_color"> Status </span>
-                                    <span class="transactionsStatusColor"> &nbsp Processed </span>
+                                    <span class="transactionDetailsStatusColor"> &nbsp Processed </span>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="address_details_padding address_details_container_background_color">
+                        <div class="transactionDetailsPadding transactionDetailsContainerBackgroundColor">
                             <div class="row">
                                 <div class="col-sm-12">
                                     <span class="default_black_color"> Time &nbsp </span>
-                                    <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='tokenIcon' />
-                                    <span class="address_title_color"> &nbsp {{ toDate transaction.timestamp }} </span>
+                                    <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='transactionDetailsTokenIcon' />
+                                    <span class="transactionDetailsTitleColora84"> &nbsp {{ toDate transaction.timestamp }} </span>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="address_details_padding">
+                        <div class="transactionDetailsPadding">
                             <div class="row">
                                 <div class="col-sm-12">
                                     <span class="default_black_color"> Amount &nbsp </span>
-                                    <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='tokenIcon' />
-                                    &nbsp
-                                    <span class="amount_coin"> {{transaction.tokens}} FRC </span>
-                                    &nbsp
-                                    <span class="address_title_color"> ({{tokens}} OST) </span>
+                                        <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='transactionDetailsTokenIcon' />
+                                        &nbsp
+                                    <span class="transactionDetailsCoinAmount"> {{transaction.tokens}} FRC </span>
+                                        &nbsp
+                                    <span class="transactionDetailsTitleColora84"> ({{tokens}} OST) </span>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="address_details_padding address_details_container_background_color">
+                        <div class="transactionDetailsPadding transactionDetailsContainerBackgroundColor">
                             <div class="row">
                                 <div class="col-sm-12">
                                     <span class="default_black_color"> Token &nbsp </span>
                                     &nbsp &nbsp
-                                    <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='tokenIcon' />
+                                    <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='transactionDetailsTokenIcon' />
                                     &nbsp
-                                    <span class="address_title_color"> FRANCHESCO COIN </span>
+                                    <span class="transactionDetailsTitleColora84"> FRANCHESCO COIN </span>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="address_details_padding">
+                        <div class="transactionDetailsPadding">
                             <div class="row">
                                 <div class="col-sm-12">
                                     <span class="default_black_color"> From &nbsp </span>
@@ -66,7 +68,7 @@
                             </div>
                         </div>
 
-                        <div class="address_details_padding address_details_container_background_color">
+                        <div class="transactionDetailsPadding transactionDetailsContainerBackgroundColor">
                             <div class="row">
                                 <div class="col-sm-12">
                                     <span class="default_black_color"> To &nbsp </span>
@@ -76,7 +78,7 @@
                             </div>
                         </div>
 
-                        <div class="address_details_padding">
+                        <div class="transactionDetailsPadding">
                             <div class="row">
                                 <div class="col-sm-12">
                                     <span class="default_black_color"> BLOCK Height &nbsp </span>
@@ -86,36 +88,36 @@
                             </div>
                         </div>
 
-                        <div class="address_details_padding address_details_container_background_color">
+                        <div class="transactionDetailsPadding transactionDetailsContainerBackgroundColor">
                             <div class="row">
                                 <div class="col-sm-12">
 
                                     <span class="default_black_color"> Gas Price &nbsp </span>
                                     &nbsp
-                                    <span class="address_title_color">  {{transaction.gas_price}} (OST) </span>
+                                    <span class="transactionDetailsTitleColora84">  {{transaction.gas_price}} (OST) </span>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="address_details_padding">
+                        <div class="transactionDetailsPadding">
                             <div class="row">
                                 <div class="col-sm-12">
                                     <span class="default_black_color"> Gas Usage &nbsp </span>
                                     &nbsp
-                                    <span class="address_title_color"> {{transaction.gas_used}} </span>
+                                    <span class="transactionDetailsTitleColora84"> {{transaction.gas_used}} </span>
                                 </div>
                             </div>
                         </div>
 
-                        <div class="address_details_padding">
+                        <div class="transactionDetailsPadding">
                             <div class="row">
                                 <div class="col-sm-2">
                                     <span class="default_black_color"> Input Data </span>
                                 </div>
                                 <div class="col-sm-10">
-                                    <div class="transactionsInputDataPadding marginRight transactionsInputDataMarginLeft address_details_container_background_color transactionsInputDataBreakAll">
+                                    <div class="transactionDetailsInputDataPadding marginRight transactionDetailsInputDataMarginLeft transactionDetailsContainerBackgroundColor transactionDetailsInputDataBreakAll">
 
-                                        <span class="address_title_color"> MethodID: {{decodeInputData transaction.input_data}} </span>
+                                        <span class="transactionDetailsTitleColora84"> MethodID: {{{getMethodNameFromInputData transaction.input_data}}} </span>
 
                                     </div>
                                 </div>
