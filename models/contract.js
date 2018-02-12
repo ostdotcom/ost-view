@@ -96,12 +96,12 @@ contract.prototype = {
    *
    * @return {Promise<Object>} List of contract value of transactions
    */
-  getGraphDataForContractValueOfTransactions: function(contractAddress, duration){
+  getGraphDataOfBrandedTokenValueTransactions: function(contractAddress, duration){
     const oThis = this;
 
     return new Promise(function (resolve, reject) {
 
-      if (contractAddress == undefined || contractAddress.length != constants.ACCOUNT_HASH_LENGTH) {
+      if (contractAddress == undefined) {
         reject("invalid input");
         return;
       }
@@ -110,9 +110,9 @@ contract.prototype = {
         duration = "All";
       }
 
-      oThis._dbInstance.getGraphDataForContractValueOfTransactions(contractAddress, duration)
+      oThis._dbInstance.getGraphDataOfBrandedTokenValueTransactions(contractAddress)
         .then(function (response) {
-          resolve(response);
+          resolve(response[duration]);
         })
         .catch(function (reason) {
           reject(reason);
@@ -129,12 +129,12 @@ contract.prototype = {
    *
    * @return {Promise<Object>} List of contract value of transactions
    */
-  getGraphDataForContractNoOfTransactions : function(contractAddress, duration){
+  getGraphDataOfNumberOfBrandedTokenTransactions : function(contractAddress, duration){
     const oThis = this;
 
     return new Promise(function (resolve, reject) {
 
-      if (contractAddress == undefined || contractAddress.length != constants.ACCOUNT_HASH_LENGTH) {
+      if (contractAddress == undefined) {
         reject("invalid input");
         return;
       }
@@ -143,9 +143,9 @@ contract.prototype = {
         duration = "All";
       }
 
-      oThis._dbInstance.getGraphDataForContractNoOfTransactions(contractAddress, duration)
+      oThis._dbInstance.getGraphDataOfNumberOfBrandedTokenTransactions(contractAddress)
         .then(function (response) {
-          resolve(response);
+          resolve(response[duration]);
         })
         .catch(function (reason) {
           reject(reason);

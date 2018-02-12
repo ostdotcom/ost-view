@@ -75,16 +75,16 @@ router.get("/:contractAddress/graph/tokenTransactions/:duration", contractMiddle
 
   const promiseResolver = [];
 
-  promiseResolver.push(req.contractInstance.getGraphDataForContractValueOfTransactions(req.contractAddress,req.duration)) ;
-  promiseResolver.push(req.contractInstance.getGraphDataForContractNoOfTransactions(req.contractAddress,req.duration)) ;
+  promiseResolver.push(req.contractInstance.getGraphDataOfBrandedTokenValueTransactions(req.contractAddress,req.duration)) ;
+  promiseResolver.push(req.contractInstance.getGraphDataOfNumberOfBrandedTokenTransactions(req.contractAddress,req.duration)) ;
 
   Promise.all(promiseResolver).then(function (rsp) {
         const valueOfTransactions = rsp[0];
-        const NOfTransactions = rsp[1];
+        const NoOfTransactions = rsp[1];
 
         const responseData = responseHelper.successWithData({
           valueOfTransactions: valueOfTransactions,
-          NOfTransactions: NOfTransactions,
+          NOfTransactions: NoOfTransactions,
           result_type: "graphData"
         });
         renderResult(responseData, res, req.headers['content-type']);
