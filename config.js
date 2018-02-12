@@ -31,6 +31,7 @@ const chain_config = {
         company_name: 'OST',
         contract_address: '0',
         company_symbol: 'OST',
+        uuid: '',
         price: 1,
         token_holders: 0,
         market_cap: 0,
@@ -42,6 +43,7 @@ const chain_config = {
         company_name: 'Pepo',
         contract_address: '0x89AFC2d64c22e555c46345cE31c4Bb6de398a50b',
         company_symbol: 'Pepo',
+        uuid: '',
         price: 3,
         token_holders: 0,
         market_cap: 0,
@@ -51,13 +53,13 @@ const chain_config = {
     ]
   },
 
-  '142': {
-    chainId: 142,
+  '2000': {
+    chainId: 2000,
     database_type: "mysql",
     web_rpc: "http://localhost:9546",
     poll_interval: 2,
     db_config: {
-      chainId: 142,
+      chainId: 2000,
       driver: 'mysql',
       user: 'root',
       password: 'root',
@@ -73,6 +75,7 @@ const chain_config = {
         company_name: 'OST',
         contract_address: '0',
         company_symbol: 'OST',
+        uuid: '',
         price: 0,
         token_holders: 0,
         market_cap: 0,
@@ -84,6 +87,7 @@ const chain_config = {
         company_name: 'Pepo',
         contract_address: '0x89AFC2d64c22e555c46345cE31c4Bb6de398a50b',
         company_symbol: 'Pepo',
+        uuid: '',
         price: '3',
         token_holders: 0,
         market_cap: 0,
@@ -114,6 +118,7 @@ const chain_config = {
           company_name: 'Pepo',
           contract_address: '0x',
           company_symbol: 'Pepo',
+          uuid: '',
           price: '3',
           token_holders: 0,
           market_cap: 0,

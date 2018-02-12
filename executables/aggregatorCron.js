@@ -135,7 +135,7 @@ ps.lookup({
         .then(function (timeId) {
             logger.log("Last Aggregated time_id ", timeId);
             if ( null === timeId ) {
-                dbInteract.getBlock(1)
+                dbInteract.getBlockFromBlockNumber(1)
                     .then( function( block ) {
                         timeId = block.timestamp - (block.timestamp % constants.AGGREGATE_CONSTANT);
                         logger.log("First timeId ", timeId);

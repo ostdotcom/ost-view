@@ -13,7 +13,9 @@
 const openSTNotification = require('@openstfoundation/openst-notification');
 
 const rootPrefix = ".."
-    , logger = require(rootPrefix + '/helpers/custom_console_logger');
+    , logger = require(rootPrefix + '/helpers/custom_console_logger')
+    , notificationProcessor = require(rootPrefix + '/lib/notificationProcessor')
+    ;
 
 
 function subscribe(){
@@ -36,5 +38,8 @@ subscribe();
  * @param msgContent
  */
 var processNotification = function (msgContent) {
-
+    if (msgContent['topics'] =='onBoarding.registerBrandedToken.completed') {
+        logger.info("New BT Added in Block chain");
+        notificationProcessor.processBTCreation(msgContent.message.payload);
+    }
 };
