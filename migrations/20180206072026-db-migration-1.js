@@ -21,7 +21,9 @@ exports.up = function(db) {
       .then(function (result) { return createCompanyTokenTable(db);})
       .then(function (result) { return createTransactionTypeTable(db);})
       .then(function (result) { return createAddressTable(db);})
-      .then(function (result) { return createAddressIndexTable(db);}
+      .then(function (result) { return createAddressIndexTable(db);})
+      .then(function (result) { return createTransactionTypeIdTable(db)})
+      .then(function (result) { return createTransactionTypeIdIndexTable(db)}
       ,
       function(err) {
 
@@ -42,6 +44,10 @@ exports.down = function(db) {
       .then(
       function(result) {
           db.dropTable(constants.ADDRESS_TABLE_NAME);
+      })
+      .then(
+      function(result) {
+          db.dropTable(constants.TRANSACTION_TYPE_ID_TABLE_NAME);
       },
       function(err) {
 
@@ -93,9 +99,8 @@ var createCompanyTokenTable = function (db) {
 
 var createTransactionTypeTable = function (db) {
   db.createTable(constants.TRANSACTION_TYPE_TABLE_NAME, {
-    transaction_hash: { type: 'string', notNull: true , length: 66},
-    transaction_type_id: { type: 'int', notNull: false, default: 0 },
-    transaction_type: { type: 'string', notNull: true , length: 20}
+    transaction_hash: { type: 'string', primaryKey: true , length: 66},
+    transaction_type_id: { type: 'int', notNull: false, default: 0 }
   });
 };
 
@@ -113,4 +118,16 @@ var createAddressTable = function (db) {
 
 var createAddressIndexTable = function (db) {
     db.addIndex(constants.ADDRESS_TABLE_NAME, 'address_index', ['address', 'branded_token_id'], true);
+};
+
+var createTransactionTypeIdTable = function (db) {
+    db.createTable(constants.TRANSACTION_TYPE_ID_TABLE_NAME, {
+        id: {type: 'int', notNull: true, primaryKey: true, autoIncrement: true},
+        contract_address: { type: 'string', notNull: true , length: 42},
+        transaction_type: { type: 'string', notNull: true , length: 10}
+    });
+};
+
+var createTransactionTypeIdIndexTable = function (db) {
+    db.addIndex(constants.TRANSACTION_TYPE_ID_TABLE_NAME, 't_t_i_index', ['contract_address', 'transaction_type'], true);
 };

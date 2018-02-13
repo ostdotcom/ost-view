@@ -156,7 +156,7 @@ var selectExecute = function (mysqlObj) {
 };
 //selectExecute(mysqlObj);
 var executeMysql = function ( mysqlObj ) {
-    mysqlObj.getBrandedTokenTopUsers(241)
+    mysqlObj.selectAggregateDataWithinTimestamp(0,1518435300,1518435700, true)
         .then(function(res){
             console.log( res );
         })

@@ -65,15 +65,15 @@ ConfigHelper.prototype.getContractOfId = function(contract_id) {
  */
 ConfigHelper.prototype.getContractOfIdByPromise = function(dbInteract, contractId) {
     var oThis = this;
-    var contractId = oThis.getContractOfId(contractId);
-    if (undefined == contractId) {
+    var contract = oThis.getContractOfId(contractId);
+    if (undefined == contract) {
         this.syncUpContractMap(dbInteract)
             .then(function(){
-                return Promise.resolve(oThis.getContractOfId(contractId))
+                return Promise.resolve(oThis.getContractOfId(contract))
             });
 
     }
-    return Promise.resolve(contractId);
+    return Promise.resolve(contract);
 };
 
 module.exports = new ConfigHelper();

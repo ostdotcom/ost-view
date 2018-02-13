@@ -24,7 +24,7 @@ function subscribe(){
         {queue: 'OpenST-Explorer-Notification-Listener'},
         function(msgContent){
             logger.info('[RECEIVED]', msgContent, '\n');
-            processNotification(msgContent);
+            processNotification(JSON.parse(msgContent)['message']);
         }
     ).catch(function (err) {logger.error(err);});
 }
@@ -38,8 +38,9 @@ subscribe();
  * @param msgContent
  */
 var processNotification = function (msgContent) {
-    if (msgContent['topics'] =='onBoarding.registerBrandedToken.completed') {
-        logger.info("New BT Added in Block chain");
-        notificationProcessor.processBTCreation(msgContent.message.payload);
+    console.log("processNotification" ,msgContent);
+    if (msgContent['kind'] =='transaction_mined') {
+        logger.info("New Transaction mined", msgContent['payload']);
+        notificationProcessor.processTransaction(msgContent.payload);
     }
 };
