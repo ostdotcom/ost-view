@@ -23,34 +23,7 @@ const chain_config = {
       connectionLimit: 10,
       blockAttributes: ['miner', 'difficulty', 'totalDifficulty', 'gasLimit', 'gasUsed'],
       txnAttributes: ['gas', 'gasPrice', 'input', 'nonce', 'contractAddress']
-    },
-    //branded_token id should be in consecutive order as per the index
-    branded_token_addresses: [
-      {
-        id: 0,
-        company_name: 'OST',
-        contract_address: '0',
-        company_symbol: 'OST',
-        uuid: '',
-        price: 1,
-        token_holders: 0,
-        market_cap: 0,
-        circulation: 0,
-        total_supply:0
-      },
-      {
-        id: 1,
-        company_name: 'Pepo',
-        contract_address: '0x89AFC2d64c22e555c46345cE31c4Bb6de398a50b',
-        company_symbol: 'Pepo',
-        uuid: '',
-        price: 3,
-        token_holders: 0,
-        market_cap: 0,
-        circulation: 0,
-        total_supply:0
-      }
-    ]
+    }
   },
 
   '2000': {
@@ -68,33 +41,7 @@ const chain_config = {
       connectionLimit: 10,
       blockAttributes: ['miner', 'difficulty', 'totalDifficulty', 'gasLimit', 'gasUsed'],
       txnAttributes: ['gas', 'gasPrice', 'input', 'nonce', 'contractAddress']
-    },
-    branded_token_addresses: [
-      {
-        id: 0,
-        company_name: 'OST',
-        contract_address: '0',
-        company_symbol: 'OST',
-        uuid: '',
-        price: 0,
-        token_holders: 0,
-        market_cap: 0,
-        circulation: 0,
-        total_supply:0
-      },
-      {
-        id: 1,
-        company_name: 'Pepo',
-        contract_address: '0x89AFC2d64c22e555c46345cE31c4Bb6de398a50b',
-        company_symbol: 'Pepo',
-        uuid: '',
-        price: '3',
-        token_holders: 0,
-        market_cap: 0,
-        circulation: 0,
-        total_supply:800000000000000000000000000
-      }
-    ]
+    }
   },
   '1410': {
       chainId: 1410,
@@ -111,21 +58,7 @@ const chain_config = {
         connectionLimit: 10,
         blockAttributes: ['miner', 'difficulty', 'totalDifficulty', 'gasLimit', 'gasUsed'],
         txnAttributes: ['gas', 'gasPrice', 'input', 'nonce', 'contractAddress']
-      },
-      branded_token_addresses: [
-        {
-          id: 1,
-          company_name: 'Pepo',
-          contract_address: '0x',
-          company_symbol: 'Pepo',
-          uuid: '',
-          price: '3',
-          token_holders: 0,
-          market_cap: 0,
-          circulation: 0,
-          total_supply:0
-        }
-    ]
+      }
   }
 };
 
@@ -149,17 +82,5 @@ module.exports = {
 
   getAllChainIDs: function() {
     return Object.keys(chain_config);
-  },
-
-  getContractIdMap: function(chainId) {
-      if(this.getChainConfig(chainId)) {
-        var map = {};
-        this.getChainConfig(chainId).branded_token_addresses.forEach(function(addresses){
-          map[addresses.contract_address] = addresses.id;
-        });
-        map[0] = 0; //For no contract address
-        return map;
-      }
-      return null;
   }
 };

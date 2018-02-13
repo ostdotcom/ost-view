@@ -86,7 +86,8 @@ var createCompanyTokenTable = function (db) {
     transactions_data: { type: 'blob', notNull: false},
     transactions_volume_data: { type: 'blob', notNull: false },
     tokens_transfer_data: { type: 'blob', notNull: false },
-    tokens_volume_data: { type: 'blob', notNull: false }
+    tokens_volume_data: { type: 'blob', notNull: false },
+    transaction_type_data: { type: 'blob', notNull: false }
   });
 };
 
@@ -104,6 +105,8 @@ var createAddressTable = function (db) {
         address: { type: 'string', notNull: true , length: 42},
         branded_token_id: { type: 'int', notNull: true, default: 0 },
         tokens: {type: 'decimal', notNull: true, length: '40,0'},
+        tokens_earned: {type: 'decimal', notNull: true, length: '40,0'},
+        tokens_spent: {type: 'decimal', notNull: true, length: '40,0'},
         total_transactions: { type: 'int', notNull: true, default: 0 }
     });
 };

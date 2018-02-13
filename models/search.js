@@ -27,7 +27,7 @@ var search = module.exports = function (chainId) {
   
   this._utilityInteractInstance = rpcInteract.getInstance(chainId);
 
-}
+};
 
 search.prototype = {
 

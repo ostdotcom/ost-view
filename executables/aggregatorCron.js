@@ -27,6 +27,7 @@ const rootPrefix = ".."
     , version = require(rootPrefix + '/package.json').version
     , maxRunTime = (2 * 60 * 60 * 1000) // 2 hrs in milliseconds
     , startRunTime = (new Date).getTime() // milliseconds since epoch
+    , configHelper = require(rootPrefix + "/helpers/configHelper")
     ;
 
 // Variables to hold different objects
@@ -135,14 +136,23 @@ ps.lookup({
         .then(function (timeId) {
             logger.log("Last Aggregated time_id ", timeId);
             if ( null === timeId ) {
-                dbInteract.getBlockFromBlockNumber(1)
+                dbInteract.initBrandedTokenTable()
+                    .then(function(){
+                        return configHelper.syncUpContractMap(dbInteract);
+                    })
+                    .then(function() {
+                        return dbInteract.getBlockFromBlockNumber(1)
+                    })
                     .then( function( block ) {
                         timeId = block.timestamp - (block.timestamp % constants.AGGREGATE_CONSTANT);
                         logger.log("First timeId ", timeId);
                         aggregateByTimeId( timeId );
-                    })
+                    });
             } else {
-                aggregateByTimeId(timeId + constants.AGGREGATE_CONSTANT);
+                configHelper.syncUpContractMap(dbInteract)
+                    .then(function(){
+                        aggregateByTimeId(timeId + constants.AGGREGATE_CONSTANT);
+                    });
             }
         })
         .catch(function (err) {

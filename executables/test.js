@@ -134,7 +134,7 @@ const execute = function ( records, sql ) {
     }
 
 };
-const db_config = core_config.getChainDbConfig(142);
+const db_config = core_config.getChainDbConfig(2000);
 const mysqlObj = new MySQL(db_config);
 
 //execute(NUMBER_OF_REC, mysqlObj);
@@ -156,13 +156,13 @@ var selectExecute = function (mysqlObj) {
 };
 //selectExecute(mysqlObj);
 var executeMysql = function ( mysqlObj ) {
-    mysqlObj.selectTransaction('transactions','0x31824e52549b919746a3a110be47a161608546d19247ad5025af54859ffe232c')
+    mysqlObj.getBrandedTokenTopUsers(241)
         .then(function(res){
-            console.log( res[0].logs.toString('utf-8') );
+            console.log( res );
         })
         .catch(function(res){
             console.log(res);
         });
 };
-//executeMysql(new MAIN_MySQL(db_config));
+executeMysql(new MAIN_MySQL(db_config));
 //console.log(JSON.stringify(core_config.getContractIdMap(142)));

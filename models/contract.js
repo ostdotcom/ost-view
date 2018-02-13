@@ -195,7 +195,7 @@ contract.prototype = {
     const oThis = this;
 
     return new Promise(function (resolve, reject) {
-
+      //To Do: Convert contract address into contract Id.
       oThis._dbInstance.getBrandedTokenTopUsers(contractAddress)
         .then(function (response) {
           resolve(response);

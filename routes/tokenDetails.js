@@ -118,8 +118,8 @@ router.get("/:contractAddress/graph/transactionsByType/:duration", contractMiddl
 
 router.get("/:contractAddress/topUsers", contractMiddleware, function (req, res) {
 
-  req.contractInstance.getBrandedTokenTopUsers(contractAddress)
-    .then (function(response){
+  req.contractInstance.getBrandedTokenTopUsers(req.contractAddress)
+    .then (function(response) {
       const responseData = responseHelper.successWithData({
         top_users :response,
         result_type: "top_users"
