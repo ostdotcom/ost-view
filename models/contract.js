@@ -10,6 +10,7 @@ const rootPrefix = ".."
   , dbInteract = require(rootPrefix + '/lib/storage/interact')
   , constants = require(rootPrefix + '/config/core_constants')
   , coreConfig = require(rootPrefix + '/config')
+  , configHelper = require(rootPrefix + '/helpers/configHelper')
 ;
 
 /**
@@ -195,14 +196,16 @@ contract.prototype = {
     const oThis = this;
 
     return new Promise(function (resolve, reject) {
-      //To Do: Convert contract address into contract Id.
-      oThis._dbInstance.getBrandedTokenTopUsers(contractAddress)
-        .then(function (response) {
-          resolve(response);
-        })
-        .catch(function (reason) {
-          reject(reason);
-        });
+      configHelper.getIdOfContractByPromise(oThis._dbInstance, contractAddress)
+          .then(function(contractId) {
+            oThis._dbInstance.getBrandedTokenTopUsers(contractId)
+                .then(function (response) {
+                  resolve(response);
+                })
+                .catch(function (reason) {
+                  reject(reason);
+                });
+          });
     });
   },
 
