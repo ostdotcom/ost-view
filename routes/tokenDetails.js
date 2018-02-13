@@ -62,6 +62,16 @@ router.get("/:contractAddress", contractMiddleware, function (req, res) {
       renderResult(response, res, req.headers['content-type']);
 });
 
+/**
+ * Get values and number of transaction of branded token
+ *
+ * @name Contract Internal Transactions
+ *
+ * @route {GET} {base_url}/:contractAddress/graph/numberOfTransactions/:duration
+ *
+ * @routeparam {String} :contractAddress - Contract address
+ * @routeparam {Integer} :duration - previous duration from now.
+ */
 router.get("/:contractAddress/graph/numberOfTransactions/:duration", contractMiddleware, function (req, res) {
 
     req.contractInstance.getGraphDataOfNumberOfBrandedTokenTransactions(req.contractAddress,req.duration)
@@ -83,26 +93,16 @@ router.get("/:contractAddress/graph/numberOfTransactions/:duration", contractMid
 
 });
 
-router.get("/:contractAddress/graph/valueOfTransactions/:duration", contractMiddleware, function (req, res) {
-
-  req.contractInstance.getGraphDataOfBrandedTokenValueTransactions(req.contractAddress,req.duration)
-      .then (function(response){
-    const responseData = responseHelper.successWithData({
-      result_type: "value_of_transactions",
-      value_of_transactions :response,
-      meta:{
-        duaration:req.duration
-      }
-    });
-    logger.log("Request of content-type:", req.headers['content-type']);
-    renderResult(responseData, res, req.headers['content-type']);
-    }).catch(function(reason){
-        logger.log(req.originalUrl + " : " + reason);
-        return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
-      });
-
-});
-
+/**
+ * Get transactions count for type of branded token
+ *
+ * @name Contract Internal Transactions
+ *
+ * @route {GET} {base_url}/:contractAddress/graph/transactionsByType/:duration
+ *
+ * @routeparam {String} :contractAddress - Contract address
+ * @routeparam {Integer} :duration - previous duration from now.
+ */
 router.get("/:contractAddress/graph/transactionsByType/:duration", contractMiddleware, function (req, res) {
 
   req.contractInstance.getGraphDataForBrandedTokenTransactionsByType(req.contractAddress,req.duration)
@@ -122,6 +122,15 @@ router.get("/:contractAddress/graph/transactionsByType/:duration", contractMiddl
 
 });
 
+/**
+ * Get top users of branded token
+ *
+ * @name Contract Internal Transactions
+ *
+ * @route {GET} {base_url}/:contractAddress/topUsers
+ *
+ * @routeparam {String} :contractAddress - Contract address
+ */
 router.get("/:contractAddress/topUsers", contractMiddleware, function (req, res) {
 
   req.contractInstance.getBrandedTokenTopUsers(req.contractAddress)
