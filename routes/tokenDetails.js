@@ -130,7 +130,7 @@ router.get("/:contractAddress/topUsers", contractMiddleware, function (req, res)
         top_users :response,
         result_type: "top_users",
         meta :{
-          user_url_templete:""
+          user_url_templete:"/chain-id/"+req.chainId+"/address/{{address}}"
         }
       });
       logger.log("Request of content-type:", req.headers['content-type']);

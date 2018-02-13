@@ -64,7 +64,7 @@ router.get('/:address', addressMiddleware, function (req, res) {
   Promise.all(promiseResolvers).then(function (rsp) {
 
     //const balanceValue = rsp[balanceIndex];
-    const transactionsValue = rsp[transactionsIndex]
+    const transactionsValue = rsp[transactionsIndex];
 
     const response = responseHelper.successWithData({
       //balance: balanceValue,
