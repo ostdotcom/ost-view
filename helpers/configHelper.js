@@ -22,7 +22,7 @@ ConfigHelper.prototype.syncUpContractMap = function(dbInteract) {
 
 /**
  * Get Id of Contract
- * @param contract_address
+ * @param {String} contract_address - contract address
  * @returns {*}
  */
 ConfigHelper.prototype.getIdOfContract = function(contract_address) {
