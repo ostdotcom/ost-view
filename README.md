@@ -47,10 +47,16 @@ OPENST-EXPLORER
     }, 
 ```
 
-* Run migration
+ * Run migration
+  > It will run migrations for all the configured chains
 ```
   > node executables/db_migrate.js up
 ```
+
+  > To run migrations for specific chain specify chain Id
+  ```
+    > node executables/db_migrate.js up -c <chain_id>
+  ```
 
 * Start block fetcher
 ```
