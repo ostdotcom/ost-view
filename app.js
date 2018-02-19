@@ -15,7 +15,8 @@ const express = require('express')
   , http = require('http')
   , cluster = require('cluster')
   , exphbs  = require('express-handlebars')
-;
+  , customUrlParser = require('url')
+  ;
 
 // Load all required internal files
 const rootPrefix    = "."
@@ -32,7 +33,8 @@ const rootPrefix    = "."
   , handlebarHelper = require(rootPrefix + '/helpers/handlebar_helper')
   , tokenDetailsRoutes = require(rootPrefix + '/routes/tokenDetails')
   , chainDetailsRoutes = require(rootPrefix + '/routes/chainDetails')
-;
+  ;
+
 
 // if the process is a master.
 if (cluster.isMaster) {
@@ -49,7 +51,7 @@ if (cluster.isMaster) {
 
   // Worker started listening and is ready
   cluster.on('listening', function(worker, address) {
-    logger.info('[worker-${worker.id} ] is listening to ${address.address}:${address.port}');
+    logger.info('[worker-${worker.id} ] is listening to '+address.address+":"+address.port);
   });
 
   // Worker came online. Will start listening shortly
@@ -180,7 +182,7 @@ if (cluster.isMaster) {
    * Get port from environment and store in Express.
    */
 
-  var port = normalizePort(process.env.PORT || '3000');
+  var port = normalizePort(process.env.PORT || '3001');
   app.set('port', port);
 
   /**

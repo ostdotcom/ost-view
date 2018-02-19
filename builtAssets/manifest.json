@@ -1,11 +1,11 @@
 {
   "assets": {
-    "addressDetails.css": "addressDetails-cda4bb5f1b0fd33d86ac67317ca23019.css",
-    "common.css": "common-35c36e89ef751b74c7aa3b07d7e0f6b6.css",
+    "addressDetails.css": "addressDetails-ee20cd7f6328c9e85f9bf143a4db2474.css",
+    "common.css": "common-d0c151093dda4dc92f3c4559eda210bb.css",
     "commonHome.css": "commonHome-b72ed7d2fd6361853f14362691e8b937.css",
     "header.css": "header-35c36e89ef751b74c7aa3b07d7e0f6b6.css",
     "home.css": "home-63dafae3fa0a9119758358fb555c399f.css",
-    "homeTransactions.css": "homeTransactions-5e28d24a5a5bdd1ed0cc441a2828d1f2.css",
+    "homeTransactions.css": "homeTransactions-fca3f1efced32b9afdc00a3ff151df8e.css",
     "pageTitle.css": "pageTitle-35c36e89ef751b74c7aa3b07d7e0f6b6.css",
     "tableComponent.css": "tableComponent-593019083a95b44a6ba91b64a8cd358f.css",
     "transactionDetails.css": "transactionDetails-79b0f42b1b3796821e9527d9d998e90d.css",
@@ -13,12 +13,14 @@
     "mTokenDetails.js": "mTokenDetails-bf77120d94c05ea4e4d165e7ecb3144e.js",
     "mTokenDetailsTransacitonList.js": "mTokenDetailsTransacitonList-94af14fda1c5b8e64d5be5e7d185d787.js",
     "mTokenDetailsTransaction.css": "mTokenDetailsTransaction-8937539773c62dadd459cbd7fbb1c675.css",
-    "mCommon.css": "mCommon-2b5fd316889a0566490271b44ab5fa51.css",
+    "mCommon.css": "mCommon-d12f7f41871193ca1f66b893720129c8.css",
     "mCommon.js": "mCommon-35c36e89ef751b74c7aa3b07d7e0f6b6.js",
     "mPageTitle.css": "mPageTitle-58617bcf433b53906820bdadc9f1835e.css",
     "mHeader.css": "mHeader-576d5f257217818206bd0ed266a2bd3b.css",
     "mTokenDetails.css": "mTokenDetails-e833c5b1c0554e103ae459fc52944f84.css",
-    "mTokenDetailsTransactionList.js": "mTokenDetailsTransactionList-94af14fda1c5b8e64d5be5e7d185d787.js"
+    "mTokenDetailsTransactionList.js": "mTokenDetailsTransactionList-94af14fda1c5b8e64d5be5e7d185d787.js",
+    "mAddressDetails.css": "mAddressDetails-b01f46378b21dc4199bdcb263a5dfe7f.css",
+    "mBlockDetails.css": "mBlockDetails-bcd97374c77b62fb3baa45685d6fd695.css"
   },
   "files": {
     "addressDetails-cda4bb5f1b0fd33d86ac67317ca23019.css": {
@@ -482,6 +484,42 @@
       "mtime": "2018-02-08T07:57:51.000Z",
       "size": 1662,
       "digest": "bf77120d94c05ea4e4d165e7ecb3144e"
+    },
+    "addressDetails-ee20cd7f6328c9e85f9bf143a4db2474.css": {
+      "logical_path": "addressDetails.css",
+      "mtime": "2018-02-12T12:03:59.000Z",
+      "size": 390,
+      "digest": "ee20cd7f6328c9e85f9bf143a4db2474"
+    },
+    "common-d0c151093dda4dc92f3c4559eda210bb.css": {
+      "logical_path": "common.css",
+      "mtime": "2018-02-12T07:25:30.000Z",
+      "size": 3441,
+      "digest": "d0c151093dda4dc92f3c4559eda210bb"
+    },
+    "homeTransactions-fca3f1efced32b9afdc00a3ff151df8e.css": {
+      "logical_path": "homeTransactions.css",
+      "mtime": "2018-02-08T10:15:02.000Z",
+      "size": 191,
+      "digest": "fca3f1efced32b9afdc00a3ff151df8e"
+    },
+    "mAddressDetails-b01f46378b21dc4199bdcb263a5dfe7f.css": {
+      "logical_path": "mAddressDetails.css",
+      "mtime": "2018-02-08T10:15:18.000Z",
+      "size": 635,
+      "digest": "b01f46378b21dc4199bdcb263a5dfe7f"
+    },
+    "mBlockDetails-bcd97374c77b62fb3baa45685d6fd695.css": {
+      "logical_path": "mBlockDetails.css",
+      "mtime": "2018-02-08T10:05:05.000Z",
+      "size": 287,
+      "digest": "bcd97374c77b62fb3baa45685d6fd695"
+    },
+    "mCommon-d12f7f41871193ca1f66b893720129c8.css": {
+      "logical_path": "mCommon.css",
+      "mtime": "2018-02-12T12:03:59.000Z",
+      "size": 1761,
+      "digest": "d12f7f41871193ca1f66b893720129c8"
     }
   }
 }

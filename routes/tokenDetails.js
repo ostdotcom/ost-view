@@ -16,7 +16,9 @@ const rootPrefix = ".."
   , responseHelper = require(rootPrefix + '/lib/formatter/response')
   , coreConfig = require(rootPrefix + '/config')
   , logger = require(rootPrefix + '/helpers/custom_console_logger')
-;
+  , jwtAuth = require(rootPrefix + '/lib/jwt/jwt_auth')
+
+  ;
 
 // Render final response
 const renderResult = function (requestResponse, responseObject, contentType) {
@@ -37,6 +39,56 @@ const contractMiddleware = function (req, res, next) {
   req.duration = duration;
 
   next();
+};
+
+
+
+const assignParams = function (req) {
+//  logger.log(customUrlParser.parse(req.originalUrl).pathname, req.method);
+  if (req.method == 'POST') {
+    req.decodedParams = req.body;
+  } else if (req.method == 'GET') {
+    req.decodedParams = req.query;
+  }
+};
+
+// before action for verifying the jwt token and setting the decoded info in req obj
+const decodeJwt = function(req, res, next) {
+
+
+  console.log("**** _____ ---- decodeJwt called.....",req);
+
+  assignParams(req);
+
+  var token = req.decodedParams.token;
+  if(!token){
+    return responseHelper.error('401', 'Unauthorized').renderResponse(res, 401);
+  }
+
+  // Set the decoded params in the re and call the next in control flow.
+  const jwtOnResolve = function (reqParams) {
+    req.decodedParams = reqParams.data;
+    // Validation passed.
+    return next();
+  };
+
+  // send error, if token is invalid
+  const jwtOnReject = function (err) {
+    logger.error(err);
+    return responseHelper.error('a_1', 'Invalid token or expired').renderResponse(res);
+  };
+
+  // Verify token
+  Promise.resolve(
+    jwtAuth.verifyToken(token, 'saasApi')
+      .then(
+      jwtOnResolve,
+      jwtOnReject
+    )
+  ).catch(function (err) {
+      logger.error(err);
+      responseHelper.error('a_2', 'Something went wrong').renderResponse(res)
+    });
 };
 
 /**
@@ -72,7 +124,7 @@ router.get("/:contractAddress", contractMiddleware, function (req, res) {
  * @routeparam {String} :contractAddress - Contract address
  * @routeparam {Integer} :duration - previous duration from now.
  */
-router.get("/:contractAddress/graph/numberOfTransactions/:duration", contractMiddleware, function (req, res) {
+router.get("/:contractAddress/graph/numberOfTransactions/:duration", decodeJwt, contractMiddleware, function (req, res) {
 
     req.contractInstance.getGraphDataOfNumberOfBrandedTokenTransactions(req.contractAddress,req.duration)
     .then (function(response){
@@ -103,13 +155,16 @@ router.get("/:contractAddress/graph/numberOfTransactions/:duration", contractMid
  * @routeparam {String} :contractAddress - Contract address
  * @routeparam {Integer} :duration - previous duration from now.
  */
-router.get("/:contractAddress/graph/transactionsByType/:duration", contractMiddleware, function (req, res) {
+router.get("/:contractAddress/graph/transactionsByType/:duration",decodeJwt, contractMiddleware, function (req, res) {
 
   req.contractInstance.getGraphDataForBrandedTokenTransactionsByType(req.contractAddress,req.duration)
     .then (function(response){
     const responseData = responseHelper.successWithData({
       result_type: "transaction_type",
-      transaction_type :response
+      transaction_type :response,
+      meta:{
+        duaration:req.duration
+      }
 
     });
     logger.log("Request of content-type:", req.headers['content-type']);
@@ -131,7 +186,7 @@ router.get("/:contractAddress/graph/transactionsByType/:duration", contractMiddl
  *
  * @routeparam {String} :contractAddress - Contract address
  */
-router.get("/:contractAddress/topUsers", contractMiddleware, function (req, res) {
+router.get("/:contractAddress/topUsers",decodeJwt, contractMiddleware, function (req, res) {
 
   req.contractInstance.getBrandedTokenTopUsers(req.contractAddress)
     .then (function(response) {
