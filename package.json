@@ -26,6 +26,7 @@
     "moment": "^2.20.1",
     "morgan": "~1.9.0",
     "mysql": "^2.15.0",
+    "node-sass": "^4.7.2",
     "ps-node": "^0.1.6",
     "underscore": "^1.8.3",
     "uuid": "^3.1.0",

@@ -125,8 +125,8 @@ if (cluster.isMaster) {
 
   var connectAssets = require("connect-assets")({
     paths: [
-      path.join(__dirname, 'public/css'),
-      path.join(__dirname, 'public/javascript')
+      path.join(__dirname, 'assets/css'),
+      path.join(__dirname, 'assets/javascript')
     ],
     fingerprinting: true,
     servePath: "assets"
