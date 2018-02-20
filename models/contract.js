@@ -88,4 +88,23 @@ contract.prototype = {
       });
   }
 
+  , getTokenDetails: function(contractAddress){
+    const oThis = this;
+    return new Promise(function (resolve, reject) {
+
+      if (contractAddress == undefined || contractAddress.length != constants.ACCOUNT_HASH_LENGTH) {
+        reject("invalid input");
+        return;
+      }
+
+      oThis._dbInstance.getCoinFromContractAddress(contractAddress)
+        .then(function (response) {
+          resolve(response);
+        })
+        .catch(function (reason) {
+          reject(reason);
+        });
+    });
+  }
+
 };

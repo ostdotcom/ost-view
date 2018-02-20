@@ -2,7 +2,6 @@
  * Created by Aniket on 06/02/18.
  */
 
-
 $(document).ready(function() {
   var transaction_url = document.getElementById("transactionUrl").innerHTML;
 
@@ -45,7 +44,7 @@ $(document).ready(function() {
       title: '',
       data: null,
       render: function(data, type, full, meta){
-        return '<div class="tableBorderRight"> <img src="https://dummyimage.com/400x400/22aaee/fff.png" class="tokenIcon" /><span class="">'+ data.timestamp +'</span> </div>';
+        return '<div class="tableBorderRight"> <img src="https://dummyimage.com/400x400/22aaee/fff.png" class="tokenIcon" /><span class="">'+ moment(data.timestamp * 1000).startOf('day').fromNow()  +'</span> </div>';
       },
       width: '16%'
     },
@@ -53,7 +52,7 @@ $(document).ready(function() {
       title: '',
       data: null,
       render: function(data, type, full, meta){
-        return ' <span class="tokenDetailsColora84"> TX#</span><span class="default_bright_blue">'+data.transaction_hash.substr( 0, 15 )+'... </span>';
+        return '<div class=" text-truncate d-inline-block tokenDetailsMaxWidth"><span class="tokenDetailsColora84"> TX#</span><span class="default_bright_blue">'+data.transaction_hash +'</span></div>';
       },
       width: '16%',
     },
@@ -61,7 +60,7 @@ $(document).ready(function() {
       title: '',
       data: null,
       render: function(data, type, full, meta){
-        return '<span class="tokenDetailsColora84"> From </span><span class="default_bright_blue">'+ data.t_from.substr( 0, 15 )+'... </span>';
+        return '<div class=" text-truncate d-inline-block tokenDetailsMaxWidth"><span class="tokenDetailsColora84"> From </span><span class="default_bright_blue">'+ data.t_from+' </span></div>';
       },
       width: '16%',
     },
@@ -77,7 +76,7 @@ $(document).ready(function() {
       title: '',
       data: null,
       render: function(data, type, full, meta){
-        return '<span class="tokenDetailsColora84"> To </span><span class="default_bright_blue">'+ data.t_to.substr( 0, 15 )+'... </span>';
+        return '<div class=" text-truncate d-inline-block tokenDetailsMaxWidth"><span class="tokenDetailsColora84"> To </span><span class="default_bright_blue">'+ data.t_to +' </span></div>';
       },
       width: '16%',
     }

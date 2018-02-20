@@ -147,5 +147,9 @@ table.dataTable tbody tr{
     padding: 2px 2px 2px 2px;
 }
 
+.tokenDetailsMaxWidth{
+    max-width: 200px;
+}
+
 .tokenDetails{
 }

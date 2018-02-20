@@ -3,8 +3,7 @@
 
 <div class="container-fluid">
 
-    {{>pageTitle title=token_details.coin_name}}
-
+    {{>pageTitle title=token_details.company_name}}
     <div class="container ">
         <div class="row">
             <div class="col-xs-12 col-sm-12">
@@ -18,7 +17,10 @@
                                     <div class="tokenDetailsIconPaddingLeft">
                                         <div class="row alignItemCenter">
                                             <div class="col-sm-4">
-                                                <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='tokenDetailsCoinIcon'/>
+                                                <div class="circle text-center">
+                                                    {{token_details.company_symbol}}
+                                                </div>
+                                                <!--<img src="https://dummyimage.com/400x400/22aaee/fff.png" class='tokenDetailsCoinIcon'/>-->
                                             </div>
 
                                             <div class="col-sm-8">
@@ -27,7 +29,7 @@
                                                         <div class="tokenDetailsContractDetails">
                                                             <div>
                                                  <span class="tokenDetailsCoinDetails">
-                                                     FRANCHESCO COIN
+                                                     {{token_details.company_name}}
                                                  </span>
                                                             </div>
                                                             <div class="tokenDetailsPriceInAlphaMargineTop">
@@ -36,7 +38,7 @@
                                                 </span>
                                                                 <br/>
                                                 <span class="tokenDetailsCoinDetails">
-                                                    0.3
+                                                    {{math 1 '/' token_details.price}}
                                                 </span>
                                                             </div>
                                                         </div>
@@ -51,24 +53,25 @@
                                     <div class="tokenDetailsBorderLeft">
                                         <div class="row">
                                             <div class="col-sm-12">
-                                                <div class="tokenDetailsContractDetails">
-                                                <span class="tokenDetailsColora84">
-                                                    CONTRACT ADDRESS
-                                                </span>
-                                                    <br/>
-                                                 <span class="default_bright_blue">
-                                                    0XCAD42B64891F72BCB250E673….
-                                                </span>
+
+                                                <div class="tokenDetailsContractDetails text-truncate">
+                                                    <span class="tokenDetailsColora84">
+                                                        CONTRACT ADDRESS
+                                                    </span>
+                                                        <br/>
+                                                     <span class="default_bright_blue">
+                                                        {{token_details.contract_address}}
+                                                    </span>
                                                 </div>
 
-                                                <div class="tokenDetailsContractDetails tokenDetailsTokenUIDPaddingTop">
-                                                <span class="tokenDetailsColora84">
-                                                    TOKEN UID
-                                                </span>
-                                                    <br/>
-                                                <span class="default_bright_blue">
-                                                    89898088989
-                                                </span>
+                                                <div class="tokenDetailsContractDetails tokenDetailsTokenUIDPaddingTop text-truncate">
+                                                    <span class="tokenDetailsColora84">
+                                                        TOKEN UUID
+                                                    </span>
+                                                        <br/>
+                                                    <span class="default_bright_blue">
+                                                        {{token_details.uuid}}
+                                                    </span>
                                                 </div>
 
                                             </div>
@@ -85,7 +88,7 @@
                                                 </span>
                                                     <br/>
                                                  <span class="default_bright_blue">
-                                                    122324
+                                                    {{token_details.token_holders}}
                                                  </span>
                                                 </div>
 
@@ -95,7 +98,7 @@
                                                 </span>
                                                     <br/>
                                                 <span class="default_bright_blue">
-                                                    12/08/2018
+
                                                 </span>
                                                 </div>
 
@@ -128,7 +131,7 @@
                                                     </span>
                                                         <br/>
                                                      <span class="tokenDetailsStatsValueColor030">
-                                                        4213232
+                                                        {{token_details.market_cap}}
                                                     </span>
                                                 </div>
                                             </div>
@@ -151,7 +154,7 @@
                                                     </span>
                                                     <br/>
                                                      <span class="tokenDetailsStatsValueColor030">
-                                                        4213232
+                                                        {{token_details.circulation}}
                                                     </span>
                                                 </div>
                                             </div>
@@ -173,7 +176,7 @@
                                                     </span>
                                                     <br/>
                                                      <span class="tokenDetailsStatsValueColor030">
-                                                        4213232
+                                                        {{token_details.total_supply}}
                                                     </span>
                                                 </div>
                                             </div>
@@ -377,7 +380,7 @@
                         </div>
 
                         <p id="transactionUrl" style="display:none">
-                            {{token_details.transaction_url}}
+                            {{transactions_url}}
                         </p>
 
                         <table id="tokenDetailsRecentTrans" class="table borderless borderBottomNone">

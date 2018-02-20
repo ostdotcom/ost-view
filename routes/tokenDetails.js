@@ -49,16 +49,24 @@ const contractMiddleware = function (req, res, next) {
  * @routeparam {Integer} :page - Page number for getting data in batch.
  */
 router.get("/:contractAddress", contractMiddleware, function (req, res) {
-  
-  const response = responseHelper.successWithData({
-        token_details : { coin_name: 'Frenco Coin',
-          contract_address: req.contractAddress,
-          transaction_url: coreConstant['BASE_ADDR']+'/chain-id/'+req.chainId+'/contract/'+req.contractAddress+'/internal-transactions/1'
-        },
+
+  req.contractInstance.getTokenDetails( req.contractAddress )
+    .then(function(response){
+
+      const responseData = responseHelper.successWithData({
+        token_details : response,
+        transactions_url: 'http://localhost:3000/chain-id/'+req.chainId+'/contract/'+req.contractAddress+'/internal-transactions/1',
         result_type: "token_details"
       });
       logger.log("Request of content-type:", req.headers['content-type']);
-      renderResult(response, res, req.headers['content-type']);
+      renderResult(responseData, res, req.headers['content-type']);
+    })
+    .catch(function(reason){
+      logger.log(req.originalUrl + " : " + reason);
+      return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
+    })
+  
+
 });
 
 
