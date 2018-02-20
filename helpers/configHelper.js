@@ -49,7 +49,6 @@ ConfigHelper.prototype.getIdOfContractByPromise = function(dbInteract, contractA
             return resolve(contractId);
         }
     });
-
 };
 
 /**

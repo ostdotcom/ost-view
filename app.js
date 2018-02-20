@@ -49,7 +49,7 @@ if (cluster.isMaster) {
 
   // Worker started listening and is ready
   cluster.on('listening', function(worker, address) {
-    logger.info('[worker-${worker.id} ] is listening to ${address.address}:${address.port}');
+    logger.info('[worker-${worker.id} ] is listening to'+ address.address+':'+address.port);
   });
 
   // Worker came online. Will start listening shortly
@@ -180,7 +180,7 @@ if (cluster.isMaster) {
    * Get port from environment and store in Express.
    */
 
-  var port = normalizePort(process.env.PORT || '3000');
+  var port = normalizePort(process.env.PORT || '3001');
   app.set('port', port);
 
   /**
