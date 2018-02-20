@@ -16,6 +16,7 @@ const rootPrefix = ".."
   , responseHelper = require(rootPrefix + '/lib/formatter/response')
   , coreConfig = require(rootPrefix + '/config')
   , logger = require(rootPrefix + '/helpers/custom_console_logger')
+  , coreConstant =  require(rootPrefix + '/config/core_constants')
 ;
 
 // Render final response
@@ -52,7 +53,7 @@ router.get("/:contractAddress", contractMiddleware, function (req, res) {
   const response = responseHelper.successWithData({
         token_details : { coin_name: 'Frenco Coin',
           contract_address: req.contractAddress,
-          transaction_url:'http://localhost:3000/chain-id/'+req.chainId+'/contract/'+req.contractAddress+'/internal-transactions/1'
+          transaction_url: coreConstant['BASE_ADDR']+'/chain-id/'+req.chainId+'/contract/'+req.contractAddress+'/internal-transactions/1'
         },
         result_type: "token_details"
       });

@@ -55,8 +55,12 @@ router.get("/:hash", transactionMiddleware, function (req, res) {
     .then(function (requestResponse) {
 
       const response = responseHelper.successWithData({
-        transaction: requestResponse,
-        result_type: "transaction"
+        transaction: requestResponse['transactionDetails'],
+        coin_details:requestResponse['coinDetails'],
+        result_type: "transaction",
+        meta:{
+          q:req.hash
+        }
       });
 
       return renderResult(response, res, req.headers['content-type']);

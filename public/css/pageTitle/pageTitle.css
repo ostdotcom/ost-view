@@ -2,6 +2,10 @@
     background-color: #e2f4f6;
 }
 
+.pageTitleBottomPadding {
+    padding-bottom: 1px;
+}
+
 .page_title_top_border {
 
     border-top: 1.5px solid rgb(220, 217, 170);

@@ -48,7 +48,7 @@ if (cluster.isMaster) {
 
   // Worker started listening and is ready
   cluster.on('listening', function(worker, address) {
-    logger.info('[worker-${worker.id} ] is listening to ${address.address}:${address.port}');
+    logger.info('[worker-${worker.id} ] is listening to '+ address.address +':' + address.port);
   });
 
   // Worker came online. Will start listening shortly

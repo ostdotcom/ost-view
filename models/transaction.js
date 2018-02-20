@@ -11,7 +11,7 @@ const rootPrefix           = ".."
     , dbInteract = require(rootPrefix + '/lib/storage/interact')
     , constants = require(rootPrefix + '/config/core_constants')
 	  , coreConfig = require(rootPrefix + '/config')
-;
+  ;
 
 /**
  * @constructor
@@ -42,10 +42,19 @@ transaction.prototype = {
 				reject('invalid input');
 				return;
 			}
-			
+
+        var transactionData ={};
 			oThis._dbInstance.getTransaction(address)
 				.then(function(response){
-					resolve(response[0]);
+          transactionData["transactionDetails"] = response[0];
+          oThis._dbInstance.getCoinFromContractAddress('0x84b8002448c46ccd4ad382c8bc28c0c4a9df6a9b')
+            .then(function(coinDetails){
+              console.log(" coinDetails transactionData  :: ",coinDetails);
+
+              transactionData["coinDetails"] = coinDetails;
+              console.log("transactionData  :: ",transactionData);
+              resolve(transactionData);
+            })
 				})
 				.catch(function(reason){
 					reject(reason);
@@ -87,6 +96,7 @@ transaction.prototype = {
 				});
 		})
 	}
+
 
 	/**
    * Get list of recent transactions in batches.

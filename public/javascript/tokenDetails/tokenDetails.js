@@ -53,7 +53,7 @@ $(document).ready(function() {
       title: '',
       data: null,
       render: function(data, type, full, meta){
-        return ' <span class="tokenDetailsColora84"> TX#</span><span class="default_bright_blue">'+data.hash.substr( 0, 15 )+'... </span>';
+        return ' <span class="tokenDetailsColora84"> TX#</span><span class="default_bright_blue">'+data.transaction_hash.substr( 0, 15 )+'... </span>';
       },
       width: '16%',
     },

@@ -15,6 +15,7 @@ define("TRANSACTION_TABLE_NAME", 'transactions');
 define("ADDRESS_TRANSACTION_TABLE_NAME", 'address_transactions');
 define("TOKEN_TRANSACTION_TABLE_NAME", 'token_transactions');
 define("ADDRESS_TOKEN_TRANSACTION_TABLE_NAME", 'address_token_transactions');
+define("BRANDED_TOKEN_TABLE_NAME", 'branded_token');
 
 // Available columns in tables
 define("BLOCKS_DATA_SEQUENCE", '(number, hash, parent_hash, miner, difficulty, total_difficulty, gas_limit, gas_used, total_transactions, timestamp, verified)');
@@ -40,5 +41,7 @@ define("blocks", "home");
 define("transaction", "transactionDetails");
 define("block","blockDetail");
 define("block_transactions","blockTransactionList");
+
+define("BASE_ADDR",process.env.BASE_URL);
 
 module.exports = constants;
