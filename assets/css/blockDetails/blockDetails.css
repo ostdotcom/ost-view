@@ -21,3 +21,12 @@
 .blockDetailsTransactionsColorbad {
     color: #438bad;
 }
+
+.addressCellMaxWidth{
+    max-width: 200px;
+}
+
+table thead.dataTablesWrapper{
+    display:none;
+}
+

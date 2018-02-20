@@ -40,7 +40,7 @@ address.prototype = {
         return;
       }
 
-      oThis._utilityInteractInstance.getBalance(address)
+      oThis._dbInstance.getBalance(address)
         .then(function (response) {
           resolve(response);
         })
@@ -142,6 +142,42 @@ address.prototype = {
           reject(reason);
         });
 
+    });
+  }
+
+  , getAddressDetails: function (address){
+    const oThis = this;
+    return new Promise(function (resolve, reject) {
+      if (address == undefined || address.length != constants.ACCOUNT_HASH_LENGTH) {
+        reject("invalid input");
+        return;
+      }
+
+      var addressDetails={};
+      oThis._dbInstance.getAddressDetailsFromDB(address)
+        .then(function (rsp) {
+          if(undefined !== rsp){
+            addressDetails['address_details'] = rsp;
+            oThis._dbInstance.getBrandedTokenFromId(rsp['branded_token_id'])
+              .then(function (response){
+                if(undefined !== response){
+                  addressDetails['token_details'] = response;
+
+                  resolve(addressDetails);
+                }else{
+                  resolve(addressDetails);
+                }
+              })
+              .catch(function(reason){
+
+              });
+          }else{
+            reject('data not available');
+          }
+        })
+        .catch(function(reason){
+
+        });
     });
   }
 

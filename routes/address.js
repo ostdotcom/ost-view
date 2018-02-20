@@ -41,6 +41,7 @@ const addressMiddleware = function (req, res, next) {
   req.addressValue = addressValue;
   req.page = page;
   req.contractAddress = contractAddress;
+  req.chainId = chainId;
 
   next();
 };
@@ -56,31 +57,30 @@ const addressMiddleware = function (req, res, next) {
  */
 router.get('/:address', addressMiddleware, function (req, res) {
 
-  var promiseResolvers = [];
+  req.addressInstance.getAddressDetails(req.addressValue)
+    .then(function(response){
 
-  //promiseResolvers.push(req.addressInstance.getAddressBalance(req.addressValue));
-  promiseResolvers.push(req.addressInstance.getAddressTransactions(req.addressValue, defaultPageNumber));
+      const responseData = responseHelper.successWithData({
+        address_info:response['address_details'],
+        token_details:response['token_details'],
+        mCss: ['mAddressDetails.css'],
+        mJs: ['mAddressDetails.js'],
+        address:req.addressValue,
+        meta: {
+          q: req.addressValue
+        },
+        result_type: 'address_details',
+        title: 'Address Details - '+req.addressValue,
+        transaction_url: 'http://localhost:3000/chain-id/'+req.chainId+'/address/'+req.addressValue+'/transactions/1'
+      });
 
-  Promise.all(promiseResolvers).then(function (rsp) {
+      return renderResult(responseData, res, req.headers['content-type']);
 
-    //const balanceValue = rsp[balanceIndex];
-    const transactionsValue = rsp[transactionsIndex]
-
-    const response = responseHelper.successWithData({
-      //balance: balanceValue,
-      transactions: transactionsValue,
-      address: req.addressValue,
-      mCss: ['mAddressDetails.css'],
-      mJs: ['mAddressDetails.js'],
-      result_type: 'address_details',
-      title:'Address Details - '+req.addressValue,
-    });
-
-    return renderResult(response, res, req.headers['content-type']);
-  })
+    })
     .catch(function (reason){
 
-  });
+    });
+
 });
 
 /**
@@ -122,14 +122,14 @@ router.get('/:address/balance', addressMiddleware, function (req, res) {
 router.get('/:address/transactions/:page', addressMiddleware, function (req, res) {
 
 
-  req.addressInstance.getAddressTransactions(req.addressValue, req.page)
+  req.addressInstance.getAddressTokenTransactions(req.addressValue, req.page)
     .then(function (requestResponse) {
       const response = responseHelper.successWithData({
         transactions: requestResponse,
         result_type: "transactions"
       });
 
-      return renderResult(response, res, req.headers['content-type']);
+      return renderResult(response, res, 'application/json');
     })
     .catch(function (reason) {
       logger.log(req.originalUrl + " : " + reason);

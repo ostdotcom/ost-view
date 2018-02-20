@@ -6,7 +6,7 @@
         <div class="row">
             <div class="col-xs-12 col-sm-12">
                 <div class="blockDetailsContainerBackgroundColor blockDetailsContainerMargineTop blockDetailsPadding text-truncate">
-                    <span class="default_black_color"> BLOCK # </span>
+                    <span class="default_black_color"> Block Height </span>
                     <span class="blockDetailsColora84"> {{block.block_number}} </span>
                 </div>
 
@@ -17,6 +17,7 @@
                             <div class="row">
                                 <div class="col-sm-12">
                                     <span class="default_black_color"> Chain Id</span>
+                                    <span class="blockDetailsColora84">{{meta.chain_id}}</span>
                                 </div>
                             </div>
                         </div>
@@ -68,9 +69,14 @@
                     <p id="block_transaction_url" style="display:none">
                         {{transaction_url}}
                     </p>
-                    <div id="transaction_table">
+                    <table id="transactions" class="table borderless borderBottomNone">
+                        <thead class="dataTablesWrapper">
 
-                    </div>
+                        </thead>
+                        <tfoot class="dataTablesWrapper">
+
+                        </tfoot>
+                    </table>
                 </div>
 
             </div>

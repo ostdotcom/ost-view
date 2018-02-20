@@ -7,7 +7,7 @@
             <div class="col-xs-12 col-sm-12">
                 <div class="addressDetailsContainerBackgroundColor addressDetailsContainerMargineTop addressDetailsPadding text-truncate">
                     <span class="default_black_color"> Address </span>
-                    <span class="addressDetailsTitleColora84"> {{data.address}} </span>
+                    <span class="addressDetailsTitleColora84"> {{address}} </span>
                 </div>
 
                 <div class="addressDetailsContainerMargineTop">
@@ -20,8 +20,8 @@
                                 </div>
                                 <div class="col-sm-10">
                                     <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='tokenIcon' />
-                                    <span class="addressDetailsCoinAmount"> 100 FRC </span>
-                                    &nbsp(10 OST)
+                                    <span class="addressDetailsCoinAmount"> {{address_info.tokens}} {{token_details.company_symbol}} </span>
+                                    &nbsp({{math address_info.tokens '/' token_details.price }} OST)
                                 </div>
                             </div>
                         </div>
@@ -33,7 +33,7 @@
                                     <span class="default_black_color"> Total Transactions </span>
                                 </div>
                                 <div class="col-sm-10">
-                                   <span class="default_bright_blue"> 100 </span>
+                                   <span class="default_bright_blue"> {{address_info.total_transactions}} </span>
                                 </div>
                             </div>
                         </div>
@@ -45,13 +45,15 @@
                     <h4 class="addressDetailsTransactionsColorbad addressDetailsPadding">
                         Token Transfers
                     </h4>
-                    <!--<div>-->
-                        <table class="table borderless text-truncate tableLayoutFix tableVarticleAlignCenter">
-                            {{#each data.transactions}}
-                                {{>transactions}}
-                            {{/each}}
-                        </table>
-                    <!--</div>-->
+                    <span id='transactionUrl' style="display: none">{{transaction_url}}</span>
+                    <table id="transactions" class="table borderless borderBottomNone">
+                        <thead class="dataTablesWrapper">
+
+                        </thead>
+                        <tfoot class="dataTablesWrapper">
+
+                        </tfoot>
+                    </table>
                 </div>
 
             </div>

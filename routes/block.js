@@ -83,6 +83,10 @@ function processBlockResponse (blockHash, req, res){
     mCss: ['mBlockDetails.css'],
     mJs: ['mBlockDetails.js'],
     title:'Block Details - ' +req.blockNumber,
+    meta:{
+      chain_id:req.chainId,
+      q:req.blockNumber
+    }
   });
 
   return renderResult(response, res, req.headers['content-type']);
@@ -113,7 +117,7 @@ router.get("/:blockNumber/transactions/:page", blockMiddleware, function (req, r
         result_type: "block_transactions",
         layout:'empty'
       });
-      return renderResult(response, res, req.headers['content-type']);
+      return renderResult(response, res,'application/json');
     })
     .catch(function (reason) {
       logger.log(req.originalUrl + " : " + reason);
