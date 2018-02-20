@@ -28,7 +28,7 @@ $(document).ready(function() {
       title: '',
       data: null,
       render: function(data, type, full, meta){
-        return '<img src="https://dummyimage.com/400x400/22aaee/fff.png" class="tokenIcon" /><span class="tokenDetailsColora84 ">'+data.id+'</span>';
+        return '<div class="text-truncate d-inline-block tokenDetailsMaxWidth"><img src="https://dummyimage.com/400x400/22aaee/fff.png" class="tokenIcon" /><span class="tokenDetailsColora84 ">'+data.id+'</span></div>';
       },
       width: '20%',
     },
@@ -36,7 +36,7 @@ $(document).ready(function() {
       title: '',
       data: null,
       render: function(data, type, full, meta){
-        return '<img src="https://dummyimage.com/400x400/22aaee/fff.png" class="tokenIcon" /> <span class="">'+ data.tokens +'</span>';
+        return '<div class="text-truncate d-inline-block tokenDetailsMaxWidth"><img src="https://dummyimage.com/400x400/22aaee/fff.png" class="tokenIcon" /> <span class="">'+ data.tokens +'</span></div>';
       },
       width: '16%'
     },
@@ -44,7 +44,7 @@ $(document).ready(function() {
       title: '',
       data: null,
       render: function(data, type, full, meta){
-        return '<div class="tableBorderRight"> <img src="https://dummyimage.com/400x400/22aaee/fff.png" class="tokenIcon" /><span class="">'+ moment(data.timestamp * 1000).startOf('day').fromNow()  +'</span> </div>';
+        return '<div class="text-truncate d-inline-block tableBorderRight"> <img src="https://dummyimage.com/400x400/22aaee/fff.png" class="tokenIcon" /><span class="">'+ moment(data.timestamp * 1000).startOf('day').fromNow()  +'</span> </div>';
       },
       width: '16%'
     },
