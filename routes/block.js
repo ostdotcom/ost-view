@@ -79,7 +79,10 @@ function processBlockResponse (blockHash, req, res){
   const response = responseHelper.successWithData({
     block: blockHash,
     transaction_url:"http://localhost:3000/chain-id/"+req.chainId+"/block/"+req.blockNumber+"/transactions/1",
-    result_type: 'block'
+    result_type: 'block',
+    mCss: ['mBlockDetails.css'],
+    mJs: ['mBlockDetails.js'],
+    title:'Block Details - ' +req.blockNumber,
   });
 
   return renderResult(response, res, req.headers['content-type']);

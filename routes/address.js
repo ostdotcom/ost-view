@@ -70,11 +70,13 @@ router.get('/:address', addressMiddleware, function (req, res) {
       //balance: balanceValue,
       transactions: transactionsValue,
       address: req.addressValue,
+      mCss: ['mAddressDetails.css'],
+      mJs: ['mAddressDetails.js'],
+      result_type: 'address_details',
+      title:'Address Details - '+req.addressValue,
     });
 
-    res.render('addressDetails', response);
-
-    //return renderResult(response, res, req.headers['content-type']);
+    return renderResult(response, res, req.headers['content-type']);
   })
     .catch(function (reason){
 

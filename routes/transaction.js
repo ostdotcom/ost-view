@@ -60,7 +60,10 @@ router.get("/:hash", transactionMiddleware, function (req, res) {
         result_type: "transaction",
         meta:{
           q:req.hash
-        }
+        },
+        mCss: ['mTransactionDetails.css'],
+        mJs: [],
+        title:'Transaction Details - '+ req.hash,
       });
 
       return renderResult(response, res, req.headers['content-type']);

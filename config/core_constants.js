@@ -41,7 +41,7 @@ define("blocks", "home");
 define("transaction", "transactionDetails");
 define("block","blockDetail");
 define("block_transactions","blockTransactionList");
-
+define("address_details",'addressDetails');
 define("BASE_ADDR",process.env.BASE_URL);
 
 module.exports = constants;
