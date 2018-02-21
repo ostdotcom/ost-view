@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-light">
+<header class="navbar navbar-expand-lg navbar-light navbar-ost">
   <div class="container">
       <a class="navbar-brand" href="#"><img src="/ost-logo.svg" class="logo mt-2 mb-2" /></a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -8,7 +8,12 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-              <input class="form-control" type="search" id="search-q" name="q" placeholder="Token, Transactions, Address or Block#" aria-label="Search">
+              <div class="input-group input-group-sm">
+                  <div class="input-group-prepend">
+                      <span class="input-group-text">s</span>
+                  </div>
+                  <input class="form-control" type="search" name="q" placeholder="Token, Transactions, Address or Block#" aria-label="Search">
+              </div>
           </li>
           <li class="nav-item">
             <a class="nav-link text-uppercase" href="#">About</a>
@@ -16,4 +21,4 @@
         </ul>
       </div>
   </div>
-</nav>
+</header>
