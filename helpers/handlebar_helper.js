@@ -15,7 +15,7 @@ module.exports = {
   },
 
   toDate: function (timestamp) {
-    const formattedDate = moment(timestamp * 1000).format("MM/DD/YYYY h:mm:ss");
+    const formattedDate = moment(timestamp * 1000).format("MM/DD/YYYY  h:mm:ss a");
     return formattedDate;
   },
 

@@ -55,7 +55,7 @@ router.get("/:contractAddress", contractMiddleware, function (req, res) {
 
       const responseData = responseHelper.successWithData({
         token_details : response,
-        transactions_url: 'http://localhost:3000/chain-id/'+req.chainId+'/contract/'+req.contractAddress+'/internal-transactions/1',
+        transactions_url: coreConstant['BASE_URL']+'/chain-id/'+req.chainId+'/contract/'+req.contractAddress+'/internal-transactions/1',
         result_type: "token_details",
         mCss: ['mTokenDetails.css'],
         mJs: ['mTokenDetails.js']

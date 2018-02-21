@@ -16,6 +16,7 @@ const rootPrefix = ".."
   , responseHelper = require(rootPrefix + '/lib/formatter/response')
   , coreConfig = require(rootPrefix + '/config')
   , logger = require(rootPrefix + '/helpers/custom_console_logger')
+  , coreConstant = require(rootPrefix + '/config/core_constants')
 ;
 
 // Render final response
@@ -36,6 +37,7 @@ const transactionMiddleware = function (req, res, next) {
 
   req.hash = hash;
   req.page = page;
+  req.chainId = chainId;
 
   next();
 };
@@ -59,7 +61,13 @@ router.get("/:hash", transactionMiddleware, function (req, res) {
         coin_details:requestResponse['coinDetails'],
         result_type: "transaction",
         meta:{
-          q:req.hash
+          q:req.hash,
+          chain_id:req.chainId,
+          redirect_url:{
+            from: coreConstant['BASE_URL']+'/chain-id/'+req.chainId+'/address/'+requestResponse['transactionDetails']['t_from'],
+            to:  coreConstant['BASE_URL']+'/chain-id/'+req.chainId+'/address/'+requestResponse['transactionDetails']['t_to'],
+            block: coreConstant['BASE_URL']+'/chain-id/'+req.chainId+'/block/'+requestResponse['transactionDetails']['block_number']
+          }
         },
         mCss: ['mTransactionDetails.css'],
         mJs: [],

@@ -15,7 +15,8 @@ const rootPrefix = ".."
   , block = require(rootPrefix + '/models/block')
   , responseHelper = require(rootPrefix + '/lib/formatter/response')
   , logger = require(rootPrefix + '/helpers/custom_console_logger')
-;
+  , coreConstant = require(rootPrefix + '/config/core_constants')
+  ;
 
 // Render final response
 const renderResult = function (requestResponse, responseObject, contentType) {
@@ -78,7 +79,7 @@ router.get("/:blockNumber", blockMiddleware, function (req, res) {
 function processBlockResponse (blockHash, req, res){
   const response = responseHelper.successWithData({
     block: blockHash,
-    transaction_url:"http://localhost:3000/chain-id/"+req.chainId+"/block/"+req.blockNumber+"/transactions/1",
+    transaction_url: coreConstant["BASE_URL"]+"/chain-id/"+req.chainId+"/block/"+req.blockNumber+"/transactions/1",
     result_type: 'block',
     mCss: ['mBlockDetails.css'],
     mJs: ['mBlockDetails.js'],
