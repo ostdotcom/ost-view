@@ -165,18 +165,18 @@ address.prototype = {
 
                   resolve(addressDetails);
                 }else{
-                  resolve(addressDetails);
+                  resolve();
                 }
               })
               .catch(function(reason){
-
+                resolve()
               });
           }else{
-            reject('data not available');
+            resolve();
           }
         })
         .catch(function(reason){
-
+          resolve(reason)
         });
     });
   }

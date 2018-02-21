@@ -62,8 +62,8 @@ router.get('/:address', addressMiddleware, function (req, res) {
     .then(function(response){
 
       const responseData = responseHelper.successWithData({
-        address_info:response['address_details'],
-        token_details:response['token_details'],
+        address_info: (response === undefined) ? '' : response['address_details'],
+        token_details:(response === undefined) ? '' : response['token_details'],
         mCss: ['mAddressDetails.css'],
         mJs: ['mAddressDetails.js'],
         address:req.addressValue,
@@ -75,11 +75,13 @@ router.get('/:address', addressMiddleware, function (req, res) {
         transaction_url: coreConstant['BASE_URL']+'/chain-id/'+req.chainId+'/address/'+req.addressValue+'/transactions/1'
       });
 
+      console.log("responseData :: ",responseData);
+
       return renderResult(responseData, res, req.headers['content-type']);
 
     })
     .catch(function (reason){
-
+      return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
     });
 
 });
