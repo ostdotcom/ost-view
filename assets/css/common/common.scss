@@ -1,3 +1,21 @@
+.divider{
+    margin-top: 0;
+    margin-bottom: 0;
+    width:100%;
+    border: 0;
+    border-top: 1px solid #e3eef3;
+}
+
+.circle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    font-size: 1.1rem;
+    color: #fff;
+    line-height: 60px;
+    text-align: center;
+    background: #000
+}
 .float_right {
     float: right;
 }
@@ -110,16 +128,6 @@
     vertical-align: middle;
 }
 
-.circle {
-    background: grey;
-    border-radius: 90px;
-    color: white;
-    height: 100px;
-    font-weight: bold;
-    width: 100px;
-    display: table;
-    margin: 0px auto;
-}
 .circle p {
     vertical-align: middle;
     display: table-cell;

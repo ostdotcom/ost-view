@@ -30,7 +30,7 @@ $(document).ready(function() {
       render: function(data, type, full, meta){
         return '<div class="text-truncate d-inline-block tokenDetailsMaxWidth"><img src="https://dummyimage.com/400x400/22aaee/fff.png" class="tokenIcon" /><span class="tokenDetailsColora84 ">'+data.id+'</span></div>';
       },
-      width: '20%',
+      "width": "16%"
     },
     {
       title: '',
@@ -38,7 +38,7 @@ $(document).ready(function() {
       render: function(data, type, full, meta){
         return '<div class="text-truncate d-inline-block tokenDetailsMaxWidth"><img src="https://dummyimage.com/400x400/22aaee/fff.png" class="tokenIcon" /> <span class="">'+ data.tokens +'</span></div>';
       },
-      width: '16%'
+      "width": "16%"
     },
     {
       title: '',
@@ -46,7 +46,7 @@ $(document).ready(function() {
       render: function(data, type, full, meta){
         return '<div class="text-truncate d-inline-block tableBorderRight"> <img src="https://dummyimage.com/400x400/22aaee/fff.png" class="tokenIcon" /><span class="">'+ moment(data.timestamp * 1000).startOf('day').fromNow()  +'</span> </div>';
       },
-      width: '16%'
+      "width": "16%"
     },
     {
       title: '',
@@ -54,7 +54,7 @@ $(document).ready(function() {
       render: function(data, type, full, meta){
         return '<div class=" text-truncate d-inline-block tokenDetailsMaxWidth"><span class="tokenDetailsColora84"> TX#</span><span class="default_bright_blue">'+data.transaction_hash +'</span></div>';
       },
-      width: '16%',
+      "width": "16%"
     },
     {
       title: '',
@@ -62,7 +62,7 @@ $(document).ready(function() {
       render: function(data, type, full, meta){
         return '<div class=" text-truncate d-inline-block tokenDetailsMaxWidth"><span class="tokenDetailsColora84"> From </span><span class="default_bright_blue">'+ data.t_from+' </span></div>';
       },
-      width: '16%',
+      "width": "16%"
     },
     {
       title: '',
@@ -70,7 +70,7 @@ $(document).ready(function() {
       render: function(data, type, full, meta){
         return '<img src="https://dummyimage.com/400x400/22aaee/fff.png" class="tokenIcon" />';
       },
-      width: '4%',
+      "width": "4%"
     },
     {
       title: '',
@@ -78,7 +78,7 @@ $(document).ready(function() {
       render: function(data, type, full, meta){
         return '<div class=" text-truncate d-inline-block tokenDetailsMaxWidth"><span class="tokenDetailsColora84"> To </span><span class="default_bright_blue">'+ data.t_to +' </span></div>';
       },
-      width: '16%',
+      "width": "16%"
     }
   );
 
