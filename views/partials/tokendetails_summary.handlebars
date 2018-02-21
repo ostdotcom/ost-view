@@ -2,7 +2,7 @@
 
     <div class="container">
 
-        <div class="row mt-4 mb-4 d-flex align-items-center">
+        <div class="row mt-4 mb-4 d-flex align-items-center summary-1">
             <div class="section col-sm">
                 <div class="d-flex">
                     <div class="circle">
@@ -41,48 +41,56 @@
             <hr class="divider d-none d-sm-block"/>
         </div>
 
-        <div class="row mt-4 mb-4">
-            <div class="col-sm text-center">
-                <div>
-                    <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='tokenDetailsStatsImage '/>
-                </div>
-                <div class="tokenDetailsContainerBackgroundColor tokenDetailsCoinStatsPadding text-center tokenDetailsCoinStatsMargineTop">
-                    <span class="tokenDetailsStatsTitleColorbad">
-                        MARKET CAP
-                    </span>
-                     <span class="tokenDetailsStatsValueColor030">
-                         {{token_details.market_cap}}
-                     </span>
-                </div>
-            </div>
-            <div class="col-sm text-center">
-                <div>
-                    <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='tokenDetailsStatsImage '/>
-                </div>
-                <div class="tokenDetailsContainerBackgroundColor tokenDetailsCoinStatsPadding text-center tokenDetailsCoinStatsMargineTop">
-                                                    <span class="tokenDetailsStatsTitleColorbad">
-                                                        CIRCULATING SUPPLY
-                                                    </span>
-                    <br/>
-                                                     <span class="tokenDetailsStatsValueColor030">
-                                                         {{token_details.circulation}}
-                                                     </span>
+        <div class="row mt-4 mb-4 summary-2">
+
+            <div class="col-sm">
+                <div class="card">
+                    <img class="card-img-top mx-auto" src="https://dummyimage.com/400x400/22aaee/fff.png" alt="Card image cap">
+                    <div class="card-body">
+                        <div class="card-text text-center">
+                        <div class="tokenDetailsStatsTitleColorbad">
+                            MARKET CAP
+                        </div>
+                        <div class="tokenDetailsStatsValueColor030">
+                            {{token_details.market_cap}}
+                        </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col-sm text-center">
-                <div>
-                    <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='tokenDetailsStatsImage '/>
-                </div>
-                <div class="tokenDetailsContainerBackgroundColor tokenDetailsCoinStatsPadding text-center tokenDetailsCoinStatsMargineTop">
-                                                    <span class="tokenDetailsStatsTitleColorbad">
-                                                       TOTAL SUPPLY
-                                                    </span>
-                    <br/>
-                                                     <span class="tokenDetailsStatsValueColor030">
-                                                         {{token_details.total_supply}}
-                                                     </span>
+
+            <div class="col-sm">
+                <div class="card">
+                    <img class="card-img-top mx-auto" src="https://dummyimage.com/400x400/22aaee/fff.png" alt="Card image cap">
+                    <div class="card-body">
+                        <div class="card-text text-center">
+                            <div class="tokenDetailsStatsTitleColorbad">
+                                CIRCULATING SUPPLY
+                            </div>
+                            <div class="tokenDetailsStatsValueColor030">
+                                {{token_details.circulation}}
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
+
+            <div class="col-sm">
+                <div class="card">
+                    <img class="card-img-top mx-auto" src="https://dummyimage.com/400x400/22aaee/fff.png" alt="Card image cap">
+                    <div class="card-body">
+                        <div class="card-text text-center">
+                            <div class="tokenDetailsStatsTitleColorbad">
+                                TOTAL SUPPLY
+                            </div>
+                            <div class="tokenDetailsStatsValueColor030">
+                                {{token_details.total_supply}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
