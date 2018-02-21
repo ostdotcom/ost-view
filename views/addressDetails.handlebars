@@ -1,62 +1,46 @@
-<div class="container-fluid">
+{{>pageTitle title="Address"}}
 
-    {{>pageTitle title="Address"}}
+<div class="container container-address-details">
+    <div class="row">
+        <div class="col-12">
+            <div class="mt-4 mb-4 info-card card">
+                <div class="text-truncate card-body">
+                    <span class="key-color mr-1"> Address </span>
+                    <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='token-icon mr-1' />
+                    <span class="value-color font-weight-light"> {{address}} </span>
+                </div>
+            </div>
 
-    <div class="container ">
-        <div class="row">
-            <div class="col-xs-12 col-sm-12">
-                <div class="addressDetailsContainerBackgroundColor addressDetailsContainerMargineTop addressDetailsPadding text-truncate">
-                    <span class="default_black_color"> Address </span>
-                    <span class="addressDetailsTitleColora84"> {{address}} </span>
+            <div class="mt-4 mb-4 details-card card">
+
+                <div class="card-body">
+                    <span class="key-color mr-3"> Amount</span>
+                    <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='icon mr-1' />
+                    <span class="coin-amount mr-1 font-weight-bold"> {{address_info.tokens}} {{token_details.company_symbol}} </span>
+                    <span class="value-color font-weight-bold"> ({{math address_info.tokens '/' token_details.price }} OST) </span>
                 </div>
 
-                <div class="addressDetailsContainerMargineTop">
-                    <div class="addressDetailsBorder">
-
-                        <div class="addressDetailsPadding">
-                            <div class="row">
-                                <div class="col-sm-2">
-                                    <span class="default_black_color"> Amount </span>
-                                </div>
-                                <div class="col-sm-10">
-                                    <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='tokenIcon' />
-                                    <span class="addressDetailsCoinAmount"> {{address_info.tokens}} {{token_details.company_symbol}} </span>
-                                    &nbsp({{math address_info.tokens '/' token_details.price }} OST)
-                                </div>
-                            </div>
-                        </div>
-
-
-                        <div class="addressDetailsPadding addressDetailsContainerBackgroundColor">
-                            <div class="row">
-                                <div class="col-sm-2">
-                                    <span class="default_black_color"> Total Transactions </span>
-                                </div>
-                                <div class="col-sm-10">
-                                   <span class="default_bright_blue"> {{address_info.total_transactions}} </span>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
+                <div class="card-body">
+                    <span class="key-color mr-2"> Total Transactions </span>
+                    <span class="value-color font-weight-light"> {{address_info.total_transactions}} </span>
                 </div>
+            </div>
 
-                <div class="addressDetailsTransactionsMargineTop">
-                    <h4 class="addressDetailsTransactionsColorbad addressDetailsPadding">
-                        Token Transfers
-                    </h4>
-                    <span id='transactionUrl' style="display: none">{{transaction_url}}</span>
-                    <table id="transactions" class="table borderless borderBottomNone">
-                        <thead class="dataTablesWrapper">
+            <div class="mt-3 transfer_table">
+                <h4 class="transactions-title-color pl-3">
+                    Token Transfers
+                </h4>
+                <span id='transactionUrl' style="display: none">{{transaction_url}}</span>
+                <!--<table id="transactions" class="table borderless">-->
+                    <!--<thead class="dataTablesWrapper">-->
 
-                        </thead>
-                        <tfoot class="dataTablesWrapper">
+                    <!--</thead>-->
+                    <!--<tfoot class="dataTablesWrapper">-->
 
-                        </tfoot>
-                    </table>
-                </div>
-
+                    <!--</tfoot>-->
+                <!--</table>-->
             </div>
         </div>
     </div>
 </div>
+

@@ -1,141 +1,95 @@
 {{>pageTitle title="Transaction Details"}}
 
-<div class="container-fluid">
-
+<div class="container container-token-details">
     <div class="row">
-
         <div class="col-12">
 
-            <div class="container ">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="transactionDetailsContainerBackgroundColor transactionDetailsContainerMarginTop transactionDetailsPadding text-truncate">
-                            <span class="default_black_color"> TX# </span>
-                            <span class="transactionDetailsTitleColora84"> {{transaction.transaction_hash}} </span>
-                        </div>
+            <div class="mt-4 mb-4 info-card card">
+                <div class="text-truncate card-body">
+                    <span class="key-color"> TX# </span>
+                    <span class="value-color font-weight-light"> {{transaction.transaction_hash}} </span>
+                </div>
+            </div>
 
-                        <div class="transactionDetailsContainerMarginTop">
-                            <div class="transactionDetailsBorder">
-                                <div class="transactionDetailsPadding">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <span class="default_black_color"> Status </span>
-                                            <span class="transactionDetailsStatusColor"> &nbsp Processed </span>
-                                        </div>
-                                    </div>
-                                </div>
+            <div class="mt-4 mb-4 details-card card">
 
-                                <div class="transactionDetailsPadding transactionDetailsContainerBackgroundColor">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <span class="default_black_color"> Time &nbsp </span>
-                                            <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='transactionDetailsTokenIcon' />
-                                            <span class="transactionDetailsTitleColora84"> &nbsp {{ toDate transaction.timestamp }} </span>
-                                        </div>
-                                    </div>
-                                </div>
+                <div class="card-body">
+                    <span class="key-color mr-1"> Status </span>
+                    <span class="transaction-status-color font-weight-light"> Processed </span>
+                </div>
 
-                                <div class="transactionDetailsPadding">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <span class="default_black_color"> Amount &nbsp </span>
-                                            <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='transactionDetailsTokenIcon' />
-                                            &nbsp
-                                            <span class="transactionDetailsCoinAmount"> {{transaction.tokens}} {{coin_details.company_symbol}} </span>
-                                            &nbsp
-                                            <span class="transactionDetailsTitleColora84"> ({{math transaction.tokens '/' coin_details.price}} OST) </span>
-                                        </div>
-                                    </div>
-                                </div>
+                <div class="card-body">
+                    <span class="key-color mr-1"> Time</span>
+                    <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='icon mr-1' />
+                    <span class="value-color font-weight-light"> {{ toDate transaction.timestamp }} </span>
+                </div>
 
-                                <div class="transactionDetailsPadding transactionDetailsContainerBackgroundColor">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <span class="default_black_color"> Token &nbsp </span>
-                                            &nbsp &nbsp
-                                            <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='transactionDetailsTokenIcon' />
-                                            &nbsp
-                                            <span class="transactionDetailsTitleColora84"> {{coin_details.company_name}} </span>
-                                        </div>
-                                    </div>
-                                </div>
+                <div class="card-body">
 
-                                <div class="transactionDetailsPadding">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <div class="text-truncate">
-                                                <span class="default_black_color"> From &nbsp </span>
-                                                &nbsp
-                                                <span class="default_bright_blue"> {{transaction.t_from}} </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                    <span class="key-color mr-1"> Amount</span>
+                    <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='icon mr-1' />
+                    <span class="coin-amount mr-1 font-weight-bold"> {{transaction.tokens}} {{coin_details.company_symbol}} </span>
+                    <span class="value-color font-weight-bold"> ({{math transaction.tokens '/' coin_details.price}} OST) </span>
 
-                                <div class="transactionDetailsPadding transactionDetailsContainerBackgroundColor">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <div class="text-truncate">
-                                                <span class="default_black_color"> To &nbsp </span>
-                                                &nbsp
-                                                <span class="default_bright_blue">  {{transaction.t_to}} </span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                </div>
 
-                                <div class="transactionDetailsPadding">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <span class="default_black_color"> BLOCK Height &nbsp </span>
-                                            &nbsp
-                                            <span class="default_bright_blue"> {{transaction.block_number}} </span>
-                                        </div>
-                                    </div>
-                                </div>
+                <div class="card-body">
 
-                                <div class="transactionDetailsPadding transactionDetailsContainerBackgroundColor">
-                                    <div class="row">
-                                        <div class="col-12">
+                    <span class="key-color mr-2"> Token </span>
+                    <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='token-icon mr-1' />
+                    <span class="value-color font-weight-bold"> {{coin_details.company_name}} </span>
 
-                                            <span class="default_black_color"> Gas Price &nbsp </span>
-                                            &nbsp
-                                            <span class="transactionDetailsTitleColora84">  {{transaction.gas_price}} (OST) </span>
-                                        </div>
-                                    </div>
-                                </div>
+                </div>
 
-                                <div class="transactionDetailsPadding">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <span class="default_black_color"> Gas Usage &nbsp </span>
-                                            &nbsp
-                                            <span class="transactionDetailsTitleColora84"> {{transaction.gas_used}} </span>
-                                        </div>
-                                    </div>
-                                </div>
+                <div class="text-truncate card-body">
 
-                                <div class="transactionDetailsPadding">
-                                    <div class="row justify-content-start">
-                                        <div class="col-2">
-                                            <span class="default_black_color"> Input Data </span>
-                                        </div>
-                                        <div class="col-10">
-                                            <div class="transactionDetailsInputDataPadding marginRight transactionDetailsContainerBackgroundColor transactionDetailsInputDataBreakAll">
+                    <span class="default_black_color mr-1"> From </span>
+                    <a class="default_bright_blue font-weight-light" href="{{meta.redirect_url.from}}">{{transaction.t_from}}</a>
 
-                                                <span class="transactionDetailsTitleColora84"> {{{getMethodNameFromInputData transaction.input_data}}} </span>
+                </div>
 
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                <div class="text-truncate card-body">
 
-                            </div>
-                        </div>
+                    <span class="key-color mr-1"> To </span>
+                    <a class="default_bright_blue font-weight-light" href="{{meta.redirect_url.to}}">{{transaction.t_to}}</a>
 
+                </div>
+
+                <div class="card-body">
+
+                    <span class="key-color mr-1"> BLOCK Height </span>
+                    <a class="default_bright_blue font-weight-light" href="{{meta.redirect_url.block}}">{{transaction.block_number}}</a>
+
+                </div>
+
+                <div class="card-body">
+
+                    <span class="key-color mr-1"> Chain Id </span>
+                    <span class="value-color font-weight-light">  </span>
+
+                </div>
+
+                <div class="card-body">
+
+                    <span class="key-color mr-1"> Gas Price </span>
+                    <span class="value-color font-weight-light">  {{transaction.gas_price}} (OST) </span>
+
+                </div>
+
+                <div class="card-body">
+                    <span class="default_black_color mr-1"> Gas Usage </span>
+                    <span class="value-color font-weight-light"> {{transaction.gas_used}} </span>
+
+                </div>
+
+                <div class="justify-content-start card-body">
+                    <span class="key-color align-top"> Input Data </span>
+                    <div class="p-2 input-data-break-all">
+                        <span class="value-color font-weight-light"> {{{getMethodNameFromInputData transaction.input_data}}} </span>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
 </div>

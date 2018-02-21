@@ -69,3 +69,6 @@ database.json
 
 # docs
 docs/
+
+# config
+config.js

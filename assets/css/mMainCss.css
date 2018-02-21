@@ -3,17 +3,17 @@
 /*= require pageTitle/pageTitle.css */
 /*= require tokenDetails/tokenDetails.css */
 /*= require tokenDetails/tokenDetailsTransaction.css */
-/*= require blockDetails/blockDetails.css */
-/*= require addressDetails/addressDetails.css */
-/*= require transactionDetails/transactionDetails.css */
+/*= require blockDetails/blockDetails.scss */
+/*= require addressDetails/addressDetails.scss */
+/*= require transactionDetails/transactionDetails.scss */
 
 
 
-/*= require addressDetails.css */
+/*= require addressDetails.scss */
 /*= require home.css */
 /*= require homeTransactions.css */
 /*= require tableComponent.css */
-/*= require transactionDetails.css */
+/*= require transactionDetails.scss */
 
 
 
