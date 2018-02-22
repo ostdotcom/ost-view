@@ -58,7 +58,12 @@ router.get("/:contractAddress", contractMiddleware, function (req, res) {
         transactions_url: coreConstant['BASE_URL']+'/chain-id/'+req.chainId+'/contract/'+req.contractAddress+'/internal-transactions/1',
         result_type: "token_details",
         mCss: ['mTokenDetails.css'],
-        mJs: ['mTokenDetails.js']
+        mJs: ['mTokenDetails.js'],
+        meta:{
+          q:req.contractAddress,
+          chainId:req.chainId
+        },
+        view_data:req.contractInstance.getTokenDetailsInfo(response)
       });
       logger.log("Request of content-type:", req.headers['content-type']);
       renderResult(responseData, res, req.headers['content-type']);

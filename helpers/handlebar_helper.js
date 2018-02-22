@@ -36,6 +36,6 @@ module.exports = {
       "/": lvalue / rvalue,
       "%": lvalue % rvalue
     }[operator];
-  }
+  },
 
 }
