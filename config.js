@@ -34,8 +34,8 @@ const chain_config = {
     db_config: {
       chainId: 142,
       driver: 'mysql',
-      user: 'pepo',
-      password: 'pepo123',
+      user: 'root',
+      password: 'root',
       host: 'localhost',
       database: 'ost_explorer_142',
       connectionLimit: 10,
