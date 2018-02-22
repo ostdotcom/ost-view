@@ -1,0 +1,65 @@
+<section class="container-datatable">
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col-12">
+
+                <div class="tokenDetailsCoinStatsPadding">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="token_transfer_tab" data-toggle="tab" href="#home" role="tab" aria-controls="TOKEN TRANSFER" aria-selected="true">TOKEN TRANSFER</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="TOKEN HOLDERS" aria-selected="false">TOKEN HOLDERS</a>
+                        </li>
+
+                    </ul>
+                </div>
+
+                <p id="transactionUrl" style="display:none">
+                    {{transactions_url}}
+                </p>
+
+                <table id="tokenDetailsRecentTrans" class="table table-hover table-responsive token-table" cellspacing="0" width="100%">
+                    <thead hidden>
+
+                    </thead>
+                    <tfoot hidden>
+
+                    </tfoot>
+                </table>
+
+                <script type="custom/ost" id="dt-col-1">
+                    <div class="d-flex align-items-center">
+                        <div class="circle circle-sm">
+                           <div>[[symbol]]</div>
+                        </div>
+                        <div class="ml-1 name">[[name]]</div>
+                    </div>
+                </script>
+                <script type="custom/ost" id="dt-col-2">
+                    <span class="badge badge-primary">[[amount]]</span>
+                    <span>([[value]] OST)</span>
+                </script>
+                <script type="custom/ost" id="dt-col-3">
+                    <span>[[timestamp]]</span>
+                </script>
+                <script type="custom/ost" id="dt-col-4">
+                    <span>TX# [[hash]]</span>
+                </script>
+                <script type="custom/ost" id="dt-col-5">
+                    <span>From <span class="d-inline-block text-truncate" style="max-width: 150px">[[from]]</div></span>
+                </script>
+                <script type="custom/ost" id="dt-col-6">
+                    &#8594;
+                </script>
+                <script type="custom/ost" id="dt-col-7">
+                    <span>To <span class="d-inline-block text-truncate" style="max-width: 150px">[[to]]</div></span>
+                </script>
+            </div>
+        </div>
+
+    </div>
+
+</section>

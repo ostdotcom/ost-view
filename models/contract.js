@@ -109,35 +109,26 @@ contract.prototype = {
 
 
   ,getTokenDetailsInfo: function(token_details){
-    var details = [];
-
-    const card1 = {
-      img:"",
-      title:"Market Cap",
-      value:token_details['market_cap'],
-      is_badge_visible:true
-    }
-
-    const card2 = {
-      img:"",
-      title:"Circulating Supply",
-      value:token_details['circulation'],
-      is_badge_visible:false
-
-    }
-
-    const card3 = {
-      img:"",
-      title:"Total Supply",
-      value:token_details['total_supply'],
-      is_badge_visible:false
-
-    }
-
-    details.push(card1);
-    details.push(card2);
-    details.push(card3);
-
+    var details = [
+      {
+        img:"",
+        title:"Market Cap",
+        value:token_details['market_cap'],
+        is_badge_visible:true
+      },
+      {
+        img:"",
+        title:"Circulating Supply",
+        value:token_details['circulation'],
+        is_badge_visible:false
+      },
+      {
+        img:"",
+        title:"Total Supply",
+        value:token_details['total_supply'],
+        is_badge_visible:false
+      }
+    ];
     return details;
   }
 

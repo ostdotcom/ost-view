@@ -9,11 +9,14 @@ $(document).ready(function() {
     console.log("test clicked! click");
   });
 
+  var something;
+
   var dtConfig = {
     "bLengthChange": false,
     "searching": false,
     "processing": true,
     "serverSide": true,
+    "autoWidth": false,
     "ajax": {
       "url": transaction_url,
       "dataSrc": function (json) {
@@ -23,62 +26,70 @@ $(document).ready(function() {
     "columns": []
   };
 
+  var handlebarsCompile = function(string){
+    return Handlebars.compile(string.replace(/\[\[/g, '{{').replace(/\]\]/g, '}}'));
+  };
+
+  var dt_col_1 = handlebarsCompile($('#dt-col-1').text());
+  var dt_col_2 = handlebarsCompile($('#dt-col-2').text());
+  var dt_col_3 = handlebarsCompile($('#dt-col-3').text());
+  var dt_col_4 = handlebarsCompile($('#dt-col-4').text());
+  var dt_col_5 = handlebarsCompile($('#dt-col-5').text());
+  var dt_col_6 = handlebarsCompile($('#dt-col-6').text());
+  var dt_col_7 = handlebarsCompile($('#dt-col-7').text());
+
    dtConfig.columns.unshift(
     {
       title: '',
       data: null,
       render: function(data, type, full, meta){
-        return '<div class="text-truncate d-inline-block tokenDetailsMaxWidth"><img src="https://dummyimage.com/400x400/22aaee/fff.png" class="tokenIcon" /><span class="tokenDetailsColora84 ">'+data.id+'</span></div>';
-      },
-      "width": "16%"
+        return dt_col_1({
+          symbol: 'AKC',
+          name: 'Akshay Coin'
+        });
+      }
     },
     {
       title: '',
       data: null,
       render: function(data, type, full, meta){
         return '<div class="text-truncate d-inline-block tokenDetailsMaxWidth"><img src="https://dummyimage.com/400x400/22aaee/fff.png" class="tokenIcon" /> <span class="">'+ data.tokens +'</span></div>';
-      },
-      "width": "16%"
+      }
     },
     {
       title: '',
       data: null,
       render: function(data, type, full, meta){
         return '<div class="text-truncate d-inline-block tableBorderRight"> <img src="https://dummyimage.com/400x400/22aaee/fff.png" class="tokenIcon" /><span class="">'+ moment(data.timestamp * 1000).startOf('day').fromNow()  +'</span> </div>';
-      },
-      "width": "16%"
+      }
     },
     {
       title: '',
       data: null,
       render: function(data, type, full, meta){
         return '<div class=" text-truncate d-inline-block tokenDetailsMaxWidth"><span class="tokenDetailsColora84"> TX#</span><span class="default_bright_blue">'+data.transaction_hash +'</span></div>';
-      },
-      "width": "16%"
+      }
     },
     {
       title: '',
       data: null,
       render: function(data, type, full, meta){
         return '<div class=" text-truncate d-inline-block tokenDetailsMaxWidth"><span class="tokenDetailsColora84"> From </span><span class="default_bright_blue">'+ data.t_from+' </span></div>';
-      },
-      "width": "16%"
+      }
     },
     {
       title: '',
       data: null,
       render: function(data, type, full, meta){
         return '<img src="https://dummyimage.com/400x400/22aaee/fff.png" class="tokenIcon" />';
-      },
-      "width": "4%"
+      }
     },
     {
       title: '',
       data: null,
       render: function(data, type, full, meta){
         return '<div class=" text-truncate d-inline-block tokenDetailsMaxWidth"><span class="tokenDetailsColora84"> To </span><span class="default_bright_blue">'+ data.t_to +' </span></div>';
-      },
-      "width": "16%"
+      }
     }
   );
 

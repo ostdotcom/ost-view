@@ -78,7 +78,15 @@
 
 
 .token-table{
-
+    th,
+    td{
+        padding: 0 !important;
+        font-size: 10px;
+        width: 16%;
+    }
+    td:nth-of-type(6){
+        width: 4%;
+    }
 }
 
 .tokenDetailsContainerBackgroundColor {
