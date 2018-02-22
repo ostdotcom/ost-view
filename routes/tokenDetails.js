@@ -72,7 +72,7 @@ router.get("/:contractAddress", contractMiddleware, function (req, res) {
       logger.log(req.originalUrl + " : " + reason);
       return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
     })
-  
+
 
 });
 
