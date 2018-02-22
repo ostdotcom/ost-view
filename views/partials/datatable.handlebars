@@ -17,10 +17,6 @@
                     </ul>
                 </div>
 
-                <p id="transactionUrl" style="display:none">
-                    {{transactions_url}}
-                </p>
-
                 <table id="tokenDetailsRecentTrans" class="table table-hover table-responsive token-table" cellspacing="0" width="100%">
                     <thead hidden>
 
@@ -52,13 +48,13 @@
                 <script type="custom/ost" id="dt-col-4">
                     <div class="cell d-flex align-items-center">
                         <span>TX#</span>
-                        <a href="#" class="d-inline-block text-truncate ml-1" style="max-width: 150px">[[tx]]</a>
+                        <a href="#" class="d-inline-block text-truncate ml-1">[[tx]]</a>
                     </div>
                 </script>
                 <script type="custom/ost" id="dt-col-5">
                     <div class="cell d-flex align-items-center">
                         <span>From</span>
-                        <a href="#" class="d-inline-block text-truncate ml-1" style="max-width: 150px">[[from]]</a>
+                        <a href="#" class="d-inline-block text-truncate ml-1">[[from]]</a>
                     </div>
                 </script>
                 <script type="custom/ost" id="dt-col-6">
@@ -69,7 +65,7 @@
                 <script type="custom/ost" id="dt-col-7">
                     <div class="cell d-flex align-items-center">
                         <span>To</span>
-                        <a href="#" class="d-inline-block text-truncate ml-1" style="max-width: 150px">[[to]]</a>
+                        <a href="#" class="d-inline-block text-truncate ml-1">[[to]]</a>
                     </div>
                 </script>
             </div>
@@ -78,3 +74,74 @@
     </div>
 
 </section>
+
+{{#contentFor "pageScripts"}}
+<script type="text/javascript">
+$(document).ready(function() {
+    var recentTransTable = new TokenTable({
+        ajaxURL: "{{transactions_url}}",
+        selector: '#tokenDetailsRecentTrans',
+        dtConfig : {
+            columns: [
+                {
+                    data: null,
+                    render: function(data, type, full, meta){
+                        return _handlebarsCompile($('#dt-col-1').text())({
+                            symbol: 'AKC',
+                            name: 'Akshay Coin'
+                        });
+                    }
+                },
+                {
+                    data: null,
+                    render: function(data, type, full, meta){
+                        return _handlebarsCompile($('#dt-col-2').text())({
+                            tokens: data.tokens,
+                            value: 100
+                        });
+                    }
+                },
+                {
+                    data: null,
+                    render: function(data, type, full, meta){
+                        return _handlebarsCompile($('#dt-col-3').text())({
+                            timestamp: moment(data.timestamp * 1000).startOf('day').fromNow()
+                        });
+                    }
+                },
+                {
+                    data: null,
+                    render: function(data, type, full, meta){
+                        return _handlebarsCompile($('#dt-col-4').text())({
+                            tx: data.transaction_hash
+                        });
+                    }
+                },
+                {
+                    data: null,
+                    render: function(data, type, full, meta){
+                        return _handlebarsCompile($('#dt-col-5').text())({
+                            from: data.t_from
+                        });
+                    }
+                },
+                {
+                    data: null,
+                    render: function(data, type, full, meta){
+                        return _handlebarsCompile($('#dt-col-6').text());
+                    }
+                },
+                {
+                    data: null,
+                    render: function(data, type, full, meta){
+                        return _handlebarsCompile($('#dt-col-7').text())({
+                            to: data.t_to
+                        });
+                    }
+                }
+            ]
+        }
+    });
+});
+</script>
+{{/contentFor}}

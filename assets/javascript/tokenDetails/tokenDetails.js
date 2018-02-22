@@ -16,8 +16,7 @@ $(document).ready(function() {
       "dataSrc": function (json) {
         return json.data.contract_internal_transactions;
       }
-    },
-    "columns": []
+    }
   };
 
   var handlebarsCompile = function(string){
@@ -33,7 +32,7 @@ $(document).ready(function() {
     handlebarsCompile($('#dt-col-6').text()),
     handlebarsCompile($('#dt-col-7').text())
   ];
-   dtConfig.columns.unshift(
+   dtConfig.columns = [
     {
       data: null,
       render: function(data, type, full, meta){
@@ -90,7 +89,7 @@ $(document).ready(function() {
         });
       }
     }
-  );
+  ];
 
 
   $('#tokenDetailsRecentTrans').DataTable(dtConfig);

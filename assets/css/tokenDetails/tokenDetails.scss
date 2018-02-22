@@ -84,6 +84,7 @@
         font-size: 0.75rem;
         width: 16%;
         color: #597a84;
+        border-top: 10px solid #ffffff;
         a,
         a:visited,
         a:active,
@@ -95,6 +96,14 @@
             height: 40px;
             .badge-primary{
                 background: #9cc5c1;
+            }
+            .text-truncate{
+                max-width: 150px
+            }
+            @media (max-width: 576px){
+                .text-truncate{
+                    max-width:75px
+                }
             }
         }
     }
