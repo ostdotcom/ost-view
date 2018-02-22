@@ -7,8 +7,39 @@
  */
 const express = require('express');
 
-// Express router to mount index routes
-var router = express.Router();
+// Express router to mount search related routes
+const router = express.Router({mergeParams: true});
+
+const rootPrefix = ".."
+  , home = require(rootPrefix + '/models/home')
+  , responseHelper = require(rootPrefix + '/lib/formatter/response')
+  , coreConfig = require(rootPrefix + '/config')
+  , logger = require(rootPrefix + '/helpers/custom_console_logger')
+  , coreConstant = require(rootPrefix + '/config/core_constants')
+  ;
+
+// Render final response
+const renderResult = function (requestResponse, responseObject, contentType) {
+  return requestResponse.renderResponse(responseObject, 200, contentType);
+};
+
+// define parameters from url, generate web rpc instance and database connect
+const homeMiddleware = function (req, res, next) {
+  var chainId = req.params.chainId
+    ;
+
+  if(undefined === chainId){
+    chainId = coreConstant['CHAIN_ID'];
+  }
+
+  // Get instance of contract class
+  req.homeInstance = new home(chainId);
+
+  req.chainId = chainId;
+
+  next();
+};
+
 
 /**
  * Index route
@@ -18,21 +49,40 @@ var router = express.Router();
  * @route {GET} {base_url}
  *
  */
-router.get("/home", function(req, res, next){
-    return res.render('home',{
-          title: "Recent Blocks",
-          //blocks: requestResponse
-      });
-  
+router.get("/",homeMiddleware, function(req, res){
+  fetchHomeData(req, res);
 });
 
-router.get("/tokendetails", function(req, res, next){
-    res.render('tokendetails', {
-          coin_name: "Frenco Coin",
-          contract_address: "0xt6yg7g7g7ghjh7798yuhhkjhu98987897"
-          //blocks: requestResponse
-      });
-  
+
+/**
+ * Index route
+ *
+ * @name Index route
+ *
+ * @route {GET} {base_url}
+ *
+ */
+router.get("/home",homeMiddleware, function(req, res){
+    fetchHomeData(req, res);
 });
+
+
+function fetchHomeData (req, res){
+  req.homeInstance.getHomeData()
+    .then(function (requestResponse) {
+      const response = responseHelper.successWithData({
+        home: requestResponse,
+        result_type: "home",
+        mCss: ['mTokenDetails.css'],
+        view_data:req.homeInstance.getChainInfo(requestResponse)
+      });
+
+      return renderResult(response, res, req.headers['content-type']);
+    })
+    .catch(function (reason) {
+      logger.log(req.originalUrl + " : " + reason);
+      return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
+    });
+}
 
 module.exports = router;
