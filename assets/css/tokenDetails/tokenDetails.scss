@@ -81,8 +81,22 @@
     th,
     td{
         padding: 0 !important;
-        font-size: 10px;
+        font-size: 0.75rem;
         width: 16%;
+        color: #597a84;
+        a,
+        a:visited,
+        a:active,
+        a:hover{
+            color: #179eb1;
+        }
+
+        .cell{
+            height: 40px;
+            .badge-primary{
+                background: #9cc5c1;
+            }
+        }
     }
     td:nth-of-type(6){
         width: 4%;

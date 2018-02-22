@@ -31,31 +31,46 @@
                 </table>
 
                 <script type="custom/ost" id="dt-col-1">
-                    <div class="d-flex align-items-center">
+                    <div class="cell d-flex align-items-center">
                         <div class="circle circle-sm">
                            <div>[[symbol]]</div>
                         </div>
-                        <div class="ml-1 name">[[name]]</div>
+                        <div class="ml-2 name">[[name]]</div>
                     </div>
                 </script>
                 <script type="custom/ost" id="dt-col-2">
-                    <span class="badge badge-primary">[[amount]]</span>
-                    <span>([[value]] OST)</span>
+                    <div class="cell d-flex align-items-center">
+                        <span class="badge badge-primary">[[tokens]]</span>
+                        <span class="ml-1">([[value]] OST)</span>
+                    </div>
                 </script>
                 <script type="custom/ost" id="dt-col-3">
-                    <span>[[timestamp]]</span>
+                    <div class="cell d-flex align-items-center">
+                        <span>[[timestamp]]</span>
+                    </div>
                 </script>
                 <script type="custom/ost" id="dt-col-4">
-                    <span>TX# [[hash]]</span>
+                    <div class="cell d-flex align-items-center">
+                        <span>TX#</span>
+                        <a href="#" class="d-inline-block text-truncate ml-1" style="max-width: 150px">[[tx]]</a>
+                    </div>
                 </script>
                 <script type="custom/ost" id="dt-col-5">
-                    <span>From <span class="d-inline-block text-truncate" style="max-width: 150px">[[from]]</div></span>
+                    <div class="cell d-flex align-items-center">
+                        <span>From</span>
+                        <a href="#" class="d-inline-block text-truncate ml-1" style="max-width: 150px">[[from]]</a>
+                    </div>
                 </script>
                 <script type="custom/ost" id="dt-col-6">
-                    &#8594;
+                    <div class="cell d-flex align-items-center">
+                        <div class="text-center w-100" style="color:#597a84">&#8594;</div>
+                    </div>
                 </script>
                 <script type="custom/ost" id="dt-col-7">
-                    <span>To <span class="d-inline-block text-truncate" style="max-width: 150px">[[to]]</div></span>
+                    <div class="cell d-flex align-items-center">
+                        <span>To</span>
+                        <a href="#" class="d-inline-block text-truncate ml-1" style="max-width: 150px">[[to]]</a>
+                    </div>
                 </script>
             </div>
         </div>
