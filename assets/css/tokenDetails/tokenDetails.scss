@@ -1,83 +1,81 @@
-.container-summary{
+.container-summary-1{
 
-    .summary-1{
+    .section{
+        border-left: 1px solid #e3eef3;
+        &:first-of-type{
+            border-left: none;
+        }
+
+        .token-name{
+            color: #597a84;
+            font-size: 0.9rem;
+            font-weight: 400;
+            letter-spacing: 1.1px;
+        }
+
+        .token-price{
+            color: #597a84;
+            font-size: 0.75rem;
+            font-weight: 300;
+            letter-spacing: 1.1px;
+        }
+
+        .name{
+            text-transform: uppercase;
+            color: #597a84;
+            font-size: 0.75rem;
+            font-weight: 400;
+            letter-spacing: 1.1px;
+        }
+
+        .value{
+            color: #179eb1;
+            font-size: 0.8rem;
+            font-weight: 300;
+        }
+    }
+
+    @media (max-width: 576px){
         .section{
-            border-left: 1px solid #e3eef3;
-            &:first-of-type{
-                border-left: none;
-            }
-
-            .token-name{
-                color: #597a84;
-                font-size: 0.9rem;
-                font-weight: 400;
-                letter-spacing: 1.1px;
-            }
-
-            .token-price{
-                color: #597a84;
-                font-size: 0.75rem;
-                font-weight: 300;
-                letter-spacing: 1.1px;
-            }
-
-            .name{
-                text-transform: uppercase;
-                color: #597a84;
-                font-size: 0.75rem;
-                font-weight: 400;
-                letter-spacing: 1.1px;
-            }
-
-            .value{
-                color: #179eb1;
-                font-size: 0.8rem;
-                font-weight: 300;
-            }
-        }
-
-        @media (max-width: 576px){
-            .section{
-                border-left: none;
-                border-bottom: 1px solid #e3eef3;
-                padding-top: 15px;
-                padding-bottom: 15px;
-            }
+            border-left: none;
+            border-bottom: 1px solid #e3eef3;
+            padding-top: 15px;
+            padding-bottom: 15px;
         }
     }
-
-    .summary-2{
-        .card{
-            border: none;
-            .card-img-top{
-                border-radius: 50%;
-                width: 20%;
-                z-index: 1;
-            }
-            .card-body{
-                background: #f1f5f8;
-                margin-top: -20px;
-                .name{
-                    color: #438bad;
-                    font-size: 1rem;
-                    font-weight: 500;
-                    text-transform: uppercase;
-                    .badge-primary{
-                        background: #19a5b8;
-                        color: #fff;
-                    }
-                }
-                .value{
-                    color: #e4b030;
-                    font-size: 0.9rem;
-                    font-weight: 500;
-                    text-transform: uppercase;
-                }
-            }
-        }
-    }
-
 }
+
+.container-summary-2{
+    .card{
+        border: none;
+        .card-img-top{
+            border-radius: 50%;
+            width: 20%;
+            z-index: 1;
+        }
+        .card-body{
+            background: #f1f5f8;
+            margin-top: -20px;
+            .name{
+                color: #438bad;
+                font-size: 1rem;
+                font-weight: 500;
+                text-transform: uppercase;
+                .badge-primary{
+                    background: #19a5b8;
+                    color: #fff;
+                }
+            }
+            .value{
+                color: #e4b030;
+                font-size: 0.9rem;
+                font-weight: 500;
+                text-transform: uppercase;
+            }
+        }
+    }
+}
+
 
 .token-table{
 
