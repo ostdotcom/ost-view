@@ -16,6 +16,7 @@ const rootPrefix = ".."
   , responseHelper = require(rootPrefix + '/lib/formatter/response')
   , coreConfig = require(rootPrefix + '/config')
   , logger = require(rootPrefix + '/helpers/custom_console_logger')
+  , coreConstant = require(rootPrefix + '/config/core_constants')
 ;
 
 // Render final response
@@ -56,23 +57,18 @@ router.get("/:contractAddress/internal-transactions/:page", contractMiddleware, 
   req.contractInstance.getContractLedger(req.contractAddress, pageNumber)
     .then(function (requestResponse) {
 
-      var previousPage,previousPageStatus;
-       if(Number(req.page) === 1){
-         previousPage = "";
-         previousPageStatus = "disabled"
-      }else{
-         previousPage = req.page-1;
-         previousPageStatus = "active"
-      }
-
-      const nextPageNumber = Number(req.page)+Number(1);
       const response = responseHelper.successWithData({
         contract_internal_transactions: requestResponse,
         result_type: "contract_internal_transactions",
         layout : 'empty',
         draw : req.query.draw,
         recordsTotal : 120,
-
+        meta:{
+          q:req.contractAddress,
+          page:req.page,
+          transaction_placeholder_url:coreConstant["BASE_URL"]+"/chain-id/"+req.chainId+"/transaction/{{tr_hash}}",
+          address_placeholder_url:coreConstant["BASE_URL"]+"/chain-id/"+req.chainId+"/address/{{addr}}"
+        }
       });
 
         logger.log("Request of content-type:", req.headers['content-type']);

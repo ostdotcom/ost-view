@@ -116,7 +116,13 @@ router.get("/:blockNumber/transactions/:page", blockMiddleware, function (req, r
       const response = responseHelper.successWithData({
         block_transactions: requestResponse,
         result_type: "block_transactions",
-        layout:'empty'
+        layout:'empty',
+        meta:{
+          block_number:req.blockNumber,
+          page: req.page,
+          transaction_placeholder_url:coreConstant["BASE_URL"]+"/chain-id/"+req.chainId+"/transaction/{{tr_hash}}",
+          address_placeholder_url:coreConstant["BASE_URL"]+"/chain-id/"+req.chainId+"/address/{{addr}}"
+        }
       });
       return renderResult(response, res,'application/json');
     })

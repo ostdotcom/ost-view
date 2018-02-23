@@ -48,13 +48,13 @@
                 <script type="custom/ost" id="dt-col-4">
                     <div class="cell d-flex align-items-center">
                         <span>TX#</span>
-                        <a href="#" class="d-inline-block text-truncate ml-1">[[tx]]</a>
+                        <a href="[[redirect_url]]" class="d-inline-block text-truncate ml-1">[[tx]]</a>
                     </div>
                 </script>
                 <script type="custom/ost" id="dt-col-5">
                     <div class="cell d-flex align-items-center">
                         <span>From</span>
-                        <a href="#" class="d-inline-block text-truncate ml-1">[[from]]</a>
+                        <a href="[[redirect_url]]" class="d-inline-block text-truncate ml-1">[[from]]</a>
                     </div>
                 </script>
                 <script type="custom/ost" id="dt-col-6">
@@ -65,7 +65,7 @@
                 <script type="custom/ost" id="dt-col-7">
                     <div class="cell d-flex align-items-center">
                         <span>To</span>
-                        <a href="#" class="d-inline-block text-truncate ml-1">[[to]]</a>
+                        <a href="[[redirect_url]]" class="d-inline-block text-truncate ml-1">[[to]]</a>
                     </div>
                 </script>
             </div>
@@ -113,7 +113,9 @@
                         data: null,
                         render: function(data, type, full, meta){
                             return _handlebarsCompile($('#dt-col-4').text())({
-                                tx: data.transaction_hash
+                                tx: data.transaction_hash,
+                                redirect_url: data.tx_redirect_url
+
                             });
                         }
                     },
@@ -121,7 +123,9 @@
                         data: null,
                         render: function(data, type, full, meta){
                             return _handlebarsCompile($('#dt-col-5').text())({
-                                from: data.t_from
+                                from: data.t_from,
+                                redirect_url: data.from_redirect_url
+
                             });
                         }
                     },
@@ -135,13 +139,40 @@
                         data: null,
                         render: function(data, type, full, meta){
                             return _handlebarsCompile($('#dt-col-7').text())({
-                                to: data.t_to
+                                to: data.t_to,
+                                redirect_url: data.to_redirect_url
+
                             });
                         }
                     }
                 ]
             }
         });
+        recentTransTable.responseReceived = function ( response ) {
+            var dataToProceess = response.data[response.data.result_type];
+            const meta =  response.data.meta;
+
+
+            dataToProceess.forEach(function(element) {
+                const txHash = element.transaction_hash;
+                const from = element.t_from;
+                const to = element.t_to;
+
+                const txURL = meta.transaction_placeholder_url;
+                const addressURL = meta.address_placeholder_url;
+
+                element['tx_redirect_url'] =  Handlebars.compile(txURL)({
+                    tr_hash: txHash
+                });
+
+                element['from_redirect_url'] =  Handlebars.compile(addressURL)({
+                    addr: from
+                });
+                element['to_redirect_url'] =  Handlebars.compile(addressURL)({
+                    addr: to
+                });
+            });
+        };
     });
 </script>
 {{/contentFor}}

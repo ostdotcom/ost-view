@@ -129,7 +129,14 @@ router.get('/:address/transactions/:page', addressMiddleware, function (req, res
     .then(function (requestResponse) {
       const response = responseHelper.successWithData({
         transactions: requestResponse,
-        result_type: "transactions"
+        result_type: "transactions",
+        meta:{
+          transaction_placeholder_url:coreConstant["BASE_URL"]+"/chain-id/"+req.chainId+"/transaction/{{tr_hash}}",
+          address_placeholder_url:coreConstant["BASE_URL"]+"/chain-id/"+req.chainId+"/address/{{addr}}",
+          page:req.page,
+          q:req.addressValue
+
+        }
       });
 
       return renderResult(response, res, 'application/json');
