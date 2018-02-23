@@ -3,6 +3,7 @@
 <div class="container container-address-details">
     <div class="row">
         <div class="col-12">
+
             <div class="mt-4 mb-4 info-card card">
                 <div class="text-truncate card-body">
                     <span class="key-color mr-1"> Address </span>
@@ -26,21 +27,9 @@
                 </div>
             </div>
 
-            <div class="mt-3 transfer_table">
-                <h4 class="transactions-title-color pl-3">
-                    Token Transfers
-                </h4>
-                <span id='transactionUrl' style="display: none">{{transaction_url}}</span>
-                <!--<table id="transactions" class="table borderless">-->
-                    <!--<thead class="dataTablesWrapper">-->
-
-                    <!--</thead>-->
-                    <!--<tfoot class="dataTablesWrapper">-->
-
-                    <!--</tfoot>-->
-                <!--</table>-->
-            </div>
         </div>
     </div>
 </div>
+
+{{>addressDetailsDataTable}}
 

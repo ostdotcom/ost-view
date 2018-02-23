@@ -1,54 +1,64 @@
 
-.font{
-    font-size: 8px;
+.container-datatable{
+
+
+
+  .nav-tab-ost{
+
+    .nav-tabs .nav-item.show .nav-link, .nav-tabs .nav-link.active{
+      color: #438bad;
+      font-weight: bold;
+    }
+
+    a {
+      color: #438bad;
+    }
+
+  }
+
+  .token-table {
+    tbody,
+    tr {
+      background-color: #fafcfd !important;
+    }
+
+    th,
+    td {
+      padding: 0 !important;
+      font-size: 0.75rem;
+      width: 16%;
+      color: #597a84;
+      border-top: 1rem solid #ffffff;
+      a,
+      a:visited,
+      a:active,
+      a:hover {
+        color: #179eb1;
+      }
+
+      .cell {
+        height: 40px;
+        .badge-primary {
+          background: #9cc5c1;
+        }
+        .text-truncate {
+          max-width: 150px
+        }
+        @media (max-width: 576px) {
+          .text-truncate {
+            max-width: 75px
+          }
+        }
+      }
+    }
+    td:nth-of-type(6) {
+      width: 4%;
+    }
+  }
 }
 
-.rcorners3 {
-    background: #73AD21;
+
+table.dataTable.no-footer {
+  border-bottom:none!important;
 }
 
-p.frcCoin {
-  font-size: 9px;
-}
-p.volume {
-  font-size: 6px;
-}
-
-.tokenIcon {
-  border-radius: 50%;
-  width: 20px;
-}
-
-.tableLayoutFix {
-    table-layout: fixed;
-}
-
-table.tableVarticleAlignCenter td, th{
-    vertical-align: middle;
-}
-
-.tableRowHashWidth {
-    width: 15%;
-}
-
-.tableRowOtherComponentWidth {
-    width: 16%;
-}
-
-.tableRowTransaferArrowComponentWidth {
-    width:4% ;
-}
-
-.tableBorderRight{
-    border-right: 2px solid rgb(227,238,243) !important;
-}
-
-table.borderless td, th {
-    border: none;
-}
-
-.table tbody+tbody {
-    border: none;
-}
-
-    

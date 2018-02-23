@@ -42,6 +42,7 @@ define("blocks", "home");
 define("transaction", "transactionDetails");
 define("block","blockDetail");
 define("address_details",'addressDetails');
+
 define("BASE_URL",process.env.BASE_URL);
 define("CHAIN_ID",process.env.CHAIN_ID);
 

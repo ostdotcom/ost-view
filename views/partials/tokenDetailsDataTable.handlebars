@@ -1,0 +1,147 @@
+<section class="container-datatable">
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col-12">
+
+                <div class="p-4 nav-tab-ost">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active text-uppercase" id="tokenTransferTab" data-toggle="pill" role="button" aria-controls="Token Transfer" aria-selected="true">Token Transfer</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-uppercase" id="tokenHoldersTab" data-toggle="pill" role="button" aria-controls="Token Holders" aria-selected="false">Token Holders</a>
+                        </li>
+
+                    </ul>
+                </div>
+
+                <table id="tokenDetailsRecentTrans" class="table table-hover table-responsive token-table" cellspacing="0" width="100%">
+                    <thead hidden>
+
+                    </thead>
+                    <tfoot hidden>
+
+                    </tfoot>
+                </table>
+
+                <script type="custom/ost" id="dt-col-1">
+                    <div class="cell d-flex align-items-center">
+                        <div class="circle circle-sm">
+                           <div>[[symbol]]</div>
+                        </div>
+                        <div class="ml-2 name">[[name]]</div>
+                    </div>
+                </script>
+                <script type="custom/ost" id="dt-col-2">
+                    <div class="cell d-flex align-items-center">
+                        <span class="badge badge-primary">[[tokens]]</span>
+                        <span class="ml-1">([[value]] OST)</span>
+                    </div>
+                </script>
+                <script type="custom/ost" id="dt-col-3">
+                    <div class="cell d-flex align-items-center">
+                        <span>[[timestamp]]</span>
+                    </div>
+                </script>
+                <script type="custom/ost" id="dt-col-4">
+                    <div class="cell d-flex align-items-center">
+                        <span>TX#</span>
+                        <a href="#" class="d-inline-block text-truncate ml-1">[[tx]]</a>
+                    </div>
+                </script>
+                <script type="custom/ost" id="dt-col-5">
+                    <div class="cell d-flex align-items-center">
+                        <span>From</span>
+                        <a href="#" class="d-inline-block text-truncate ml-1">[[from]]</a>
+                    </div>
+                </script>
+                <script type="custom/ost" id="dt-col-6">
+                    <div class="cell d-flex align-items-center">
+                        <div class="text-center w-100" style="color:#597a84">&#8594;</div>
+                    </div>
+                </script>
+                <script type="custom/ost" id="dt-col-7">
+                    <div class="cell d-flex align-items-center">
+                        <span>To</span>
+                        <a href="#" class="d-inline-block text-truncate ml-1">[[to]]</a>
+                    </div>
+                </script>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+{{#contentFor "pageScripts"}}
+<script type="text/javascript">
+    $(document).ready(function() {
+        var recentTransTable = new TokenTable({
+            ajaxURL: "{{transactions_url}}",
+            selector: '#tokenDetailsRecentTrans',
+            dtConfig : {
+                columns: [
+                    {
+                        data: null,
+                        render: function(data, type, full, meta){
+                            return _handlebarsCompile($('#dt-col-1').text())({
+                                symbol: 'AKC',
+                                name: 'Akshay Coin'
+                            });
+                        }
+                    },
+                    {
+                        data: null,
+                        render: function(data, type, full, meta){
+                            return _handlebarsCompile($('#dt-col-2').text())({
+                                tokens: data.tokens,
+                                value: 100
+                            });
+                        }
+                    },
+                    {
+                        data: null,
+                        render: function(data, type, full, meta){
+                            return _handlebarsCompile($('#dt-col-3').text())({
+                                timestamp: moment(data.timestamp * 1000).startOf('day').fromNow()
+                            });
+                        }
+                    },
+                    {
+                        data: null,
+                        render: function(data, type, full, meta){
+                            return _handlebarsCompile($('#dt-col-4').text())({
+                                tx: data.transaction_hash
+                            });
+                        }
+                    },
+                    {
+                        data: null,
+                        render: function(data, type, full, meta){
+                            return _handlebarsCompile($('#dt-col-5').text())({
+                                from: data.t_from
+                            });
+                        }
+                    },
+                    {
+                        data: null,
+                        render: function(data, type, full, meta){
+                            return _handlebarsCompile($('#dt-col-6').text());
+                        }
+                    },
+                    {
+                        data: null,
+                        render: function(data, type, full, meta){
+                            return _handlebarsCompile($('#dt-col-7').text())({
+                                to: data.t_to
+                            });
+                        }
+                    }
+                ]
+            }
+        });
+    });
+</script>
+{{/contentFor}}
