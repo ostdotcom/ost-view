@@ -35,15 +35,21 @@
         $.ajax({
           url: oThis.ajaxURL,
           success: function (response) {
+            oThis.responseReceived.apply( oThis, arguments );
             callback({
               data: response.data[response.data.result_type],
               recordsTotal: response.data.recordsTotal,
-              draw: response.data.draw
+              draw: response.data.draw,
+              meta: response.data.meta
             });
           }
         })
       };
       $(oThis.selector).DataTable(oThis.dtConfig);
+    },
+
+    responseReceived: function ( response ) {
+
     }
 
   };

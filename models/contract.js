@@ -132,4 +132,29 @@ contract.prototype = {
     return details;
   }
 
+
+  , getTokenHolders: function(contractAddress){
+  const oThis = this;
+  return new Promise(function (resolve, reject) {
+
+    if ((contractAddress == undefined || contractAddress.length != constants.ACCOUNT_HASH_LENGTH) &&  contractAddress != '0') {
+      reject("invalid input");
+      return;
+    }
+
+    oThis._dbInstance.getBrandedTokenIdFromContract(contractAddress)
+      .then(function (response) {
+        oThis._dbInstance.getAddressesWithBrandedToken(response)
+          .then(function(holders){
+            resolve(holders);
+          })
+          .catch(function(reason){
+
+          });
+      })
+      .catch(function (reason) {
+        reject(reason);
+      });
+  });
+}
 };
