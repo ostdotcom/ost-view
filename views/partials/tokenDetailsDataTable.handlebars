@@ -5,7 +5,7 @@
         <div class="row">
             <div class="col-12">
 
-                <div class="nav-tab-ost">
+                <div class="nav-tab-ost mt-3 mb-3">
 
                     <ul class="nav nav-pills" id="myTab" role="tablist">
                         <li class="nav-item">
@@ -15,7 +15,7 @@
                             <a class="nav-link" id="tokenHoldersTab" data-toggle="pill" href="#tokenHolders" role="tab" aria-controls="tokenHolders" aria-selected="false">Token Holders</a>
                         </li>
                     </ul>
-                    <div class="tab-content" id="myTabContent">
+                    <div class="tab-content mt-2" id="myTabContent">
                         <div class="tab-pane show active" id="tokenTransfer" role="tabpanel" aria-labelledby="tokenTransferTab">
 
                             <table id="tokenDetailsRecentTrans" class="table table-hover table-responsive token-table" cellspacing="0" width="100%">
@@ -98,101 +98,9 @@
 {{#contentFor "pageScripts"}}
     <script type="text/javascript">
         $(document).ready(function() {
-            var recentTransTable = new TokenTable({
-                ajaxURL: "{{transactions_url}}",
-                selector: '#tokenDetailsRecentTrans',
-                dtConfig : {
-                    columns: [
-                        {
-                            data: null,
-                            render: function(data, type, full, meta){
-                                return _handlebarsCompile($('#dt-col-1').text())({
-                                    symbol: 'AKC',
-                                    name: 'Akshay Coin'
-                                });
-                            }
-                        },
-                        {
-                            data: null,
-                            render: function(data, type, full, meta){
-                                return _handlebarsCompile($('#dt-col-2').text())({
-                                    tokens: data.tokens,
-                                    value: 100
-                                });
-                            }
-                        },
-                        {
-                            data: null,
-                            render: function(data, type, full, meta){
-                                return _handlebarsCompile($('#dt-col-3').text())({
-                                    timestamp: moment(data.timestamp * 1000).startOf('day').fromNow()
-                                });
-                            }
-                        },
-                        {
-                            data: null,
-                            render: function(data, type, full, meta){
-                                return _handlebarsCompile($('#dt-col-4').text())({
-                                    tx: data.transaction_hash,
-                                    redirect_url: data.tx_redirect_url
-
-                                });
-                            }
-                        },
-                        {
-                            data: null,
-                            render: function(data, type, full, meta){
-                                return _handlebarsCompile($('#dt-col-5').text())({
-                                    from: data.t_from,
-                                    redirect_url: data.from_redirect_url
-
-                                });
-                            }
-                        },
-                        {
-                            data: null,
-                            render: function(data, type, full, meta){
-                                return _handlebarsCompile($('#dt-col-6').text());
-                            }
-                        },
-                        {
-                            data: null,
-                            render: function(data, type, full, meta){
-                                return _handlebarsCompile($('#dt-col-7').text())({
-                                    to: data.t_to,
-                                    redirect_url: data.to_redirect_url
-
-                                });
-                            }
-                        }
-                    ]
-                }
+            btx.tokenDetails.init({
+                transactions_url: "{{transactions_url}}"
             });
-            recentTransTable.responseReceived = function ( response ) {
-                var dataToProceess = response.data[response.data.result_type];
-                const meta =  response.data.meta;
-
-
-                dataToProceess.forEach(function(element) {
-                    const txHash = element.transaction_hash;
-                    const from = element.t_from;
-                    const to = element.t_to;
-
-                    const txURL = meta.transaction_placeholder_url;
-                    const addressURL = meta.address_placeholder_url;
-
-                    element['tx_redirect_url'] =  Handlebars.compile(txURL)({
-                        tr_hash: txHash
-                    });
-
-                    element['from_redirect_url'] =  Handlebars.compile(addressURL)({
-                        addr: from
-                    });
-                    element['to_redirect_url'] =  Handlebars.compile(addressURL)({
-                        addr: to
-                    });
-                });
-            };
         });
     </script>
 {{/contentFor}}

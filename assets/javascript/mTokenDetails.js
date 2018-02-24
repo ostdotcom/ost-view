@@ -4,3 +4,4 @@
 
 //= require common/TokenTable.js
 //= require common/GoogleCharts.js
+//= require tokenDetails/tokenDetails.js

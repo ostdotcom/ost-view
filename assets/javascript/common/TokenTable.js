@@ -1,13 +1,5 @@
 ;(function (window, $) {
 
-  window._handlebarsCompile = function(str){
-    if(Handlebars){
-      return Handlebars.compile(str.replace(/\[\[/g, '{{').replace(/\]\]/g, '}}'));
-    } else {
-      console.warn('Handlebars not installed / initiated');
-    }
-  };
-
   var TokenTable = function ( config ) {
 
     var oThis = this;
