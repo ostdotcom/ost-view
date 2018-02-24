@@ -184,7 +184,6 @@ contract.prototype = {
 
       oThis._dbInstance.getGraphDataForBrandedTokenTransactions(contractAddress)
         .then(function (response) {
-          console.log("data :: ",response,duration);
           resolve(response[duration]);
         })
         .catch(function (reason) {
