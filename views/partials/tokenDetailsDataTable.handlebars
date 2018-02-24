@@ -5,69 +5,89 @@
         <div class="row">
             <div class="col-12">
 
-                <div class="p-4 nav-tab-ost">
-                    <ul class="nav nav-tabs" id="myTab" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active text-uppercase" id="tokenTransferTab" data-toggle="pill" role="button" aria-controls="Token Transfer" aria-selected="true">Token Transfer</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-uppercase" id="tokenHoldersTab" data-toggle="pill" role="button" aria-controls="Token Holders" aria-selected="false">Token Holders</a>
-                        </li>
+                <div class="nav-tab-ost">
 
+                    <ul class="nav nav-pills" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="tokenTransferTab" data-toggle="pill" href="#tokenTransfer" role="tab" aria-controls="tokenTransfer" aria-selected="true">Token Transfer</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="tokenHoldersTab" data-toggle="pill" href="#tokenHolders" role="tab" aria-controls="tokenHolders" aria-selected="false">Token Holders</a>
+                        </li>
                     </ul>
-                </div>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane show active" id="tokenTransfer" role="tabpanel" aria-labelledby="tokenTransferTab">
 
-                <table id="tokenDetailsRecentTrans" class="table table-hover table-responsive token-table" cellspacing="0" width="100%">
-                    <thead hidden>
+                            <table id="tokenDetailsRecentTrans" class="table table-hover table-responsive token-table" cellspacing="0" width="100%">
+                                <thead hidden>
 
-                    </thead>
-                    <tfoot hidden>
+                                </thead>
+                                <tfoot hidden>
 
-                    </tfoot>
-                </table>
+                                </tfoot>
 
-                <script type="custom/ost" id="dt-col-1">
-                    <div class="cell d-flex align-items-center">
-                        <div class="circle circle-sm">
-                           <div>[[symbol]]</div>
+                                <script type="custom/ost" id="dt-col-1">
+                                    <div class="cell d-flex align-items-center">
+                                        <div class="circle circle-sm">
+                                           <div>[[symbol]]</div>
+                                        </div>
+                                        <div class="ml-2 name">[[name]]</div>
+                                    </div>
+                                </script>
+                                <script type="custom/ost" id="dt-col-2">
+                                        <div class="cell d-flex align-items-center">
+                                            <span class="badge badge-primary">[[tokens]]</span>
+                                            <span class="ml-1">([[value]] OST)</span>
+                                        </div>
+                                </script>
+                                <script type="custom/ost" id="dt-col-3">
+                                        <div class="cell d-flex align-items-center">
+                                            <span>[[timestamp]]</span>
+                                        </div>
+                                    </script>
+                                <script type="custom/ost" id="dt-col-4">
+                                        <div class="cell d-flex align-items-center">
+                                            <span>TX#</span>
+                                            <a href="[[redirect_url]]" class="d-inline-block text-truncate ml-1">[[tx]]</a>
+                                        </div>
+                                </script>
+                                <script type="custom/ost" id="dt-col-5">
+                                        <div class="cell d-flex align-items-center">
+                                            <span>From</span>
+                                            <a href="[[redirect_url]]" class="d-inline-block text-truncate ml-1">[[from]]</a>
+                                        </div>
+                                </script>
+                                <script type="custom/ost" id="dt-col-6">
+                                        <div class="cell d-flex align-items-center">
+                                            <div class="text-center w-100" style="color:#597a84">&#8594;</div>
+                                        </div>
+                                </script>
+                                <script type="custom/ost" id="dt-col-7">
+                                        <div class="cell d-flex align-items-center">
+                                            <span>To</span>
+                                            <a href="[[redirect_url]]" class="d-inline-block text-truncate ml-1">[[to]]</a>
+                                        </div>
+                                </script>
+
+                            </table>
+
                         </div>
-                        <div class="ml-2 name">[[name]]</div>
+                        <div class="tab-pane" id="tokenHolders" role="tabpanel" aria-labelledby="tokenHoldersTab">tokenHolders</div>
                     </div>
-                </script>
-                <script type="custom/ost" id="dt-col-2">
-                    <div class="cell d-flex align-items-center">
-                        <span class="badge badge-primary">[[tokens]]</span>
-                        <span class="ml-1">([[value]] OST)</span>
-                    </div>
-                </script>
-                <script type="custom/ost" id="dt-col-3">
-                    <div class="cell d-flex align-items-center">
-                        <span>[[timestamp]]</span>
-                    </div>
-                </script>
-                <script type="custom/ost" id="dt-col-4">
-                    <div class="cell d-flex align-items-center">
-                        <span>TX#</span>
-                        <a href="[[redirect_url]]" class="d-inline-block text-truncate ml-1">[[tx]]</a>
-                    </div>
-                </script>
-                <script type="custom/ost" id="dt-col-5">
-                    <div class="cell d-flex align-items-center">
-                        <span>From</span>
-                        <a href="[[redirect_url]]" class="d-inline-block text-truncate ml-1">[[from]]</a>
-                    </div>
-                </script>
-                <script type="custom/ost" id="dt-col-6">
-                    <div class="cell d-flex align-items-center">
-                        <div class="text-center w-100" style="color:#597a84">&#8594;</div>
-                    </div>
-                </script>
-                <script type="custom/ost" id="dt-col-7">
-                    <div class="cell d-flex align-items-center">
-                        <span>To</span>
-                        <a href="[[redirect_url]]" class="d-inline-block text-truncate ml-1">[[to]]</a>
-                    </div>
-                </script>
+
+                    <!--<ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active text-uppercase" id="tokenTransferTab" data-toggle="pill" role="button" aria-controls="tokenTransfer" aria-selected="true">Token Transfer</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-uppercase" id="tokenHoldersTab" data-toggle="pill" role="button" aria-controls="tokenHolders" aria-selected="false">Token Holders</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade show active" id="tokenTransfer" role="tabpanel" aria-labelledby="tokenTransferTab">a</div>
+                        <div class="tab-pane fade" id="tokenHolders" role="tabpanel" aria-labelledby="tokenHoldersTab">b</div>
+                    </div>-->
+                </div>
             </div>
         </div>
 
@@ -76,103 +96,103 @@
 </section>
 
 {{#contentFor "pageScripts"}}
-<script type="text/javascript">
-    $(document).ready(function() {
-        var recentTransTable = new TokenTable({
-            ajaxURL: "{{transactions_url}}",
-            selector: '#tokenDetailsRecentTrans',
-            dtConfig : {
-                columns: [
-                    {
-                        data: null,
-                        render: function(data, type, full, meta){
-                            return _handlebarsCompile($('#dt-col-1').text())({
-                                symbol: 'AKC',
-                                name: 'Akshay Coin'
-                            });
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var recentTransTable = new TokenTable({
+                ajaxURL: "{{transactions_url}}",
+                selector: '#tokenDetailsRecentTrans',
+                dtConfig : {
+                    columns: [
+                        {
+                            data: null,
+                            render: function(data, type, full, meta){
+                                return _handlebarsCompile($('#dt-col-1').text())({
+                                    symbol: 'AKC',
+                                    name: 'Akshay Coin'
+                                });
+                            }
+                        },
+                        {
+                            data: null,
+                            render: function(data, type, full, meta){
+                                return _handlebarsCompile($('#dt-col-2').text())({
+                                    tokens: data.tokens,
+                                    value: 100
+                                });
+                            }
+                        },
+                        {
+                            data: null,
+                            render: function(data, type, full, meta){
+                                return _handlebarsCompile($('#dt-col-3').text())({
+                                    timestamp: moment(data.timestamp * 1000).startOf('day').fromNow()
+                                });
+                            }
+                        },
+                        {
+                            data: null,
+                            render: function(data, type, full, meta){
+                                return _handlebarsCompile($('#dt-col-4').text())({
+                                    tx: data.transaction_hash,
+                                    redirect_url: data.tx_redirect_url
+
+                                });
+                            }
+                        },
+                        {
+                            data: null,
+                            render: function(data, type, full, meta){
+                                return _handlebarsCompile($('#dt-col-5').text())({
+                                    from: data.t_from,
+                                    redirect_url: data.from_redirect_url
+
+                                });
+                            }
+                        },
+                        {
+                            data: null,
+                            render: function(data, type, full, meta){
+                                return _handlebarsCompile($('#dt-col-6').text());
+                            }
+                        },
+                        {
+                            data: null,
+                            render: function(data, type, full, meta){
+                                return _handlebarsCompile($('#dt-col-7').text())({
+                                    to: data.t_to,
+                                    redirect_url: data.to_redirect_url
+
+                                });
+                            }
                         }
-                    },
-                    {
-                        data: null,
-                        render: function(data, type, full, meta){
-                            return _handlebarsCompile($('#dt-col-2').text())({
-                                tokens: data.tokens,
-                                value: 100
-                            });
-                        }
-                    },
-                    {
-                        data: null,
-                        render: function(data, type, full, meta){
-                            return _handlebarsCompile($('#dt-col-3').text())({
-                                timestamp: moment(data.timestamp * 1000).startOf('day').fromNow()
-                            });
-                        }
-                    },
-                    {
-                        data: null,
-                        render: function(data, type, full, meta){
-                            return _handlebarsCompile($('#dt-col-4').text())({
-                                tx: data.transaction_hash,
-                                redirect_url: data.tx_redirect_url
-
-                            });
-                        }
-                    },
-                    {
-                        data: null,
-                        render: function(data, type, full, meta){
-                            return _handlebarsCompile($('#dt-col-5').text())({
-                                from: data.t_from,
-                                redirect_url: data.from_redirect_url
-
-                            });
-                        }
-                    },
-                    {
-                        data: null,
-                        render: function(data, type, full, meta){
-                            return _handlebarsCompile($('#dt-col-6').text());
-                        }
-                    },
-                    {
-                        data: null,
-                        render: function(data, type, full, meta){
-                            return _handlebarsCompile($('#dt-col-7').text())({
-                                to: data.t_to,
-                                redirect_url: data.to_redirect_url
-
-                            });
-                        }
-                    }
-                ]
-            }
-        });
-        recentTransTable.responseReceived = function ( response ) {
-            var dataToProceess = response.data[response.data.result_type];
-            const meta =  response.data.meta;
-
-
-            dataToProceess.forEach(function(element) {
-                const txHash = element.transaction_hash;
-                const from = element.t_from;
-                const to = element.t_to;
-
-                const txURL = meta.transaction_placeholder_url;
-                const addressURL = meta.address_placeholder_url;
-
-                element['tx_redirect_url'] =  Handlebars.compile(txURL)({
-                    tr_hash: txHash
-                });
-
-                element['from_redirect_url'] =  Handlebars.compile(addressURL)({
-                    addr: from
-                });
-                element['to_redirect_url'] =  Handlebars.compile(addressURL)({
-                    addr: to
-                });
+                    ]
+                }
             });
-        };
-    });
-</script>
+            recentTransTable.responseReceived = function ( response ) {
+                var dataToProceess = response.data[response.data.result_type];
+                const meta =  response.data.meta;
+
+
+                dataToProceess.forEach(function(element) {
+                    const txHash = element.transaction_hash;
+                    const from = element.t_from;
+                    const to = element.t_to;
+
+                    const txURL = meta.transaction_placeholder_url;
+                    const addressURL = meta.address_placeholder_url;
+
+                    element['tx_redirect_url'] =  Handlebars.compile(txURL)({
+                        tr_hash: txHash
+                    });
+
+                    element['from_redirect_url'] =  Handlebars.compile(addressURL)({
+                        addr: from
+                    });
+                    element['to_redirect_url'] =  Handlebars.compile(addressURL)({
+                        addr: to
+                    });
+                });
+            };
+        });
+    </script>
 {{/contentFor}}
