@@ -1,7 +1,4 @@
-
 .container-datatable{
-
-
 
   .nav-tab-ost{
 
@@ -45,6 +42,7 @@
           max-width: 150px
         }
         @media (max-width: 576px) {
+          min-width: 100px;
           .text-truncate {
             max-width: 75px
           }
