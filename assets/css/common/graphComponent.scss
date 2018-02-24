@@ -24,6 +24,7 @@
 
       .interval{
         cursor: pointer;
+        border-bottom: 1px solid transparent;
         &[data-interval='hour'] {
           border-left: 1px solid #e3eef3;
         }

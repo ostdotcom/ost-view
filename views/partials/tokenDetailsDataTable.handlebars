@@ -47,13 +47,13 @@
                                     </script>
                                 <script type="custom/ost" id="dt-col-4">
                                         <div class="cell d-flex align-items-center">
-                                            <span>TX#</span>
+                                            <span>TX# </span>
                                             <a href="[[redirect_url]]" class="d-inline-block text-truncate ml-1">[[tx]]</a>
                                         </div>
                                 </script>
                                 <script type="custom/ost" id="dt-col-5">
                                         <div class="cell d-flex align-items-center">
-                                            <span>From</span>
+                                            <span>From </span>
                                             <a href="[[redirect_url]]" class="d-inline-block text-truncate ml-1">[[from]]</a>
                                         </div>
                                 </script>
@@ -64,7 +64,7 @@
                                 </script>
                                 <script type="custom/ost" id="dt-col-7">
                                         <div class="cell d-flex align-items-center">
-                                            <span>To</span>
+                                            <span>To </span>
                                             <a href="[[redirect_url]]" class="d-inline-block text-truncate ml-1">[[to]]</a>
                                         </div>
                                 </script>
@@ -74,19 +74,6 @@
                         </div>
                         <div class="tab-pane" id="tokenHolders" role="tabpanel" aria-labelledby="tokenHoldersTab">tokenHolders</div>
                     </div>
-
-                    <!--<ul class="nav nav-tabs" id="myTab" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active text-uppercase" id="tokenTransferTab" data-toggle="pill" role="button" aria-controls="tokenTransfer" aria-selected="true">Token Transfer</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-uppercase" id="tokenHoldersTab" data-toggle="pill" role="button" aria-controls="tokenHolders" aria-selected="false">Token Holders</a>
-                        </li>
-                    </ul>
-                    <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade show active" id="tokenTransfer" role="tabpanel" aria-labelledby="tokenTransferTab">a</div>
-                        <div class="tab-pane fade" id="tokenHolders" role="tabpanel" aria-labelledby="tokenHoldersTab">b</div>
-                    </div>-->
                 </div>
             </div>
         </div>
@@ -101,7 +88,8 @@
             btx.tokenDetails.init({
                 transactions_url: "{{transactions_url}}",
                 coin_symbol: "AKC",
-                coin_name: "Akshay Coin"
+                coin_name: "Akshay Coin",
+                token_transfer_graph_url: "/chain-id/142/tokenDetails/0x84b8002448c46ccd4ad382c8bc28c0c4a9df6a9b/graph/numberOfTransactions/"
             });
         });
     </script>

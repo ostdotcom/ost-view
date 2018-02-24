@@ -18,6 +18,7 @@
       $('.interval').on('click', function(){
         $(this).closest('.graph-header').find('.interval').removeClass('active');
         $(this).addClass('active');
+        oThis.printTransfersChart($(this).data('interval'));
       });
 
     },
@@ -120,24 +121,16 @@
       });
     },
 
-    printTransactionsChart: function(interval){
-      if(['day','hour','month'].indexOf(interval) == -1) {
-        return;
-      }
+    printTransfersChart: function(interval){
+      var url = oThis.config.token_transfer_graph_url+interval;
       switch(interval) {
-        case 'day':
-          var url = 'http://devcompany.com:8080/day.json';
-          var count = 24;
+        case 'Day':
           var format = 'H';
           break;
-        case 'hour':
-          var url = 'http://devcompany.com:8080/hour.json'
-          var count = 12;
+        case 'Hour':
           var format = 'm';
           break;
-        case 'month':
-          var url = 'http://devcompany.com:8080/month.json'
-          var count = 30;
+        case 'Month':
           var format = 'd';
           break;
       }
@@ -167,9 +160,7 @@
             }
           },
           legend: {
-            alignment: 'end',
-            position: 'top',
-            textStyle: oThis.chartTextStyle
+            position: 'none'
           },
           chartArea: {
             width: '90%',
@@ -178,8 +169,7 @@
           hAxis: {
             format: format,
             gridlines: {
-              color: 'transparent',
-              count: count
+              color: 'transparent'
             },
             textStyle: oThis.chartTextStyle
           },
@@ -193,68 +183,6 @@
         selector: '#transactionsValue',
         type: 'LineChart'
       });
-    },
-
-    printTypeChart: function(){
-      oThis.googleCharts_2.draw({
-        ajax: {
-          url: 'http://devcompany.com:8080/transactionByType.json'
-        },
-        selector: '#transactionsType',
-        type: 'ColumnChart',
-        options:{
-          series: {
-            0: {
-              labelInLegend: 'Type of Transfers',
-              color: 'f6c62b'
-            }
-          },
-          legend: {
-            alignment: 'end',
-            position: 'top',
-            textStyle: oThis.chartTextStyle
-          },
-          bars: 'vertical',
-          chartArea: {
-            width: '90%',
-            height: '80%'
-          },
-          hAxis: {
-            textStyle: oThis.chartTextStyle,
-            ticks: ['a','b','c']
-          },
-          vAxis: {
-            textStyle: oThis.chartTextStyle
-          }
-        }
-      });
-    },
-
-    printSupplyChart: function(){
-      oThis.googleCharts_3.draw({
-        data: [
-          ['Category', 'Value'],
-          [$('[data-ost_available_key]').text(),    parseInt($('[data-ost_available_val]').text())],
-          [$('[data-ost_allocated_key]').text(),    parseInt($('[data-ost_allocated_val]').text())],
-          [$('[data-ost_staked_key]').text(),       parseInt($('[data-ost_staked_val]').text())]
-        ],
-        selector: '#ostSupplyPie',
-        type: 'PieChart',
-        options: {
-          pieHole: 0.7,
-          pieSliceText: 'none',
-          pieSliceBorderColor: 'none',
-          colors: ['f6c62b','88c7ca','34445b'],
-          backgroundColor: 'transparent',
-          legend: 'none',
-          chartArea: {
-            width: 180,
-            height: 180,
-            top: 10,
-            left: 10
-          }
-        }
-      })
     },
 
     chartTextStyle: {
