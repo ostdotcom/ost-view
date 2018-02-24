@@ -156,5 +156,42 @@ contract.prototype = {
         reject(reason);
       });
   });
-}
+  }
+
+
+
+  /**
+   * Get graph data for number of transactions.
+   *
+   * @param {String} contractAddress - Contract address
+   * @param {Integer} duration  - duration
+   *
+   * @return {Promise<Object>} List of contract value of transactions
+   */
+  ,getGraphDataOfNumberOfBrandedTokenTransactions : function(contractAddress, duration){
+    const oThis = this;
+
+    return new Promise(function (resolve, reject) {
+
+      if (contractAddress == undefined) {
+        reject("invalid input");
+        return;
+      }
+
+      if (duration === undefined ) {
+        duration = "All";
+      }
+
+      oThis._dbInstance.getGraphDataForBrandedTokenTransactions(contractAddress)
+        .then(function (response) {
+          console.log("data :: ",response,duration);
+          resolve(response[duration]);
+        })
+        .catch(function (reason) {
+          reject(reason);
+        });
+    });
+  },
+
+
 };

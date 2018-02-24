@@ -28,12 +28,14 @@ const renderResult = function (requestResponse, responseObject, contentType) {
 const contractMiddleware = function (req, res, next) {
   const chainId = req.params.chainId
     , contractAddress = req.params.contractAddress
+    , duration = req.params.duration
   ;
   // Get instance of contract class
   req.contractInstance = new contract(chainId);
 
   req.chainId = chainId;
   req.contractAddress = contractAddress;
+  req.duration = duration;
 
   next();
 };
@@ -108,6 +110,40 @@ router.get("/:contractAddress/holders", contractMiddleware, function (req, res) 
 
 
 });
+
+
+/**
+ * Get values and number of transaction of branded token
+ *
+ * @name Contract Internal Transactions
+ *
+ * @route {GET} {base_url}/:contractAddress/graph/numberOfTransactions/:duration
+ *
+ * @routeparam {String} :contractAddress - Contract address
+ * @routeparam {Integer} :duration - previous duration from now.
+ */
+router.get("/:contractAddress/graph/numberOfTransactions/:duration", contractMiddleware, function (req, res) {
+
+  req.contractInstance.getGraphDataOfNumberOfBrandedTokenTransactions(req.contractAddress,req.duration)
+    .then (function(response){
+    const responseData = responseHelper.successWithData({
+      result_type: "number_of_transactions",
+      number_of_transactions :response,
+      meta:{
+        duaration:req.duration
+      }
+    });
+    logger.log("Request of content-type:", req.headers['content-type']);
+    renderResult(responseData, res, 'application/json');
+  })
+    .catch(function(reason){
+      logger.log(req.originalUrl + " : " + reason);
+      return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
+    });
+
+});
+
+
 
 
 module.exports = router;
