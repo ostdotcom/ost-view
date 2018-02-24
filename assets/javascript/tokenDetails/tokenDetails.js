@@ -138,14 +138,6 @@
         ajax: {
           url: url
         },
-        ajaxCallback: function(response){
-          var data = [];
-          data.push(Object.keys(response.data[response.data.result_type][0]));
-          $.each( response.data[response.data.result_type], function( index, value ) {
-            data.push([new Date(value.timestamp*1000), value.transaction_count, value.ost_amount]);
-          });
-          return data;
-        },
         options: {
           series: {
             0: {

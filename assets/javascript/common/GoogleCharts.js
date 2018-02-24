@@ -12,12 +12,13 @@
     constructor: GoogleCharts,
     version: 'current',
     packages: ['corechart'],
-    data: [],
-    columns: [],
-    ajax: {},
-    options: {},
+    data: null,
+    columns: null,
+    ajax: null,
+    options: null,
     selector: null,
     type: null,
+    tsUnixToJs: true,
 
     /*
      * Initiates Google Charts by google.charts.load
@@ -53,7 +54,7 @@
             console.log('Drawing chart using AJAX data and callback...');
             oThis.render();
           }
-        }
+        };
         $.extend( ajaxObj, oThis.ajax );
         $.ajax(ajaxObj);
       } else {
@@ -98,13 +99,30 @@
     },
 
     /*
+     * dataSrc to specify custom
+     */
+    dataSrc: function(response){
+      return response.data[response.data.result_type];
+    },
+
+    /*
      * ajaxCallback boilerplate
      */
     ajaxCallback: function(response){
+      var oThis = this;
       var data = [];
-      data.push(Object.keys(response.data[response.data.result_type][0]));
-      $.each( response.data[response.data.result_type], function( index, value ) {
-        data.push(Object.values(value));
+      var header = Object.keys(oThis.dataSrc(response)[0]);
+      data.push(header);
+      $.each( oThis.dataSrc(response), function( index, value ) {
+        var row = [];
+        header.forEach(function(elem){
+          if(oThis.tsUnixToJs === true && typeof value[elem] === 'number' && value[elem] > 1262304000 && (new Date(value[elem])).getYear() < 1971){
+            row.push(new Date(value[elem]*1000));
+          } else {
+            row.push(value[elem]);
+          }
+        });
+        data.push(row);
       });
       return data;
     }
