@@ -16,7 +16,7 @@
     bindButtons: function(){
 
       $('.interval').on('click', function(){
-        $('.interval').removeClass('active');
+        $(this).closest('.graph-header').find('.interval').removeClass('active');
         $(this).addClass('active');
       });
 
@@ -33,8 +33,8 @@
               data: null,
               render: function(data, type, full, meta){
                 return Handlebars.compile_fe($('#dt-col-1').text())({
-                  symbol: 'AKC',
-                  name: 'Akshay Coin'
+                  symbol: oThis.config.coin_symbol,
+                  name: oThis.config.coin_name
                 });
               }
             },
@@ -92,33 +92,32 @@
               }
             }
           ]
+        },
+        responseReceived: function ( response ) {
+          var dataToProceess = response.data[response.data.result_type];
+          var meta =  response.data.meta;
+
+          dataToProceess.forEach(function(element) {
+            var txHash = element.transaction_hash;
+            var from = element.t_from;
+            var to = element.t_to;
+
+            var txURL = meta.transaction_placeholder_url;
+            var addressURL = meta.address_placeholder_url;
+
+            element['tx_redirect_url'] =  Handlebars.compile(txURL)({
+              tr_hash: txHash
+            });
+
+            element['from_redirect_url'] =  Handlebars.compile(addressURL)({
+              addr: from
+            });
+            element['to_redirect_url'] =  Handlebars.compile(addressURL)({
+              addr: to
+            });
+          });
         }
       });
-      recentTransTable.responseReceived = function ( response ) {
-        var dataToProceess = response.data[response.data.result_type];
-        var meta =  response.data.meta;
-
-
-        dataToProceess.forEach(function(element) {
-          var txHash = element.transaction_hash;
-          var from = element.t_from;
-          var to = element.t_to;
-
-          var txURL = meta.transaction_placeholder_url;
-          var addressURL = meta.address_placeholder_url;
-
-          element['tx_redirect_url'] =  Handlebars.compile(txURL)({
-            tr_hash: txHash
-          });
-
-          element['from_redirect_url'] =  Handlebars.compile(addressURL)({
-            addr: from
-          });
-          element['to_redirect_url'] =  Handlebars.compile(addressURL)({
-            addr: to
-          });
-        });
-      };
     },
 
     printTransactionsChart: function(interval){
