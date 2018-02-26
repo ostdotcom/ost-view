@@ -42,7 +42,7 @@
       oThis.dtConfig.ajax = function (data, callback, settings) {
         $.ajax({
           url: oThis.ajaxURL,
-          data: $.param(settings.oAjaxData),
+          data: settings.oAjaxData,
           success: function (response) {
             oThis.responseReceived.apply( oThis, arguments );
             callback({

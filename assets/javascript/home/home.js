@@ -182,6 +182,7 @@
               }
             },
             {
+              title:'Price (OST α)',
               data: null,
               render: function (data, type, full, meta) {
 
@@ -191,6 +192,7 @@
               }
             },
             {
+              title:'Circulating Supply (bt)',
               data: null,
               render: function (data, type, full, meta) {
 
@@ -199,7 +201,8 @@
                 });
               }
             },
-          ]
+          ],
+          ordering: false
         },
 
         responseReceived: function ( response ) {
