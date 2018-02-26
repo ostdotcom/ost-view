@@ -1,0 +1,55 @@
+$sprite-retina-location: "/Sprite-2X.png";
+$sprite-location: "/Sprite-1X.png";
+
+@mixin icon-generator($width,$height,$posX,$posY,$offsetHover,$offsetActive,$scale:100) {
+  background-image: url($sprite-location);
+  background-size: 1250px * $scale/100 1250px * $scale/100;
+  @media only screen and (-webkit-min-device-pixel-ratio: 2),
+  only screen and (min--moz-device-pixel-ratio: 2),
+  only screen and (-o-min-device-pixel-ratio: 2/1),
+  only screen and (min-device-pixel-ratio: 2),
+  only screen and (min-resolution: 192dpi),
+  only screen and (min-resolution: 2dppx) {
+    background-image: url($sprite-retina-location);
+    background-size: 1000px * $scale/100 1000px * $scale/100;
+  }
+  display: inline-block;
+  outline: none !important;
+  &:focus {
+    outline: none;
+    background-position: $posX * $scale/100 $posY * $scale/100;
+  }
+  width: $width * $scale/100;
+  height: $height * $scale/100;
+  background-position: $posX * $scale/100 $posY * $scale/100;
+  &:hover {
+    background-position: $offsetHover * $scale/100 $posY * $scale/100;
+  }
+  &:active {
+    background-position: $offsetActive * $scale/100 $posY * $scale/100;
+  }
+}
+
+.ost-view-logo{
+  @include icon-generator(100px, 30px, -132px, -65px, -132px, -132px);
+}
+
+.communities{
+  @include icon-generator(110px, 50px, -225px, -15px, -225px, -225px);
+}
+
+.token-holders{
+  @include icon-generator(110px, 50px, -113px, -15px, -113px, -113px);
+}
+
+.market-cap{
+  @include icon-generator(110px, 53px, 0px, -8px, 0px, 0px, 95);
+}
+
+.circulating-supply{
+  @include icon-generator(110px, 50px, -343px, -15px, -343px, -343px);
+}
+
+.total-supply{
+  @include icon-generator(110px, 50px, -457px, -15px, -457px, -457px);
+}

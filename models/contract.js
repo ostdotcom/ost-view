@@ -111,19 +111,19 @@ contract.prototype = {
   ,getTokenDetailsInfo: function(token_details){
     var details = [
       {
-        img:"",
+        img:"market-cap",
         title:"Market Cap",
         value:token_details['market_cap'],
         is_badge_visible:true
       },
       {
-        img:"",
+        img:"circulating-supply",
         title:"Circulating Supply",
         value:token_details['circulation'],
         is_badge_visible:false
       },
       {
-        img:"",
+        img:"total-supply",
         title:"Total Supply",
         value:token_details['total_supply'],
         is_badge_visible:false

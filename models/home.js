@@ -46,19 +46,19 @@ home.prototype = {
   , getChainInfo: function(chain_data){
       var details = [
         {
-          img:"",
+          img:"communities",
           title:"Communities",
           value:chain_data['MAX(id)'],
           is_badge_visible:false
         },
         {
-          img:"",
+          img:"token-holders",
           title:"Token Holders",
           value:chain_data['SUM(token_holders)'],
           is_badge_visible:false
         },
         {
-          img:"",
+          img:"market-cap",
           title:"Market Cap",
           value:chain_data['SUM(market_cap)'],
           is_badge_visible:true
