@@ -119,6 +119,39 @@
           });
         }
       });
+
+      var tokenHolders = new TokenTable({
+        ajaxURL: oThis.config.token_holders_url,
+        selector: '#tokenDetailsTokenHolders',
+        dtConfig : {
+          columns: [
+            {
+              data: null,
+              render: function(data, type, full, meta){
+                return Handlebars.compile_fe($('#dt-holders-col-1').text())({
+                  name: data.address
+                });
+              }
+            },
+            {
+              data: null,
+              render: function(data, type, full, meta){
+                return $('#dt-holders-col-2').text();
+              }
+            },
+            {
+              data: null,
+              render: function(data, type, full, meta){
+                return Handlebars.compile_fe($('#dt-holders-col-3').text())({
+                  tokens: data.tokens,
+                  value: 100
+                });
+              }
+            }
+          ]
+        }
+
+      });
     },
 
     printTransfersChart: function(interval){

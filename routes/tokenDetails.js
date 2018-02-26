@@ -57,11 +57,13 @@ router.get("/:contractAddress", contractMiddleware, function (req, res) {
 
       const responseData = responseHelper.successWithData({
         token_details : response,
-        transactions_url: coreConstant['BASE_URL']+'/chain-id/'+req.chainId+'/contract/'+req.contractAddress+'/internal-transactions/1',
         result_type: "token_details",
         mCss: ['mTokenDetails.css'],
         mJs: ['mTokenDetails.js'],
+
         meta:{
+          transactions_url: '/chain-id/'+req.chainId+'/contract/'+req.contractAddress+'/internal-transactions/1',
+          token_holders_url:'/chain-id/'+req.chainId+'/tokendetails/'+req.contractAddress+'/holders',
           q:req.contractAddress,
           chainId:req.chainId
         },
@@ -69,39 +71,6 @@ router.get("/:contractAddress", contractMiddleware, function (req, res) {
       });
       logger.log("Request of content-type:", req.headers['content-type']);
       renderResult(responseData, res, req.headers['content-type']);
-    })
-    .catch(function(reason){
-      logger.log(req.originalUrl + " : " + reason);
-      return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
-    })
-
-
-});
-
-/**
- * Get token holders
- *
- * @name token Holders
- *
- * @route {GET} {base_url}/:contractAddress/holder
- *
- * @routeparam {String} :contractAddress - Contract address
- */
-router.get("/:contractAddress/holders", contractMiddleware, function (req, res) {
-
-  req.contractInstance.getTokenHolders( req.contractAddress )
-    .then(function(response){
-
-      const responseData = responseHelper.successWithData({
-        token_holders : response,
-        result_type: "token_holders",
-        meta:{
-          q:req.contractAddress,
-          chainId:req.chainId
-        },
-      });
-      logger.log("Request of content-type:", req.headers['content-type']);
-      renderResult(responseData, res,'application/json');
     })
     .catch(function(reason){
       logger.log(req.originalUrl + " : " + reason);
@@ -144,6 +113,36 @@ router.get("/:contractAddress/graph/numberOfTransactions/:duration", contractMid
 });
 
 
+/**
+ * Get token holders
+ *
+ * @name token Holders
+ *
+ * @route {GET} {base_url}/:contractAddress/holder
+ *
+ * @routeparam {String} :contractAddress - Contract address
+ */
+router.get("/:contractAddress/holders", contractMiddleware, function (req, res) {
+
+  req.contractInstance.getTokenHolders( req.contractAddress )
+    .then(function(response){
+      const responseData = responseHelper.successWithData({
+        token_holders : response,
+        result_type: "token_holders",
+        meta:{
+          q:req.contractAddress,
+          chainId:req.chainId
+        },
+      });
+      renderResult(responseData, res,'application/json');
+    })
+    .catch(function(reason){
+      logger.log(req.originalUrl + " : " + reason);
+      return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
+    })
+
+
+});
 
 
 module.exports = router;

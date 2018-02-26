@@ -141,11 +141,16 @@ contract.prototype = {
       reject("invalid input");
       return;
     }
+    console.log("1");
 
     oThis._dbInstance.getBrandedTokenIdFromContract(contractAddress)
       .then(function (response) {
+        console.log("2");
+
         oThis._dbInstance.getAddressesWithBrandedToken(response)
           .then(function(holders){
+            console.log("3");
+
             resolve(holders);
           })
           .catch(function(reason){

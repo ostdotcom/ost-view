@@ -64,7 +64,7 @@
                                 </script>
                                 <script type="custom/ost" id="dt-col-7">
                                         <div class="cell d-flex align-items-center">
-                                            <span>To </span>
+                                            <span>To</span>
                                             <a href="[[redirect_url]]" class="d-inline-block text-truncate ml-1">[[to]]</a>
                                         </div>
                                 </script>
@@ -72,21 +72,52 @@
                             </table>
 
                         </div>
-                        <div class="tab-pane" id="tokenHolders" role="tabpanel" aria-labelledby="tokenHoldersTab">tokenHolders</div>
+                        <div class="tab-pane" id="tokenHolders" role="tabpanel" aria-labelledby="tokenHoldersTab">
+                            <table id="tokenDetailsTokenHolders" class="table table-hover table-responsive token-table" cellspacing="0" width="100%">
+                                <thead hidden>
+
+                                </thead>
+                                <tfoot hidden>
+
+                                </tfoot>
+
+                                <script type="custom/ost" id="dt-holders-col-1">
+                                    <div class="cell d-flex align-items-center">
+                                         <div class="circle circle-sm">
+                                           <div>[[symbol]]</div>
+                                        </div>
+                                        <div class="ml-2 name">[[name]]</div>
+                                    </div>
+                                </script>
+                                <script type="custom/ost" id="dt-holders-col-2">
+                                    <div class="cell d-flex align-items-center">
+                                        <span>Available Balance</span>
+                                    </div>
+                                </script>
+                                <script type="custom/ost" id="dt-holders-col-3">
+                                        <div class="cell d-flex align-items-center">
+                                            <span class="badge badge-primary">[[tokens]]</span>
+                                            <span class="ml-1">([[value]] OST)</span>
+                                        </div>
+                                </script>
+
+                            </table>
+
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
 
     </div>
-
 </section>
 
 {{#contentFor "pageScripts"}}
     <script type="text/javascript">
         $(document).ready(function() {
             btx.tokenDetails.init({
-                transactions_url: "{{transactions_url}}",
+                transactions_url: "{{meta.transactions_url}}",
+                token_holders_url:"{{meta.token_holders_url}}",
                 coin_symbol: "AKC",
                 coin_name: "Akshay Coin",
                 token_transfer_graph_url: "/chain-id/142/tokenDetails/0x84b8002448c46ccd4ad382c8bc28c0c4a9df6a9b/graph/numberOfTransactions/"

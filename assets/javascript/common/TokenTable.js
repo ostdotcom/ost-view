@@ -3,7 +3,19 @@
   var TokenTable = function ( config ) {
 
     var oThis = this;
+
+    oThis.dtConfig = {
+      "bLengthChange": false,
+      "searching": false,
+      "processing": true,
+      "serverSide": true,
+      paging:true,
+      responsive: true,
+      "columns": []
+    };
+
     $.extend( true, oThis, config );
+
     oThis.loadDataTable();
 
   };
@@ -13,19 +25,14 @@
     constructor: TokenTable,
     selector: null,
     ajaxURL: null,
-    dtConfig: {
-      bLengthChange: false,
-      searching: false,
-      processing: true,
-      serverSide: true,
-      autoWidth: false
-    },
+    dtConfig: null,
 
     loadDataTable: function(){
       var oThis = this;
       oThis.dtConfig.ajax = function (data, callback, settings) {
         $.ajax({
           url: oThis.ajaxURL,
+          data: $.param(settings.oAjaxData),
           success: function (response) {
             oThis.responseReceived.apply( oThis, arguments );
             callback({
@@ -37,6 +44,7 @@
           }
         })
       };
+
       $(oThis.selector).DataTable(oThis.dtConfig);
     },
 
