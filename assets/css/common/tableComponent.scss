@@ -84,3 +84,17 @@ table.dataTable.no-footer {
   border-bottom:none!important;
 }
 
+.dataTables_wrapper .dataTables_info{
+  right: 100px;
+  bottom: 10px;
+  position: absolute;
+  font-size: 0.7rem;
+  color: #979797;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button,
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover,
+.dataTables_wrapper .dataTables_paginate .paginate_button:active{
+  color: #979797 !important;
+  border: 1px solid #e9eff4 !important;
+}
