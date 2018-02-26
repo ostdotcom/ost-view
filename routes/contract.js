@@ -71,7 +71,7 @@ router.get("/:contractAddress/internal-transactions/:page", contractMiddleware, 
         result_type: "contract_internal_transactions",
         layout : 'empty',
         draw : req.query.draw,
-        recordsTotal : 120,
+        recordsTotal : 120
 
       });
 
