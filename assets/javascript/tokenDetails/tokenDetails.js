@@ -10,6 +10,7 @@
       $.extend(oThis.config, config);
       oThis.googleCharts_1 = new GoogleCharts();
       oThis.bindButtons();
+      oThis.triggerClick();
       oThis.initDatatable();
     },
 
@@ -21,6 +22,10 @@
         oThis.printTransfersChart($(this).data('interval'));
       });
 
+    },
+
+    triggerClick: function(){
+      $('.interval[data-interval="Hour"]').trigger('click');
     },
 
     initDatatable: function(){
@@ -159,12 +164,23 @@
       switch(interval) {
         case 'Day':
           var format = 'H';
+          var count = 24;
           break;
         case 'Hour':
           var format = 'm';
+          var count = 12;
+          break;
+        case 'Week':
+          var format = 'EE';
+          var count = 7;
           break;
         case 'Month':
           var format = 'd';
+          var count = 30;
+          break;
+        case 'Year':
+          var format = 'MMM';
+          var count = 12;
           break;
       }
       oThis.googleCharts_1.draw({
@@ -206,7 +222,8 @@
           hAxis: {
             format: format,
             gridlines: {
-              color: 'transparent'
+              color: 'transparent',
+              count: count
             },
             textStyle: oThis.chartTextStyle
           },
