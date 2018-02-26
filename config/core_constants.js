@@ -16,8 +16,8 @@ define("ADDRESS_TRANSACTION_TABLE_NAME", 'address_transactions');
 define("TOKEN_TRANSACTION_TABLE_NAME", 'token_transactions');
 define("ADDRESS_TOKEN_TRANSACTION_TABLE_NAME", 'address_token_transactions');
 define("BRANDED_TOKEN_TABLE_NAME", 'branded_token');
-define("home","home");
 define("ADDRESS_TABLE_NAME", "address");
+define("TOKEN_TRANSACTIONS_TABLE_NAME","token_transactions");
 
 // Available columns in tables
 define("BLOCKS_DATA_SEQUENCE", '(number, hash, parent_hash, miner, difficulty, total_difficulty, gas_limit, gas_used, total_transactions, timestamp, verified)');
@@ -43,6 +43,8 @@ define("blocks", "home");
 define("transaction", "transactionDetails");
 define("block","blockDetail");
 define("address_details",'addressDetails');
+define("home","home");
+
 
 define("BASE_URL",process.env.BASE_URL);
 define("CHAIN_ID",process.env.CHAIN_ID);

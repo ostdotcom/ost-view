@@ -195,7 +195,59 @@ contract.prototype = {
           reject(reason);
         });
     });
-  },
+  }
+
+  /**
+   *Get recent token transactions available on utility chain.
+   *
+   *@return {Promise<Object>} List of pending transactions.
+   */
+    ,getRecentTokenTransactions : function(pageNumber){
+    const oThis = this;
+
+    return new Promise(function(resolve, reject){
+
+      if (pageNumber == undefined || !pageNumber || isNaN(pageNumber) || pageNumber < 0) {
+        pageNumber = constants.DEFAULT_PAGE_NUMBER;
+      }
+
+      oThis._dbInstance.getRecentTokenTransactions(pageNumber,constants.DEFAULT_PAGE_SIZE)
+        .then(function(response){
+          resolve(response);
+        })
+        .catch(function(reason){
+          reject(reason);
+        });
+
+    });
+  }
+
+  /**
+   *Get list top tokens available on utility chain.
+   *
+   *@return {Promise<Object>} List of pending transactions.
+   */
+  ,getTopTokens : function(pageNumber){
+    const oThis = this;
+
+    return new Promise(function(resolve, reject){
+
+      if (pageNumber == undefined || !pageNumber || isNaN(pageNumber) || pageNumber < 0) {
+        pageNumber = constants.DEFAULT_PAGE_NUMBER;
+      }
+
+      oThis._dbInstance.getTopTokens(pageNumber,constants.DEFAULT_PAGE_SIZE)
+        .then(function(response){
+          resolve(response);
+        })
+        .catch(function(reason){
+          reject(reason);
+        });
+
+    });
+  }
+
+
 
 
 };

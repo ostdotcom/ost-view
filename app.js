@@ -31,6 +31,7 @@ const rootPrefix    = "."
   , logger = require(rootPrefix + '/helpers/custom_console_logger')
   , handlebarHelper = require(rootPrefix + '/helpers/handlebar_helper')
   , tokenDetailsRoutes = require(rootPrefix + '/routes/tokenDetails')
+  , tokenTransactionsRoutes = require (rootPrefix + '/routes/tokenTransactions')
 ;
 
 // if the process is a master.
@@ -161,6 +162,7 @@ if (cluster.isMaster) {
   app.use('/chain-id/:chainId/search', searchRoutes);
   app.use('/chain-id/:chainId/contract', contractRoutes);
   app.use('/chain-id/:chainId/tokendetails', tokenDetailsRoutes);
+  app.use('/chain-id/:chainId/tokens', tokenTransactionsRoutes);
 
   // catch 404 and forward to error handler
   app.use(function (req, res, next) {

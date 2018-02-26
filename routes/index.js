@@ -73,8 +73,13 @@ function fetchHomeData (req, res){
       const response = responseHelper.successWithData({
         home: requestResponse,
         result_type: "home",
-        mCss: ['mTokenDetails.css'],
-        view_data:req.homeInstance.getChainInfo(requestResponse)
+        mCss:['mTokenDetails.css'],
+        mJs:['mHome.js'],
+        view_data:req.homeInstance.getChainInfo(requestResponse),
+        meta:{
+          "top_tokens_url" : "/chain-id/"+req.chainId+"/tokens/top/1",
+          "latest_token_transfer_url" : "/chain-id/"+req.chainId+"/tokens/transactions/recent/1"
+        }
       });
 
       return renderResult(response, res, req.headers['content-type']);

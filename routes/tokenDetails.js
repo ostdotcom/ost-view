@@ -16,7 +16,6 @@ const rootPrefix = ".."
   , responseHelper = require(rootPrefix + '/lib/formatter/response')
   , coreConfig = require(rootPrefix + '/config')
   , logger = require(rootPrefix + '/helpers/custom_console_logger')
-  , coreConstant =  require(rootPrefix + '/config/core_constants')
 ;
 
 // Render final response

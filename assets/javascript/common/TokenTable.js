@@ -11,7 +11,7 @@
       "serverSide": true,
       paging:true,
       responsive: true,
-      "columns": []
+      "columns": [],
     };
 
     $.extend( true, oThis, config );
