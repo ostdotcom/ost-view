@@ -13,7 +13,10 @@
                       <div class="input-group-prepend">
                           <span class="input-group-text">s</span>
                       </div>
-                      <input class="form-control" type="search" name="q" placeholder="Token, Transactions, Address or Block#" aria-label="Search">
+                      <form id="btxSearch" action="/search">
+                          <input type="hidden" name="chain_id" value="142" />
+                          <input class="form-control" id="search" type="search" name="q" placeholder="Token, Transactions, Address or Block#" aria-label="Search">
+                      </form>
                   </div>
               </li>
               <li class="nav-item">

@@ -3,3 +3,4 @@
  */
 
 //= require common/common.js
+//= require common/search.js

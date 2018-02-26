@@ -16,6 +16,8 @@ const rootPrefix = ".."
   , coreConfig = require(rootPrefix + '/config')
   , logger = require(rootPrefix + '/helpers/custom_console_logger')
   , coreConstant = require(rootPrefix + '/config/core_constants')
+  , search = require(rootPrefix + '/models/search')
+
   ;
 
 // Render final response
@@ -25,12 +27,8 @@ const renderResult = function (requestResponse, responseObject, contentType) {
 
 // define parameters from url, generate web rpc instance and database connect
 const homeMiddleware = function (req, res, next) {
-  var chainId = req.params.chainId
+  const chainId = req.params.chainId
     ;
-
-  if(undefined === chainId){
-    chainId = coreConstant['CHAIN_ID'];
-  }
 
   // Get instance of contract class
   req.homeInstance = new home(chainId);
@@ -89,5 +87,56 @@ function fetchHomeData (req, res){
       return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
     });
 }
+
+
+
+// define parameters from url, generate web rpc instance and database connect
+const searchMiddleware = function (req, res, next) {
+  var chainId = req.params.chainId
+    , q = req.query.q
+    ;
+
+  if(undefined === chainId){
+    chainId = coreConstant['CHAIN_ID'];
+  }
+  // create instance of search class
+  req.searchInstance = new search(chainId);
+
+  req.q = q;
+  req.chainId = chainId
+
+  next();
+};
+
+/**
+ * Search by address, contract address, transaction hash, block number
+ *
+ * @name Search
+ *
+ * @route {GET} {base_url}/:param
+ *
+ * @routeparam {String} :params - search string
+ */
+router.get('/search', searchMiddleware, function (req, res) {
+
+  req.searchInstance.getParamData(req.q)
+    .then(function (requestResponse) {
+      const response = responseHelper.successWithData({
+        redirect_url: "/chain-id/"+req.chainId +requestResponse,
+        result_type: "redirect_url"
+      });
+
+      return renderResult(response, res, 'application/json');
+    })
+    .catch(function (reason) {
+      const response = responseHelper.successWithData({
+        redirect_url: "/search?q="+reason,
+        result_type: "redirect_url"
+      });
+
+      return renderResult(response, res, 'application/json');
+    });
+});
+
 
 module.exports = router;

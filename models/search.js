@@ -24,7 +24,8 @@ const balanceIndex = 0
  */
 
 var search = module.exports = function (chainId) {
-  
+
+  this.chainId = chainId;
   this._utilityInteractInstance = rpcInteract.getInstance(chainId);
 
 }
@@ -45,9 +46,8 @@ search.prototype = {
     return new Promise(function (resolve, reject) {
 
       if (argument == undefined) {
-        reject('invalid input');
+        reject(argument);
         return;
-
       }
 
       if (argument.length === constants.ACCOUNT_HASH_LENGTH) {
@@ -64,11 +64,10 @@ search.prototype = {
 
           resolve("/transaction/"+argument);
       }else if(!isNaN(argument)){
-                          console.log("*** 4 ***");
 
           resolve("/block/"+argument);
       }else{
-          reject('invalid input');
+        reject(argument);
       }
     });
   }
