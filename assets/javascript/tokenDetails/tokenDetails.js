@@ -171,6 +171,18 @@
         ajax: {
           url: url
         },
+        columns: [
+          {
+            type: 'datetime',
+            opt_label: 'Date',
+            opt_id: 'timestamp'
+          },
+          {
+            type: 'number',
+            opt_label: 'Transaction Count',
+            opt_id: 'transaction_count'
+          }
+        ],
         options: {
           series: {
             0: {

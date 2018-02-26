@@ -75,6 +75,7 @@
         $.each( oThis.columns, function( index, value ) {
           data.addColumn(value);
         });
+        oThis.data.splice(0, 1);
         data.addRows(oThis.data);
         console.log('Using custom columns and data to build DataTable...');
       } else {
@@ -99,7 +100,7 @@
     },
 
     /*
-     * dataSrc to specify custom
+     * dataSrc to specify custom data source in ajax response
      */
     dataSrc: function(response){
       return response.data[response.data.result_type];
@@ -111,7 +112,17 @@
     ajaxCallback: function(response){
       var oThis = this;
       var data = [];
-      var header = Object.keys(oThis.dataSrc(response)[0]);
+      var header_temp = Object.keys(oThis.dataSrc(response)[0]);
+      var header = [];
+      if(!$.isEmptyObject(oThis.columns)){
+        $.each( oThis.columns, function( index, value ) {
+          if(header_temp.indexOf(value.opt_id) > -1){
+            header.push(value.opt_id);
+          }
+        });
+      } else {
+        var header = header_temp;
+      }
       data.push(header);
       $.each( oThis.dataSrc(response), function( index, value ) {
         var row = [];
