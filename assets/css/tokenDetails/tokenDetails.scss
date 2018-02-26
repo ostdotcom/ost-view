@@ -54,15 +54,15 @@
         .card-body{
             background: #f1f5f8;
             margin-top: -20px;
+            .ost-alpha-badge{
+                position: absolute;
+                right: 0;
+            }
             h3.name{
                 color: #438bad;
                 font-size: 1rem;
                 font-weight: 500;
                 text-transform: uppercase;
-                .badge-primary{
-                    background: #19a5b8;
-                    color: #fff;
-                }
             }
             .value{
                 color: #e4b030;

@@ -53,3 +53,7 @@ $sprite-location: "/Sprite-1X.png";
 .total-supply{
   @include icon-generator(110px, 50px, -457px, -15px, -457px, -457px);
 }
+
+.ost-alpha-badge{
+  @include icon-generator(50px, 30px, -70px, -65px, -70px, -70px);
+}
