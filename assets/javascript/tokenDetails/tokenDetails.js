@@ -17,9 +17,15 @@
     bindButtons: function(){
 
       $('.interval').on('click', function(){
-        $(this).closest('.graph-header').find('.interval').removeClass('active');
+        var $graphCard = $(this).closest('.card-graph');
+        $graphCard.find('.interval').removeClass('active');
         $(this).addClass('active');
-        oThis.printTransfersChart($(this).data('interval'));
+        if($graphCard.hasClass('graph-1')){
+          oThis.printTransfersChart($(this).data('interval'));
+        } else {
+          // other
+        }
+
       });
 
     },
