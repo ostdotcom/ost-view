@@ -3,5 +3,6 @@
  */
 
 //= require common/TokenTable.js
+//= require common/GoogleCharts.js
 //= require home/home.js
 

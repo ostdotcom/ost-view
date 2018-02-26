@@ -14,8 +14,33 @@
     init: function ( config ) {
       var oThis = this;
       $.extend(oThis.config, config);
+      oThis.googleCharts_1 = new GoogleCharts();
+      oThis.bindButtons();
+      oThis.triggerClick();
       oThis.initDatatable();
     },
+
+    bindButtons: function(){
+
+      $('.interval').on('click', function(){
+        var $graphCard = $(this).closest('.card-graph');
+        $graphCard.find('.interval').removeClass('active');
+        $(this).addClass('active');
+        if($graphCard.hasClass('graph-1')){
+          oThis.printTransfersChart($(this).data('interval'));
+        } else {
+          oThis.printVolumeChart($(this).data('interval'));
+        }
+
+      });
+
+    },
+
+    triggerClick: function(){
+      $('.graph-1 .interval[data-interval="Hour"]').trigger('click');
+      $('.graph-2 .interval[data-interval="Hour"]').trigger('click');
+    },
+
 
     initDatatable: function(){
       var oThis = this;
@@ -197,6 +222,171 @@
 
           });
         }
+      });
+    },
+
+    printTransfersChart: function(interval){
+      var url = oThis.config.token_transfer_graph_url+interval;
+      switch(interval) {
+        case 'Day':
+          var format = 'H';
+          var count = 24;
+          break;
+        case 'Hour':
+          var format = 'm';
+          var count = 12;
+          break;
+        case 'Week':
+          var format = 'EE';
+          var count = 7;
+          break;
+        case 'Month':
+          var format = 'd';
+          var count = 30;
+          break;
+        case 'Year':
+          var format = 'MMM';
+          var count = 12;
+          break;
+      }
+      oThis.googleCharts_1.draw({
+        ajax: {
+          url: url
+        },
+        columns: [
+          {
+            type: 'datetime',
+            opt_label: 'Date',
+            opt_id: 'timestamp'
+          },
+          {
+            type: 'number',
+            opt_label: 'Transaction Count',
+            opt_id: 'transaction_count'
+          }
+        ],
+        options: {
+          series: {
+            0: {
+              targetAxisIndex: 0,
+              labelInLegend: 'No. of Transfers',
+              color: '84d1d4'
+            },
+            1: {
+              targetAxisIndex: 1,
+              labelInLegend: 'Value of Transfers',
+              color: 'ff5f5a'
+            }
+          },
+          legend: {
+            position: 'none'
+          },
+          chartArea: {
+            width: '90%',
+            height: '80%'
+          },
+          hAxis: {
+            format: format,
+            gridlines: {
+              color: 'transparent',
+              count: count
+            },
+            textStyle: oThis.chartTextStyle
+          },
+          vAxis: {
+            gridlines: {
+              color: 'e3eef3'
+            },
+            textStyle: oThis.chartTextStyle
+          }
+        },
+        selector: '#transactionsValue',
+        type: 'LineChart'
+      });
+    },
+
+    chartTextStyle: {
+      color: '597a84',
+      fontSize: 10
+    },
+
+    printVolumeChart: function(interval){
+      var url = oThis.config.token_volume_graph_url+interval;
+      switch(interval) {
+        case 'Day':
+          var format = 'H';
+          var count = 24;
+          break;
+        case 'Hour':
+          var format = 'm';
+          var count = 12;
+          break;
+        case 'Week':
+          var format = 'EE';
+          var count = 7;
+          break;
+        case 'Month':
+          var format = 'd';
+          var count = 30;
+          break;
+        case 'Year':
+          var format = 'MMM';
+          var count = 12;
+          break;
+      }
+      oThis.googleCharts_1.draw({
+        ajax: {
+          url: url
+        },
+        columns: [
+          {
+            type: 'datetime',
+            opt_label: 'Date',
+            opt_id: 'timestamp'
+          },
+          {
+            type: 'number',
+            opt_label: 'Transaction Volume',
+            opt_id: 'ost_amount'
+          }
+        ],
+        options: {
+          series: {
+            0: {
+              targetAxisIndex: 0,
+              labelInLegend: 'No. of Transfers',
+              color: '84d1d4'
+            },
+            1: {
+              targetAxisIndex: 1,
+              labelInLegend: 'Value of Transfers',
+              color: 'ff5f5a'
+            }
+          },
+          legend: {
+            position: 'none'
+          },
+          chartArea: {
+            width: '90%',
+            height: '80%'
+          },
+          hAxis: {
+            format: format,
+            gridlines: {
+              color: 'transparent',
+              count: count
+            },
+            textStyle: oThis.chartTextStyle
+          },
+          vAxis: {
+            gridlines: {
+              color: 'e3eef3'
+            },
+            textStyle: oThis.chartTextStyle
+          }
+        },
+        selector: '#transactionsVolume',
+        type: 'LineChart'
       });
     }
 
