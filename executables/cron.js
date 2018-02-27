@@ -89,7 +89,7 @@ function startAggregator() {
 
 
 function writeLogsToFile(fileName, data) {
-    const LOGS_DIR = "./logs/";
+    const LOGS_DIR = "./log/";
     var stream = fs.createWriteStream(LOGS_DIR + fileName, {flags:'a'});
     stream.write(data + "\n");
     stream.end();
