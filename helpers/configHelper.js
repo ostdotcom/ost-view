@@ -101,10 +101,10 @@ ConfigHelper.prototype.getContractDetailsOfIdByPromise = function(dbInteract, co
             oThis.syncUpContractMap(dbInteract)
                 .then(function(){
                     return resolve(oThis.getContractOfId(contractId));
-                },reject);
+                }, reject);
 
         } else {
-            return resolve(contractId);
+            return resolve(contract);
         }
     });
 };
