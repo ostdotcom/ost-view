@@ -65,8 +65,10 @@ router.get("/:contractAddress", contractMiddleware, function (req, res) {
         meta:{
           transactions_url: '/chain-id/'+req.chainId+'/contract/'+req.contractAddress+'/internal-transactions',
           token_holders_url:'/chain-id/'+req.chainId+'/tokendetails/'+req.contractAddress+'/holders',
-          q:req.contractAddress,
-          chainId:req.chainId
+          token_transfer_graph_url: "/chain-id/"+req.chainId+"/tokenDetails/"+req.contractAddress+"/graph/numberOfTransactions/",
+          token_volume_graph_url: "/chain-id/"+req.chainId+"/tokenDetails/"+req.contractAddress+"/graph/numberOfTransactions/",
+          contract_address:req.contractAddress,
+          chain_id:req.chainId
         },
         view_data:req.contractInstance.getTokenDetailsInfo(response)
       });

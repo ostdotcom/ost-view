@@ -77,8 +77,12 @@ function fetchHomeData (req, res){
         mJs:['mHome.js'],
         view_data:req.homeInstance.getChainInfo(requestResponse),
         meta:{
+          "chain_id" : req.chainId,
+          "contract_address" : coreConstant['BASE_CONTRACT_ADDRESS'],
           "top_tokens_url" : "/chain-id/"+req.chainId+"/tokens/top",
-          "latest_token_transfer_url" : "/chain-id/"+req.chainId+"/tokens/transactions/recent"
+          "latest_token_transfer_url" : "/chain-id/"+req.chainId+"/tokens/transactions/recent",
+          "token_transfer_graph_url" : "/chain-id/"+req.chainId+"/tokenDetails/"+coreConstant['BASE_CONTRACT_ADDRESS']+"/graph/numberOfTransactions/",
+          "token_volume_graph_url" : "/chain-id/"+req.chainId+"/tokenDetails/"+coreConstant['BASE_CONTRACT_ADDRESS']+"/graph/numberOfTransactions/"
         }
       });
 

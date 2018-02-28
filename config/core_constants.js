@@ -48,5 +48,6 @@ define("home","home");
 
 define("BASE_URL",process.env.BASE_URL);
 define("CHAIN_ID",process.env.CHAIN_ID);
+define("BASE_CONTRACT_ADDRESS",process.env.BASE_CONTRACT_ADDRESS);
 
 module.exports = constants;
