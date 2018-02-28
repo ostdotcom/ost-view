@@ -72,7 +72,7 @@ router.get('/:address', addressMiddleware, function (req, res) {
         },
         result_type: 'address_details',
         title: 'Address Details - '+req.addressValue,
-        transaction_url: coreConstant['BASE_URL']+'/chain-id/'+req.chainId+'/address/'+req.addressValue+'/transactions/1'
+        transaction_url: '/chain-id/'+req.chainId+'/address/'+req.addressValue+'/transactions/1'
       });
 
       console.log("responseData :: ",responseData);
