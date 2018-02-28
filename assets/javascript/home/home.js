@@ -136,11 +136,11 @@
             });
 
             element['from_redirect_url'] =  Handlebars.compile(addressURL)({
-              addr: from
+              address: from
             });
 
             element['to_redirect_url'] =  Handlebars.compile(addressURL)({
-              addr: to
+              address: to
             });
           });
         }

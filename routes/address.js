@@ -131,8 +131,8 @@ router.get('/:address/transactions/:page', addressMiddleware, function (req, res
         transactions: requestResponse,
         result_type: "transactions",
         meta:{
-          transaction_placeholder_url:coreConstant["BASE_URL"]+"/chain-id/"+req.chainId+"/transaction/{{tr_hash}}",
-          address_placeholder_url:coreConstant["BASE_URL"]+"/chain-id/"+req.chainId+"/address/{{addr}}",
+          transaction_placeholder_url:"/chain-id/"+req.chainId+"/transaction/{{tr_hash}}",
+          address_placeholder_url:"/chain-id/"+req.chainId+"/address/{{addr}}",
           page:req.page,
           q:req.addressValue
 
