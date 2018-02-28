@@ -34,7 +34,7 @@ define("TOKEN_TRANSACTION_INDEX_MAP", {'hash':0, 'contract_address':1, 't_from':
 define('ACCOUNT_HASH_LENGTH',42);
 define('TRANSACTION_HASH_LENGTH', 66);
 define('DEFAULT_PAGE_SIZE', 10);
-define('DEFAULT_PAGE_NUMBER',1);
+define('DEFAULT_PAGE_NUMBER',0);
 
 //template map
 define("contract_internal_transactions", "transactionList");

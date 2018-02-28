@@ -133,23 +133,25 @@ contract.prototype = {
   }
 
 
-  , getTokenHolders: function(contractAddress){
+  , getTokenHolders: function(contractAddress, pageNumber){
   const oThis = this;
   return new Promise(function (resolve, reject) {
 
-    if ((contractAddress == undefined || contractAddress.length != constants.ACCOUNT_HASH_LENGTH) &&  contractAddress != '0') {
+    if ((contractAddress === undefined || contractAddress.length != constants.ACCOUNT_HASH_LENGTH) &&  contractAddress != '0') {
       reject("invalid input");
       return;
     }
-    console.log("1");
+
+    if (pageNumber === undefined || pageNumber < 0){
+      pageNumber = constants.DEFAULT_PAGE_NUMBER;
+
+    }
 
     oThis._dbInstance.getBrandedTokenIdFromContract(contractAddress)
       .then(function (response) {
-        console.log("2");
 
-        oThis._dbInstance.getAddressesWithBrandedToken(response)
+        oThis._dbInstance.getAddressesWithBrandedToken(response, pageNumber, constants.DEFAULT_PAGE_SIZE)
           .then(function(holders){
-            console.log("3");
 
             resolve(holders);
           })
@@ -202,7 +204,7 @@ contract.prototype = {
    *
    *@return {Promise<Object>} List of pending transactions.
    */
-    ,getRecentTokenTransactions : function(pageNumber){
+    ,getRecentTokenTransactions : function(pageNumber, pagePaylaod){
     const oThis = this;
 
     return new Promise(function(resolve, reject){
@@ -211,9 +213,13 @@ contract.prototype = {
         pageNumber = constants.DEFAULT_PAGE_NUMBER;
       }
 
-      oThis._dbInstance.getRecentTokenTransactions(pageNumber,constants.DEFAULT_PAGE_SIZE)
+      oThis._dbInstance.getRecentTokenTransactions(pageNumber,5, pagePaylaod)
         .then(function(response){
-          resolve(response);
+          const responseData = {
+            response : response,
+            pageSize : 5
+          }
+          resolve(responseData);
         })
         .catch(function(reason){
           reject(reason);
@@ -227,18 +233,22 @@ contract.prototype = {
    *
    *@return {Promise<Object>} List of pending transactions.
    */
-  ,getTopTokens : function(pageNumber){
+  ,getTopTokens : function(pageNumber, pagePayload){
     const oThis = this;
 
     return new Promise(function(resolve, reject){
 
-      if (pageNumber == undefined || !pageNumber || isNaN(pageNumber) || pageNumber < 0) {
+      if (pageNumber === undefined || !pageNumber || isNaN(pageNumber) || pageNumber < 0) {
         pageNumber = constants.DEFAULT_PAGE_NUMBER;
       }
 
-      oThis._dbInstance.getTopTokens(pageNumber,constants.DEFAULT_PAGE_SIZE)
+      oThis._dbInstance.getTopTokens(pageNumber, constants.DEFAULT_PAGE_SIZE, pagePayload)
         .then(function(response){
-          resolve(response);
+          const responseData={
+            response:response,
+            pageSize:constants.DEFAULT_PAGE_SIZE
+          }
+          resolve(responseData);
         })
         .catch(function(reason){
           reject(reason);

@@ -15,6 +15,7 @@
       var oThis = this;
       $.extend(oThis.config, config);
       oThis.googleCharts_1 = new GoogleCharts();
+      oThis.googleCharts_2 = new GoogleCharts();
       oThis.bindButtons();
       oThis.triggerClick();
       oThis.initDatatable();
@@ -39,7 +40,9 @@
     triggerClick: function(){
       $('.graph-1 .interval[data-interval="Hour"]').trigger('click');
       $('.graph-2 .interval[data-interval="Hour"]').trigger('click');
+
     },
+
 
 
     initDatatable: function(){
@@ -115,7 +118,6 @@
           ]
         },
         responseReceived: function ( response ) {
-
 
           var dataToProceess = response.data[response.data.result_type];
           var meta =  response.data.meta;
@@ -206,7 +208,6 @@
         },
 
         responseReceived: function ( response ) {
-          console.log("came here")
 
           var dataToProceess = response.data[response.data.result_type];
           var meta =  response.data.meta;
@@ -337,7 +338,7 @@
           var count = 12;
           break;
       }
-      oThis.googleCharts_1.draw({
+      oThis.googleCharts_2.draw({
         ajax: {
           url: url
         },

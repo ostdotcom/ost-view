@@ -53,8 +53,12 @@
             .input-data-break-all{
                 word-break: break-all;
             }
-
         }
+    }
+}
 
+.token-table {
+    tr {
+        background-color: #ffffff !important;
     }
 }

@@ -26,7 +26,7 @@
 
     $.extend( true, oThis, config );
 
-    oThis.loadDataTable();
+    return oThis.loadDataTable();
 
   };
 
@@ -39,23 +39,46 @@
 
     loadDataTable: function(){
       var oThis = this;
+      var meta;
+      var payload;
+      var previousStartIndex;
+
+
       oThis.dtConfig.ajax = function (data, callback, settings) {
+
+        var currentStart = settings.oAjaxData.start;
+
+        if (meta !== undefined) {
+
+          if (currentStart > previousStartIndex) {
+            payload = {next_page_payload: meta.next_page_payload};
+
+          } else {
+            payload = {prev_page_payload: meta.prev_page_payload};
+
+          }
+        }
+
         $.ajax({
           url: oThis.ajaxURL,
-          data: settings.oAjaxData,
+          data: payload,
+          contentType: "application/json",
           success: function (response) {
+            meta = response.data.meta;
             oThis.responseReceived.apply( oThis, arguments );
+            previousStartIndex = settings.oAjaxData.start;
             callback({
               data: response.data[response.data.result_type],
               recordsTotal: response.data.recordsTotal,
-              draw: response.data.draw,
-              meta: response.data.meta
+              draw: settings.oAjaxData.draw,
+              meta: response.data.meta,
+              recordsFiltered: response.data.recordsTotal,
             });
           }
         })
       };
 
-      $(oThis.selector).DataTable(oThis.dtConfig);
+      return $(oThis.selector).DataTable(oThis.dtConfig);
     },
 
     responseReceived: function ( response ) {

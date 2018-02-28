@@ -27,9 +27,11 @@ const renderResult = function (requestResponse, responseObject, contentType) {
 
 // define parameters from url, generate web rpc instance and database connect
 const homeMiddleware = function (req, res, next) {
-  const chainId = req.params.chainId
+  var chainId = req.params.chainId
     ;
-
+  if(undefined === chainId){
+    chainId = coreConstant['CHAIN_ID'];
+  }
   // Get instance of contract class
   req.homeInstance = new home(chainId);
 
@@ -75,8 +77,8 @@ function fetchHomeData (req, res){
         mJs:['mHome.js'],
         view_data:req.homeInstance.getChainInfo(requestResponse),
         meta:{
-          "top_tokens_url" : "/chain-id/"+req.chainId+"/tokens/top/1",
-          "latest_token_transfer_url" : "/chain-id/"+req.chainId+"/tokens/transactions/recent/1"
+          "top_tokens_url" : "/chain-id/"+req.chainId+"/tokens/top",
+          "latest_token_transfer_url" : "/chain-id/"+req.chainId+"/tokens/transactions/recent"
         }
       });
 

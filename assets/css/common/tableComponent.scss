@@ -37,48 +37,48 @@
 
   }
 
-  .token-table {
-    tbody,
-    tr {
-      background-color: #fafcfd !important;
-    }
-
-    th,
-    td {
-      padding: 0 !important;
-      font-size: 0.75rem;
-      width: 16%;
-      color: #597a84;
-      border-top: 1rem solid #ffffff;
-      a,
-      a:visited,
-      a:active,
-      a:hover {
-        color: #179eb1;
-      }
-
-      .cell {
-        height: 40px;
-        .badge-primary {
-          background: #9cc5c1;
-        }
-        .text-truncate {
-          max-width: 150px
-        }
-        @media (max-width: 576px) {
-          min-width: 100px;
-          .text-truncate {
-            max-width: 75px
-          }
-        }
-      }
-    }
-    td:nth-of-type(6) {
-      width: 4%;
-    }
-  }
 }
 
+.token-table {
+  tbody,
+  tr {
+    background-color: #fafcfd !important;
+  }
+
+  th,
+  td {
+    padding: 0 !important;
+    font-size: 0.75rem;
+    width: 16%;
+    color: #597a84;
+    border-top: 1rem solid #ffffff;
+    a,
+    a:visited,
+    a:active,
+    a:hover {
+      color: #179eb1;
+    }
+
+    .cell {
+      height: 40px;
+      .badge-primary {
+        background: #9cc5c1;
+      }
+      .text-truncate {
+        max-width: 150px
+      }
+      @media (max-width: 576px) {
+        min-width: 100px;
+        .text-truncate {
+          max-width: 75px
+        }
+      }
+    }
+  }
+  td:nth-of-type(6) {
+    width: 4%;
+  }
+}
 
 table.dataTable.no-footer {
   border-bottom:none!important;

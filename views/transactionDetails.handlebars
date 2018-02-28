@@ -25,36 +25,45 @@
                 </div>
 
                 <div class="card-body card-body-table">
-                    <table class="table">
+                    <table class="table token-table">
                         <tbody>
                             <tr>
-                                <td class="">
-                                    <div class="circle circle-sm">
-                                        <div>{{coin_details.company_symbol}}</div>
+                                <td>
+                                    <div class="cell d-flex align-items-center">
+                                        <div class="circle circle-sm">
+                                            <div>{{coin_details.company_symbol}}</div>
+                                        </div>
+                                        <div class="ml-2 name">{{coin_details.company_name}}</div>
                                     </div>
-                                    <div class="ml-2 name">{{coin_details.company_name}}</div>
+
                                 </td>
-                                <td class="">
-                                    <span class="badge badge-primary">{{transaction.tokens}} {{coin_details.company_symbol}}</span>
-                                    <span class="ml-1">({{math transaction.tokens '/' coin_details.price}} OST)</span>
+                                <td>
+                                    <div class="cell d-flex align-items-center">
+                                        <span class="badge badge-primary">{{transaction.tokens}} {{coin_details.company_symbol}}</span>
+                                        <span class="ml-1">({{math transaction.tokens '/' coin_details.price}} OST)</span>
+                                    </div>
                                 </td>
-                                <td class="">
-                                    {{ toDate transaction.timestamp }}
+                                <td>
+                                    <div class="cell d-flex align-items-center">
+                                        {{ toDate transaction.timestamp }}
+                                    </div>
                                 </td>
-                                <td class="">
-                                    <span class="default_black_color mr-1"> From </span>
-                                    <a class="default_bright_blue font-weight-light" href="{{meta.redirect_url.from}}">
-                                        <span class="text-truncate">{{transaction.t_from}}</span>
-                                    </a>
+                                <td >
+                                    <div class="cell d-flex align-items-center">
+                                    <span>From </span>
+                                    <a class="d-inline-block text-truncate ml-1" href="{{meta.redirect_url.from}}">{{transaction.t_from}}</a>
+                                    </div>
                                 </td>
-                                <td  class="">
-                                    <div class="text-center w-100" style="color:#597a84">&#8594;</div>
+                                <td>
+                                    <div class="cell d-flex align-items-center">
+                                        <div class="text-center w-100" style="color:#597a84">&#8594;</div>
+                                    </div>
                                 </td>
-                                <td class="">
-                                    <span class="key-color mr-1"> To </span>
-                                    <a class="default_bright_blue font-weight-light" href="{{meta.redirect_url.to}}">
-                                        <span class="text-truncate">{{transaction.t_to}}</span>
-                                    </a>
+                                <td>
+                                    <div class="cell d-flex align-items-center">
+                                    <span>To </span>
+                                    <a class="d-inline-block text-truncate ml-1" href="{{meta.redirect_url.to}}">{{transaction.t_to}}</a>
+                                    </div>
                                 </td>
                             </tr>
                         </tbody>

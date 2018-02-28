@@ -9,6 +9,7 @@
       var oThis = this;
       $.extend(oThis.config, config);
       oThis.googleCharts_1 = new GoogleCharts();
+      oThis.googleCharts_2 = new GoogleCharts();
       oThis.bindButtons();
       oThis.triggerClick();
       oThis.initDatatable();
@@ -275,7 +276,7 @@
           var count = 12;
           break;
       }
-      oThis.googleCharts_1.draw({
+      oThis.googleCharts_2.draw({
         ajax: {
           url: url
         },

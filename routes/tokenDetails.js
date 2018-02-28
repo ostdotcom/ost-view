@@ -28,6 +28,7 @@ const contractMiddleware = function (req, res, next) {
   const chainId = req.params.chainId
     , contractAddress = req.params.contractAddress
     , duration = req.params.duration
+    , pageNumber = 0;
   ;
   // Get instance of contract class
   req.contractInstance = new contract(chainId);
@@ -35,6 +36,7 @@ const contractMiddleware = function (req, res, next) {
   req.chainId = chainId;
   req.contractAddress = contractAddress;
   req.duration = duration;
+  req.pageNumber = pageNumber
 
   next();
 };
@@ -61,7 +63,7 @@ router.get("/:contractAddress", contractMiddleware, function (req, res) {
         mJs: ['mTokenDetails.js'],
 
         meta:{
-          transactions_url: '/chain-id/'+req.chainId+'/contract/'+req.contractAddress+'/internal-transactions/1',
+          transactions_url: '/chain-id/'+req.chainId+'/contract/'+req.contractAddress+'/internal-transactions',
           token_holders_url:'/chain-id/'+req.chainId+'/tokendetails/'+req.contractAddress+'/holders',
           q:req.contractAddress,
           chainId:req.chainId
@@ -123,11 +125,13 @@ router.get("/:contractAddress/graph/numberOfTransactions/:duration", contractMid
  */
 router.get("/:contractAddress/holders", contractMiddleware, function (req, res) {
 
-  req.contractInstance.getTokenHolders( req.contractAddress )
+  req.contractInstance.getTokenHolders( req.contractAddress,  req.pageNumber)
     .then(function(response){
       const responseData = responseHelper.successWithData({
         token_holders : response,
         result_type: "token_holders",
+        draw:req.query.draw,
+        recordsTotal : 120,
         meta:{
           q:req.contractAddress,
           chainId:req.chainId
