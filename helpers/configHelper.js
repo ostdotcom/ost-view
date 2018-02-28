@@ -14,8 +14,17 @@ ConfigHelper.prototype.syncUpContractMap = function(dbInteract) {
     return dbInteract.getBrandedTokenDetails()
         .then(function(btResult) {
             btResult.forEach(function(contractHash){
-                oThis.contractIdMap[contractHash.contract_address] = contractHash.id;
-                oThis.idContractMap[contractHash.id] = contractHash.contract_address;
+
+                const brandedTokenDetails = {
+                    id : contractHash.id,
+                    company_name : contractHash.company_name,
+                    contract_address : contractHash.contract_address,
+                    company_symbol : contractHash.company_symbol,
+                    price : contractHash.price
+                }
+
+                oThis.contractIdMap[contractHash.contract_address] = brandedTokenDetails;
+                oThis.idContractMap[contractHash.id] = brandedTokenDetails;
             });
         });
 };
@@ -26,8 +35,33 @@ ConfigHelper.prototype.syncUpContractMap = function(dbInteract) {
  * @returns {*}
  */
 ConfigHelper.prototype.getIdOfContract = function(contract_address) {
-    return this.contractIdMap[contract_address];
+    return this.contractIdMap[contract_address].id;
 };
+
+
+/**
+ * Get Contract of Id
+ * @param {Integer} contract_id - Contract Id
+ * @returns {*}
+ */
+ConfigHelper.prototype.getContractOfId = function(contract_id) {
+    return this.idContractMap[contract_id].contract_address;
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /**
  * Get Id of Contract by returning promise
@@ -48,14 +82,7 @@ ConfigHelper.prototype.getIdOfContractByPromise = function(dbInteract, contractA
     return Promise.resolve(contractId);
 };
 
-/**
- * Get Contract of Id
- * @param {Integer} contract_id - Contract Id
- * @returns {*}
- */
-ConfigHelper.prototype.getContractOfId = function(contract_id) {
-    return this.idContractMap[contract_id];
-};
+
 
 /**
  * Get Contract of Id by returning promise
@@ -63,7 +90,7 @@ ConfigHelper.prototype.getContractOfId = function(contract_id) {
  * @param {Integer} contractId - contract id
  * @returns {Promise}
  */
-ConfigHelper.prototype.getContractOfIdByPromise = function(dbInteract, contractId) {
+ConfigHelper.prototype.getContractDetailsOfIdByPromise = function(dbInteract, contractId) {
     var oThis = this;
     var contract = oThis.getContractOfId(contractId);
     if (undefined == contract) {
@@ -75,5 +102,26 @@ ConfigHelper.prototype.getContractOfIdByPromise = function(dbInteract, contractI
     }
     return Promise.resolve(contract);
 };
+
+/**
+ * Get Contract of Id by returning promise
+ * @param {Object} dbInteract -  Db interact object
+ * @param {Integer} contractId - contract id
+ * @returns {Promise}
+ */
+ConfigHelper.prototype.getContractDetailsOfAddressByPromise = function(dbInteract, contractId) {
+    var oThis = this;
+    var contract = oThis.getContractOfId(contractId);
+    if (undefined == contract) {
+        this.syncUpContractMap(dbInteract)
+          .then(function(){
+              return Promise.resolve(oThis.getContractOfId(contract))
+          });
+
+    }
+    return Promise.resolve(contract);
+};
+
+
 
 module.exports = new ConfigHelper();
