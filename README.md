@@ -48,22 +48,31 @@ OPENST-EXPLORER
 ```
 
  * Run migration
-  > It will run migrations for all the configured chains
-```
-  > node executables/db_migrate.js up
-```
-
   > To run migrations for specific chain specify chain Id
   ```
     > node executables/db_migrate.js up -c <chain_id>
   ```
+  > To run migrations for all the configured chains (make sure all databases are created.)
+  ```
+    > node executables/db_migrate.js up
+  ```
+## In terminal 1
+   * (Optional) Start notification listener(rabbitmq)
+       > rabbitmq is required for processing with notificationListener
+       ```
+           > cd openst-explorer
+           > source source ~/openst-setup/openst_env_vars.sh
+           > ./executables/notificationListener.js
+       ```
 
+## In terminal 2
 * Start block fetcher
-```
-  > nohup node executables/block_fetcher_cron.js --chainID <chain_id> >> log/block_fetcher_cron.log &
-```
+   > It will run block fetcher, block verifier and block aggregator cron.
+    ```
+     > ./executables/block_fetcher_cron.js --chainID <chain_id> >> log/block_fetcher_cron.log &
+    ```
 
 * Start block verifier
-```
-  > nohup node executables/block_verifier_cron.js --chainID <chain_id> >> log/block_verifier_cron.log &
-```
+    ```
+      > ./executables/block_verifier_cron.js --chainID <chain_id> >> log/block_verifier_cron.log &
+    ```
