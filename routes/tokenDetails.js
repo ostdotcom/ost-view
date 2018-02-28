@@ -74,23 +74,27 @@ router.get("/:contractAddress", contractMiddleware, function (req, res) {
  */
 router.get("/:contractAddress/graph/numberOfTransactions/:duration", contractMiddleware, function (req, res) {
 
-    req.contractInstance.getGraphDataOfNumberOfBrandedTokenTransactions(req.contractAddress,req.duration)
-    .then (function(response){
-    const responseData = responseHelper.successWithData({
-      result_type: "number_of_transactions",
-      number_of_transactions :response,
-      meta:{
-        duaration:req.duration
+  req.contractInstance.getGraphDataOfNumberOfBrandedTokenTransactions(req.contractAddress, req.duration)
+    .then(function (response) {
+      if (response !== undefined) {
+        const responseData = responseHelper.successWithData({
+          result_type: "number_of_transactions",
+          number_of_transactions: response,
+          meta: {
+            duaration: req.duration
+          }
+        });
+
+        logger.log("Request of content-type:", req.headers['content-type']);
+        renderResult(responseData, res, req.headers['content-type']);
+      } else {
+        return renderResult(responseHelper.error('', "Data not available. Please check the input parameters."), res, req.headers['content-type']);
       }
-    });
-    logger.log("Request of content-type:", req.headers['content-type']);
-    renderResult(responseData, res, req.headers['content-type']);
-  })
-    .catch(function(reason){
+    })
+    .catch(function (reason) {
       logger.log(req.originalUrl + " : " + reason);
       return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
     });
-
 });
 
 /**
@@ -105,17 +109,22 @@ router.get("/:contractAddress/graph/numberOfTransactions/:duration", contractMid
  */
 router.get("/:contractAddress/graph/transactionsByType/:duration", contractMiddleware, function (req, res) {
 
-  req.contractInstance.getGraphDataForBrandedTokenTransactionsByType(req.contractAddress,req.duration)
-    .then (function(response){
-    const responseData = responseHelper.successWithData({
-      result_type: "transaction_type",
-      transaction_type :response
+  req.contractInstance.getGraphDataForBrandedTokenTransactionsByType(req.contractAddress, req.duration)
+    .then(function (response) {
+      if (response !== undefined) {
+        const responseData = responseHelper.successWithData({
+          result_type: "transaction_type",
+          transaction_type: response
 
-    });
-    logger.log("Request of content-type:", req.headers['content-type']);
-    renderResult(responseData, res, req.headers['content-type']);
-  })
-    .catch(function(reason){
+        });
+
+        logger.log("Request of content-type:", req.headers['content-type']);
+        renderResult(responseData, res, req.headers['content-type']);
+      } else {
+        return renderResult(responseHelper.error('', "Data not available. Please check the input parameters."), res, req.headers['content-type']);
+      }
+    })
+    .catch(function (reason) {
       logger.log(req.originalUrl + " : " + reason);
       return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
     });
