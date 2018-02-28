@@ -102,9 +102,9 @@ var createTransactionTable = function(db) {
         contract_address: { type: 'string', notNull: false , length: 42},
         t_from: { type: 'string', notNull: true , length: 42},
         t_to: { type: 'string', notNull: false , length: 42},
-        tokens: {type: 'decimal', notNull: true, length: '40,0'},
+        tokens: {type: 'decimal', notNull: true, length: '40,5'},
         gas_used: { type: 'int', notNull: true },
-        gas_price: {type: 'decimal', notNull: true, length: '40,0'},
+        gas_price: {type: 'decimal', notNull: true, length: '40,5'},
         nounce: { type: 'bigint', notNull: true },
         input_data: { type: 'blob', notNull: false },
         logs: { type: 'blob', notNull: false },
@@ -128,9 +128,9 @@ var createTransactionLedgerTable = function(db) {
         id: {type: 'int', notNull: true, primaryKey: true, autoIncrement: true},
         address: { type: 'string', notNull: true , length: 42},
         corresponding_address: { type: 'string', notNull: false , length: 42},
-        tokens: {type: 'decimal', notNull: true, length: '40,0'},
+        tokens: {type: 'decimal', notNull: true, length: '40,5'},
         transaction_hash: { type: 'string', notNull: true, length: 66},
-        transaction_fees: {type: 'decimal', notNull: true, length: '40,0'},
+        transaction_fees: {type: 'decimal', notNull: true, length: '40,5'},
         inflow: { type: 'boolean', notNull: true},
         timestamp: { type: 'int', notNull: true }
     });
@@ -147,7 +147,7 @@ var createIntTransactionTable = function(db) {
         contract_address: { type: 'string', notNull: true , length: 42},
         t_from: { type: 'string', notNull: true , length: 42},
         t_to: { type: 'string', notNull: true , length: 42},
-        tokens: {type: 'decimal', notNull: true, length: '40,0'},
+        tokens: {type: 'decimal', notNull: true, length: '40,5'},
         timestamp: { type: 'int', notNull: true }
     });
 };
@@ -161,7 +161,7 @@ var createIntTransactionLedgerTable = function(db) {
 		id: {type: 'int', notNull: true, primaryKey: true, autoIncrement: true},
         address: { type: 'string', notNull: true , length: 42},
         corresponding_address: { type: 'string', notNull: true , length: 42},
-        tokens: {type: 'decimal', notNull: true, length: '40,0'},
+        tokens: {type: 'decimal', notNull: true, length: '40,5'},
         contract_address: { type: 'string', notNull: true , length: 42},
         transaction_hash: { type: 'string', notNull: true, length: 66},
         inflow: { type: 'boolean', notNull: true },

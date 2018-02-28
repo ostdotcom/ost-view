@@ -72,14 +72,17 @@ ConfigHelper.prototype.getContractOfId = function(contract_id) {
 ConfigHelper.prototype.getIdOfContractByPromise = function(dbInteract, contractAddress) {
     var oThis = this;
     var contractId = oThis.getIdOfContract(contractAddress);
-    if (undefined == contractId) {
-        this.syncUpContractMap(dbInteract)
-            .then(function(){
-               return Promise.resolve(oThis.getIdOfContract(contractAddress))
-            });
+    return new Promise(function(resolve, reject){
+        if (undefined == contractId) {
+            oThis.syncUpContractMap(dbInteract)
+                .then(function(){
+                    return resolve(oThis.getIdOfContract(contractAddress))
+                }, reject);
 
-    }
-    return Promise.resolve(contractId);
+        } else {
+            return resolve(contractId);
+        }
+    });
 };
 
 
@@ -93,14 +96,17 @@ ConfigHelper.prototype.getIdOfContractByPromise = function(dbInteract, contractA
 ConfigHelper.prototype.getContractDetailsOfIdByPromise = function(dbInteract, contractId) {
     var oThis = this;
     var contract = oThis.getContractOfId(contractId);
-    if (undefined == contract) {
-        this.syncUpContractMap(dbInteract)
-            .then(function(){
-                return Promise.resolve(oThis.getContractOfId(contract))
-            });
+    return new Promise(function(resolve, reject){
+        if (undefined == contract) {
+            oThis.syncUpContractMap(dbInteract)
+                .then(function(){
+                    return resolve(oThis.getContractOfId(contractId));
+                },reject);
 
-    }
-    return Promise.resolve(contract);
+        } else {
+            return resolve(contractId);
+        }
+    });
 };
 
 /**

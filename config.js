@@ -8,13 +8,13 @@
 
 //Chain config
 const chain_config = {
-  '141': {
-    chainId: 141,
+  '2001': {
+    chainId: 2001,
     database_type: "mysql",
-    web_rpc: "http://localhost:8545",
+    web_rpc: "http://devValueChain.com:8545",
     poll_interval: 2000,
     db_config: {
-      chainId: 141,
+      chainId: 2001,
       driver: 'mysql',
       user: 'root',
       password: 'root',
@@ -29,15 +29,15 @@ const chain_config = {
   '2000': {
     chainId: 2000,
     database_type: "mysql",
-    web_rpc: "http://localhost:9546",
-    poll_interval: 2,
+    web_rpc: "http://devUtilityChain.com:9546",
+    poll_interval: 1,
     db_config: {
       chainId: 2000,
       driver: 'mysql',
       user: 'root',
       password: 'root',
       host: 'localhost',
-      database: 'ost_explorer_142',
+      database: 'ost_explorer_2000',
       connectionLimit: 10,
       blockAttributes: ['miner', 'difficulty', 'totalDifficulty', 'gasLimit', 'gasUsed'],
       txnAttributes: ['gas', 'gasPrice', 'input', 'nonce', 'contractAddress']
@@ -46,7 +46,7 @@ const chain_config = {
   '1410': {
       chainId: 1410,
       database_type: "mysql",
-      web_rpc: "http://127.0.0.1:8545",
+      web_rpc: "http://devValueChain.com:8545",
       poll_interval: 1,
       db_config: {
         chainId: 1410,

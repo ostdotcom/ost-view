@@ -64,9 +64,9 @@ var createAggregateTable = function (db) {
   return db.createTable(constants.AGGREGATE_TABLE_NAME, {
     id: {type: 'int', notNull: true, primaryKey: true, autoIncrement: true},
     total_transactions: { type: 'int', notNull: false, default: 0 },
-    total_transaction_value: {type: 'decimal', notNull: true, length: '40,0'},
+    total_transaction_value: {type: 'decimal', notNull: true, length: '40,5'},
     total_transfers: { type: 'int', notNull: false, default: 0 },
-    total_transfer_value: {type: 'decimal', notNull: true, length: '40,0'},
+    total_transfer_value: {type: 'decimal', notNull: true, length: '40,5'},
     transaction_type_id: { type: 'int', notNull: false, default: 0 },
     branded_token_id: { type: 'int', notNull: false, default: 0 },
     time_id: { type: 'int', notNull: false, default: 0 }
@@ -86,9 +86,9 @@ var createCompanyTokenTable = function (db) {
     uuid: { type: 'string', notNull: true , length: 66},
     price: { type: 'int', notNull: true, default: 0 },
     token_holders: { type: 'int', notNull: true, default: 0 },
-    market_cap: {type: 'decimal', notNull: true, length: '40,0'},
-    circulation: {type: 'decimal', notNull: true, length: '40,0'},
-    total_supply: {type: 'decimal', notNull: true, length: '40,0'},
+    market_cap: {type: 'decimal', notNull: true, length: '40,5'},
+    circulation: {type: 'decimal', notNull: true, length: '40,5'},
+    total_supply: {type: 'decimal', notNull: true, length: '40,5'},
     transactions_data: { type: 'blob', notNull: false},
     transactions_volume_data: { type: 'blob', notNull: false },
     tokens_transfer_data: { type: 'blob', notNull: false },
@@ -109,9 +109,9 @@ var createAddressTable = function (db) {
         id: {type: 'int', notNull: true, primaryKey: true, autoIncrement: true},
         address: { type: 'string', notNull: true , length: 42},
         branded_token_id: { type: 'int', notNull: true, default: 0 },
-        tokens: {type: 'decimal', notNull: true, length: '40,0'},
-        tokens_earned: {type: 'decimal', notNull: true, length: '40,0'},
-        tokens_spent: {type: 'decimal', notNull: true, length: '40,0'},
+        tokens: {type: 'decimal', notNull: true, length: '40,5'},
+        tokens_earned: {type: 'decimal', notNull: true, length: '40,5'},
+        tokens_spent: {type: 'decimal', notNull: true, length: '40,5'},
         total_transactions: { type: 'int', notNull: true, default: 0 }
     });
 };

@@ -61,6 +61,7 @@ var setBlockVerifier = function (blockNumber) {
           } else {
             //Need to set up the cron again.
             logger.log("Done verification of all the blocks, Need to run the job again after new block mining.");
+            process.exit(1);
           }
         })
         .catch(function (err) {
