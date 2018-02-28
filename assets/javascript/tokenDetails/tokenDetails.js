@@ -142,7 +142,8 @@
               data: null,
               render: function(data, type, full, meta){
                 return Handlebars.compile_fe($('#dt-holders-col-1').text())({
-                  name: data.address
+                  name: data.address,
+                  redirect_url: data.address_redirect_url
                 });
               }
             },
@@ -162,6 +163,20 @@
               }
             }
           ]
+        },
+        responseReceived: function ( response ) {
+          var dataToProceess = response.data[response.data.result_type];
+          var meta =  response.data.meta;
+
+          dataToProceess.forEach(function(element) {
+            var name = element.address;
+
+            var addressURL = meta.address_placeholder_url;
+
+            element['address_redirect_url'] =  Handlebars.compile(addressURL)({
+              address: name
+            });
+          });
         }
 
       });

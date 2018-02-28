@@ -136,7 +136,8 @@ router.get("/:contractAddress/holders", contractMiddleware, function (req, res) 
         recordsTotal : 120,
         meta:{
           q:req.contractAddress,
-          chainId:req.chainId
+          chain_id:req.chainId,
+          address_placeholder_url : "/chain-id/"+req.chainId+"/address/{{address}}"
         },
       });
       renderResult(responseData, res,'application/json');
