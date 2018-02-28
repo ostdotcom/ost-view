@@ -98,15 +98,20 @@ router.get("/:contractAddress/graph/numberOfTransactions/:duration", contractMid
 
   req.contractInstance.getGraphDataOfNumberOfBrandedTokenTransactions(req.contractAddress,req.duration)
     .then (function(response){
-    const responseData = responseHelper.successWithData({
-      result_type: "number_of_transactions",
-      number_of_transactions :response,
-      meta:{
-        duaration:req.duration
-      }
-    });
-    logger.log("Request of content-type:", req.headers['content-type']);
-    renderResult(responseData, res, 'application/json');
+    if (response !== undefined){
+      const responseData = responseHelper.successWithData({
+        result_type: "number_of_transactions",
+        number_of_transactions :response,
+        meta:{
+          duaration:req.duration
+        }
+      });
+      logger.log("Request of content-type:", req.headers['content-type']);
+      renderResult(responseData, res, 'application/json');
+    }else{
+      return renderResult(responseHelper.error('', 'Data not available. Please check the input parameters.'), res, req.headers['content-type']);
+    }
+
   })
     .catch(function(reason){
       logger.log(req.originalUrl + " : " + reason);

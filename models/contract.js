@@ -180,7 +180,7 @@ contract.prototype = {
 
     return new Promise(function (resolve, reject) {
 
-      if (contractAddress == undefined) {
+      if (contractAddress === undefined) {
         reject("invalid input");
         return;
       }
@@ -191,7 +191,11 @@ contract.prototype = {
 
       oThis._dbInstance.getGraphDataForBrandedTokenTransactions(contractAddress)
         .then(function (response) {
-          resolve(response[duration]);
+          if (response !== undefined && typeof response === 'object' &&  Object.keys(response).length > 0){
+            resolve(response[duration]);
+          }else{
+            resolve();
+          }
         })
         .catch(function (reason) {
           reject(reason);

@@ -39,7 +39,15 @@
 
 }
 
-.token-table {
+table.token-table {
+
+  th{
+    border-collapse: collapse !important;
+    background-color: #ffffff !important;
+    border: none;
+  }
+
+
   tbody,
   tr {
     background-color: #fafcfd !important;
