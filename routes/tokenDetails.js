@@ -193,7 +193,7 @@ router.get("/:contractAddress/graph/transactionsByType/:duration",decodeJwt, con
  *
  * @routeparam {String} :contractAddress - Contract address
  */
-router.get("/:contractAddress/topUsers", contractMiddleware, function (req, res) {
+router.get("/:contractAddress/topUsers", decodeJwt ,contractMiddleware, function (req, res) {
 
   var topUserCount = req.query.topUserCount;
 
