@@ -110,23 +110,23 @@ contract.prototype = {
     }
 
     return memCache.get("getGraphDataOfBrandedTokenValueTransactions" + contractAddress + duration)
-        .then(function(cacheResponse){
-          if (!cacheResponse.isSuccess()) {
-            return oThis._dbInstance.getGraphDataOfBrandedTokenValueTransactions(contractAddress)
-                .then(function (response) {
-                  return memCache.set("getGraphDataOfBrandedTokenValueTransactions" + contractAddress + duration, response[duration])
-                      .then(function(){
-                        return Promise.resolve(response[duration]);
-                      });
-                })
-                .catch(function (reason) {
-                  return Promise.reject(reason);
+      .then(function (cacheResponse) {
+        if (!cacheResponse.isSuccess()) {
+          return oThis._dbInstance.getGraphDataOfBrandedTokenValueTransactions(contractAddress)
+            .then(function (response) {
+              return memCache.set("getGraphDataOfBrandedTokenValueTransactions" + contractAddress + duration, response[duration])
+                .then(function () {
+                  return Promise.resolve(response[duration]);
                 });
+            })
+            .catch(function (reason) {
+              return Promise.reject(reason);
+            });
 
-          } else {
-            return Promise.resolve(cacheResponse.data.response);
-          }
-        });
+        } else {
+          return Promise.resolve(cacheResponse.data.response);
+        }
+      });
   },
 
 
@@ -145,34 +145,34 @@ contract.prototype = {
       return Promise.reject("invalid contract address");
     }
 
-    if (duration == undefined ) {
+    if (duration == undefined) {
       duration = "All";
     }
 
     return memCache.getObject("getValuesAndVolumesOfBrandedTokenTransactions" + contractAddress + duration)
-        .then(function(cacheResponse){
-            if (!cacheResponse.isSuccess() || cacheResponse.data.response == null) {
-                return configHelper.getIdOfContractByPromise(oThis._dbInstance, contractAddress)
-                  .then(function (contractId) {
-                    return oThis._dbInstance.getValuesAndVolumesOfBrandedTokenTransactions(contractId)
-                      .then(function (response) {
-                        return memCache.setObject("getValuesAndVolumesOfBrandedTokenTransactions" + contractAddress + duration, response[duration])
-                          .then(function(){
-                            if (response[duration] !== undefined) {
-                              return Promise.resolve(response[duration]);
-                            } else {
-                              return Promise.resolve([]);
-                            }
-                          });
-                      })
-                      .catch(function (reason) {
-                        return Promise.reject("Data not available. Please check the input parameters.");
+      .then(function (cacheResponse) {
+        if (!cacheResponse.isSuccess() || cacheResponse.data.response == null) {
+          return configHelper.getIdOfContractByPromise(oThis._dbInstance, contractAddress)
+            .then(function (contractId) {
+              return oThis._dbInstance.getValuesAndVolumesOfBrandedTokenTransactions(contractId)
+                .then(function (response) {
+                  if (response[duration] !== undefined) {
+                    return memCache.setObject("getValuesAndVolumesOfBrandedTokenTransactions" + contractAddress + duration, response[duration])
+                      .then(function () {
+                        return Promise.resolve(response[duration]);
                       });
-                  });
-            } else {
-                return Promise.resolve(cacheResponse.data.response);
-            }
-        });
+                  } else {
+                    return Promise.resolve([]);
+                  }
+                })
+                .catch(function (reason) {
+                  return Promise.reject("Data not available. Please check the input parameters.");
+                });
+            });
+        } else {
+          return Promise.resolve(cacheResponse.data.response);
+        }
+      });
   },
 
   /**
@@ -201,14 +201,14 @@ contract.prototype = {
             .then(function (contractId) {
               return oThis._dbInstance.getDataForBrandedTokenTransactionsByType(contractId)
                 .then(function (response) {
-                  return memCache.setObject("getGraphDataForBrandedTokenTransactionsByType" + contractAddress + duration, response[duration])
-                    .then(function () {
-                      if (response[duration] !== undefined) {
+                  if (response[duration] !== undefined) {
+                    return memCache.setObject("getGraphDataForBrandedTokenTransactionsByType" + contractAddress + duration, response[duration])
+                      .then(function () {
                         return Promise.resolve(response[duration]);
-                      } else {
-                        return Promise.resolve([]);
-                      }
-                    });
+                      });
+                  } else {
+                    return Promise.resolve([]);
+                  }
                 })
                 .catch(function (reason) {
                   return Promise.reject("Data not available. Please check the input parameters.");
