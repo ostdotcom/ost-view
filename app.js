@@ -16,6 +16,7 @@ const express = require('express')
   , cluster = require('cluster')
   , exphbs  = require('express-handlebars')
   , morgan = require('morgan')
+  , customUrlParser = require('url')
   ;
 
 morgan.token('id', function getId (req) {
@@ -38,7 +39,6 @@ const rootPrefix    = "."
   , tokenDetailsRoutes = require(rootPrefix + '/routes/tokenDetails')
   , chainDetailsRoutes = require(rootPrefix + '/routes/chainDetails')
   , customMiddleware = require(rootPrefix + '/helpers/custom_middleware')
-
   ;
 
 // if the process is a master.
@@ -192,6 +192,7 @@ if (cluster.isMaster) {
    */
 
   var port = normalizePort(process.env.PORT || '7000');
+
   app.set('port', port);
 
   /**

@@ -16,12 +16,17 @@ const rootPrefix = ".."
   , responseHelper = require(rootPrefix + '/lib/formatter/response')
   , coreConfig = require(rootPrefix + '/config')
   , logger = require(rootPrefix + '/helpers/custom_console_logger')
+  , jwtAuth = require(rootPrefix + '/lib/jwt/jwt_auth')
+  , customUrlParser = require('url');
   ;
 
 // Render final response
 const renderResult = function (requestResponse, responseObject, contentType) {
   return requestResponse.renderResponse(responseObject, 200, contentType);
 };
+
+
+const defaultTopUsersCount = 15;
 
 // define parameters from url, generate web rpc instance and database connect
 const contractMiddleware = function (req, res, next) {
@@ -37,6 +42,61 @@ const contractMiddleware = function (req, res, next) {
   req.duration = duration;
 
   next();
+};
+
+
+
+const assignParams = function (req) {
+//  logger.log(customUrlParser.parse(req.originalUrl).pathname, req.method);
+  if (req.method == 'POST') {
+    req.decodedParams = req.body;
+  } else if (req.method == 'GET') {
+    req.decodedParams = req.query;
+  }
+};
+
+// before action for verifying the jwt token and setting the decoded info in req obj
+const decodeJwt = function(req, res, next) {
+
+  assignParams(req);
+
+  var token = req.decodedParams.token;
+
+  if(!token){
+    return responseHelper.error('401', 'Unauthorized').renderResponse(res, 401);
+  }
+
+  // Set the decoded params in the re and call the next in control flow.
+  const jwtOnResolve = function (reqParams) {
+    req.decodedParams = reqParams.data;
+    if (customUrlParser.parse(req.originalUrl).pathname != req.decodedParams['url']){
+      return responseHelper.error('a_2', 'Invalid url').renderResponse(res);
+    }
+    var currentTime = Math.floor((new Date).getTime()/1000);
+    if(currentTime > (parseInt(req.decodedParams['request_time']) + 10)){
+      return responseHelper.error('a_3', 'Request Expired').renderResponse(res);
+    }
+    // Validation passed.
+    return next();
+  };
+
+  // send error, if token is invalid
+  const jwtOnReject = function (err) {
+    logger.error(err);
+    return responseHelper.error('a_1', 'Invalid token or expired').renderResponse(res);
+  };
+
+  // Verify token
+  Promise.resolve(
+    jwtAuth.verifyToken(token, 'saasApi')
+      .then(
+      jwtOnResolve,
+      jwtOnReject
+    )
+  ).catch(function (err) {
+      logger.error(err);
+      responseHelper.error('a_2', 'Something went wrong').renderResponse(res)
+    });
 };
 
 /**
@@ -73,7 +133,7 @@ router.get("/:contractAddress", contractMiddleware, function (req, res) {
  * @routeparam {String} :contractAddress - Contract address
  * @routeparam {Integer} :duration - previous duration from now.
  */
-router.get("/:contractAddress/graph/numberOfTransactions/:duration", contractMiddleware, function (req, res) {
+router.get("/:contractAddress/graph/numberOfTransactions/:duration",decodeJwt, contractMiddleware, function (req, res) {
 
   req.contractInstance.getValuesAndVolumesOfBrandedTokenTransactions(req.contractAddress, req.duration)
     .then(function (response) {
@@ -103,15 +163,17 @@ router.get("/:contractAddress/graph/numberOfTransactions/:duration", contractMid
  * @routeparam {String} :contractAddress - Contract address
  * @routeparam {Integer} :duration - previous duration from now.
  */
-router.get("/:contractAddress/graph/transactionsByType/:duration", contractMiddleware, function (req, res) {
+router.get("/:contractAddress/graph/transactionsByType/:duration",decodeJwt, contractMiddleware, function (req, res) {
 
-  req.contractInstance.getGraphDataForBrandedTokenTransactionsByType(req.contractAddress, req.duration)
-    .then(function (response) {
-      const responseData = responseHelper.successWithData({
-        result_type: "transaction_type",
-        transaction_type: response
-
-      });
+  req.contractInstance.getGraphDataForBrandedTokenTransactionsByType(req.contractAddress,req.duration)
+    .then (function(response){
+    const responseData = responseHelper.successWithData({
+      result_type: "transaction_type",
+      transaction_type: response,
+      meta: {
+        duaration: req.duration
+      }
+    });
 
       logger.log("Request of content-type:", req.headers['content-type']);
       renderResult(responseData, res, req.headers['content-type']);
@@ -133,7 +195,13 @@ router.get("/:contractAddress/graph/transactionsByType/:duration", contractMiddl
  */
 router.get("/:contractAddress/topUsers", contractMiddleware, function (req, res) {
 
-  req.contractInstance.getBrandedTokenTopUsers(req.contractAddress)
+  var topUserCount = req.query.topUserCount;
+
+  if (topUserCount === undefined){
+    topUserCount = defaultTopUsersCount;
+  }
+
+  req.contractInstance.getBrandedTokenTopUsers(req.contractAddress, topUserCount)
     .then(function (response) {
       const responseData = responseHelper.successWithData({
         top_users: response,

@@ -53,4 +53,8 @@ define("transaction", "transactionDetails");
 define("block","blockDetail");
 define("block_transactions","blockTransactionList");
 
+
+// JWT details
+define('JWT_API_SECRET_KEY', process.env.JWT_API_SECRET_KEY);
+
 module.exports = constants;
