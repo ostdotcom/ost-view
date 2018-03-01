@@ -26,6 +26,24 @@ const chain_config = {
     }
   },
 
+  '142': {
+    chainId: 142,
+    database_type: "mysql",
+    web_rpc: "http://devUtilityChain.com:9546",
+    poll_interval: 1,
+    db_config: {
+      chainId: 142,
+      driver: 'mysql',
+      user: 'root',
+      password: 'root',
+      host: 'localhost',
+      database: 'ost_explorer_142',
+      connectionLimit: 10,
+      blockAttributes: ['miner', 'difficulty', 'totalDifficulty', 'gasLimit', 'gasUsed'],
+      txnAttributes: ['gas', 'gasPrice', 'input', 'nonce', 'contractAddress']
+    }
+  },
+
   '2000': {
     chainId: 2000,
     database_type: "mysql",
@@ -37,7 +55,7 @@ const chain_config = {
       user: 'root',
       password: 'root',
       host: 'localhost',
-      database: 'ost_explorer_2000',
+      database: 'ost_explorer_142',
       connectionLimit: 10,
       blockAttributes: ['miner', 'difficulty', 'totalDifficulty', 'gasLimit', 'gasUsed'],
       txnAttributes: ['gas', 'gasPrice', 'input', 'nonce', 'contractAddress']

@@ -44,7 +44,7 @@ block.prototype = {
 
       oThis._dbInstance.getBlockFromBlockNumber(blockNumber)
         .then(function (response) {
-          resolve(response[0]);
+          resolve(response);
         })
         .catch(function (reason) {
           reject(reason);

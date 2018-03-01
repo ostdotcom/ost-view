@@ -1,0 +1,2 @@
+# JWT details
+export JWT_API_SECRET_KEY='6p5BkI0uGHI1JPrAKP3eB1Zm88KZ84a9Th9o4syhwZhxlv0oe0'
