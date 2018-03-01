@@ -58,16 +58,25 @@ OPENST-EXPLORER
   ```
 ## In terminal 1
    * (Optional) Start notification listener(rabbitmq)
-       > rabbitmq is required for processing with notificationListener
+       > rabbitmq is required for notificationListener
        ```
            > cd openst-explorer
-           > source source ~/openst-setup/openst_env_vars.sh
+           > source set_env_vars.sh
            > ./executables/notificationListener.js
        ```
 
 ## In terminal 2
-* Start block fetcher
+* Start cron services
    > It will run block fetcher, block verifier and block aggregator cron.
     ```
+     > cd openst-explorer
+     > source set_env_vars.sh
      > ./executables/cron.js -c <chain_id>
     ```
+## In terminal 3
+* Start node
+   > It will run block fetcher, block verifier and block aggregator cron.
+    ```
+     > cd openst-explorer
+     > source set_env_vars.sh
+     > npm start
