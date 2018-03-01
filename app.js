@@ -15,7 +15,12 @@ const express = require('express')
   , http = require('http')
   , cluster = require('cluster')
   , exphbs  = require('express-handlebars')
-;
+  , morgan = require('morgan')
+  ;
+
+morgan.token('id', function getId (req) {
+  return req.id;
+});
 
 // Load all required internal files
 const rootPrefix    = "."
@@ -32,7 +37,9 @@ const rootPrefix    = "."
   , handlebarHelper = require(rootPrefix + '/helpers/handlebar_helper')
   , tokenDetailsRoutes = require(rootPrefix + '/routes/tokenDetails')
   , chainDetailsRoutes = require(rootPrefix + '/routes/chainDetails')
-;
+  , customMiddleware = require(rootPrefix + '/helpers/custom_middleware')
+
+  ;
 
 // if the process is a master.
 if (cluster.isMaster) {
@@ -93,6 +100,10 @@ if (cluster.isMaster) {
 
 
   var app = express();
+
+  // Load custom middleware and set the worker id
+  app.use(customMiddleware({worker_id: cluster.worker.id}));
+  app.use(morgan('[:id] :remote-addr - :remote-user [:date[clf]] :method :url :response-time HTTP/:http-version" :status :res[content-length] :referrer :user-agent'));
 
   // app.use(function(req, res, next) {
   //   inputRequest.run(function() {
