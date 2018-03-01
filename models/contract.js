@@ -226,22 +226,22 @@ contract.prototype = {
    * @return {Promise<Object>} List of top users in contract address
    *
    */
-  getBrandedTokenTopUsers: function (contractAddress) {
+  getBrandedTokenTopUsers: function (contractAddress, topUsersCount) {
     const oThis = this;
 
     if (contractAddress == undefined) {
       return Promise.reject("invalid input");
     }
 
-    return memCache.get("getBrandedTokenTopUsers" + contractAddress)
+    return memCache.get("getBrandedTokenTopUsers" + contractAddress + topUsersCount)
       .then(function (cacheResponse) {
         if (!cacheResponse.isSuccess() || cacheResponse.data.response == null) {
           return configHelper.getIdOfContractByPromise(oThis._dbInstance, contractAddress)
             .then(function (contractId) {
-              return oThis._dbInstance.getBrandedTokenTopUsers(contractId);
+              return oThis._dbInstance.getBrandedTokenTopUsers(contractId, topUsersCount);
             })
             .then(function (response) {
-              return memCache.set("getBrandedTokenTopUsers" + contractAddress, response)
+              return memCache.set("getBrandedTokenTopUsers" + contractAddress + topUsersCount, response)
                 .then(function () {
                   return Promise.resolve(response);
                 });

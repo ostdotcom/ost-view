@@ -25,6 +25,9 @@ const renderResult = function (requestResponse, responseObject, contentType) {
   return requestResponse.renderResponse(responseObject, 200, contentType);
 };
 
+
+const defaultTopUsersCount = 15;
+
 // define parameters from url, generate web rpc instance and database connect
 const contractMiddleware = function (req, res, next) {
   const chainId = req.params.chainId
@@ -190,9 +193,15 @@ router.get("/:contractAddress/graph/transactionsByType/:duration",decodeJwt, con
  *
  * @routeparam {String} :contractAddress - Contract address
  */
-router.get("/:contractAddress/topUsers",decodeJwt, contractMiddleware, function (req, res) {
+router.get("/:contractAddress/topUsers", contractMiddleware, function (req, res) {
 
-  req.contractInstance.getBrandedTokenTopUsers(req.contractAddress)
+  var topUserCount = req.query.topUserCount;
+
+  if (topUserCount === undefined){
+    topUserCount = defaultTopUsersCount;
+  }
+
+  req.contractInstance.getBrandedTokenTopUsers(req.contractAddress, topUserCount)
     .then(function (response) {
       const responseData = responseHelper.successWithData({
         top_users: response,

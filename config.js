@@ -55,7 +55,7 @@ const chain_config = {
       user: 'root',
       password: 'root',
       host: 'localhost',
-      database: 'ost_explorer_142',
+      database: 'ost_explorer_2000',
       connectionLimit: 10,
       blockAttributes: ['miner', 'difficulty', 'totalDifficulty', 'gasLimit', 'gasUsed'],
       txnAttributes: ['gas', 'gasPrice', 'input', 'nonce', 'contractAddress']
