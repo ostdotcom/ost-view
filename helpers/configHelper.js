@@ -18,7 +18,7 @@ ConfigHelper.prototype.syncUpContractMap = function(dbInteract) {
                 const brandedTokenDetails = {
                     id : contractHash.id,
                     company_name : contractHash.company_name,
-                    contract_address : contractHash.contract_address,
+                    contract_address : contractHash.contract_address.toLowerCase(),
                     company_symbol : contractHash.company_symbol,
                     price : contractHash.price
                 };
@@ -35,8 +35,9 @@ ConfigHelper.prototype.syncUpContractMap = function(dbInteract) {
  * @returns {*}
  */
 ConfigHelper.prototype.getIdOfContract = function(contract_address) {
-    if (this.contractIdMap[contract_address] !== undefined) {
-        return this.contractIdMap[contract_address].id;
+    var lowerCaseContract_Address = contract_address.toLowerCase();
+    if (this.contractIdMap[lowerCaseContract_Address] !== undefined) {
+        return this.contractIdMap[lowerCaseContract_Address].id;
     }else{
         return undefined;
     }
@@ -55,20 +56,6 @@ ConfigHelper.prototype.getContractOfId = function(contract_id) {
         return undefined;
     }
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 /**
