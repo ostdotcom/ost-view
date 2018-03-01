@@ -69,10 +69,5 @@ OPENST-EXPLORER
 * Start block fetcher
    > It will run block fetcher, block verifier and block aggregator cron.
     ```
-     > ./executables/block_fetcher_cron.js --chainID <chain_id> >> log/block_fetcher_cron.log &
-    ```
-
-* Start block verifier
-    ```
-      > ./executables/block_verifier_cron.js --chainID <chain_id> >> log/block_verifier_cron.log &
+     > ./executables/cron.js -c <chain_id>
     ```
