@@ -129,7 +129,7 @@ ps.lookup({
   logger.log('State Configuration', state);
 
   // Start processing blocks
-  dbInteract.getHigestInsertedBlock()
+  dbInteract.getHighestInsertedBlock()
     .then(function (blockNumber) {
       logger.log("Highest Block Number ", blockNumber);
       if (block_fetcher.state.blockNumber == 0 && blockNumber != null) {

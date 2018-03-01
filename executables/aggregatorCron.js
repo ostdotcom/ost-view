@@ -148,6 +148,10 @@ ps.lookup({
                         return dbInteract.getBlockFromBlockNumber(1)
                     })
                     .then( function( block ) {
+                        if (block == undefined){
+                            logger.log("#getBlockFromBlockNumber(1) returned is undefined");
+                            process.exit(1);
+                        }
                         timeId = block.timestamp - (block.timestamp % constants.AGGREGATE_CONSTANT);
                         logger.log("First timeId ", timeId);
                         aggregateByTimeId( timeId );

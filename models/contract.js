@@ -11,7 +11,8 @@ const rootPrefix = ".."
   , constants = require(rootPrefix + '/config/core_constants')
   , coreConfig = require(rootPrefix + '/config')
   , configHelper = require(rootPrefix + '/helpers/configHelper')
-  ;
+  , memCache = require(rootPrefix + '/helpers/memCache')
+;
 
 /**
  * @constructor
@@ -100,66 +101,82 @@ contract.prototype = {
   getGraphDataOfBrandedTokenValueTransactions: function (contractAddress, duration) {
     const oThis = this;
 
-    return new Promise(function (resolve, reject) {
+    if (contractAddress == undefined) {
+      return Promise.reject("invalid input");
+    }
 
-      if (contractAddress == undefined) {
-        reject("invalid input");
-        return;
-      }
+    if (duration == undefined ) {
+      duration = "All";
+    }
 
-      if (duration == undefined) {
-        duration = "All";
-      }
+    return memCache.get("getGraphDataOfBrandedTokenValueTransactions" + contractAddress + duration)
+        .then(function(cacheResponse){
+          if (!cacheResponse.isSuccess()) {
+            return oThis._dbInstance.getGraphDataOfBrandedTokenValueTransactions(contractAddress)
+                .then(function (response) {
+                  return memCache.set("getGraphDataOfBrandedTokenValueTransactions" + contractAddress + duration, response[duration])
+                      .then(function(){
+                        return Promise.resolve(response[duration]);
+                      });
+                })
+                .catch(function (reason) {
+                  return Promise.reject(reason);
+                });
 
-      oThis._dbInstance.getGraphDataOfBrandedTokenValueTransactions(contractAddress)
-        .then(function (response) {
-          resolve(response[duration]);
-        })
-        .catch(function (reason) {
-          reject(reason);
+          } else {
+            return Promise.resolve(cacheResponse.data.response);
+          }
         });
-    });
   },
 
 
   /**
-   * Get graph data for number of transactions.
+   * Get graph data for values and number of transactions.
    *
    * @param {String} contractAddress - Contract address
    * @param {Integer} duration  - duration
    *
    * @return {Promise<Object>} List of contract value of transactions
    */
-  getGraphDataOfNumberOfBrandedTokenTransactions: function (contractAddress, duration) {
+  getValuesAndVolumesOfBrandedTokenTransactions: function (contractAddress, duration) {
     const oThis = this;
 
-    return new Promise(function (resolve, reject) {
+    if (contractAddress == undefined) {
+      return Promise.reject("invalid contract address");
+    }
 
-      if (contractAddress == undefined) {
-        reject("invalid input");
-        return;
-      }
+    if (duration == undefined ) {
+      duration = "All";
+    }
 
-      if (duration == undefined) {
-        duration = "All";
-      }
-
-      oThis._dbInstance.getGraphDataOfNumberOfBrandedTokenTransactions(contractAddress)
-        .then(function (response) {
-          if (response !== undefined && typeof response == 'object' && Object.keys(response).length > 0) {
-            resolve(response[duration]);
-          } else {
-            resolve();
-          }
-        })
-        .catch(function (reason) {
-          reject(reason);
+    return memCache.getObject("getValuesAndVolumesOfBrandedTokenTransactions" + contractAddress + duration)
+        .then(function(cacheResponse){
+            if (!cacheResponse.isSuccess() || cacheResponse.data.response == null) {
+                return configHelper.getIdOfContractByPromise(oThis._dbInstance, contractAddress)
+                  .then(function (contractId) {
+                    return oThis._dbInstance.getValuesAndVolumesOfBrandedTokenTransactions(contractId)
+                      .then(function (response) {
+                        return memCache.setObject("getValuesAndVolumesOfBrandedTokenTransactions" + contractAddress + duration, response[duration])
+                          .then(function(){
+                            if (response[duration] !== undefined) {
+                              return Promise.resolve(response[duration]);
+                            } else {
+                              return Promise.resolve([]);
+                            }
+                          });
+                      })
+                      .catch(function (reason) {
+                        return Promise.reject("Data not available. Please check the input parameters.");
+                      });
+                  });
+            } else {
+                return Promise.resolve(cacheResponse.data.response);
+            }
         });
-    });
   },
 
   /**
-   * Get graph data for transaction by type.
+   * Get branded token Id graph data for transaction by type.
    *
    * @param {String} contractAddress - Contract address
    * @param {Integer} duration  - duration
@@ -169,38 +186,38 @@ contract.prototype = {
   getGraphDataForBrandedTokenTransactionsByType: function (contractAddress, duration) {
     const oThis = this;
 
-    return new Promise(function (resolve, reject) {
+    if (contractAddress == undefined) {
+      return Promise.reject("invalid input");
+    }
 
-      if (contractAddress == undefined) {
-        reject("invalid input");
-        return;
-      }
+    if (duration == undefined) {
+      duration = "All";
+    }
 
-      if (duration == undefined) {
-        duration = "All";
-      }
-
-      configHelper.getIdOfContractByPromise(oThis._dbInstance, contractAddress)
-        .then(function (contractId) {
-          if (contractId === undefined) {
-            return reject('unknown contract address :: ' + contractAddress);
-          }
-
-          oThis._dbInstance.getGraphDataForBrandedTokenTransactionsByType(contractId)
-            .then(function (response) {
-              if (response !== undefined && typeof response == 'object' && Object.keys(response).length > 0) {
-                resolve(response[duration]);
-              } else {
-                resolve();
-              }
-            })
-            .catch(function (reason) {
-              reject(reason);
+    return memCache.getObject("getGraphDataForBrandedTokenTransactionsByType" + contractAddress + duration)
+      .then(function (cacheResponse) {
+        if (!cacheResponse.isSuccess() || cacheResponse.data.response == null) {
+          return configHelper.getIdOfContractByPromise(oThis._dbInstance, contractAddress)
+            .then(function (contractId) {
+              return oThis._dbInstance.getDataForBrandedTokenTransactionsByType(contractId)
+                .then(function (response) {
+                  return memCache.setObject("getGraphDataForBrandedTokenTransactionsByType" + contractAddress + duration, response[duration])
+                    .then(function () {
+                      if (response[duration] !== undefined) {
+                        return Promise.resolve(response[duration]);
+                      } else {
+                        return Promise.resolve([]);
+                      }
+                    });
+                })
+                .catch(function (reason) {
+                  return Promise.reject("Data not available. Please check the input parameters.");
+                });
             });
-
-        });
-
-    });
+        } else {
+          return Promise.resolve(cacheResponse.data.response);
+        }
+      });
   },
 
   /**
@@ -212,22 +229,30 @@ contract.prototype = {
   getBrandedTokenTopUsers: function (contractAddress) {
     const oThis = this;
 
-    return new Promise(function (resolve, reject) {
-      configHelper.getIdOfContractByPromise(oThis._dbInstance, contractAddress)
-        .then(function (contractId) {
-          if (contractId === undefined) {
-            return reject('unknown contract address :: ' + contractAddress);
-          }
+    if (contractAddress == undefined) {
+      return Promise.reject("invalid input");
+    }
 
-          oThis._dbInstance.getBrandedTokenTopUsers(contractId)
+    return memCache.get("getBrandedTokenTopUsers" + contractAddress)
+      .then(function (cacheResponse) {
+        if (!cacheResponse.isSuccess() || cacheResponse.data.response == null) {
+          return configHelper.getIdOfContractByPromise(oThis._dbInstance, contractAddress)
+            .then(function (contractId) {
+              return oThis._dbInstance.getBrandedTokenTopUsers(contractId);
+            })
             .then(function (response) {
-              resolve(response);
+              return memCache.set("getBrandedTokenTopUsers" + contractAddress, response)
+                .then(function () {
+                  return Promise.resolve(response);
+                });
             })
             .catch(function (reason) {
-              reject(reason);
+              return Promise.reject("Data not available. Please check the input parameters.");
             });
-        });
-    });
+        } else {
+          return Promise.resolve(cacheResponse.data.response);
+        }
+      });
   },
 
   /**
@@ -238,16 +263,29 @@ contract.prototype = {
   getOstSupply: function (contractAddress) {
     const oThis = this;
 
-    return new Promise(function (resolve, reject) {
+      if (contractAddress == undefined) {
+          return Promise.reject("invalid input");
+      }
 
-      oThis._dbInstance.getOstSupply(contractAddress)
-        .then(function (response) {
-          resolve(response);
-        })
-        .catch(function (reason) {
-          reject(reason);
-        });
-    });
+      return memCache.get("getOstSupply" + contractAddress)
+          .then(function(cacheResponse) {
+              if (cacheResponse.isSuccess() && cacheResponse.data.response == null) {
+                  return configHelper.getIdOfContractByPromise(oThis._dbInstance, contractAddress)
+                      .then(function(contractId) {
+                          return oThis._dbInstance.getOstSupply(contractId);
+                      })
+                      .then(function(response) {
+                          return memCache.set("getOstSupply" + contractAddress, response)
+                              .then(function(){
+                                  console.log("getOstSupply DB response", response);
+                                  return Promise.resolve(response);
+                              });
+                      });
+              } else {
+                  console.log("getOstSupply Cached response", cacheResponse.data.response);
+                  return Promise.resolve(cacheResponse.data.response);
+              }
+          });
   }
 
 };

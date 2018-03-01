@@ -53,7 +53,7 @@ var setBlockVerifier = function (blockNumber) {
   state.blockNumber = blockNumber;
   setTimeout(function () {
     if ((startRunTime + maxRunTime) > (new Date).getTime()) {
-      dbInteract.getHigestInsertedBlock()
+      dbInteract.getHighestInsertedBlock()
         .then(function (resBlockNumber) {
           logger.log("Higest Block Number ", resBlockNumber);
           if (resBlockNumber != null && +resBlockNumber - 10 > state.blockNumber) {

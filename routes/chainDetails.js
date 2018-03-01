@@ -50,6 +50,7 @@ const contractMiddleware = function (req, res, next) {
  */
 router.get("/", contractMiddleware, function (req, res) {
 
+    /*************Dummy Data ***************/
     const response = responseHelper.successWithData({
         token_details : { coin_name: 'Frenco Coin', contract_address: req.contractAddress, transaction_url:'http://localhost:3000/chain-id/141/contract/0x9B3d6cCd2Db9A911588bC1715F91320C8Ce28c9e/internal-transactions/1' },
         result_type: "token_details"
@@ -58,6 +59,15 @@ router.get("/", contractMiddleware, function (req, res) {
     renderResult(response, res, req.headers['content-type']);
 });
 
+/**
+ * Get graph of total token transfers in the chain.
+ *
+ * @name graph
+ *
+ * @route {GET} {base_url}/graph/tokenTransfers/:type
+ *
+ *
+ */
 router.get("/graph/tokenTransfers/:type", contractMiddleware, function (req, res) {
 
     var oThis = this;
@@ -77,6 +87,7 @@ router.get("/graph/tokenTransfers/:type", contractMiddleware, function (req, res
 
 router.get("/graph/volume/:type", contractMiddleware, function (req, res) {
 
+    /*************Dummy Data ***************/
     const response = responseHelper.successWithData({
         token_details : { coin_name: 'Frenco Coin', contract_address: req.contractAddress, transaction_url:'http://localhost:3000/chain-id/141/contract/0x9B3d6cCd2Db9A911588bC1715F91320C8Ce28c9e/internal-transactions/1' },
         result_type: "token_details"
@@ -90,7 +101,7 @@ router.get("/graph/transactions/:type", contractMiddleware, function (req, res) 
     var oThis = this;
     logger.log("Request type", req.type);
 
-    req.companyInstance.getTokenTr(req.type)
+    req.companyInstance.getTokenTransactions(req.type)
         .then(function(result){
             const response = responseHelper.successWithData({
                 result_type: "token_details",
