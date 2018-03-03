@@ -9,9 +9,10 @@ OPENST-EXPLORER
 
 ## Setup OpenST utility chains 
 
-* Go to OpenST Explorer repo directory
+* Go to OpenST Explorer repo directory and create home directory env path
 ```
-  > cd openst-explorer 
+  > cd openst-explorer
+  > export OST_VIEW_PATH=$(pwd)
 ```
 
 * Install Packages
@@ -25,7 +26,7 @@ OPENST-EXPLORER
 
 * Configure database details in config.js
 ```
-  > vim config.js
+  > vim $OST_VIEW_PATH/config.js
 ```
   > under chain_config hash update following values and pest 
 ```
@@ -50,11 +51,11 @@ OPENST-EXPLORER
  * Run migration
   > To run migrations for specific chain specify chain Id
   ```
-    > node executables/db_migrate.js up -c <chain_id>
+    > $OST_VIEW_PATH/executables/db_migrate.js up -c <chain_id>
   ```
   > To run migrations for all the configured chains (make sure all databases are created.)
   ```
-    > node executables/db_migrate.js up
+    > $OST_VIEW_PATH/node executables/db_migrate.js up
   ```
 ## In terminal 1
    * (Optional) Start notification listener(rabbitmq)

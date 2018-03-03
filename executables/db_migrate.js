@@ -30,6 +30,8 @@ const rootPrefix = '..'
   , version = require(rootPrefix + '/package.json').version
 ;
 
+process.chdir(process.env.OST_VIEW_PATH);
+
 /**
  * To get the chainList of IDs from the object commandline object,
  * If not present return all the chaidIDs from the config.

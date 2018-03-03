@@ -52,3 +52,6 @@ export OST_RMQ_HEARTBEATS='10'
 
 # JWT details
 export JWT_API_SECRET_KEY='6p5BkI0uGHI1JPrAKP3eB1Zm88KZ84a9Th9o4syhwZhxlv0oe0'
+
+#Home directory Path
+export OST_VIEW_PATH='.'

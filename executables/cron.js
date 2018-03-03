@@ -8,6 +8,8 @@ const { spawn } = require('child_process');
 
 var chainId = 2000;
 
+process.chdir(process.env.OST_VIEW_PATH);
+
 if (process.argv[2] == '-c' && process.argv[3] != undefined){
     chainId = parseInt(process.argv[3]);
     console.log("Passed Chain Id", chainId);
