@@ -14,26 +14,26 @@ const express = require('express')
   , sanitizer = require('express-sanitized')
   , http = require('http')
   , cluster = require('cluster')
-  , exphbs  = require('express-handlebars')
+  , exphbs = require('express-handlebars')
   , morgan = require('morgan')
   , customUrlParser = require('url')
   ;
 
-morgan.token('id', function getId (req) {
+morgan.token('id', function getId(req) {
   return req.id;
 });
 
 // Load all required internal files
-const rootPrefix    = "."
-  , indexRoutes     = require( rootPrefix + '/routes/index')
-  , blockRoutes     = require( rootPrefix + '/routes/block')
-  , blocksRoutes     = require( rootPrefix + '/routes/blocks')
-  , transactionsRoutes     = require( rootPrefix + '/routes/transactions')
-  , transactionRoutes     = require( rootPrefix + '/routes/transaction')
-  , addressRoutes   = require( rootPrefix + '/routes/address')
-  , searchRoutes   = require( rootPrefix + '/routes/search')
+const rootPrefix = "."
+  , indexRoutes = require(rootPrefix + '/routes/index')
+  , blockRoutes = require(rootPrefix + '/routes/block')
+  , blocksRoutes = require(rootPrefix + '/routes/blocks')
+  , transactionsRoutes = require(rootPrefix + '/routes/transactions')
+  , transactionRoutes = require(rootPrefix + '/routes/transaction')
+  , addressRoutes = require(rootPrefix + '/routes/address')
+  , searchRoutes = require(rootPrefix + '/routes/search')
   , contractRoutes = require(rootPrefix + '/routes/contract')
-  , responseHelper = require(rootPrefix+'/lib/formatter/response')
+  , responseHelper = require(rootPrefix + '/lib/formatter/response')
   , logger = require(rootPrefix + '/helpers/custom_console_logger')
   , handlebarHelper = require(rootPrefix + '/helpers/handlebar_helper')
   , tokenDetailsRoutes = require(rootPrefix + '/routes/tokenDetails')
@@ -55,39 +55,39 @@ if (cluster.isMaster) {
   }
 
   // Worker started listening and is ready
-  cluster.on('listening', function(worker, address) {
-    logger.info('[worker-${worker.id} ] is listening to'+ address.address+':'+address.port);
+  cluster.on('listening', function (worker, address) {
+    logger.info('[worker-' + worker.id + '] is listening to ' + address.address + ':' + address.port);
   });
 
   // Worker came online. Will start listening shortly
-  cluster.on('online', function(worker) {
-    logger.info('[worker-${worker.id}] is online');
+  cluster.on('online', function (worker) {
+    logger.info('[worker-' + worker.id + '] is online');
   });
 
   //  Called when all workers are disconnected and handles are closed.
-  cluster.on('disconnect', function(worker) {
-    logger.error('[worker-${worker.id}] is disconnected');
+  cluster.on('disconnect', function (worker) {
+    logger.error('[worker-' + worker.id + '] is disconnected');
   });
 
   // When any of the workers die the cluster module will emit the 'exit' event.
-  cluster.on('exit', function(worker, code, signal) {
+  cluster.on('exit', function (worker, code, signal) {
     if (worker.exitedAfterDisconnect === true) {
       // don't restart worker as voluntary exit
-      logger.info('[worker-${worker.id}] voluntary exit. signal: ${signal}. code: ${code}');
+      logger.info('[worker-' + worker.id + '] voluntary exit. signal: ${signal}. code: ${code}');
     } else {
       // restart worker as died unexpectedly
-      logger.error('[worker-${worker.id}] restarting died. signal: ${signal}. code: ${code}', worker.id, signal, code);
+      logger.error('[worker-' + worker.id + '] restarting died. signal: ${signal}. code: ${code}', worker.id, signal, code);
       cluster.fork();
     }
   });
 
   // When someone try to kill the master process
   // kill <master process id>
-  process.on('SIGTERM', function() {
+  process.on('SIGTERM', function () {
     for (var id in cluster.workers) {
       cluster.workers[id].exitedAfterDisconnect = true;
     }
-    cluster.disconnect(function() {
+    cluster.disconnect(function () {
       logger.info('Master received SIGTERM. Killing/disconnecting it.');
     });
   });
@@ -96,7 +96,7 @@ if (cluster.isMaster) {
   // if the process is not a master
 
   // Set worker process title
-  process.title = "OpenST Explorer worker-"+cluster.worker.id;
+  process.title = "OpenST Explorer worker-" + cluster.worker.id;
 
 
   var app = express();
@@ -127,11 +127,11 @@ if (cluster.isMaster) {
   app.set('views', path.join(__dirname, 'views'));
   //Helper is used to ease stringifying JSON
   app.engine('handlebars', exphbs({
-      defaultLayout: 'main', 
-      helpers: handlebarHelper,
-      partialsDir: [
-        'views/partials/'
-      ]
+    defaultLayout: 'main',
+    helpers: handlebarHelper,
+    partialsDir: [
+      'views/partials/'
+    ]
   }));
   app.set('view engine', 'handlebars');
 
@@ -146,17 +146,17 @@ if (cluster.isMaster) {
   app.use(connectAssets);
 
   var hbs = require('handlebars');
-  hbs.registerHelper('css', function() {
+  hbs.registerHelper('css', function () {
     var css = connectAssets.options.helperContext.css.apply(this, arguments);
     return new hbs.SafeString(css);
   });
 
-  hbs.registerHelper('js', function() {
+  hbs.registerHelper('js', function () {
     var js = connectAssets.options.helperContext.js.apply(this, arguments);
     return new hbs.SafeString(js);
   });
 
-  hbs.registerHelper('with', function(context, options) {
+  hbs.registerHelper('with', function (context, options) {
     return options.fn(context);
   });
 
