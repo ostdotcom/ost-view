@@ -3,25 +3,35 @@
 # opentST View Environment file
 #################
 
-# chain env
-export OST_VIEW_2000_WEB_RPC="http://devUtilityChain.com:9546"
-export OST_VIEW_2001_WEB_RPC="http://devValueChain.com:8545"
+
+# chain env 2000
+export OST_VIEW_0_CHAIN_ID="2000"
+export OST_VIEW_0_WEB_RPC="http://devUtilityChain.com:9546"
 
 #DB env
-export OST_VIEW_2001_DB_USER="root"
-export OST_VIEW_2001_DB_PWD="root"
-export OST_VIEW_2000_DB_USER="root"
-export OST_VIEW_2000_DB_PWD="root"
+export OST_VIEW_0_DB_USER="root"
+export OST_VIEW_0_DB_PWD="root"
 
-export OST_VIEW_2000_DB_NAME="ost_explorer_2000"
-export OST_VIEW_2001_DB_NAME="ost_explorer_2001"
+export OST_VIEW_0_DB_NAME="ost_explorer_2000"
 
-export OST_VIEW_2000_DB_HOST="localhost"
-export OST_VIEW_2001_DB_HOST="localhost"
+export OST_VIEW_0_DB_HOST="localhost"
 
-export OST_VIEW_2000_DB_CONNECTION_LIMIT=10
-export OST_VIEW_2001_DB_CONNECTION_LIMIT=10
+export OST_VIEW_0_DB_CONNECTION_LIMIT=10
 
+
+# chain env 2001
+export OST_VIEW_1_CHAIN_ID="2001"
+export OST_VIEW_1_WEB_RPC="http://devValueChain.com:8545"
+
+#DB env
+export OST_VIEW_1_DB_USER="root"
+export OST_VIEW_1_DB_PWD="root"
+
+export OST_VIEW_1_DB_NAME="ost_explorer_2001"
+
+export OST_VIEW_1_DB_HOST="localhost"
+
+export OST_VIEW_1_DB_CONNECTION_LIMIT=10
 
 # Cache
 export OST_CACHING_ENGINE='memcached'
@@ -42,4 +52,3 @@ export OST_RMQ_HEARTBEATS='10'
 
 # JWT details
 export JWT_API_SECRET_KEY='6p5BkI0uGHI1JPrAKP3eB1Zm88KZ84a9Th9o4syhwZhxlv0oe0'
-

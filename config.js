@@ -9,62 +9,40 @@
 //Chain config
 const chain_config = {
 
-  //Development Env
-  '2001': {
-    chainId: 2001,
-    database_type: "mysql",
-    web_rpc: process.env.OST_VIEW_2001_WEB_RPC,
-    poll_interval: 1,
-    db_config: {
-      chainId: 2001,
-      driver: 'mysql',
-      user: process.env.OST_VIEW_2001_DB_USER,
-      password: process.env.OST_VIEW_2001_DB_PWD,
-      host: process.env.OST_VIEW_2001_DB_HOST,
-      database: process.env.OST_VIEW_2001_DB_NAME,
-      connectionLimit: process.env.OST_VIEW_2001_DB_CONNECTION_LIMIT,
-      blockAttributes: ['miner', 'difficulty', 'totalDifficulty', 'gasLimit', 'gasUsed'],
-      txnAttributes: ['gas', 'gasPrice', 'input', 'nonce', 'contractAddress']
-    }
-  },
-
-  '2000': {
-    chainId: 2000,
-    database_type: "mysql",
-    web_rpc: process.env.OST_VIEW_2000_WEB_RPC,
-    poll_interval: 1,
-    db_config: {
-      chainId: 2000,
-      driver: 'mysql',
-      user: process.env.OST_VIEW_2000_DB_USER,
-      password: process.env.OST_VIEW_2000_DB_PWD,
-      host: process.env.OST_VIEW_2000_DB_HOST,
-      database: process.env.OST_VIEW_2000_DB_NAME,
-      connectionLimit: process.env.OST_VIEW_2000_DB_CONNECTION_LIMIT,
-      blockAttributes: ['miner', 'difficulty', 'totalDifficulty', 'gasLimit', 'gasUsed'],
-      txnAttributes: ['gas', 'gasPrice', 'input', 'nonce', 'contractAddress']
-    }
-  },
-
-  //Staging evn
-  '200': {
-    chainId: 200,
-    database_type: "mysql",
-    web_rpc: process.env.OST_VIEW_200_WEB_RPC,
-    poll_interval: 1,
-    db_config: {
-      chainId: 200,
-      driver: 'mysql',
-      user: process.env.OST_VIEW_200_DB_USER,
-      password: process.env.OST_VIEW_200_DB_PWD,
-      host: process.env.OST_VIEW_200_DB_HOST,
-      database: process.env.OST_VIEW_200_DB_NAME,
-      connectionLimit: process.env.OST_VIEW_200_DB_CONNECTION_LIMIT,
-      blockAttributes: ['miner', 'difficulty', 'totalDifficulty', 'gasLimit', 'gasUsed'],
-      txnAttributes: ['gas', 'gasPrice', 'input', 'nonce', 'contractAddress']
-    }
-  }
 };
+
+(function setUpChainFromEnv() {
+  var i = 0;
+  while(true) {
+
+    var ostView = "OST_VIEW_" + i;
+    var chainId = process.env[ostView + "_CHAIN_ID"];
+    if (undefined == chainId) {
+      break;
+    }
+
+    var chainIdValue = {
+      chainId: chainId,
+      database_type: "mysql",
+      web_rpc: process.env[ostView + "_WEB_RPC"],
+      poll_interval: 1,
+      db_config: {
+        chainId: chainId,
+        driver: 'mysql',
+        user: process.env[ostView + "_DB_USER"],
+        password: process.env[ostView + "_DB_PWD"],
+        host: process.env[ostView + "_DB_HOST"],
+        database: process.env[ostView + "_DB_NAME"],
+        connectionLimit: process.env[ostView + "_DB_CONNECTION_LIMIT"],
+        blockAttributes: ['miner', 'difficulty', 'totalDifficulty', 'gasLimit', 'gasUsed'],
+        txnAttributes: ['gas', 'gasPrice', 'input', 'nonce', 'contractAddress']
+      }
+    };
+
+    chain_config[chainId] = chainIdValue;
+    i++;
+  }
+})();
 
 module.exports = {
 
