@@ -73,6 +73,7 @@ function fetchHomeData (req, res){
       const response = responseHelper.successWithData({
         home: requestResponse,
         result_type: "home",
+        title: "OST View - OST SideChains Explorer and Search",
         mCss:['mTokenDetails.css'],
         mJs:['mHome.js'],
         view_data:req.homeInstance.getChainInfo(requestResponse),

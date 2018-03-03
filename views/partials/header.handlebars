@@ -1,22 +1,45 @@
 <header class="container">
-    <nav class="navbar navbar-expand-sm navbar-light navbar-ost">
 
-        <a class="navbar-brand" href="/"><span class="ost-view-logo icon logo mt-2 mb-2"></span></a>
-        <div class="navbar-nav ml-md-auto">
-            <div class="nav-item">
-                <div class="input-group input-group-sm">
-                    <div class="input-group-prepend">
-                        <span class="input-group-text"><span class="search icon"></span></span>
+    <div class="d-none d-sm-block">
+        <nav class="navbar navbar-expand-sm navbar-light navbar-ost">
+            <a class="navbar-brand" href="/"><span class="ost-view-logo icon logo mt-2 mb-2"></span></a>
+            <div class="navbar-nav ml-md-auto">
+                <div class="nav-item">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><span class="search icon"></span></span>
+                        </div>
+                        <form id="btxSearch" action="/search">
+                            <input type="hidden" name="chain_id" value="142" />
+                            <input class="form-control" id="search" type="search" name="q" placeholder="Token, Transactions, Address or Block#" aria-label="Search">
+                        </form>
                     </div>
-                    <form id="btxSearch" action="/search">
-                        <input type="hidden" name="chain_id" value="142" />
-                        <input class="form-control" id="search" type="search" name="q" placeholder="Token, Transactions, Address or Block#" aria-label="Search">
-                    </form>
+                </div>
+                <div class="nav-item">
+                    <a class="nav-link text-uppercase about" href="#">About</a>
                 </div>
             </div>
-            <div class="nav-item">
-                <a class="nav-link text-uppercase about" href="#">About</a>
+        </nav>
+    </div>
+
+    <div class="d-block d-sm-none">
+        <nav class="navbar navbar-expand-sm navbar-light navbar-ost">
+            <a class="navbar-brand" href="/"><span class="ost-view-logo icon logo mt-2 mb-2"></span></a>
+            <a class="nav-link text-uppercase about" href="#">About</a>
+            <div class="navbar-nav m-auto">
+                <div class="nav-item">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text"><span class="search icon"></span></span>
+                        </div>
+                        <form id="btxSearch" action="/search">
+                            <input type="hidden" name="chain_id" value="142" />
+                            <input class="form-control" id="search" type="search" name="q" placeholder="Token, Transactions, Address or Block#" aria-label="Search">
+                        </form>
+                    </div>
+                </div>
             </div>
-        </div>
-    </nav>
+        </nav>
+    </div>
 </header>
+
