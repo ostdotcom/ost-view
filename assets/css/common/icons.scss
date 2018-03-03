@@ -30,30 +30,34 @@ $sprite-location: "/Sprite-1X.png";
   }
 }
 
-.ost-view-logo{
-  @include icon-generator(100px, 30px, -132px, -65px, -132px, -132px);
+.ost-view-logo.icon{
+  @include icon-generator(120px, 30px, -255px, -65px, -255px, -255px);
 }
 
-.communities{
+.communities.icon{
   @include icon-generator(110px, 50px, -225px, -15px, -225px, -225px);
 }
 
-.token-holders{
+.token-holders.icon{
   @include icon-generator(110px, 50px, -113px, -15px, -113px, -113px);
 }
 
-.market-cap{
+.market-cap.icon{
   @include icon-generator(110px, 53px, 0px, -8px, 0px, 0px, 95);
 }
 
-.circulating-supply{
+.circulating-supply.icon{
   @include icon-generator(110px, 50px, -343px, -15px, -343px, -343px);
 }
 
-.total-supply{
+.total-supply.icon{
   @include icon-generator(110px, 50px, -457px, -15px, -457px, -457px);
 }
 
-.ost-alpha-badge{
+.ost-alpha-badge.icon{
   @include icon-generator(50px, 30px, -70px, -65px, -70px, -70px);
+}
+
+.search.icon{
+  @include icon-generator(20px, 20px, -375px, -75px, -375px, -375px);
 }

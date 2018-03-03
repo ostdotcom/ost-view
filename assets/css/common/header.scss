@@ -5,8 +5,9 @@
         height: 30px;
     }
 
-    .navbar-collapse{
+    .about{
         font-size: 0.8rem;
+        color: rgba(0,0,0,.5);
     }
 
     .input-group{
@@ -22,7 +23,12 @@
             border-bottom-right-radius: 20px;
             border-left: none;
             font-size: 0.8rem;
-            width: 300px;
+            width: 270px;
+            &:focus{
+                border-color: #ced4da;
+                outline:none;
+                box-shadow: none;
+            }
         }
     }
 }
