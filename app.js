@@ -15,6 +15,7 @@ const express = require('express')
   , http = require('http')
   , cluster = require('cluster')
   , exphbs  = require('express-handlebars')
+  , basicAuth = require('express-basic-auth')
 ;
 
 // Load all required internal files
@@ -111,6 +112,16 @@ if (cluster.isMaster) {
   //The below piece of code should always be before routes.
   //Docs: https://www.npmjs.com/package/express-sanitized
   app.use(sanitizer());
+
+  //For authentication
+  const userName = process.env.OST_VIEW_2000_UNAME;
+  var userPwd = process.env.OST_VIEW_2000_PWD;
+  var usersHash = {};
+  usersHash[userName] = userPwd;
+  app.use(basicAuth({
+    users: usersHash,
+    challenge: true
+  }));
 
   //Setting view engine template handlebars
   app.set('views', path.join(__dirname, 'views'));

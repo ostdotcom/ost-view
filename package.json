@@ -18,7 +18,7 @@
     "db-migrate-mysql": "^1.1.10",
     "debug": "~2.6.9",
     "express": "~4.15.5",
-    "express-basic-auth": "^1.1.3",
+    "express-basic-auth": "^1.1.4",
     "express-handlebars": "^3.0.0",
     "express-sanitized": "^0.5.1",
     "handlebars": "^4.0.11",
