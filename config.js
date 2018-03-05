@@ -17,7 +17,7 @@ const chain_config = {
 
     var ostView = "OST_VIEW_" + i;
     var chainId = process.env[ostView + "_CHAIN_ID"];
-    if (undefined == chainId) {
+    if (undefined === chainId) {
       break;
     }
 
