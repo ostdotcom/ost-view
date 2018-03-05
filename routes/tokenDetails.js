@@ -132,7 +132,8 @@ router.get("/:contractAddress", contractMiddleware, function (req, res) {
           chain_id:req.chainId
         },
         view_data:{
-          summary: req.contractInstance.getTokenDetailsInfo(response)
+          summary: req.contractInstance.getTokenDetailsInfo(response),
+          graph_stats: req.contractInstance.getTokenStats(response)
         }
       });
       logger.log("Request of content-type:", req.headers['content-type']);

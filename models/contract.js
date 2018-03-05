@@ -289,7 +289,7 @@ contract.prototype = {
           });
   }
 
-  , getTokenDetails: function(contractAddress){
+  , getTokenDetails: function (contractAddress) {
     const oThis = this;
     return new Promise(function (resolve, reject) {
 
@@ -300,7 +300,15 @@ contract.prototype = {
 
       oThis._dbInstance.getCoinFromContractAddress(contractAddress)
         .then(function (response) {
-          resolve(response);
+          configHelper.getIdOfContractByPromise(oThis._dbInstance, contractAddress)
+            .then(function (brandedTokenId) {
+              oThis._dbInstance.getTokenStatsData(brandedTokenId)
+                .then(function (stateResponse) {
+                  response["token_transfers"] = stateResponse.token_transfers == undefined? 0: stateResponse.token_transfers;
+                  response["token_volume"] = stateResponse.token_volume == undefined? 0: stateResponse.token_volume;
+                  resolve(response);
+                }, reject);
+            }, reject);
         })
         .catch(function (reason) {
           reject(reason);
@@ -331,8 +339,16 @@ contract.prototype = {
       }
     ];
     return details;
-  }
+  },
 
+  getTokenStats: function (chain_data) {
+    var details = {
+      token_transfers: TokenUnits.toBigNumber(chain_data['token_transfers']).toFormat(0),
+      token_volume: TokenUnits.toBigNumber(chain_data['token_volume']).toFormat(0)
+    };
+
+    return details;
+  }
 
   , getTokenHolders: function(contractAddress, pageNumber){
   const oThis = this;
@@ -434,7 +450,7 @@ contract.prototype = {
           const responseData={
             response:response,
             pageSize:constants.DEFAULT_PAGE_SIZE
-          }
+          };
           resolve(responseData);
         })
         .catch(function(reason){

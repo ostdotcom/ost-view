@@ -37,8 +37,8 @@ home.prototype = {
         .then(function (response) {
           oThis._dbInstance.getChainStatsData()
             .then(function (stateResponse) {
-              response["token_transfers"] = stateResponse.token_transfers;
-              response["token_volume"] = stateResponse.token_volume;
+              response["token_transfers"] = stateResponse.token_transfers == undefined? 0: stateResponse.token_transfers;
+              response["token_volume"] = stateResponse.token_volume == undefined? 0: stateResponse.token_volume;
               resolve(response);
             });
         })
