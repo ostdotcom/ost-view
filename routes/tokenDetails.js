@@ -126,8 +126,8 @@ router.get("/:contractAddress", contractMiddleware, function (req, res) {
         meta:{
           transactions_url: '/chain-id/'+req.chainId+'/contract/'+req.contractAddress+'/internal-transactions',
           token_holders_url:'/chain-id/'+req.chainId+'/tokendetails/'+req.contractAddress+'/holders',
-          token_transfer_graph_url: "/chain-id/"+req.chainId+"/tokenDetails/"+req.contractAddress+"/graph/numberOfTransactions/",
-          token_volume_graph_url: "/chain-id/"+req.chainId+"/tokenDetails/"+req.contractAddress+"/graph/numberOfTransactions/",
+          token_transfer_graph_url: "/chain-id/"+req.chainId+"/tokenDetails/"+req.contractAddress+"/graph-date/numberOfTransactions/",
+          token_volume_graph_url: "/chain-id/"+req.chainId+"/tokenDetails/"+req.contractAddress+"/graph-date/numberOfTransactions/",
           contract_address:req.contractAddress,
           chain_id:req.chainId
         },
@@ -182,6 +182,46 @@ router.get("/:contractAddress/graph/numberOfTransactions/:duration",decodeJwt, c
     });
 
 });
+
+
+/**
+ * Get values and volume of transaction of branded token
+ *
+ * @name values and volume of number of transactions
+ *
+ * @route {GET} {base_url}/:contractAddress/graph-date/numberOfTransactions/:duration
+ *
+ * @routeparam {String} :contractAddress - Contract address
+ * @routeparam {Integer} :duration - previous duration from now.
+ */
+
+router.get("/:contractAddress/graph-date/numberOfTransactions/:duration", contractMiddleware, function (req, res) {
+
+  req.contractInstance.getValuesAndVolumesOfBrandedTokenTransactions(req.contractAddress, req.duration)
+    .then(function (response) {
+      if (response !== undefined){
+        const responseData = responseHelper.successWithData({
+          result_type: "number_of_transactions",
+          number_of_transactions: response,
+          meta: {
+            duaration: req.duration
+          }
+        });
+
+        logger.log("Request of content-type:", req.headers['content-type']);
+        renderResult(responseData, res, 'application/json');
+      }else{
+        return renderResult(responseHelper.error('', 'Data not available. Please check the input parameters.'), res, req.headers['content-type']);
+      }
+
+    })
+    .catch(function(reason){
+      logger.log(req.originalUrl + " : " + reason);
+      return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
+    });
+
+});
+
 
 
 /**

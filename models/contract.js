@@ -338,7 +338,7 @@ contract.prototype = {
   const oThis = this;
   return new Promise(function (resolve, reject) {
 
-    if ((contractAddress === undefined || contractAddress.length != constants.ACCOUNT_HASH_LENGTH) &&  contractAddress != '0') {
+    if (contractAddress === undefined &&  contractAddress != '0') {
       reject("invalid input");
       return;
     }
@@ -409,28 +409,10 @@ contract.prototype = {
    *
    *@return {Promise<Object>} List of pending transactions.
    */
-    ,getRecentTokenTransactions : function(pageNumber, pagePaylaod){
+    ,getRecentTokenTransactions : function(pageSize, pagePaylaod){
     const oThis = this;
 
-    return new Promise(function(resolve, reject){
-
-      if (pageNumber == undefined || !pageNumber || isNaN(pageNumber) || pageNumber < 0) {
-        pageNumber = constants.DEFAULT_PAGE_NUMBER;
-      }
-
-      oThis._dbInstance.getRecentTokenTransactions(pageNumber,constants.DEFAULT_PAGE_SIZE, pagePaylaod)
-        .then(function(response){
-          const responseData = {
-            response : response,
-            pageSize : 5
-          }
-          resolve(responseData);
-        })
-        .catch(function(reason){
-          reject(reason);
-        });
-
-    });
+    return oThis._dbInstance.getRecentTokenTransactions(pageSize, pagePaylaod);
   }
 
   /**

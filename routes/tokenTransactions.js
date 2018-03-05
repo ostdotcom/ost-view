@@ -27,25 +27,24 @@ const renderResult = function (requestResponse, responseObject, contentType) {
 };
 
 // define parameters from url, generate web rpc instance and database connect
-const contractMiddleware = function (req, res, next) {
+const contractMiddleware = function (req, rresponsees, next) {
   const chainId = req.params.chainId
-    , pageNumber = req.query.start/req.query.length
     , nextPagePayload = req.query.next_page_payload
     , prevPagePayload = req.query.prev_page_payload
   ;
 
-  var pagePaylod = {};
-  if (nextPagePayload !== undefined && Object.keys(nextPagePayload).length > 0){
+  var pagePaylod = null;
+  if (nextPagePayload){
+    console.log("\n\n\n************* nextPagePayload :: ", nextPagePayload);
     pagePaylod = nextPagePayload;
-  }else if (prevPagePayload !== undefined && Object.keys(prevPagePayload).length > 0){
-
+  }else if (prevPagePayload){
+    console.log("\n\n\n************* prevPagePayload :: ", prevPagePayload);
     pagePaylod = prevPagePayload;
   }
   // Get instance of contract class
   req.contractInstance = new contract(chainId);
 
   req.chainId = chainId;
-  req.pageNumber = pageNumber;
   req.pagePayload = pagePaylod;
 
   next();
@@ -62,25 +61,45 @@ const contractMiddleware = function (req, res, next) {
  * @routeparam {String} :page - page number
  */
 router.get("/transactions/recent", contractMiddleware, function (req, res) {
+  var pageSize = 3+1;
 
-  req.contractInstance.getRecentTokenTransactions( req.pageNumber, req.pagePayload)
-    .then(function (requestResponse) {
+  req.contractInstance.getRecentTokenTransactions( pageSize, req.pagePayload)
+    .then(function (queryResponse) {
 
+      const nextPagePayload = getNextPagePaylaodForRecentTransactions(queryResponse, pageSize);
+      var prevPagePayload = {};
+
+      const responseData = queryResponse;
+      // For all the pages remove last row if its equal to page size.
+      var lastRecordRemoved = false;
+      if(queryResponse.length == pageSize){
+        queryResponse.pop();
+        lastRecordRemoved = true;
+      }else if(req.pagePayload.direction === 'next'){
+        lastRecordRemoved = true;
+      }
+
+      if(req.pagePayload && req.pagePayload.direction === 'prev'){
+        queryResponse.reverse();
+      }
+      if(lastRecordRemoved){
+        prevPagePayload = getPrevPagePaylaodForRecentTransactions(queryResponse, req.pagePayload, pageSize);
+      }
       const response = responseHelper.successWithData({
-        token_transactions:requestResponse.response,
-        result_type: "token_transactions",
         draw : req.query.draw,
         recordsTotal : 120,
         meta:{
-
-          next_page_payload : getNextPagePaylaodForRecentTransactions(requestResponse, req.pagePayload),
-          prev_page_payload : getPrevPagePaylaodForRecentTransactions(requestResponse, req.pagePayload),
+          next_page_payload :nextPagePayload,
+          prev_page_payload :prevPagePayload,
 
           chain_id:req.chainId,
           address_placeholder_url:'/chain-id/'+req.chainId+'/address/{{address}}',
           transaction_placeholder_url:"/chain-id/"+req.chainId+"/transaction/{{tr_hash}}"
-        }
+        },
+        token_transactions:queryResponse,
+        result_type: "token_transactions",
       });
+
       return renderResult(response, res, 'application/json');
     })
     .catch(function (reason) {
@@ -89,46 +108,53 @@ router.get("/transactions/recent", contractMiddleware, function (req, res) {
     });
 });
 
-function getNextPagePaylaodForRecentTransactions (requestResponse, pagePayload){
 
+function getResponseData (requestResponse, isFirstPageRequest){
   const pageSize = requestResponse.pageSize;
   const response = requestResponse.response;
 
+  if (pageSize < response.length)
+  {
 
-  if(pageSize < response.length){
-
-    console.log("--> getNextPagePaylaodForRecentTransactions :: 1 ::",response[response.length-1].timestamp);
-    console.log("getNextPagePaylaodForRecentTransactions :: 2 ::",response[0].timestamp);
-
-    return {
-      timestamp:response[response.length-1].timestamp,
-      direction: "next"
-    };
-  }else{
-    console.log("getNextPagePaylaodForRecentTransactions empty");
-
-    return {};
+    return response;
   }
+
+  return response;
 }
 
-function getPrevPagePaylaodForRecentTransactions (requestResponse, pagePayload){
+function getNextPagePaylaodForRecentTransactions (requestResponse, pageSize){
 
-  const pageSize = requestResponse.pageSize;
-  const response = requestResponse.response;
+  const response = requestResponse,
+        count = response.length;
 
-  console.log("pagePayload :: ",pagePayload, Object.keys(pagePayload).length > 0);
-  if(Object.keys(pagePayload).length > 0){
-    console.log("getPrevPagePaylaodForRecentTransactions :: 1 ::",response[response.length-1].timestamp);
-    console.log("--> getPrevPagePaylaodForRecentTransactions :: 2 ::",response[0].timestamp);
-    return {
-      timestamp:response[0].timestamp,
-      direction: "prev"
-    }
-  }else{
-    console.log("getPrevPagePaylaodForRecentTransactions empty");
-
+  if(count <= pageSize -1){
     return {};
   }
+
+  return {
+    id: response[count-1].id,
+    timestamp: response[count-1].timestamp,
+    direction: "next"
+  };
+
+}
+
+function getPrevPagePaylaodForRecentTransactions (requestResponse, pagePayload, pageSize){
+
+  const response = requestResponse,
+    count = response.length;
+
+  // If page payload is null means its a request for 1st page
+  // OR direction is previous and count if less than page size means there is no previous page
+  if(!pagePayload){
+    return {};
+  }
+
+  return {
+    id: response[0].id,
+    timestamp: response[0].timestamp,
+    direction: "prev"
+  };
 }
 
 /**
@@ -148,8 +174,6 @@ router.get("/top", contractMiddleware, function (req, res) {
       const response = responseHelper.successWithData({
         token_transactions:requestResponse.response,
         result_type: "token_transactions",
-        draw : req.query.draw,
-        recordsTotal : 3,
         meta:{
 
           next_page_payload : getNextPagePaylaodForTopTokens(requestResponse, req.pagePayload),
@@ -170,7 +194,6 @@ router.get("/top", contractMiddleware, function (req, res) {
 
 
 function getNextPagePaylaodForTopTokens (requestResponse, pagePayload){
-
   const pageSize = requestResponse.pageSize;
   const response = requestResponse.response;
 
@@ -182,6 +205,7 @@ function getNextPagePaylaodForTopTokens (requestResponse, pagePayload){
 
     };
   }else{
+
     return {};
   }
 }
@@ -191,7 +215,7 @@ function getPrevPagePaylaodForTopTokens (requestResponse, pagePayload){
   const pageSize = requestResponse.pageSize;
   const response = requestResponse.response;
 
-  if(Object.keys(pagePayload).length > 0){
+  if(pagePayload && Object.keys(pagePayload).length > 0){
 
     return {
       market_cap:response[0].market_cap,

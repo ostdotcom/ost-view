@@ -52,8 +52,6 @@ const contractMiddleware = function (req, res, next) {
  */
 router.get("/:contractAddress/internal-transactions", contractMiddleware, function (req, res) {
 
-  const pageNumber = req.query.start/req.query.length;
-
   req.contractInstance.getContractLedger(req.contractAddress, pageNumber)
     .then(function (requestResponse) {
 
@@ -86,7 +84,7 @@ router.get("/:contractAddress/internal-transactions", contractMiddleware, functi
  *
  * @name Contract Internal Transactions
  *
- * @route {GET} {base_url}/:contractAddress/internal-transactions/:page
+ * @route {GET} {base_url}/:contractAddress/:page
  *
  * @routeparam {String} :contractAddress - Contract address whose internal transactions need to be fetched (42 chars length)
  * @routeparam {Integer} :page - Page number for getting data in batch.
