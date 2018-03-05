@@ -19,6 +19,7 @@
     selector: null,
     type: null,
     tsUnixToJs: true,
+    noDataHTML: 'No data to populate graphs',
 
     /*
      * Initiates Google Charts by google.charts.load
@@ -46,13 +47,22 @@
         return false;
       }
 
+      if(!$(oThis.selector)[0]){
+        console.warn('Selector '+oThis.selector+' not found in DOM');
+        return false;
+      }
+
       if(!$.isEmptyObject(oThis.ajax)){
         var ajaxObj = {
           success: function(response){
             oThis.data = oThis.ajaxCallback(response);
-            console.log(oThis.data);
+            console.log('AJAX data: ', oThis.data);
             console.log('Drawing chart using AJAX data and callback...');
-            oThis.render();
+            if(oThis.data.length === 0){
+              oThis.renderBlank();
+            } else {
+              oThis.render();
+            }
           }
         };
         $.extend( ajaxObj, oThis.ajax );
@@ -93,10 +103,15 @@
       var oThis = this;
       google.charts.setOnLoadCallback(function(){
         var data = oThis.makeData(oThis.data);
-        var chart = new google.visualization[oThis.type]($(oThis.selector)[0]);
         console.log('Drawing '+oThis.type+' chart in '+oThis.selector);
+        var chart = new google.visualization[oThis.type]($(oThis.selector)[0]);
         chart.draw(data, oThis.options);
       });
+    },
+
+    renderBlank: function(){
+      var oThis = this;
+      $(oThis.selector).html(oThis.noDataHTML);
     },
 
     /*
@@ -111,8 +126,12 @@
      */
     ajaxCallback: function(response){
       var oThis = this;
+      var response_data = oThis.dataSrc(response);
+      if($.isEmptyObject(response_data)){
+        return [];
+      }
       var data = [];
-      var header_temp = Object.keys(oThis.dataSrc(response)[0]);
+      var header_temp = Object.keys(response_data[0]);
       var header = [];
       if(!$.isEmptyObject(oThis.columns)){
         $.each( oThis.columns, function( index, value ) {
@@ -124,7 +143,7 @@
         var header = header_temp;
       }
       data.push(header);
-      $.each( oThis.dataSrc(response), function( index, value ) {
+      $.each( response_data, function( index, value ) {
         var row = [];
         header.forEach(function(elem){
           if(oThis.tsUnixToJs === true && typeof value[elem] === 'number' && value[elem] > 1262304000 && (new Date(value[elem])).getYear() < 1971){
