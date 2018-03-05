@@ -204,7 +204,7 @@ router.get("/:contractAddress/holders", contractMiddleware, function (req, res) 
           q:req.contractAddress,
           chain_id:req.chainId,
           address_placeholder_url : "/chain-id/"+req.chainId+"/address/{{address}}"
-        },
+        }
       });
       renderResult(responseData, res,'application/json');
     })

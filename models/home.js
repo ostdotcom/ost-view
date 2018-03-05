@@ -13,6 +13,7 @@ const rootPrefix = ".."
   , dbInteract = require(rootPrefix + '/lib/storage/interact')
   , constants = require(rootPrefix + '/config/core_constants')
   , coreConfig = require(rootPrefix + '/config')
+  , TokenUnits = require(rootPrefix + '/helpers/tokenUnits')
   ;
 
 /**
@@ -48,23 +49,23 @@ home.prototype = {
         {
           img:"communities",
           title:"Communities",
-          value:chain_data['MAX(id)'],
+          value: TokenUnits.toBigNumber(chain_data['MAX(id)']).toFormat(0),
           is_badge_visible:false
         },
         {
           img:"token-holders",
           title:"Token Holders",
-          value:chain_data['SUM(token_holders)'],
+          value: TokenUnits.toBigNumber(chain_data['SUM(token_holders)']).toFormat(0),
           is_badge_visible:false
         },
         {
           img:"market-cap",
           title:"Market Cap",
-          value:chain_data['SUM(market_cap)'],
+          value: TokenUnits.toBigNumber(chain_data['SUM(market_cap)']).toFormat(0),
           is_badge_visible:true
         }
       ];
 
       return details;
   }
-}
+};

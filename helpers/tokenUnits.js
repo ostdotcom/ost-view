@@ -4,7 +4,16 @@
  */
 var BigNumber = require('bignumber.js');
 
-BigNumber.config({ DECIMAL_PLACES: 5, ROUNDING_MODE: 4 });
+BigNumber.config({  DECIMAL_PLACES: 5,
+                    ROUNDING_MODE: 4,
+                    FORMAT: {
+                        decimalSeparator: '.',
+                        groupSeparator: ',',
+                        groupSize: 3,
+                        secondaryGroupSize: 0,
+                        fractionGroupSeparator: ' ',
+                        fractionGroupSize: 0
+                    }});
 
 var tokenUnits = function() {};
 tokenUnits.unitMap = {
@@ -66,6 +75,10 @@ tokenUnits.add = function(num1, num2) {
 tokenUnits.sub = function(num1, num2) {
     var returnValue = new BigNumber(String(num1)).minus(new BigNumber(String(num2)));
     return returnValue.toString(10);
+};
+
+tokenUnits.toBigNumber = function(num) {
+    return new BigNumber(num.toString());
 };
 
 module.exports = tokenUnits;
