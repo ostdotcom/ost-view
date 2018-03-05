@@ -125,15 +125,15 @@ if (cluster.isMaster) {
   //Docs: https://www.npmjs.com/package/express-sanitized
   app.use(sanitizer());
 
-  //For authentication
-  const userName = process.env.OST_VIEW_2000_UNAME;
-  var userPwd = process.env.OST_VIEW_2000_PWD;
-  var usersHash = {};
-  usersHash[userName] = userPwd;
-  app.use(basicAuth({
-    users: usersHash,
-    challenge: true
-  }));
+  ////For authentication
+  //const userName = process.env.OST_VIEW_2000_UNAME;
+  //var userPwd = process.env.OST_VIEW_2000_PWD;
+  //var usersHash = {};
+  //usersHash[userName] = userPwd;
+  //app.use(basicAuth({
+  //  users: usersHash,
+  //  challenge: true
+  //}));
 
   //Setting view engine template handlebars
   app.set('views', path.join(__dirname, 'views'));
