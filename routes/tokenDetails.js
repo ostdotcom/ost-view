@@ -17,7 +17,7 @@ const rootPrefix = ".."
   , coreConfig = require(rootPrefix + '/config')
   , logger = require(rootPrefix + '/helpers/custom_console_logger')
   , jwtAuth = require(rootPrefix + '/lib/jwt/jwt_auth')
-  , customUrlParser = require('url');
+  , customUrlParser = require('url')
   ;
 
 // Render final response

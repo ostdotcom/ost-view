@@ -12,6 +12,7 @@ const rootPrefix = ".."
   , coreConfig = require(rootPrefix + '/config')
   , configHelper = require(rootPrefix + '/helpers/configHelper')
   , memCache = require(rootPrefix + '/helpers/memCache')
+  , TokenUnits = require(rootPrefix + '/helpers/tokenUnits')
 ;
 
 /**
@@ -313,19 +314,19 @@ contract.prototype = {
       {
         img:"market-cap",
         title:"Market Cap",
-        value:token_details['market_cap'],
+        value: TokenUnits.toBigNumber(token_details['market_cap']).toFormat(0),
         is_badge_visible:true
       },
       {
         img:"circulating-supply",
         title:"Circulating Supply",
-        value:token_details['circulation'],
+        value: TokenUnits.toBigNumber(token_details['circulation']).toFormat(0),
         is_badge_visible:false
       },
       {
         img:"total-supply",
         title:"Total Supply",
-        value:token_details['total_supply'],
+        value: TokenUnits.toBigNumber(token_details['total_supply']).toFormat(0),
         is_badge_visible:false
       }
     ];
