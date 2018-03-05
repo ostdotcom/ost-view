@@ -123,26 +123,13 @@ address.prototype = {
    *
    * @return {promise<Object>}  list of token transactions available in database for particular batch.
    */
-  , getAddressTokenTransactions: function (address, page) {
+  , getAddressTokenTransactions: function (address, pageSize, pagePaylaod) {
     const oThis = this;
-    return new Promise(function (resolve, reject) {
-      if (address == undefined || address.length != constants.ACCOUNT_HASH_LENGTH) {
-        reject("invalid input");
-        return;
-      }
+    if (address == undefined ) {
+      return Promise.reject("invalid input");
+    }
 
-      if (page == undefined || !page || isNaN(page) || page < 1) {
-        page = constants.DEFAULT_PAGE_NUMBER;
-      }
-      oThis._dbInstance.getAddressTokenTransactions(address, page, constants.DEFAULT_PAGE_SIZE)
-        .then(function (response) {
-          resolve(response);
-        })
-        .catch(function (reason) {
-          reject(reason);
-        });
-
-    });
+    return oThis._dbInstance.getAddressTokenTransactions(address, pageSize, pagePaylaod);
   }
 
   , getAddressDetails: function (address){

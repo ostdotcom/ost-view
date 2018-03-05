@@ -19,6 +19,7 @@ const rootPrefix = ".."
   , responseHelper = require(rootPrefix + '/lib/formatter/response')
   , coreConfig = require(rootPrefix + '/config')
   , logger = require(rootPrefix + '/helpers/custom_console_logger')
+  , constants = require(rootPrefix + '/config/core_constants')
   ;
 
 // Render final response
@@ -33,19 +34,17 @@ const contractMiddleware = function (req, res, next) {
     , prevPagePayload = req.query.prev_page_payload
   ;
 
-  var pagePaylod = null;
+  var pagePayload = null;
   if (nextPagePayload){
-    console.log("\n\n\n************* nextPagePayload :: ", nextPagePayload);
-    pagePaylod = nextPagePayload;
+    pagePayload = nextPagePayload;
   }else if (prevPagePayload){
-    console.log("\n\n\n************* prevPagePayload :: ", prevPagePayload);
-    pagePaylod = prevPagePayload;
+    pagePayload = prevPagePayload;
   }
   // Get instance of contract class
   req.contractInstance = new contract(chainId);
 
   req.chainId = chainId;
-  req.pagePayload = pagePaylod;
+  req.pagePayload = pagePayload;
 
   next();
 };
@@ -56,36 +55,24 @@ const contractMiddleware = function (req, res, next) {
  *
  * @name Transaction Details
  *
- * @route {GET} {base_url}/:hash
+ * @route {GET} {base_url}/transactions/recent
  *
- * @routeparam {String} :page - page number
  */
 router.get("/transactions/recent", contractMiddleware, function (req, res) {
-  var pageSize = 3+1;
+  var pageSize = constants.DEFAULT_PAGE_SIZE+1;
 
   req.contractInstance.getRecentTokenTransactions( pageSize, req.pagePayload)
     .then(function (queryResponse) {
-
-      const responseData = queryResponse.tokenTransactions;
-      const nextPagePayload = getNextPagePaylaodForRecentTransactions(responseData, pageSize);
-      var prevPagePayload = {};
-
+      const tokenTransactions = queryResponse.tokenTransactions;
+      console.log(">>>>>>>>>> tokenTransactions :: ",tokenTransactions);
+      const nextPagePayload = getNextPagePaylaodForRecentTransactions(tokenTransactions, pageSize);
+      const prevPagePayload = getPrevPagePaylaodForRecentTransactions(tokenTransactions, req.pagePayload, pageSize);
 
       // For all the pages remove last row if its equal to page size.
-      var lastRecordRemoved = false;
-      if(responseData.length == pageSize){
-        responseData.pop();
-        lastRecordRemoved = true;
-      }else if(req.pagePayload.direction === 'next'){
-        lastRecordRemoved = true;
+      if(tokenTransactions.length == pageSize){
+        tokenTransactions.pop();
       }
 
-      if(req.pagePayload && req.pagePayload.direction === 'prev'){
-        responseData.reverse();
-      }
-      if(lastRecordRemoved){
-        prevPagePayload = getPrevPagePaylaodForRecentTransactions(responseData, req.pagePayload, pageSize);
-      }
       const response = responseHelper.successWithData({
         draw : req.query.draw,
         recordsTotal : 120,
@@ -97,7 +84,7 @@ router.get("/transactions/recent", contractMiddleware, function (req, res) {
           address_placeholder_url:'/chain-id/'+req.chainId+'/address/{{address}}',
           transaction_placeholder_url:"/chain-id/"+req.chainId+"/transaction/{{tr_hash}}"
         },
-        token_transactions:responseData,
+        token_transactions:tokenTransactions,
         contract_addresses:queryResponse.contractAddress,
         result_type: "token_transactions"
       });
@@ -109,20 +96,6 @@ router.get("/transactions/recent", contractMiddleware, function (req, res) {
       return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
     });
 });
-
-
-function getResponseData (requestResponse, isFirstPageRequest){
-  const pageSize = requestResponse.pageSize;
-  const response = requestResponse.response;
-
-  if (pageSize < response.length)
-  {
-
-    return response;
-  }
-
-  return response;
-}
 
 function getNextPagePaylaodForRecentTransactions (requestResponse, pageSize){
 
@@ -148,7 +121,7 @@ function getPrevPagePaylaodForRecentTransactions (requestResponse, pagePayload, 
 
   // If page payload is null means its a request for 1st page
   // OR direction is previous and count if less than page size means there is no previous page
-  if(!pagePayload){
+  if(!pagePayload || (pagePayload.direction === 'prev' && count < pageSize)){
     return {};
   }
 
@@ -164,22 +137,30 @@ function getPrevPagePaylaodForRecentTransactions (requestResponse, pagePayload, 
  *
  * @name Transaction Details
  *
- * @route {GET} {base_url}/:hash
+ * @route {GET} {base_url}/top
  *
- * @routeparam {String} :page - page number
  */
 router.get("/top", contractMiddleware, function (req, res) {
+  var pageSize = constants.DEFAULT_PAGE_SIZE+1;
 
-  req.contractInstance.getTopTokens( req.pageNumber, req.pagePayload)
-    .then(function (requestResponse) {
+  req.contractInstance.getTopTokens(pageSize, req.pagePayload)
+    .then(function (queryResponse) {
+
+      const nextPagePayload = getNextPagePaylaodForTopTokens(queryResponse, pageSize);
+      const prevPagePayload = getPrevPagePaylaodForTopTokens(queryResponse, req.pagePayload, pageSize);
+
+      // For all the pages remove last row if its equal to page size.
+      if(queryResponse.length == pageSize){
+        queryResponse.pop();
+      }
 
       const response = responseHelper.successWithData({
-        token_transactions:requestResponse.response,
-        result_type: "token_transactions",
+        top_tokens:queryResponse,
+        result_type: "top_tokens",
         meta:{
 
-          next_page_payload : getNextPagePaylaodForTopTokens(requestResponse, req.pagePayload),
-          prev_page_payload : getPrevPagePaylaodForTopTokens(requestResponse, req.pagePayload),
+          next_page_payload : nextPagePayload,
+          prev_page_payload : prevPagePayload,
 
           chain_id:req.chainId,
           token_details_redirect_url: "/chain-id/"+req.chainId+"/tokendetails/{{contract_addr}}"
@@ -195,39 +176,37 @@ router.get("/top", contractMiddleware, function (req, res) {
 });
 
 
-function getNextPagePaylaodForTopTokens (requestResponse, pagePayload){
-  const pageSize = requestResponse.pageSize;
-  const response = requestResponse.response;
+function getNextPagePaylaodForTopTokens (requestResponse, pageSize){
 
-  if(pageSize < response.length){
+  const response = requestResponse,
+    count = response.length;
 
-    return {
-      market_cap:response[response.length-1].market_cap,
-      direction: "next"
-
-    };
-  }else{
-
+  if(count <= pageSize -1){
     return {};
   }
+  return {
+    market_cap:response[count-1].market_cap,
+    direction: "next"
+  };
+
 }
 
-function getPrevPagePaylaodForTopTokens (requestResponse, pagePayload){
+function getPrevPagePaylaodForTopTokens (requestResponse, pagePayload, pageSize){
 
-  const pageSize = requestResponse.pageSize;
-  const response = requestResponse.response;
+  const response = requestResponse,
+    count = response.length;
 
-  if(pagePayload && Object.keys(pagePayload).length > 0){
-
-    return {
-      market_cap:response[0].market_cap,
-      direction: "prev"
-
-    };
-  }else{
-
+  // If page payload is null means its a request for 1st page
+  // OR direction is previous and count if less than page size means there is no previous page
+  if(!pagePayload || (pagePayload.direction === 'prev' && count < pageSize)){
     return {};
   }
+
+  return {
+    market_cap:response[0].market_cap,
+    direction: "prev"
+  };
 }
+
 
 module.exports = router;

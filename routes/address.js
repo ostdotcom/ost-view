@@ -19,10 +19,6 @@ const rootPrefix = ".."
   , coreConstant = require(rootPrefix + '/config/core_constants')
   ;
 
-// Class related constants
-const balanceIndex = 0
-  , transactionsIndex = 0
-  , defaultPageNumber = 1;
 
 // Render final response
 const renderResult = function (requestResponse, responseObject, contentType) {
@@ -33,14 +29,23 @@ const renderResult = function (requestResponse, responseObject, contentType) {
 const addressMiddleware = function (req, res, next) {
   const chainId = req.params.chainId
     , addressValue = req.params.address
-    , page = req.params.page
-    , contractAddress = req.params.contractAddress;
+    , contractAddress = req.params.contractAddress
+    , nextPagePayload = req.query.next_page_payload
+    , prevPagePayload = req.query.prev_page_payload
+    ;
+
+  var pagePayload = null;
+  if (nextPagePayload){
+    pagePayload = nextPagePayload;
+  }else if (prevPagePayload){
+    pagePayload = prevPagePayload;
+  }
 
   // create instance of address class
   req.addressInstance = new address(chainId);
 
   req.addressValue = addressValue;
-  req.page = page;
+  req.pagePayload = pagePayload;
   req.contractAddress = contractAddress;
   req.chainId = chainId;
 
@@ -66,13 +71,13 @@ router.get('/:address', addressMiddleware, function (req, res) {
         token_details:(response === undefined) ? '' : response['token_details'],
         mCss: ['mAddressDetails.css'],
         mJs: ['mAddressDetails.js'],
-        address:req.addressValue,
         meta: {
-          q: req.addressValue
+          q: req.addressValue,
+          address:req.addressValue,
+          transaction_url: '/chain-id/'+req.chainId+'/address/'+req.addressValue+'/transactions'
         },
         result_type: 'address_details',
         title: 'Address Details - '+req.addressValue,
-        transaction_url: '/chain-id/'+req.chainId+'/address/'+req.addressValue+'/transactions/1'
       });
 
       return renderResult(responseData, res, req.headers['content-type']);
@@ -120,20 +125,33 @@ router.get('/:address/balance', addressMiddleware, function (req, res) {
  * @routeparam {String} :address - Address whose balance need to be fetched (42 chars length)
  * @routeparam {Integer} :page - Page number for getting data in batch.
  */
-router.get('/:address/transactions/:page', addressMiddleware, function (req, res) {
+router.get('/:address/transactions', addressMiddleware, function (req, res) {
 
+  var pageSize = coreConstant.DEFAULT_PAGE_SIZE+1;
 
-  req.addressInstance.getAddressTokenTransactions(req.addressValue, req.page)
-    .then(function (requestResponse) {
+  req.addressInstance.getAddressTokenTransactions(req.addressValue, pageSize, req.pagePayload)
+    .then(function (queryResponse) {
+
+      const nextPagePayload = getNextPagePaylaodForAddressTransactions(queryResponse, pageSize);
+      const prevPagePayload = getPrevPagePaylaodForAddressTransactions(queryResponse, req.pagePayload, pageSize);
+
+      // For all the pages remove last row if its equal to page size.
+      if(queryResponse.length == pageSize){
+        queryResponse.pop();
+      }
+
       const response = responseHelper.successWithData({
-        transactions: requestResponse,
+        transactions: queryResponse,
         result_type: "transactions",
+        draw : req.query.draw,
+        recordsTotal : 120,
         meta:{
+          next_page_payload :nextPagePayload,
+          prev_page_payload :prevPagePayload,
+
           transaction_placeholder_url:"/chain-id/"+req.chainId+"/transaction/{{tr_hash}}",
           address_placeholder_url:"/chain-id/"+req.chainId+"/address/{{addr}}",
-          page:req.page,
           q:req.addressValue
-
         }
       });
 
@@ -144,6 +162,41 @@ router.get('/:address/transactions/:page', addressMiddleware, function (req, res
       return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
     });
 });
+
+function getNextPagePaylaodForAddressTransactions (requestResponse, pageSize){
+
+  const response = requestResponse,
+    count = response.length;
+
+  if(count <= pageSize -1){
+    return {};
+  }
+
+  return {
+    id: response[count-1].id,
+    timestamp: response[count-1].timestamp,
+    direction: "next"
+  };
+
+}
+
+function getPrevPagePaylaodForAddressTransactions (requestResponse, pagePayload, pageSize){
+
+  const response = requestResponse,
+    count = response.length;
+
+  // If page payload is null means its a request for 1st page
+  // OR direction is previous and count if less than page size means there is no previous page
+  if(!pagePayload || (pagePayload.direction === 'prev' && count < pageSize)){
+    return {};
+  }
+
+  return {
+    id: response[0].id,
+    timestamp: response[0].timestamp,
+    direction: "prev"
+  };
+}
 
 /**
  * Get paginated address transactions in given contracts

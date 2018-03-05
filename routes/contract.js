@@ -29,13 +29,24 @@ const contractMiddleware = function (req, res, next) {
   const chainId = req.params.chainId
     , contractAddress = req.params.contractAddress
     , page = req.params.page
+    , nextPagePayload = req.query.next_page_payload
+    , prevPagePayload = req.query.prev_page_payload
   ;
+
+  var pagePayload = null;
+  if (nextPagePayload){
+    pagePayload = nextPagePayload;
+  }else if (prevPagePayload){
+    pagePayload = prevPagePayload;
+  }
+
   // Get instance of contract class
   req.contractInstance = new contract(chainId);
 
   req.chainId = chainId;
   req.page = page;
   req.contractAddress = contractAddress;
+  req.pagePayload = pagePayload;
 
   next();
 };
@@ -52,16 +63,30 @@ const contractMiddleware = function (req, res, next) {
  */
 router.get("/:contractAddress/internal-transactions", contractMiddleware, function (req, res) {
 
-  req.contractInstance.getContractLedger(req.contractAddress, pageNumber)
-    .then(function (requestResponse) {
+  var pageSize =  coreConstant.DEFAULT_PAGE_SIZE+1;
+  +1;
+
+  req.contractInstance.getContractLedger(req.contractAddress, pageSize, req.pagePayload)
+    .then(function (queryResponse) {
+
+      const nextPagePayload = getNextPagePaylaodForInternalTransactions(queryResponse, pageSize);
+      const prevPagePayload = getPrevPagePaylaodForInternalTransactions(queryResponse, req.pagePayload, pageSize);
+
+      // For all the pages remove last row if its equal to page size.
+      if(queryResponse.length == pageSize){
+        queryResponse.pop();
+      }
 
       const response = responseHelper.successWithData({
-        contract_internal_transactions: requestResponse,
+        contract_internal_transactions: queryResponse,
         result_type: "contract_internal_transactions",
         layout : 'empty',
         draw : req.query.draw,
         recordsTotal : 120,
         meta:{
+          next_page_payload :nextPagePayload,
+          prev_page_payload :prevPagePayload,
+
           q:req.contractAddress,
           page:req.page,
           transaction_placeholder_url:coreConstant["BASE_URL"]+"/chain-id/"+req.chainId+"/transaction/{{tr_hash}}",
@@ -77,6 +102,41 @@ router.get("/:contractAddress/internal-transactions", contractMiddleware, functi
       return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
     });
 });
+
+function getNextPagePaylaodForInternalTransactions (requestResponse, pageSize){
+
+  const response = requestResponse,
+    count = response.length;
+
+  if(count <= pageSize -1){
+    return {};
+  }
+
+  return {
+    id: response[count-1].id,
+    timestamp: response[count-1].timestamp,
+    direction: "next"
+  };
+
+}
+
+function getPrevPagePaylaodForInternalTransactions (requestResponse, pagePayload, pageSize){
+
+  const response = requestResponse,
+    count = response.length;
+
+  // If page payload is null means its a request for 1st page
+  // OR direction is previous and count if less than page size means there is no previous page
+  if(!pagePayload || (pagePayload.direction === 'prev' && count < pageSize)){
+    return {};
+  }
+
+  return {
+    id: response[0].id,
+    timestamp: response[0].timestamp,
+    direction: "prev"
+  };
+}
 
 
 /**

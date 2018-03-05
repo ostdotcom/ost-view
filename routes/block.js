@@ -28,14 +28,24 @@ const renderResult = function (requestResponse, responseObject, contentType) {
 const blockMiddleware = function (req, res, next) {
   const blockNumber = req.params.blockNumber
     , chainId = req.params.chainId
-    , page = req.params.page;
+    , nextPagePayload = req.query.next_page_payload
+    , prevPagePayload = req.query.prev_page_payload
+    ;
+
+  var pagePayload = null;
+  if (nextPagePayload){
+    pagePayload = nextPagePayload;
+  }else if (prevPagePayload){
+    pagePayload = prevPagePayload;
+  }
 
   // create instance of block class
   req.blockInstance = new block(chainId);
 
   req.blockNumber = blockNumber;
   req.chainId = chainId;
-  req.page = page;
+  req.pagePayload = pagePayload;
+
 
   next();
 };
@@ -109,7 +119,8 @@ function processBlockError(reason, req, res){
  * @routeparam {Integer} :block_number - number of block need to be fetched
  * @routeparam {Integer} :page - Page number for getting data in batch.
  */
-router.get("/:blockNumber/transactions/:page", blockMiddleware, function (req, res) {
+router.get("/:blockNumber/transactions", blockMiddleware, function (req, res) {
+
   req.blockInstance.getBlockTransactions(req.blockNumber, req.page)
     .then(function (requestResponse) {
 

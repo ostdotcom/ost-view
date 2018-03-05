@@ -18,6 +18,7 @@ const rootPrefix = ".."
   , logger = require(rootPrefix + '/helpers/custom_console_logger')
   , jwtAuth = require(rootPrefix + '/lib/jwt/jwt_auth')
   , customUrlParser = require('url')
+  , coreConstant = require(rootPrefix + '/config/core_constants')
   ;
 
 // Render final response
@@ -33,8 +34,16 @@ const contractMiddleware = function (req, res, next) {
   const chainId = req.params.chainId
     , contractAddress = req.params.contractAddress
     , duration = req.params.duration
-    , pageNumber = 0;
+    , nextPagePayload = req.query.next_page_payload
+    , prevPagePayload = req.query.prev_page_payload
   ;
+
+  var pagePayload = null;
+  if (nextPagePayload){
+    pagePayload = nextPagePayload;
+  }else if (prevPagePayload){
+    pagePayload = prevPagePayload;
+  }
 
   // Get instance of contract class
   req.contractInstance = new contract(chainId);
@@ -42,7 +51,7 @@ const contractMiddleware = function (req, res, next) {
   req.chainId = chainId;
   req.contractAddress = contractAddress;
   req.duration = duration;
-  req.pageNumber = pageNumber
+  req.pagePayload = pagePayload
 
   next();
 };
@@ -238,12 +247,28 @@ router.get("/:contractAddress/graph-date/numberOfTransactions/:duration", contra
  */
 router.get("/:contractAddress/holders", contractMiddleware, function (req, res) {
 
-  req.contractInstance.getTokenHolders( req.contractAddress,  req.pageNumber)
-    .then(function(response){
+  var pageSize = coreConstant.DEFAULT_PAGE_SIZE+1;
+
+  req.contractInstance.getTokenHolders( req.contractAddress, pageSize, req.pagePayload)
+    .then(function(queryResponse){
+
+      const nextPagePayload = getNextPagePaylaodForHolders(queryResponse, pageSize);
+      const prevPagePayload = getPrevPagePaylaodForHolders(queryResponse, req.pagePayload, pageSize);
+
+      // For all the pages remove last row if its equal to page size.
+      if(queryResponse.length == pageSize){
+        queryResponse.pop();
+      }
+
       const responseData = responseHelper.successWithData({
-        token_holders : response,
+        token_holders : queryResponse,
         result_type: "token_holders",
+        draw : req.query.draw,
+        recordsTotal : 120,
         meta:{
+          next_page_payload :nextPagePayload,
+          prev_page_payload :prevPagePayload,
+
           q:req.contractAddress,
           chain_id:req.chainId,
           address_placeholder_url : "/chain-id/"+req.chainId+"/address/{{address}}"
@@ -256,6 +281,42 @@ router.get("/:contractAddress/holders", contractMiddleware, function (req, res) 
       return renderResult(responseHelper.error('', reason), res, 'application/json');
     })
 });
+
+
+function getNextPagePaylaodForHolders (requestResponse, pageSize){
+
+  const response = requestResponse,
+    count = response.length;
+
+  if(count <= pageSize -1){
+    return {};
+  }
+
+  return {
+    id: response[count-1].id,
+    timestamp: response[count-1].timestamp,
+    direction: "next"
+  };
+
+}
+
+function getPrevPagePaylaodForHolders (requestResponse, pagePayload, pageSize){
+
+  const response = requestResponse,
+    count = response.length;
+
+  // If page payload is null means its a request for 1st page
+  // OR direction is previous and count if less than page size means there is no previous page
+  if(!pagePayload || (pagePayload.direction === 'prev' && count < pageSize)){
+    return {};
+  }
+
+  return {
+    id: response[0].id,
+    timestamp: response[0].timestamp,
+    direction: "prev"
+  };
+}
 
 /**
  * Get transactions type count of branded token

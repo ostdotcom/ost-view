@@ -35,29 +35,15 @@ contract.prototype = {
    *
    * @return {Promise<Object>} List of contract internal transaction
    */
-  getContractLedger: function (contractAddress, page) {
+  getContractLedger: function (contractAddress, pageSize, pagePayload) {
     const oThis = this;
 
-    return new Promise(function (resolve, reject) {
+    if (contractAddress === undefined) {
+      return Promise.reject("invalid input");
+      return;
+    }
 
-      if (contractAddress == undefined || contractAddress.length != constants.ACCOUNT_HASH_LENGTH) {
-        reject("invalid input");
-        return;
-      }
-
-      if (page == undefined || !page || isNaN(page) || page < 0) {
-        page = constants.DEFAULT_PAGE_NUMBER;
-      }
-
-      oThis._dbInstance.getContractLedger(contractAddress, page, constants.DEFAULT_PAGE_SIZE)
-        .then(function (response) {
-          resolve(response);
-        })
-        .catch(function (reason) {
-          reject(reason);
-        });
-
-    });
+    return oThis._dbInstance.getContractLedger(contractAddress, pageSize, pagePayload);
   },
 
   /**
@@ -351,36 +337,28 @@ contract.prototype = {
     return details;
   }
 
-  , getTokenHolders: function(contractAddress, pageNumber){
-  const oThis = this;
-  return new Promise(function (resolve, reject) {
+  , getTokenHolders: function(contractAddress, pageSize, pagePaylaod) {
+    const oThis = this;
+    return new Promise(function (resolve, reject) {
 
-    if (contractAddress === undefined &&  contractAddress != '0') {
-      reject("invalid input");
-      return;
-    }
+      if (contractAddress === undefined) {
+        reject("invalid input");
+      }
+      configHelper.getIdOfContractByPromise(oThis._dbInstance, contractAddress)
+        .then(function (contractId) {
 
-    if (pageNumber === undefined || pageNumber < 0){
-      pageNumber = constants.DEFAULT_PAGE_NUMBER;
-
-    }
-
-    oThis._dbInstance.getBrandedTokenIdFromContract(contractAddress)
-      .then(function (response) {
-
-        oThis._dbInstance.getAddressesWithBrandedToken(response, pageNumber, constants.DEFAULT_PAGE_SIZE)
-          .then(function(holders){
-
-            resolve(holders);
-          })
-          .catch(function(reason){
-
-          });
-      })
-      .catch(function (reason) {
-        reject(reason);
-      });
-  });
+          oThis._dbInstance.getAddressesWithBrandedToken(contractId, pageSize, pagePaylaod)
+            .then(function (response) {
+              resolve(response);
+            })
+            .catch(function (addressesFailed) {
+              reject(addressesFailed);
+            });
+        })
+        .catch(function (reason) {
+          reject(reason);
+        });
+    });
   }
 
 
@@ -449,28 +427,10 @@ contract.prototype = {
    *
    *@return {Promise<Object>} List of pending transactions.
    */
-  ,getTopTokens : function(pageNumber, pagePayload){
+  ,getTopTokens : function(pageSize, pagePayload){
     const oThis = this;
 
-    return new Promise(function(resolve, reject){
-
-      if (pageNumber === undefined || !pageNumber || isNaN(pageNumber) || pageNumber < 0) {
-        pageNumber = constants.DEFAULT_PAGE_NUMBER;
-      }
-
-      oThis._dbInstance.getTopTokens(pageNumber, constants.DEFAULT_PAGE_SIZE, pagePayload)
-        .then(function(response){
-          const responseData={
-            response:response,
-            pageSize:constants.DEFAULT_PAGE_SIZE
-          };
-          resolve(responseData);
-        })
-        .catch(function(reason){
-          reject(reason);
-        });
-
-    });
+    return oThis._dbInstance.getTopTokens(pageSize, pagePayload);
   }
 
 

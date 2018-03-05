@@ -42,7 +42,7 @@ define("TOKEN_TRANSACTION_INDEX_MAP", {'transaction_hash':0, 'contract_address':
 //constants
 define('ACCOUNT_HASH_LENGTH',42);
 define('TRANSACTION_HASH_LENGTH', 66);
-define('DEFAULT_PAGE_SIZE', 3);
+define('DEFAULT_PAGE_SIZE', 10);
 define('DEFAULT_PAGE_NUMBER',1);
 define('AGGREGATE_CONSTANT', 5 * 60);
 
