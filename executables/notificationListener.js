@@ -20,7 +20,7 @@ const rootPrefix = ".."
 
 function subscribe(){
     openSTNotification.subscribeEvent.rabbit(
-        ['#'],
+        ['transfer.#'],
         {queue: 'OpenST-Explorer-Notification-Listener'},
         function(msgContent){
             logger.info('[RECEIVED]', msgContent, '\n');
