@@ -38,6 +38,10 @@ module.exports = {
     }[operator];
   },
 
+  randomStr: function(){
+    return Math.random().toString(36).replace(/[^a-z]+/g, '');
+  },
+
   block: function (name) {
     var blocks  = this._blocks,
       content = blocks && blocks[name];
