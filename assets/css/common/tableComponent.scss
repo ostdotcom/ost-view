@@ -98,9 +98,11 @@ table.dataTable.no-footer {
 }
 
 .dataTables_wrapper .dataTables_info{
-  right: 100px;
-  bottom: 10px;
-  position: absolute;
+  @media (min-width: 576px) {
+    right: 100px;
+    bottom: 10px;
+    position: absolute;
+  }
   font-size: 0.7rem;
   color: #979797;
 }
