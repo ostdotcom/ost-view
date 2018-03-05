@@ -1,4 +1,4 @@
-"use strict"
+"use strict";
 /**
  * Model to fetch contract address related details from database or from chain.
  *
