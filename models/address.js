@@ -11,7 +11,10 @@ const rootPrefix = ".."
   , dbInteract = require(rootPrefix + '/lib/storage/interact')
   , constants = require(rootPrefix + '/config/core_constants')
   , coreConfig = require(rootPrefix + '/config')
+  , configHelper = require(rootPrefix + '/helpers/configHelper')
 ;
+
+const und = require('underscore');
 
 /**
  * @constructor
@@ -123,13 +126,35 @@ address.prototype = {
    *
    * @return {promise<Object>}  list of token transactions available in database for particular batch.
    */
-  , getAddressTokenTransactions: function (address, pageSize, pagePaylaod) {
+  , getAddressTokenTransactions: function (address, page) {
     const oThis = this;
-    if (address == undefined ) {
-      return Promise.reject("invalid input");
-    }
+    return new Promise(function (resolve, reject) {
+      if (address == undefined || address.length != constants.ACCOUNT_HASH_LENGTH) {
+        reject("invalid input");
+        return;
+      }
 
-    return oThis._dbInstance.getAddressTokenTransactions(address, pageSize, pagePaylaod);
+      if (page == undefined || !page || isNaN(page) || page < 1) {
+        page = constants.DEFAULT_PAGE_NUMBER;
+      }
+      oThis._dbInstance.getAddressTokenTransactions(address, pageSize, pagePaylaod)
+        .then(function (response) {
+          var contractArray = [];
+          response.forEach(function(object){
+            contractArray.push(object.contract_address);
+          });
+          contractArray = und.uniq(contractArray);
+          return configHelper.getContractDetailsOfAddressArray(oThis._dbInstance, contractArray)
+            .then(function(addressHash){
+               resolve({tokenTransactions: response, contractAddress: addressHash});
+            });
+
+        })
+        .catch(function (reason) {
+          reject(reason);
+        });
+
+    });
   }
 
   , getAddressDetails: function (address){

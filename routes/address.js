@@ -141,7 +141,8 @@ router.get('/:address/transactions', addressMiddleware, function (req, res) {
       }
 
       const response = responseHelper.successWithData({
-        transactions: queryResponse,
+        transactions: requestResponse.tokenTransactions,
+        contract_addresses: requestResponse.contractAddress,
         result_type: "transactions",
         draw : req.query.draw,
         recordsTotal : 120,
