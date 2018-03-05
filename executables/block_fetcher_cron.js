@@ -98,7 +98,7 @@ const lockProcess = {
 // Check if process with same arguments already running or not
 ps.lookup({
   command: lockProcess.command,
-  arguments: lockProcess.script + "," + lockProcess.arguments.join(","),
+  arguments: lockProcess.script + "," + lockProcess.arguments.join(",")
 }, function (err, resultList) {
   if (err) {
     throw new Error(err);
@@ -124,12 +124,12 @@ ps.lookup({
   // Create required connections and objects
   dbInteract = DbInteract.getInstance(state.config.db_config);
   web3Interact = Web3Interact.getInstance(state.config.chainId);
-  block_fetcher = BlockFetcher.newInstance(web3Interact, dbInteract, false);
+  block_fetcher = BlockFetcher.newInstance(web3Interact, dbInteract, state.config.chainId, false);
   block_fetcher.state.blockNumber = state.blockNumber;
   logger.log('State Configuration', state);
 
   // Start processing blocks
-  dbInteract.getHigestInsertedBlock()
+  dbInteract.getHighestInsertedBlock()
     .then(function (blockNumber) {
       logger.log("Highest Block Number ", blockNumber);
       if (block_fetcher.state.blockNumber == 0 && blockNumber != null) {

@@ -9,9 +9,10 @@ OPENST-EXPLORER
 
 ## Setup OpenST utility chains 
 
-* Go to OpenST Explorer repo directory
+* Go to OpenST Explorer repo directory and create home directory env path
 ```
-  > cd openst-explorer 
+  > cd openst-explorer
+  > export OST_VIEW_PATH=$(pwd)
 ```
 
 * Install Packages
@@ -25,7 +26,7 @@ OPENST-EXPLORER
 
 * Configure database details in config.js
 ```
-  > vim config.js
+  > vim $OST_VIEW_PATH/config.js
 ```
   > under chain_config hash update following values and pest 
 ```
@@ -47,17 +48,36 @@ OPENST-EXPLORER
     }, 
 ```
 
-* Run migration
-```
-  > node executables/db_migrate.js up
-```
+ * Run migration
+  > To run migrations for specific chain specify chain Id
+  ```
+    > $OST_VIEW_PATH/executables/db_migrate.js up -c <chain_id>
+  ```
+  > To run migrations for all the configured chains (make sure all databases are created.)
+  ```
+    > $OST_VIEW_PATH/node executables/db_migrate.js up
+  ```
+## In terminal 1
+   * (Optional) Start notification listener(rabbitmq)
+       > rabbitmq is required for notificationListener
+       ```
+           > cd openst-explorer
+           > source set_env_vars.sh
+           > ./executables/notificationListener.js
+       ```
 
-* Start block fetcher
-```
-  > nohup node executables/block_fetcher_cron.js --chainID <chain_id> >> log/block_fetcher_cron.log &
-```
-
-* Start block verifier
-```
-  > nohup node executables/block_verifier_cron.js --chainID <chain_id> >> log/block_verifier_cron.log &
-```
+## In terminal 2
+* Start cron services
+   > It will run block fetcher, block verifier and block aggregator cron.
+    ```
+     > cd openst-explorer
+     > source set_env_vars.sh
+     > ./executables/cron.js -c <chain_id>
+    ```
+## In terminal 3
+* Start node
+   > It will run block fetcher, block verifier and block aggregator cron.
+    ```
+     > cd openst-explorer
+     > source set_env_vars.sh
+     > npm start

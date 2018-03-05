@@ -21,7 +21,7 @@ const rootPrefix           = ".."
 var transaction = module.exports = function(chainId){
   this._utilityInteractInstance = rpcInteract.getInstance(chainId);
   this._dbInstance = dbInteract.getInstance(coreConfig.getChainDbConfig(chainId));
-}
+};
 
 
 transaction.prototype = {
@@ -149,4 +149,5 @@ transaction.prototype = {
 
     });
   }
-}
+
+};

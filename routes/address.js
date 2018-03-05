@@ -75,8 +75,6 @@ router.get('/:address', addressMiddleware, function (req, res) {
         transaction_url: '/chain-id/'+req.chainId+'/address/'+req.addressValue+'/transactions/1'
       });
 
-      console.log("responseData :: ",responseData);
-
       return renderResult(responseData, res, req.headers['content-type']);
 
     })

@@ -1,7 +1,7 @@
 const moment = require('moment');
 
 const preRoot = "../",
-     erc20Tokens = require(preRoot + '/lib/contract_interact/erc20Token');
+     erc20Tokens = require(preRoot + '/lib/contract_interact/contractDecoder');
 
 
 module.exports = {
@@ -52,4 +52,6 @@ module.exports = {
     block.push(options.fn(this));
   }
 
-}
+
+
+};

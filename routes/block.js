@@ -79,7 +79,7 @@ router.get("/:blockNumber", blockMiddleware, function (req, res) {
 function processBlockResponse (blockHash, req, res){
   const response = responseHelper.successWithData({
     block: blockHash,
-    transaction_url: coreConstant["BASE_URL"]+"/chain-id/"+req.chainId+"/block/"+req.blockNumber+"/transactions/1",
+    transaction_url: "/chain-id/"+req.chainId+"/block/"+req.blockNumber+"/transactions/1",
     result_type: 'block',
     mCss: ['mBlockDetails.css'],
     mJs: ['mBlockDetails.js'],

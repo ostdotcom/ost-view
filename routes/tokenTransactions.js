@@ -34,25 +34,13 @@ const contractMiddleware = function (req, res, next) {
     , prevPagePayload = req.query.prev_page_payload
   ;
 
-
-  console.log("req.query.next_page_payload :: ",nextPagePayload);
-  console.log("req.query.prev_page_payload :: ",prevPagePayload);
-
-
-
   var pagePaylod = {};
   if (nextPagePayload !== undefined && Object.keys(nextPagePayload).length > 0){
-    console.log("1..");
     pagePaylod = nextPagePayload;
   }else if (prevPagePayload !== undefined && Object.keys(prevPagePayload).length > 0){
-    console.log("2..");
 
     pagePaylod = prevPagePayload;
-  }else{
-    console.log("3..");
-
   }
-
   // Get instance of contract class
   req.contractInstance = new contract(chainId);
 
