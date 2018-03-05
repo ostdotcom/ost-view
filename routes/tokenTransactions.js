@@ -27,7 +27,7 @@ const renderResult = function (requestResponse, responseObject, contentType) {
 };
 
 // define parameters from url, generate web rpc instance and database connect
-const contractMiddleware = function (req, rresponsees, next) {
+const contractMiddleware = function (req, res, next) {
   const chainId = req.params.chainId
     , nextPagePayload = req.query.next_page_payload
     , prevPagePayload = req.query.prev_page_payload
@@ -66,24 +66,25 @@ router.get("/transactions/recent", contractMiddleware, function (req, res) {
   req.contractInstance.getRecentTokenTransactions( pageSize, req.pagePayload)
     .then(function (queryResponse) {
 
-      const nextPagePayload = getNextPagePaylaodForRecentTransactions(queryResponse, pageSize);
+      const responseData = queryResponse.tokenTransactions;
+      const nextPagePayload = getNextPagePaylaodForRecentTransactions(responseData, pageSize);
       var prevPagePayload = {};
 
-      const responseData = queryResponse;
+
       // For all the pages remove last row if its equal to page size.
       var lastRecordRemoved = false;
-      if(queryResponse.length == pageSize){
-        queryResponse.pop();
+      if(responseData.length == pageSize){
+        responseData.pop();
         lastRecordRemoved = true;
       }else if(req.pagePayload.direction === 'next'){
         lastRecordRemoved = true;
       }
 
       if(req.pagePayload && req.pagePayload.direction === 'prev'){
-        queryResponse.reverse();
+        responseData.reverse();
       }
       if(lastRecordRemoved){
-        prevPagePayload = getPrevPagePaylaodForRecentTransactions(queryResponse, req.pagePayload, pageSize);
+        prevPagePayload = getPrevPagePaylaodForRecentTransactions(responseData, req.pagePayload, pageSize);
       }
       const response = responseHelper.successWithData({
         draw : req.query.draw,
@@ -96,8 +97,9 @@ router.get("/transactions/recent", contractMiddleware, function (req, res) {
           address_placeholder_url:'/chain-id/'+req.chainId+'/address/{{address}}',
           transaction_placeholder_url:"/chain-id/"+req.chainId+"/transaction/{{tr_hash}}"
         },
-        token_transactions:queryResponse,
-        result_type: "token_transactions",
+        token_transactions:responseData,
+        contract_addresses:queryResponse.contractAddress,
+        result_type: "token_transactions"
       });
 
       return renderResult(response, res, 'application/json');

@@ -13,6 +13,7 @@ const rootPrefix = ".."
   , configHelper = require(rootPrefix + '/helpers/configHelper')
   , memCache = require(rootPrefix + '/helpers/memCache')
   , TokenUnits = require(rootPrefix + '/helpers/tokenUnits')
+  , und = require('underscore')
 ;
 
 /**
@@ -428,7 +429,19 @@ contract.prototype = {
     ,getRecentTokenTransactions : function(pageSize, pagePaylaod){
     const oThis = this;
 
-    return oThis._dbInstance.getRecentTokenTransactions(pageSize, pagePaylaod);
+    return oThis._dbInstance.getRecentTokenTransactions(pageSize, pagePaylaod)
+      .then(function(response){
+          var contractArray = [];
+          response.forEach(function(object){
+            contractArray.push(object.contract_address);
+          });
+          contractArray = und.uniq(contractArray);
+          return configHelper.getContractDetailsOfAddressArray(oThis._dbInstance, contractArray)
+            .then(function(addressHash){
+                return Promise.resolve({tokenTransactions: response, contractAddress: addressHash});
+            });
+
+      });
   }
 
   /**

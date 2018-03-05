@@ -123,6 +123,34 @@ ConfigHelper.prototype.getContractDetailsOfAddressByPromise = function(dbInterac
     return Promise.resolve(contract);
 };
 
+/**
+ * Get Hashes of contract addresses
+ * @param dbInteract Db interact
+ * @param contractAddressArray Contract Address Array
+ * @returns {*}
+ */
+ConfigHelper.prototype.getContractDetailsOfAddressArray = function (dbInteract, contractAddressArray) {
+    var oThis = this;
+    var result = {};
+    return oThis.syncUpContractMap(dbInteract)
+      .then(function () {
+          contractAddressArray.forEach(function (contractAddress) {
+              var contractAddressLower = contractAddress.toLowerCase();
+              var value = oThis.contractIdMap[contractAddressLower];
+              if (undefined !== value) {
+                  result[contractAddress] = value;
+              } else {
+                  result[contractAddress] = {};
+              }
+          });
+          return Promise.resolve(result);
+      })
+      .catch(function (error) {
+          logger.error("configHelper#getContractDetailsOfAddressArray :: Error", error);
+          return Promise.resolve(result);
+      });
+};
+
 
 
 module.exports = new ConfigHelper();
