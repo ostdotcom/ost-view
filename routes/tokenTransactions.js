@@ -78,8 +78,8 @@ router.get("/transactions/recent", contractMiddleware, function (req, res) {
 
           chain_id:req.chainId,
           address_placeholder_url:'/chain-id/'+req.chainId+'/address/{{address}}',
-          transaction_placeholder_url:"/chain-id/"+req.chainId+"/transaction/{{tr_hash}}",
-        },
+          transaction_placeholder_url:"/chain-id/"+req.chainId+"/transaction/{{tr_hash}}"
+        }
       });
       return renderResult(response, res, 'application/json');
     })

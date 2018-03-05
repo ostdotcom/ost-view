@@ -178,7 +178,7 @@ router.get("/:contractAddress/graph/numberOfTransactions/:duration",decodeJwt, c
   })
     .catch(function(reason){
       logger.log(req.originalUrl + " : " + reason);
-      return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
+      return renderResult(responseHelper.error('', reason), res, 'application/json');
     });
 
 });
@@ -210,7 +210,7 @@ router.get("/:contractAddress/holders", contractMiddleware, function (req, res) 
     })
     .catch(function(reason){
       logger.log(req.originalUrl + " : " + reason);
-      return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
+      return renderResult(responseHelper.error('', reason), res, 'application/json');
     })
 });
 
@@ -237,10 +237,10 @@ router.get("/:contractAddress/graph/transactionsByType/:duration",decodeJwt, con
     });
 
       logger.log("Request of content-type:", req.headers['content-type']);
-      renderResult(responseData, res, req.headers['content-type']);
+      renderResult(responseData, res, 'application/json');
     })
     .catch(function (reason) {
-      return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
+      return renderResult(responseHelper.error('', reason), res, 'application/json');
     });
 
 });
@@ -272,10 +272,10 @@ router.get("/:contractAddress/topUsers", decodeJwt ,contractMiddleware, function
         }
       });
       logger.log("Request of content-type:", req.headers['content-type']);
-      renderResult(responseData, res, req.headers['content-type']);
+      renderResult(responseData, res, 'application/json');
     })
     .catch(function (reason) {
-      return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
+      return renderResult(responseHelper.error('', reason), res, 'application/json');
     });
 
 });
@@ -289,11 +289,11 @@ router.get("/:contractAddress/ostSupply", contractMiddleware, function (req, res
         result_type: "ostSupply"
       });
       logger.log("Request of content-type:", req.headers['content-type']);
-      renderResult(responseData, res, req.headers['content-type']);
+      renderResult(responseData, res, 'application/json');
     })
     .catch(function (reason) {
       logger.log(req.originalUrl + " : " + reason);
-      return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
+      return renderResult(responseHelper.error('', reason), res, 'application/json');
     });
 
 });
