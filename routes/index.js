@@ -141,7 +141,7 @@ router.get('/search', searchMiddleware, function (req, res) {
     })
     .catch(function (reason) {
       const response = responseHelper.successWithData({
-        redirect_url: "/search?q="+reason,
+        redirect_url: "/search-results?q="+reason,
         result_type: "redirect_url"
       });
 
