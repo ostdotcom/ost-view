@@ -133,10 +133,12 @@
       var data = [];
       var header_temp = Object.keys(response_data[0]);
       var header = [];
+      var header_type = [];
       if(!$.isEmptyObject(oThis.columns)){
         $.each( oThis.columns, function( index, value ) {
           if(header_temp.indexOf(value.opt_id) > -1){
             header.push(value.opt_id);
+            header_type.push(value.type);
           }
         });
       } else {
@@ -145,11 +147,19 @@
       data.push(header);
       $.each( response_data, function( index, value ) {
         var row = [];
-        header.forEach(function(elem){
-          if(oThis.tsUnixToJs === true && typeof value[elem] === 'number' && value[elem] > 1262304000 && (new Date(value[elem])).getYear() < 1971){
-            row.push(new Date(value[elem]*1000));
-          } else {
-            row.push(value[elem]);
+        header.forEach(function(elem, index){
+          if(header_type[index] === 'string'){
+            row.push(String(value[elem]));
+          } else if (header_type[index] === 'number'){
+            row.push(Number(value[elem]));
+          } else if (header_type[index] === 'boolean'){
+            row.push(Boolean(value[elem]));
+          } else if (header_type[index] === 'date' || header_type[index] === 'datetime' || header_type[index] === 'timeofday'){
+            if(oThis.tsUnixToJs === true && typeof value[elem] === 'number' && value[elem] > 1262304000 && (new Date(value[elem])).getYear() < 1971){
+              row.push(new Date(value[elem]*1000));
+            } else {
+              row.push(new Date(value[elem]));
+            }
           }
         });
         data.push(row);
