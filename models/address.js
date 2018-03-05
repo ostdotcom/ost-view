@@ -126,7 +126,7 @@ address.prototype = {
    *
    * @return {promise<Object>}  list of token transactions available in database for particular batch.
    */
-  , getAddressTokenTransactions: function (address, page) {
+  , getAddressTokenTransactions: function (address, pageSize, pagePayload) {
     const oThis = this;
     return new Promise(function (resolve, reject) {
       if (address == undefined || address.length != constants.ACCOUNT_HASH_LENGTH) {
@@ -134,10 +134,7 @@ address.prototype = {
         return;
       }
 
-      if (page == undefined || !page || isNaN(page) || page < 1) {
-        page = constants.DEFAULT_PAGE_NUMBER;
-      }
-      oThis._dbInstance.getAddressTokenTransactions(address, pageSize, pagePaylaod)
+      oThis._dbInstance.getAddressTokenTransactions(address, pageSize, pagePayload)
         .then(function (response) {
           var contractArray = [];
           response.forEach(function(object){

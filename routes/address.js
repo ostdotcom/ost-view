@@ -132,17 +132,20 @@ router.get('/:address/transactions', addressMiddleware, function (req, res) {
   req.addressInstance.getAddressTokenTransactions(req.addressValue, pageSize, req.pagePayload)
     .then(function (queryResponse) {
 
-      const nextPagePayload = getNextPagePaylaodForAddressTransactions(queryResponse, pageSize);
-      const prevPagePayload = getPrevPagePaylaodForAddressTransactions(queryResponse, req.pagePayload, pageSize);
+      const tokenTransactions =  queryResponse.tokenTransactions,
+        contractAddress = queryResponse.contractAddress,
+        nextPagePayload = getNextPagePaylaodForAddressTransactions(tokenTransactions, pageSize),
+        prevPagePayload = getPrevPagePaylaodForAddressTransactions(tokenTransactions, req.pagePayload, pageSize)
+        ;
 
       // For all the pages remove last row if its equal to page size.
-      if(queryResponse.length == pageSize){
-        queryResponse.pop();
+      if(tokenTransactions.length == pageSize){
+        tokenTransactions.pop();
       }
 
       const response = responseHelper.successWithData({
-        transactions: requestResponse.tokenTransactions,
-        contract_addresses: requestResponse.contractAddress,
+        transactions: tokenTransactions,
+        contract_addresses: contractAddress,
         result_type: "transactions",
         draw : req.query.draw,
         recordsTotal : 120,
