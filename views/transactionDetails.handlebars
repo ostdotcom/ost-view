@@ -24,50 +24,40 @@
                     <span class="value-color font-weight-light"> {{ toDate transaction.timestamp }} </span>
                 </div>
 
-                <div class="card-body card-body-table">
-                    <table class="table token-table">
-                        <tbody>
-                            <tr>
-                                <td>
-                                    <div class="cell d-flex align-items-center">
-                                        <div class="circle circle-sm">
-                                            <div>{{coin_details.company_symbol}}</div>
-                                        </div>
-                                        <div class="ml-2 name">{{coin_details.company_name}}</div>
-                                    </div>
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
 
-                                </td>
-                                <td>
-                                    <div class="cell d-flex align-items-center">
-                                        <span class="badge badge-primary">{{transaction.tokens}} {{coin_details.company_symbol}}</span>
-                                        <span class="ml-1">({{math transaction.tokens '/' coin_details.price}} OST)</span>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="cell d-flex align-items-center">
-                                        {{ toDate transaction.timestamp }}
-                                    </div>
-                                </td>
-                                <td >
-                                    <div class="cell d-flex align-items-center">
-                                    <span>From </span>
-                                    <a class="d-inline-block text-truncate ml-1" href="{{meta.redirect_url.from}}">{{transaction.t_from}}</a>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="cell d-flex align-items-center">
-                                        <div class="text-center w-100" style="color:#597a84">&#8594;</div>
-                                    </div>
-                                </td>
-                                <td>
-                                    <div class="cell d-flex align-items-center">
-                                    <span>To </span>
-                                    <a class="d-inline-block text-truncate ml-1" href="{{meta.redirect_url.to}}">{{transaction.t_to}}</a>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                        <span class="key-color mr-1"> Amount </span>
+                        <div class="cell d-flex align-items-center ml-2">
+                            <span class="badge badge-primary">{{transaction.tokens}} {{coin_details.company_symbol}}</span>
+                            <span class="ml-1">({{math transaction.tokens '/' coin_details.price}} OST)</span>
+                         </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="d-flex align-items-center">
+                        <span class="key-color mr-1"> Token </span>
+                        <div class="circle circle-sm ml-4">
+                            <div>{{coin_details.company_symbol}}</div>
+                        </div>
+                        <div class="ml-2 name">{{coin_details.company_name}}</div>
+                    </div>
+
+                </div>
+
+                <div class="card-body">
+
+                    <span class="key-color mr-1"> From </span>
+                    <a class="default_bright_blue font-weight-light text-truncate ml-1" href="{{meta.redirect_url.from}}">{{transaction.t_from}}</a>
+
+                </div>
+
+                <div class="card-body">
+
+                    <span class="key-color mr-1"> To </span>
+                    <a class="default_bright_blue font-weight-light text-truncate ml-1" href="{{meta.redirect_url.to}}">{{transaction.t_to}}</a>
+
                 </div>
 
                 <div class="card-body">
@@ -80,7 +70,7 @@
                 <div class="card-body">
 
                     <span class="key-color mr-1"> Chain Id </span>
-                    <span class="value-color font-weight-light">  </span>
+                    <span class="value-color font-weight-light">{{meta.chain_id}}  </span>
 
                 </div>
 
