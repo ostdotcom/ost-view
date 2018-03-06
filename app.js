@@ -28,7 +28,7 @@ morgan.token('id', function getId(req) {
 const rootPrefix = "."
   , indexRoutes = require(rootPrefix + '/routes/index')
   , blockRoutes = require(rootPrefix + '/routes/block')
-  , blocksRoutes = require(rootPrefix + '/routes/blocks')
+  // , blocksRoutes = require(rootPrefix + '/routes/blocks')
   , transactionsRoutes = require(rootPrefix + '/routes/transactions')
   , transactionRoutes = require(rootPrefix + '/routes/transaction')
   , addressRoutes = require(rootPrefix + '/routes/address')
@@ -177,7 +177,7 @@ if (cluster.isMaster) {
   app.use('/', indexRoutes);
 
   app.use('/chain-id/:chainId/block', blockRoutes);
-  app.use('/chain-id/:chainId/blocks', blocksRoutes);
+  // app.use('/chain-id/:chainId/blocks', blocksRoutes);
   app.use('/chain-id/:chainId/transactions', transactionsRoutes);
   app.use('/chain-id/:chainId/transaction', transactionRoutes);
   app.use('/chain-id/:chainId/address', addressRoutes);
