@@ -142,7 +142,7 @@ if (cluster.isMaster) {
     defaultLayout: 'main',
     helpers: handlebarHelper,
     partialsDir: [
-      'views/partials/'
+      path.join(__dirname, 'views/partials')
     ]
   }));
   app.set('view engine', 'handlebars');
