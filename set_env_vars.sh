@@ -5,14 +5,14 @@
 
 
 # chain env 2000
-export OST_VIEW_0_CHAIN_ID="142"
+export OST_VIEW_0_CHAIN_ID="2000"
 export OST_VIEW_0_WEB_RPC="http://devUtilityChain.com:9546"
 
 #DB env
-export OST_VIEW_0_DB_USER="pepo"
-export OST_VIEW_0_DB_PWD="pepo123"
+export OST_VIEW_0_DB_USER="root"
+export OST_VIEW_0_DB_PWD="root"
 
-export OST_VIEW_0_DB_NAME="ost_explorer_142"
+export OST_VIEW_0_DB_NAME="ost_explorer_2000"
 
 export OST_VIEW_0_DB_HOST="localhost"
 
