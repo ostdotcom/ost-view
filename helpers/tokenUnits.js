@@ -90,6 +90,6 @@ tokenUnits.convertToBigNumber= function (number) {
 
 tokenUnits.convertToNormal = function (numInWei) {
     return this.convertToBigNumber(numInWei).div(this.convertToBigNumber(10).toPower(18))
-}
+};
 
 module.exports = tokenUnits;
