@@ -58,9 +58,9 @@ module.exports = {
     block.push(options.fn(this));
   },
 
-  bigNumber_toFromat: function(number, decimalPrecision){
-    var finalBigNumber = new bigNumber(number);
-    return finalBigNumber.toFormat(decimalPrecision);
+  bigNumber_toFromat: function(number_string){
+
+    return new bigNumber(number_string).toFormat(5);
   },
 
   bigNumber_toFromat_mathCalculation: function(decimalPrecision, lvalue, operator, rvalue){

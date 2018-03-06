@@ -32,7 +32,6 @@ const rootPrefix = "."
   , transactionsRoutes = require(rootPrefix + '/routes/transactions')
   , transactionRoutes = require(rootPrefix + '/routes/transaction')
   , addressRoutes = require(rootPrefix + '/routes/address')
-  , searchRoutes = require(rootPrefix + '/routes/search')
   , contractRoutes = require(rootPrefix + '/routes/contract')
   , responseHelper = require(rootPrefix + '/lib/formatter/response')
   , logger = require(rootPrefix + '/helpers/custom_console_logger')
@@ -182,7 +181,6 @@ if (cluster.isMaster) {
   app.use('/chain-id/:chainId/transactions', transactionsRoutes);
   app.use('/chain-id/:chainId/transaction', transactionRoutes);
   app.use('/chain-id/:chainId/address', addressRoutes);
-  app.use('/chain-id/:chainId/search', searchRoutes);
   app.use('/chain-id/:chainId/contract', contractRoutes);
   app.use('/chain-id/:chainId/tokendetails', tokenDetailsRoutes);
   app.use('/chain-id/:chainId/tokens', tokenTransactionsRoutes);

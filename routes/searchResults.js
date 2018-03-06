@@ -25,12 +25,8 @@ const renderResult = function (requestResponse, responseObject, contentType) {
 
 // define parameters from url, generate web rpc instance and database connect
 const searchMiddleware = function (req, res, next) {
-  const chainId = req.params.chainId
-    , q = req.query.q
+    const q = req.query.q
   ;
-
-  // create instance of search class
-  req.searchInstance = new search(chainId);
 
   req.q = q;
 
@@ -48,18 +44,12 @@ const searchMiddleware = function (req, res, next) {
  */
 router.get('/', searchMiddleware, function (req, res) {
 
-  req.searchInstance.getParamData(req.q)
-    .then(function (requestResponse) {
-    	const response = responseHelper.successWithData({
-        redirect_url: "http://"+req.headers.host+"/chain-id/"+req.params.chainId+requestResponse,
-        result_type: "redirect_url"
-      });
-
-      return renderResult(response, res, req.headers['content-type']);
-    })
-    .catch(function (reason) {
-      return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
+    const response = responseHelper.successWithData({
+      message: "Unable to find data you are looking for at this point of time. Query="+req.q,
+      result_type: "search_results"
     });
+
+    return renderResult(response, res, req.headers['content-type']);
 });
 
 module.exports = router;
