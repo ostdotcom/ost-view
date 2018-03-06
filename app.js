@@ -41,6 +41,7 @@ const rootPrefix = "."
   , tokenTransactionsRoutes = require (rootPrefix + '/routes/tokenTransactions')
   , chainDetailsRoutes = require(rootPrefix + '/routes/chainDetails')
   , customMiddleware = require(rootPrefix + '/helpers/custom_middleware')
+  , searchResultRoutes = require(rootPrefix + '/routes/searchResults')
   ;
 
 // if the process is a master.
@@ -186,6 +187,7 @@ if (cluster.isMaster) {
   app.use('/chain-id/:chainId/tokendetails', tokenDetailsRoutes);
   app.use('/chain-id/:chainId/tokens', tokenTransactionsRoutes);
   app.use('/chain-id/:chainId/chainDetails', chainDetailsRoutes);
+  app.use('/search-results', searchResultRoutes);
 
   // catch 404 and forward to error handler
   app.use(function (req, res, next) {
