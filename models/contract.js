@@ -43,7 +43,8 @@ contract.prototype = {
       return;
     }
 
-    return oThis._dbInstance.getContractLedger(contractAddress, pageSize, pagePayload);
+     oThis._dbInstance.getContractLedger(contractAddress, pageSize, pagePayload)
+
   },
 
   /**

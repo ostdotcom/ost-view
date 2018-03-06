@@ -63,10 +63,10 @@ router.get("/transactions/recent", contractMiddleware, function (req, res) {
 
   req.contractInstance.getRecentTokenTransactions( pageSize, req.pagePayload)
     .then(function (queryResponse) {
-      const tokenTransactions = queryResponse.tokenTransactions;
-      console.log(">>>>>>>>>> tokenTransactions :: ",tokenTransactions);
-      const nextPagePayload = getNextPagePaylaodForRecentTransactions(tokenTransactions, pageSize);
-      const prevPagePayload = getPrevPagePaylaodForRecentTransactions(tokenTransactions, req.pagePayload, pageSize);
+      const tokenTransactions = queryResponse.tokenTransactions
+        , nextPagePayload = getNextPagePaylaodForRecentTransactions(tokenTransactions, pageSize)
+        , prevPagePayload = getPrevPagePaylaodForRecentTransactions(tokenTransactions, req.pagePayload, pageSize)
+        ;
 
       // For all the pages remove last row if its equal to page size.
       if(tokenTransactions.length == pageSize){
