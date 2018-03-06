@@ -55,7 +55,6 @@
             {
               data: null,
               render: function(data, type, full, meta){
-
                 return Handlebars.compile_fe($('#dt-col-1').text())({
                   symbol: oThis.config.coin_symbol,
                   name: oThis.config.coin_name
@@ -101,6 +100,7 @@
             },
             {
               data: null,
+              className: 'arrow',
               render: function(data, type, full, meta){
                 return Handlebars.compile_fe($('#dt-col-6').text());
               }

@@ -88,8 +88,14 @@ table.token-table {
       }
     }
   }
-  td:nth-of-type(6) {
+
+  td.arrow {
     width: 4%;
+    @media (max-width: 576px) {
+      .cell{
+        min-width: 30px;
+      }
+    }
   }
 }
 

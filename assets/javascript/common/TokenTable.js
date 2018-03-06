@@ -13,8 +13,8 @@
       "responsive": true,
       "pagingType": 'simple',
       "language": {
-        "info": "_START_ TO _END_ OF _TOTAL_",
-        "infoEmpty": "_START_ TO _END_ OF _TOTAL_",
+        "info": "",
+        "infoEmpty": "",
         "infoFiltered": "",
         "paginate": {
           "next": "❯",
