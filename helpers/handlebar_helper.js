@@ -27,7 +27,7 @@ module.exports = {
     return formattedDate;
   },
 
-  mathOperation: function (lvalue, operator, rvalue){
+  math: function (lvalue, operator, rvalue){
     lvalue = parseFloat(lvalue);
     rvalue = parseFloat(rvalue);
 
