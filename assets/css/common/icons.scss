@@ -11,7 +11,7 @@ $sprite-location: "/Sprite-1X.png";
   only screen and (min-resolution: 192dpi),
   only screen and (min-resolution: 2dppx) {
     background-image: url($sprite-retina-location);
-    background-size: 1000px * $scale/100 1000px * $scale/100;
+    background-size: 1250px * $scale/100 1250px * $scale/100;
   }
   display: inline-block;
   outline: none !important;
@@ -31,33 +31,41 @@ $sprite-location: "/Sprite-1X.png";
 }
 
 .ost-view-logo.icon{
-  @include icon-generator(120px, 30px, -255px, -65px, -255px, -255px);
+  @include icon-generator(150px, 30px, -320px, -85px, -320px, -320px);
 }
 
 .communities.icon{
-  @include icon-generator(110px, 50px, -225px, -15px, -225px, -225px);
+  @include icon-generator(135px, 65px, -285px, -15px, -285px, -285px);
 }
 
 .token-holders.icon{
-  @include icon-generator(110px, 50px, -113px, -15px, -113px, -113px);
+  @include icon-generator(135px, 65px, -140px, -15px, -140px, -140px);
 }
 
 .market-cap.icon{
-  @include icon-generator(110px, 53px, 0px, -8px, 0px, 0px, 95);
+  @include icon-generator(135px, 65px, -5px, -10px, -5px, -5px);
 }
 
 .circulating-supply.icon{
-  @include icon-generator(110px, 50px, -343px, -15px, -343px, -343px);
+  @include icon-generator(135px, 65px, -429px, -15px, -429px, -429px);
 }
 
 .total-supply.icon{
-  @include icon-generator(110px, 50px, -457px, -15px, -457px, -457px);
+  @include icon-generator(135px, 65px, -570px, -15px, -570px, -570px);
 }
 
 .ost-alpha-badge.icon{
-  @include icon-generator(50px, 30px, -70px, -65px, -70px, -70px);
+  @include icon-generator(60px, 30px, -90px, -85px, -90px, -90px);
 }
 
 .search.icon{
-  @include icon-generator(20px, 20px, -375px, -75px, -375px, -375px);
+  @include icon-generator(20px, 20px, -470px, -97px, -470px, -470px);
+}
+
+.staked-coin.icon{
+  @include icon-generator(15px, 15px, -9px, -100px, -9px, -9px);
+}
+
+.time.icon{
+  @include icon-generator(15px, 15px, -35px, -100px, -35px, -35px);
 }

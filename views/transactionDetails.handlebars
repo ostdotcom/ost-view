@@ -20,7 +20,7 @@
 
                 <div class="card-body">
                     <span class="key-color mr-1"> Time</span>
-                    <img src="https://dummyimage.com/400x400/22aaee/fff.png" class='icon mr-1' />
+                    <span class="time icon"></span>
                     <span class="value-color font-weight-light"> {{ toDate transaction.timestamp }} </span>
                 </div>
 
@@ -29,6 +29,7 @@
 
                         <span class="key-color mr-1"> Amount </span>
                         <div class="cell d-flex align-items-center ml-2">
+                            <span class="staked-coin icon"></span>
                             <span class="badge badge-primary">{{transaction.tokens}} {{coin_details.company_symbol}}</span>
                             <span class="ml-1">({{math transaction.tokens '/' coin_details.price}} OST)</span>
                          </div>
@@ -38,7 +39,7 @@
                 <div class="card-body">
                     <div class="d-flex align-items-center">
                         <span class="key-color mr-1"> Token </span>
-                        <div class="circle circle-sm ml-4">
+                        <div class="circle circle-xs ml-4">
                             <div>{{coin_details.company_symbol}}</div>
                         </div>
                         <div class="ml-2 name">{{coin_details.company_name}}</div>
