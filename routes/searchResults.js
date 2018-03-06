@@ -45,7 +45,7 @@ const searchMiddleware = function (req, res, next) {
 router.get('/', searchMiddleware, function (req, res) {
 
     const response = responseHelper.successWithData({
-      message: "Unable to find data you are looking for at this point of time. Query="+req.q,
+      message: "The search string you entered '"+req.q+"' did not fetch any results",
       result_type: "search_results"
     });
 

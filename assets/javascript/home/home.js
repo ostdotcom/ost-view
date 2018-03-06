@@ -166,9 +166,8 @@
               title:'',
               data: null,
               render: function (data, type, full, meta) {
-
                 return Handlebars.compile_fe($('#dt-tokens-col-1').text())({
-                 id: data.rank
+                  rank: data.rank
                 });
               }
             },

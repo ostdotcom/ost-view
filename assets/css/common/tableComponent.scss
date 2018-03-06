@@ -63,7 +63,6 @@ table.token-table {
     padding: 0 !important;
     font-size: 0.75rem;
     width: 16%;
-    color: #597a84;
     border-top: 1rem solid #ffffff;
     a,
     a:visited,
@@ -84,6 +83,31 @@ table.token-table {
         }
       }
     }
+
+    .rank{
+      width: 50px;
+      height: 100%;
+      text-align: center;
+      font-weight: 500;
+      font-size: 1.2rem;
+      line-height: 40px;
+      background: #f1f5f8;
+      border-right: 5px solid #fff;
+    }
+  }
+
+  thead {
+    th{
+      color: #438bad;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      font-weight: 500;
+      border-bottom: none;
+    }
+  }
+
+  td{
+    color: #597a84;
   }
 
   td.arrow {
