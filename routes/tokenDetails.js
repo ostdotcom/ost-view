@@ -229,7 +229,7 @@ router.get("/:contractAddress/graph-date/numberOfTransactions/:duration", contra
     })
     .catch(function(reason){
       logger.log(req.originalUrl + " : " + reason);
-      return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
+      return renderResult(responseHelper.error('', reason), res, 'application/json');
     });
 
 });

@@ -78,6 +78,9 @@ tokenUnits.sub = function(num1, num2) {
 };
 
 tokenUnits.toBigNumber = function(num) {
+    if(num == undefined || num == null) {
+        num = 0;
+    }
     return new BigNumber(num.toString());
 };
 
