@@ -31,6 +31,7 @@
     line-height: 30px;
     font-size: 0.6rem;
 }
+
 .badge{
     font-size: 90%;
 }
@@ -42,165 +43,14 @@ a:hover,
 a:visited{
     color: #179eb1;
 }
-
-
-//.float_right {
-//    float: right;
-//}
-//
-//.float_left{
-//    float:left;
-//}
-//
-//.center {
-//    text-align: center;
-//}
-//
-//.inline {
-//    display: inline;
-//}
-//
-//.inline_block {
-//    display:inline-block;
-//}
-//
-//.round_element {
-//    border-radius: 50%;
-//}
-//
-//.break_all {
-//    word-break: break-all;
-//}
-//
-//.table_cell {
-//    display:table-cell;
-//}
-//
-//.display_table {
-//    display: table;
-//}
-//
-//.vertical_align_middle {
-//    vertical-align: middle;
-//}
-//
-//.left_seperator {
-//    border-left: 1.5px solid #e4e4e4;
-//}
-//
-//.right_seperator {
-//    border-right: 1.5px solid #e4e4e4;
-//}
-//
-//.border_bottom_e4 {
-//    border-bottom: 1px solid #e4e4e4;
-//}
-//
-//.bottom_seperator {
-//    border-bottom: 1.5px solid #c5d7d8;
-//}
-//
-//.padding_left {
-//    padding-left:20px;
-//}
-//
-//.paddingRight {
-//    padding-right:10px;
-//}
-//.paddingTop {
-//    padding-top:5px;
-//}
-//
-//.marginRight {
-//    margin-right:20px;
-//}
-//
-//.margin_top{
-//    margin-top: 5px;
-//}
-//
-//.margin_bottom {
-//    margin-bottom: 5px;
-//}
-//
-//.left-right-border {
-//    border-right: solid 2px #e4e4e4;
-//    border-left: solid 2px #e4e4e4;
-//}
-//
-//.token-details {
-//    margin-top: 20px;
-//}
-//
-//.contract_address {
-//    font-family: SourceSansPro;
-//    font-size: 12px;
-//    font-weight: normal;
-//    font-style: normal;
-//    font-stretch: normal;
-//    line-height: normal;
-//    color: #5d6d6e;
-//    letter-spacing: normal;
-//}
-//
-//.address {
-//    font-family: SourceSansPro;
-//    font-size: 14px;
-//    font-weight: 300;
-//    letter-spacing: 1px;
-//    color: #179eb1;
-//}
-//
-//.block {
-//    text-align: center;
-//    vertical-align: middle;
-//}
-//
-//.circle p {
-//    vertical-align: middle;
-//    display: table-cell;
-//}
-//
-//.token_heading {
-//    width: 279px;
-//    height: 40px;
-//    font-family: Quasimoda;
-//    font-size: 28px;
-//    font-weight: 600;
-//    line-height: 1.43;
-//    color: #5d6d6e;
-//}
-//.rectangle-2 {
-//    height: 340px;
-//    background-color: #f9f8e5;
-//}
-//
-//.default_black_color {
-//    color: #5d6d6e;
-//}
-//
-//.default_bright_blue {
-//    color: #179eb1;
-//}
-//
-//.default_dark_blue {
-//    color: #75a9b0;
-//}
-//
-//.truncate_tail {
-//    white-space: nowrap;
-//    text-overflow: ellipsis;
-//    overflow: hidden;
-//}
-//
-//.margin_left {
-//    margin-left: 10px;
-//}
-//
-//table.transactionsBackgroundColor {
-//    background-color: #fafcfd;
-//}
-//
-//.alignItemCenter{
-//    align-items: center;
-//}
+.btn-secondary{
+    background-color: #ffffff;
+    border: solid 1px #34445b;
+    color: #34445b;
+    &:hover{
+        color: #ffffff;
+    }
+}
+a.btn-secondary{
+    color: #34445b;
+}
