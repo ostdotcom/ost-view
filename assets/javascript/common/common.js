@@ -23,3 +23,20 @@ if(Handlebars){
     return Handlebars.compile(str.replace(/\[\[/g, '{{').replace(/\]\]/g, '}}'));
   }
 }
+
+// BigNumber formatter wrapper
+function bigNumberToFormat(number_string, dp){
+  if(typeof dp === 'undefined'){
+    dp = 5;
+  }
+  var format = {
+    decimalSeparator: '.',
+    groupSeparator: ',',
+    groupSize: 3,
+    secondaryGroupSize: 0,
+    fractionGroupSeparator: ' ',
+    fractionGroupSize: 0
+  };
+  BigNumber.config({ FORMAT: format });
+  return new BigNumber(number_string).sd(dp).toString();
+}

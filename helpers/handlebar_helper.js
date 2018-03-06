@@ -1,4 +1,6 @@
-const moment = require('moment');
+const moment = require('moment')
+  ,  bigNumber = require('bignumber.js');
+  ;
 
 const preRoot = "../",
      erc20Tokens = require(preRoot + '/lib/contract_interact/contractDecoder');
@@ -25,7 +27,7 @@ module.exports = {
     return formattedDate;
   },
 
-  math: function (lvalue, operator, rvalue){
+  mathOperation: function (lvalue, operator, rvalue){
     lvalue = parseFloat(lvalue);
     rvalue = parseFloat(rvalue);
 
@@ -54,8 +56,18 @@ module.exports = {
       block  = blocks[name] || (blocks[name] = []);
 
     block.push(options.fn(this));
-  }
+  },
 
+  bigNumber_toFromat: function(number, decimalPrecision){
+    var finalBigNumber = new bigNumber(number);
+    return finalBigNumber.toFormat(decimalPrecision);
+  },
 
+  bigNumber_toFromat_mathCalculation: function(decimalPrecision, lvalue, operator, rvalue){
+    var mathValue = mathOperation(lvalue, operator, rvalue);
+
+    var finalBigNumber = new bigNumber(mathValue.toString());
+    return finalBigNumber.toFormat(decimalPrecision);
+  },
 
 };

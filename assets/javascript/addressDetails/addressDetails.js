@@ -119,7 +119,9 @@
               addr: to
             });
 
-            element['ost_amount'] = tokens/ contractAddresses[contarct_address].price;
+            element.tokens = bigNumberToFormat(tokens);
+            var ostAmount = tokens/contractAddresses[contarct_address].price;
+            element['ost_amount'] = bigNumberToFormat(ostAmount)
 
             element['company_name'] = contractAddresses[contarct_address].company_name;
             element['company_symbol'] = contractAddresses[contarct_address].company_symbol;

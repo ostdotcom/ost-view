@@ -141,11 +141,11 @@ router.get('/search', searchMiddleware, function (req, res) {
     })
     .catch(function (reason) {
       const response = responseHelper.successWithData({
-        redirect_url: "/search-results?q="+reason,
-        result_type: "redirect_url"
+        message: "Unable to find data you are looking for at this point of time. Query="+req.q,
+        result_type: "search-results"
       });
 
-      return renderResult(response, res, 'application/json');
+      return renderResult(response, res, req.headers['content-type']);
     });
 });
 

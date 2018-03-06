@@ -54,6 +54,8 @@ define("transaction", "transactionDetails");
 define("block","blockDetail");
 define("address_details",'addressDetails');
 define("home","home");
+define("search-results","searchResult");
+
 
 
 define("BASE_URL",process.env.BASE_URL);

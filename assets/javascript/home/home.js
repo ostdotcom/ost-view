@@ -147,7 +147,9 @@
             element['to_redirect_url'] =  Handlebars.compile(addressURL)({
               address: to
             });
-            element['ost_amount'] = tokens/ contractAddresses[contarct_address].price;
+
+            element['tokens'] = bigNumberToFormat(tokens)
+            element['ost_amount'] = bigNumberToFormat(tokens/ contractAddresses[contarct_address].price);
             element['company_name'] = contractAddresses[contarct_address].company_name;
             element['company_symbol'] = contractAddresses[contarct_address].company_symbol;
 

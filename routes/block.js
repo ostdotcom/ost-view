@@ -63,7 +63,6 @@ router.get("/:blockNumber", blockMiddleware, function (req, res) {
 
   if(req.blockNumber.startsWith("0x")){
 
-    console.log("# is hash ::",req.blockNumber);
     req.blockInstance.getBlockFromBlockHash(req.blockNumber)
       .then(function (requestResponse) {
         processBlockResponse(requestResponse, req, res);
