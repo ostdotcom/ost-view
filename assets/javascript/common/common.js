@@ -26,6 +26,8 @@ if(Handlebars){
 
 // BigNumber formatter wrapper
 function bigNumberToFormat(number_string, dp){
+
+  return number_string;
   if(typeof dp === 'undefined'){
     dp = 5;
   }
