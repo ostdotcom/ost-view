@@ -89,12 +89,12 @@ router.get("/:blockNumber", blockMiddleware, function (req, res) {
 function processBlockResponse (blockHash, req, res){
   const response = responseHelper.successWithData({
     block: blockHash,
-    transaction_url: "/chain-id/"+req.chainId+"/block/"+req.blockNumber+"/transactions/1",
     result_type: 'block',
     mCss: ['mBlockDetails.css'],
     mJs: ['mBlockDetails.js'],
     title:'Block Details - ' +req.blockNumber,
     meta:{
+      transaction_url: "/chain-id/"+req.chainId+"/block/"+req.blockNumber+"/transactions",
       chain_id:req.chainId,
       q:req.blockNumber
     }
@@ -117,20 +117,34 @@ function processBlockError(reason, req, res){
  * @route {GET} {base_url}/:block_number/transactions/:page
  *
  * @routeparam {Integer} :block_number - number of block need to be fetched
- * @routeparam {Integer} :page - Page number for getting data in batch.
  */
 router.get("/:blockNumber/transactions", blockMiddleware, function (req, res) {
 
-  req.blockInstance.getBlockTransactions(req.blockNumber, req.page)
-    .then(function (requestResponse) {
+  var pageSize = coreConstant.DEFAULT_PAGE_SIZE+1;
+
+  req.blockInstance.getBlockTransactions(req.blockNumber, pageSize, req.pagePayload)
+    .then(function (queryResponse) {
+
+      const nextPagePayload = getNextPagePaylaodForBlockTransactions(queryResponse, pageSize),
+        prevPagePayload = getPrevPagePaylaodForBlockTransactions(queryResponse, req.pagePayload, pageSize)
+        ;
+
+      // For all the pages remove last row if its equal to page size.
+      if(queryResponse.length == pageSize){
+        queryResponse.pop();
+      }
+
 
       const response = responseHelper.successWithData({
-        block_transactions: requestResponse,
+        block_transactions: queryResponse,
         result_type: "block_transactions",
         layout:'empty',
         meta:{
+          next_page_payload :nextPagePayload,
+          prev_page_payload :prevPagePayload,
+
           block_number:req.blockNumber,
-          page: req.page,
+
           transaction_placeholder_url:coreConstant["BASE_URL"]+"/chain-id/"+req.chainId+"/transaction/{{tr_hash}}",
           address_placeholder_url:coreConstant["BASE_URL"]+"/chain-id/"+req.chainId+"/address/{{addr}}"
         }
@@ -143,5 +157,40 @@ router.get("/:blockNumber/transactions", blockMiddleware, function (req, res) {
     });
 });
 
+
+function getNextPagePaylaodForBlockTransactions (requestResponse, pageSize){
+
+  const response = requestResponse,
+    count = response.length;
+
+  if(count <= pageSize -1){
+    return {};
+  }
+
+  return {
+    id: response[count-1].id,
+    timestamp: response[count-1].timestamp,
+    direction: "next"
+  };
+
+}
+
+function getPrevPagePaylaodForBlockTransactions (requestResponse, pagePayload, pageSize){
+
+  const response = requestResponse,
+    count = response.length;
+
+  // If page payload is null means its a request for 1st page
+  // OR direction is previous and count if less than page size means there is no previous page
+  if(!pagePayload || (pagePayload.direction === 'prev' && count < pageSize)){
+    return {};
+  }
+
+  return {
+    id: response[0].id,
+    timestamp: response[0].timestamp,
+    direction: "prev"
+  };
+}
 
 module.exports = router;

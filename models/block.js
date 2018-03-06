@@ -87,40 +87,22 @@ block.prototype = {
    *
    * @return {Promise<Object>} List of transactions available in database for particular batch.
    */
-  , getBlockTransactions: function (blockNumber, page) {
+  , getBlockTransactions: function (blockNumber, pageSize, pagePayload) {
       const oThis = this;
-      return new Promise(function (resolve, reject) {
-        console.log("#block_number = ", blockNumber);
-        if (blockNumber == undefined) {
 
-          reject("invalid input");
-          return;
-        }
+      if (blockNumber == undefined) {
 
-        if (page == undefined || !page || page < 0) {
-          page = constants.DEFAULT_PAGE_NUMBER;
-        }
+        return Promise.reject("invalid input");
 
+      }
 
+      if (blockNumber.startsWith("0x")) {
+        return oThis._dbInstance.getBlockTransactionsFromBlockHash(blockNumber, pageSize, pagePayload);
 
-        if (blockNumber.startsWith("0x")) {
-          oThis._dbInstance.getBlockTransactionsFromBlockHash(blockNumber, page, constants.DEFAULT_PAGE_SIZE)
-            .then(function (response) {
-              resolve(response);
-            })
-            .catch(function (reason) {
-              reject(reason);
-            });
-        } else {
-          oThis._dbInstance.getBlockTransactionsFromBlockNumber(blockNumber, page, constants.DEFAULT_PAGE_SIZE)
-            .then(function (response) {
-              resolve(response);
-            })
-            .catch(function (reason) {
-              reject(reason);
-            });
-        }
-      });
+      } else {
+        return oThis._dbInstance.getBlockTransactionsFromBlockNumber(blockNumber, pageSize, pagePayload);
+
+      }
   }
 
 

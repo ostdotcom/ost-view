@@ -71,14 +71,14 @@
     <script type="text/javascript">
         $(document).ready(function() {
             var blockDetails = new TokenTable({
-                ajaxURL: "{{transaction_url}}",
+                ajaxURL: "{{meta.transaction_url}}",
                 selector: '#blockDetailsTransactions',
                 dtConfig : {
                     columns: [
                         {
                             data: null,
                             render: function(data, type, full, meta){
-                                return _handlebarsCompile($('#dt-col-1').text())({
+                                return Handlebars.compile_fe($('#dt-col-1').text())({
                                     symbol: 'AKC',
                                     name: 'Akshay Coin'
                                 });
@@ -88,7 +88,7 @@
                             data: null,
                             render: function(data, type, full, meta){
 
-                                return _handlebarsCompile($('#dt-col-2').text())({
+                                return Handlebars.compile_fe($('#dt-col-2').text())({
                                     tokens: data.tokens,
                                     value: 100
                                 });
@@ -97,7 +97,7 @@
                         {
                             data: null,
                             render: function(data, type, full, meta){
-                                return _handlebarsCompile($('#dt-col-3').text())({
+                                return Handlebars.compile_fe($('#dt-col-3').text())({
                                     timestamp: moment(data.timestamp * 1000).startOf('day').fromNow()
                                 });
                             }
@@ -105,7 +105,7 @@
                         {
                             data: null,
                             render: function(data, type, full, meta){
-                                return _handlebarsCompile($('#dt-col-4').text())({
+                                return Handlebars.compile_fe($('#dt-col-4').text())({
                                     tx: data.transaction_hash,
                                     redirect_url: data.tx_redirect_url
 
@@ -116,7 +116,7 @@
                             data: null,
                             render: function(data, type, full, meta){
                                 console.log("data :: ",data);
-                                return _handlebarsCompile($('#dt-col-5').text())({
+                                return Handlebars.compile_fe($('#dt-col-5').text())({
                                     from: data.t_from,
                                     redirect_url: data.from_redirect_url
                                 });
@@ -125,13 +125,13 @@
                         {
                             data: null,
                             render: function(data, type, full, meta){
-                                return _handlebarsCompile($('#dt-col-6').text());
+                                return Handlebars.compile_fe($('#dt-col-6').text());
                             }
                         },
                         {
                             data: null,
                             render: function(data, type, full, meta){
-                                return _handlebarsCompile($('#dt-col-7').text())({
+                                return Handlebars.compile_fe($('#dt-col-7').text())({
                                     to: data.t_to,
                                     redirect_url: data.to_redirect_url
 
