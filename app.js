@@ -141,9 +141,8 @@ if (cluster.isMaster) {
   app.engine('handlebars', exphbs({
     defaultLayout: 'main',
     helpers: handlebarHelper,
-    partialsDir: [
-      path.join(__dirname, 'views/partials')
-    ]
+    partialsDir: path.join(__dirname, 'views/partials'),
+    layoutsDir: path.join(__dirname, 'views/layouts')
   }));
   app.set('view engine', 'handlebars');
 
