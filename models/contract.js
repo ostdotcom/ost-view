@@ -13,6 +13,7 @@ const rootPrefix = ".."
   , configHelper = require(rootPrefix + '/helpers/configHelper')
   , memCache = require(rootPrefix + '/helpers/memCache')
   , TokenUnits = require(rootPrefix + '/helpers/tokenUnits')
+  , responseHelper = require(rootPrefix + '/lib/formatter/response')
   , und = require('underscore')
 ;
 
@@ -295,13 +296,15 @@ contract.prototype = {
     const oThis = this;
     return new Promise(function (resolve, reject) {
 
-      if (contractAddress == undefined) {
-        reject("invalid input");
-        return;
+      if (!contractAddress) {
+        return(reject("invalid input"));
       }
 
       oThis._dbInstance.getCoinFromContractAddress(contractAddress)
         .then(function (response) {
+          if(!response){
+            return(reject("invalid input"));
+          }
           configHelper.getIdOfContractByPromise(oThis._dbInstance, contractAddress)
             .then(function (brandedTokenId) {
               oThis._dbInstance.getTokenStatsData(brandedTokenId)
