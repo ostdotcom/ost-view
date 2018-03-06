@@ -49,10 +49,10 @@ search.prototype = {
         reject(argument);
         return;
       }
-
       if (argument.length === constants.ACCOUNT_HASH_LENGTH) {
         oThis._utilityInteractInstance.isContract(argument)
           .then(function(response){
+
             resolve("/contract/"+argument);
           })
           .catch(function(reason){
@@ -67,6 +67,7 @@ search.prototype = {
 
           resolve("/block/"+argument);
       }else{
+
         reject(argument);
       }
     });
