@@ -145,8 +145,8 @@ router.get("/:blockNumber/transactions", blockMiddleware, function (req, res) {
 
           block_number:req.blockNumber,
 
-          transaction_placeholder_url:coreConstant["BASE_URL"]+"/chain-id/"+req.chainId+"/transaction/{{tr_hash}}",
-          address_placeholder_url:coreConstant["BASE_URL"]+"/chain-id/"+req.chainId+"/address/{{addr}}"
+          transaction_placeholder_url:"/chain-id/"+req.chainId+"/transaction/{{tr_hash}}",
+          address_placeholder_url:"/chain-id/"+req.chainId+"/address/{{addr}}"
         }
       });
       return renderResult(response, res,'application/json');

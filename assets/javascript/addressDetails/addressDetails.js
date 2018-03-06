@@ -27,8 +27,8 @@
               data: null,
               render: function (data, type, full, meta) {
                 return Handlebars.compile_fe($('#dt-col-1').text())({
-                  symbol: 'AKC',
-                  name: 'Akshay Coin'
+                  symbol: data['company_symbol'],
+                  name: data['company_name']
                 });
               }
             },
@@ -37,7 +37,7 @@
               render: function (data, type, full, meta) {
                 return Handlebars.compile_fe($('#dt-col-2').text())({
                   tokens: data.tokens,
-                  value: 100
+                  value: data.ost_amount
                 });
               }
             },
@@ -71,6 +71,7 @@
             },
             {
               data: null,
+              className: 'arrow',
               render: function (data, type, full, meta) {
                 return Handlebars.compile_fe($('#dt-col-6').text());
               }
@@ -89,17 +90,22 @@
         },
 
         responseReceived : function ( response ) {
-          var dataToProceess = response.data[response.data.result_type];
-          const meta = response.data.meta;
-
+          var dataToProceess = response.data[response.data.result_type]
+            , meta = response.data.meta
+            , contractAddresses = response.data['contract_addresses']
+            ;
 
           dataToProceess.forEach(function (element) {
-            const txHash = element.transaction_hash;
-            const from = element.address;
-            const to = element.corresponding_address;
+            var txHash = element.transaction_hash
+             , from = element.address
+             , to = element.corresponding_address
+              , txURL = meta.transaction_placeholder_url
+              , addressURL = meta.address_placeholder_url
+              , contarct_address = element.contract_address
+              ,tokens = element.tokens
+            ;
 
-            const txURL = meta.transaction_placeholder_url;
-            const addressURL = meta.address_placeholder_url;
+
 
             element['tx_redirect_url'] = Handlebars.compile(txURL)({
               tr_hash: txHash
@@ -111,6 +117,12 @@
             element['to_redirect_url'] = Handlebars.compile(addressURL)({
               addr: to
             });
+
+            element['ost_amount'] = tokens/ contractAddresses[contarct_address].price;
+
+            element['company_name'] = contractAddresses[contarct_address].company_name;
+            element['company_symbol'] = contractAddresses[contarct_address].company_symbol;
+
           });
         }
       });

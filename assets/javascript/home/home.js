@@ -56,8 +56,8 @@
               data: null,
               render: function(data, type, full, meta){
                 return Handlebars.compile_fe($('#dt-col-1').text())({
-                  symbol: oThis.config.coin_symbol,
-                  name: oThis.config.coin_name
+                  symbol: data["company_symbol"],
+                  name: data["company_name"]
                 });
               }
             },
@@ -66,7 +66,7 @@
               render: function(data, type, full, meta){
                 return Handlebars.compile_fe($('#dt-col-2').text())({
                   tokens: data.tokens,
-                  value: 100
+                  value: data.ost_amount
                 });
               }
             },
@@ -119,17 +119,21 @@
         },
         responseReceived: function ( response ) {
 
-          var dataToProceess = response.data[response.data.result_type];
-          var meta =  response.data.meta;
+          var dataToProceess = response.data[response.data.result_type]
+          , meta =  response.data.meta
+          ,contractAddresses = response.data['contract_addresses']
+          ;
 
           dataToProceess.forEach(function(element) {
 
-            var txHash = element.transaction_hash;
-            var from = element.t_from;
-            var to = element.t_to;
-
-            var txURL = meta.transaction_placeholder_url;
-            var addressURL = meta.address_placeholder_url;
+            var txHash = element.transaction_hash
+            ,from = element.t_from
+            ,to = element.t_to
+            ,txURL = meta.transaction_placeholder_url
+            ,addressURL = meta.address_placeholder_url
+              , contarct_address = element.contract_address
+              ,tokens = element.tokens
+              ;
 
             element['tx_redirect_url'] =  Handlebars.compile(txURL)({
               tr_hash: txHash
@@ -142,11 +146,15 @@
             element['to_redirect_url'] =  Handlebars.compile(addressURL)({
               address: to
             });
+            element['ost_amount'] = tokens/ contractAddresses[contarct_address].price;
+            element['company_name'] = contractAddresses[contarct_address].company_name;
+            element['company_symbol'] = contractAddresses[contarct_address].company_symbol;
+
           });
         }
       });
 
-      var topTokenTransactions = new TokenTable({
+      var topTokens = new TokenTable({
         ajaxURL: oThis.config.top_tokens_url,
         selector: '#homeTopTokens',
         dtConfig: {

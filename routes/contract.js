@@ -89,8 +89,8 @@ router.get("/:contractAddress/internal-transactions", contractMiddleware, functi
 
           q:req.contractAddress,
           page:req.page,
-          transaction_placeholder_url:coreConstant["BASE_URL"]+"/chain-id/"+req.chainId+"/transaction/{{tr_hash}}",
-          address_placeholder_url:coreConstant["BASE_URL"]+"/chain-id/"+req.chainId+"/address/{{addr}}"
+          transaction_placeholder_url:"/chain-id/"+req.chainId+"/transaction/{{tr_hash}}",
+          address_placeholder_url:"/chain-id/"+req.chainId+"/address/{{addr}}"
         }
       });
 

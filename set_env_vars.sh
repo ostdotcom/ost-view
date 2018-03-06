@@ -72,7 +72,6 @@ export JWT_API_SECRET_KEY='6p5BkI0uGHI1JPrAKP3eB1Zm88KZ84a9Th9o4syhwZhxlv0oe0'
 export OST_VIEW_PATH='.'
 
 #Web env variables
-export BASE_URL='http://localhost:7000';
 
 export CHAIN_ID='142';
 
