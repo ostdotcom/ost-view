@@ -47,8 +47,8 @@
               data: null,
               render: function(data, type, full, meta){
                 return Handlebars.compile_fe($('#dt-col-1').text())({
-                  symbol: oThis.config.coin_symbol,
-                  name: oThis.config.coin_name
+                  symbol: data.company_symbol,
+                  name: data.company_name
                 });
               }
             },
@@ -57,7 +57,7 @@
               render: function(data, type, full, meta){
                 return Handlebars.compile_fe($('#dt-col-2').text())({
                   tokens: data.tokens,
-                  value: 100
+                  value: data.ost_amount
                 });
               }
             },
@@ -109,12 +109,17 @@
         },
         responseReceived: function ( response ) {
           var dataToProceess = response.data[response.data.result_type];
-          var meta =  response.data.meta;
+          var meta =  response.data.meta
+          ,contractAddresses = response.data['contract_address']
+          ;
 
           dataToProceess.forEach(function(element) {
             var txHash = element.transaction_hash;
             var from = element.t_from;
-            var to = element.t_to;
+            var to = element.t_to
+              , contarct_address = element.contract_address
+              ,tokens = element.tokens
+            ;
 
             var txURL = meta.transaction_placeholder_url;
             var addressURL = meta.address_placeholder_url;
@@ -129,6 +134,10 @@
             element['to_redirect_url'] =  Handlebars.compile(addressURL)({
               addr: to
             });
+
+            element['ost_amount'] = tokens/ contractAddresses[contarct_address].price;
+            element['company_name'] = contractAddresses[contarct_address].company_name;
+            element['company_symbol'] = contractAddresses[contarct_address].company_symbol;
           });
         }
       });

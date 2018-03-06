@@ -38,13 +38,27 @@ contract.prototype = {
   getContractLedger: function (contractAddress, pageSize, pagePayload) {
     const oThis = this;
 
-    if (contractAddress === undefined) {
-      return Promise.reject("invalid input");
-      return;
-    }
+    return new Promise(function (resolve, reject) {
+      if (contractAddress === undefined) {
+        reject("invalid input");
+        return;
+      }
 
-     oThis._dbInstance.getContractLedger(contractAddress, pageSize, pagePayload)
+      oThis._dbInstance.getContractLedger(contractAddress, pageSize, pagePayload)
+        .then(function(response){
+          var contractArray = [];
+          response.forEach(function(object){
+            contractArray.push(object.contract_address);
+          });
+          contractArray = und.uniq(contractArray);
+          return configHelper.getContractDetailsOfAddressArray(oThis._dbInstance, contractArray)
+            .then(function(addressHash){
+              resolve({contractTransactions: response, contractAddress: addressHash});
+            });
 
+        })
+        .catch();
+    });
   },
 
   /**
@@ -420,7 +434,8 @@ contract.prototype = {
                 return Promise.resolve({tokenTransactions: response, contractAddress: addressHash});
             });
 
-      });
+      })
+      .catch();
   }
 
   /**

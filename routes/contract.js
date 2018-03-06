@@ -64,21 +64,24 @@ const contractMiddleware = function (req, res, next) {
 router.get("/:contractAddress/internal-transactions", contractMiddleware, function (req, res) {
 
   var pageSize =  coreConstant.DEFAULT_PAGE_SIZE+1;
-  +1;
 
   req.contractInstance.getContractLedger(req.contractAddress, pageSize, req.pagePayload)
     .then(function (queryResponse) {
 
-      const nextPagePayload = getNextPagePaylaodForInternalTransactions(queryResponse, pageSize);
-      const prevPagePayload = getPrevPagePaylaodForInternalTransactions(queryResponse, req.pagePayload, pageSize);
+      var contractTransactions = queryResponse.contractTransactions;
+      var contractAddresses = queryResponse.contractAddress;
+
+      const nextPagePayload = getNextPagePaylaodForInternalTransactions(contractTransactions, pageSize);
+      const prevPagePayload = getPrevPagePaylaodForInternalTransactions(contractTransactions, req.pagePayload, pageSize);
 
       // For all the pages remove last row if its equal to page size.
-      if(queryResponse.length == pageSize){
-        queryResponse.pop();
+      if(contractTransactions.length == pageSize){
+        contractTransactions.pop();
       }
 
       const response = responseHelper.successWithData({
-        contract_internal_transactions: queryResponse,
+        contract_internal_transactions: contractTransactions,
+        contract_address: contractAddresses,
         result_type: "contract_internal_transactions",
         layout : 'empty',
         draw : req.query.draw,
@@ -88,7 +91,6 @@ router.get("/:contractAddress/internal-transactions", contractMiddleware, functi
           prev_page_payload :prevPagePayload,
 
           q:req.contractAddress,
-          page:req.page,
           transaction_placeholder_url:"/chain-id/"+req.chainId+"/transaction/{{tr_hash}}",
           address_placeholder_url:"/chain-id/"+req.chainId+"/address/{{addr}}"
         }
