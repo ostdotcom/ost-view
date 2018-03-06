@@ -81,8 +81,8 @@
                             data: null,
                             render: function(data, type, full, meta){
                                 return Handlebars.compile_fe($('#dt-col-1').text())({
-                                    symbol: 'AKC',
-                                    name: 'Akshay Coin'
+                                    symbol: data.company_symbol,
+                                    name: data.company_name
                                 });
                             }
                         },
@@ -174,9 +174,15 @@
 
                         if(contarct_address){
                             element['ost_amount'] = '('+tokens/ contractAddresses[contarct_address].price+' OST)';
+                            element['company_name'] = contractAddresses[contarct_address].company_name;
+                            element['company_symbol'] = contractAddresses[contarct_address].company_symbol;
                         }else{
                             element['ost_amount'] = '';
+                            element['company_name'] = '';
+                            element['company_symbol'] = '';
                         }
+
+
 
 
                     });

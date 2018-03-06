@@ -252,16 +252,19 @@ router.get("/:contractAddress/holders", contractMiddleware, function (req, res) 
   req.contractInstance.getTokenHolders( req.contractAddress, pageSize, req.pagePayload)
     .then(function(queryResponse){
 
-      const nextPagePayload = getNextPagePaylaodForHolders(queryResponse, pageSize);
-      const prevPagePayload = getPrevPagePaylaodForHolders(queryResponse, req.pagePayload, pageSize);
+      var tokenHolders = queryResponse.tokenHolders;
+      var contractAddress = queryResponse.contractAddress
+      const nextPagePayload = getNextPagePaylaodForHolders(tokenHolders, pageSize);
+      const prevPagePayload = getPrevPagePaylaodForHolders(tokenHolders, req.pagePayload, pageSize);
 
       // For all the pages remove last row if its equal to page size.
-      if(queryResponse.length == pageSize){
-        queryResponse.pop();
+      if(tokenHolders.length == pageSize){
+        tokenHolders.pop();
       }
 
       const responseData = responseHelper.successWithData({
-        token_holders : queryResponse,
+        token_holders : tokenHolders,
+        contract_address : contractAddress,
         result_type: "token_holders",
         draw : req.query.draw,
         recordsTotal : 120,

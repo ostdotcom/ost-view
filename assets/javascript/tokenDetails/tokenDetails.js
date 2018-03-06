@@ -167,7 +167,8 @@
               render: function(data, type, full, meta){
                 return Handlebars.compile_fe($('#dt-holders-col-3').text())({
                   tokens: data.tokens,
-                  value: 100
+                  coin_name : data.company_symbol,
+                  value: data.ost_amount
                 });
               }
             }
@@ -175,16 +176,24 @@
         },
         responseReceived: function ( response ) {
           var dataToProceess = response.data[response.data.result_type];
-          var meta =  response.data.meta;
+          var meta =  response.data.meta
+            ,contractAddresses = response.data['contract_address']
+            , contarct_address = meta.q
+            ;
 
           dataToProceess.forEach(function(element) {
-            var name = element.address;
+            var name = element.address
+              ,tokens = element.tokens
+            ;
 
             var addressURL = meta.address_placeholder_url;
 
             element['address_redirect_url'] =  Handlebars.compile(addressURL)({
               address: name
             });
+            element['ost_amount'] = tokens/ contractAddresses[contarct_address].price;
+            element['company_name'] = contractAddresses[contarct_address].company_name;
+            element['company_symbol'] = contractAddresses[contarct_address].company_symbol;
           });
         }
 

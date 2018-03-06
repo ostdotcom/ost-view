@@ -367,7 +367,10 @@ contract.prototype = {
 
           oThis._dbInstance.getAddressesWithBrandedToken(contractId, pageSize, pagePaylaod)
             .then(function (response) {
-              resolve(response);
+              configHelper.getContractDetailsOfAddressArray(oThis._dbInstance, [contractAddress])
+                .then(function(addressHash){
+                  resolve({tokenHolders: response, contractAddress: addressHash});
+                });
             })
             .catch(function (addressesFailed) {
               reject(addressesFailed);
@@ -465,8 +468,5 @@ contract.prototype = {
         });
     });
   }
-
-
-
 
 };

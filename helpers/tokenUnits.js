@@ -84,4 +84,12 @@ tokenUnits.toBigNumber = function(num) {
     return new BigNumber(num.toString());
 };
 
+tokenUnits.convertToBigNumber= function (number) {
+    return (number instanceof BigNumber) ? number : this.toBigNumber(number);
+};
+
+tokenUnits.convertToNormal = function (numInWei) {
+    return this.convertToBigNumber(numInWei).div(this.convertToBigNumber(10).toPower(18))
+}
+
 module.exports = tokenUnits;
