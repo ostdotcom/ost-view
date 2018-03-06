@@ -15,15 +15,15 @@ if (process.argv[2] == '-c' && process.argv[3] != undefined){
     console.log("Passed Chain Id", chainId);
 }
 
-var job1 = new CronJob('*/5 * * * *', function() {
+var job1 = new CronJob('*/1 * * * *', function() {
     startBlockFetcher()
 }, null, false, 'Asia/Kolkata');
 
-var job2 = new CronJob('*/5 * * * *', function() {
+var job2 = new CronJob('*/1 * * * *', function() {
     startBlockVerifier()
 }, null, false, 'Asia/Kolkata');
 
-var job3 = new CronJob('*/5 * * * *', function() {
+var job3 = new CronJob('*/1 * * * *', function() {
     startAggregator()
 }, null, false, 'Asia/Kolkata');
 
