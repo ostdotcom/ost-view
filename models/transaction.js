@@ -11,6 +11,7 @@ const rootPrefix           = ".."
     , dbInteract = require(rootPrefix + '/lib/storage/interact')
     , constants = require(rootPrefix + '/config/core_constants')
 	  , coreConfig = require(rootPrefix + '/config')
+    , configHelper = require(rootPrefix + '/helpers/configHelper')
   ;
 
 /**
@@ -29,37 +30,46 @@ transaction.prototype = {
   /** 
   	*Get list of transactions for given transaction address.
   	*
-  	*@param {String} address - transaction address.
+  	*@param {String} transactionAddress - transaction address.
   	*
   	*@return {Promise} List of transactions
   	*/
-	getTransaction : function(address){
+	getTransaction : function(transactionAddress){
 
 		const oThis = this;
 	    return new Promise(function(resolve, reject){
 
-			if (!address || address == undefined || address.length != constants.TRANSACTION_HASH_LENGTH) {
+			if (!transactionAddress || transactionAddress == undefined || transactionAddress.length != constants.TRANSACTION_HASH_LENGTH) {
 				reject('invalid input');
 				return;
 			}
-
         var transactionData ={};
-			oThis._dbInstance.getTransaction(address)
-				.then(function(response){
-          transactionData["transactionDetails"] = response[0];
-          oThis._dbInstance.getCoinFromContractAddress('0x84b8002448c46ccd4ad382c8bc28c0c4a9df6a9b')
-            .then(function(coinDetails){
-              console.log(" coinDetails transactionData  :: ",coinDetails);
+        oThis._dbInstance.getTransaction(transactionAddress)
+          .then(function(transactionResponse){
+            transactionData["transactionDetails"] = transactionResponse[0];
 
-              transactionData["coinDetails"] = coinDetails;
-              console.log("transactionData  :: ",transactionData);
-              resolve(transactionData);
-            })
-				})
-				.catch(function(reason){
-					reject(reason);
-				});
-		})	
+            oThis._dbInstance.getTokenTransaction(transactionAddress)
+              .then(function(tokenTransactionResponse){
+                transactionData["tokenTransactionDetails"] = tokenTransactionResponse[0];
+
+                configHelper.getContractDetailsOfAddressArray(oThis._dbInstance, [tokenTransactionResponse[0].contract_address])
+                  .then(function(contractDetails){
+                    transactionData["contractAddresses"] = contractDetails;
+                    resolve(transactionData);
+                  })
+                  .catch(function(reason){
+                    reject(reason);
+                  });
+              })
+              .catch(function(reason){
+                reject(reason);
+              });
+          })
+          .catch(function(reason){
+            reject(reason);
+          });
+
+      })
 	}
 
 	/**

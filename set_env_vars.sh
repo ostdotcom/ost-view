@@ -6,7 +6,7 @@
 
 # chain env 2000
 export OST_VIEW_0_CHAIN_ID="2000"
-export OST_VIEW_0_WEB_RPC="http://devUtilityChain.com:9546"
+export OST_VIEW_0_WEB_RPC="http://172.16.0.194:9546"
 
 #DB env
 export OST_VIEW_0_DB_USER="root"
@@ -73,7 +73,7 @@ export OST_VIEW_PATH='.'
 
 #Web env variables
 
-export CHAIN_ID='142';
+export CHAIN_ID='2000';
 
 export BASE_CONTRACT_ADDRESS='0';
 

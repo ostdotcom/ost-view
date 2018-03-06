@@ -27,18 +27,35 @@ if(Handlebars){
 // BigNumber formatter wrapper
 function bigNumberToFormat(number_string, dp){
 
-  return number_string;
+  if (number_string === undefined){
+    return '';
+  }
+
+
+  if ((typeof number_string !== 'string') && (typeof  number_string !== BigNumber)){
+    number_string = number_string.toString();
+  }
+
+  var finalBigNumber;
+  if (typeof  number_string !== BigNumber){
+    var format = {
+      decimalSeparator: '.',
+      groupSeparator: ',',
+      groupSize: 3,
+      secondaryGroupSize: 0,
+      fractionGroupSeparator: ' ',
+      fractionGroupSize: 0
+    };
+    BigNumber.config({ FORMAT: format });
+    finalBigNumber = new BigNumber(number_string)
+  }else{
+    finalBigNumber = number_string;
+  }
+
+
   if(typeof dp === 'undefined'){
     dp = 5;
   }
-  var format = {
-    decimalSeparator: '.',
-    groupSeparator: ',',
-    groupSize: 3,
-    secondaryGroupSize: 0,
-    fractionGroupSeparator: ' ',
-    fractionGroupSize: 0
-  };
-  BigNumber.config({ FORMAT: format });
-  return new BigNumber(number_string).sd(dp).toString();
+
+  return finalBigNumber.sd(dp).toString();
 }

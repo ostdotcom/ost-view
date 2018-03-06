@@ -30,7 +30,7 @@
                         <span class="key-color mr-1"> Amount </span>
                         <div class="cell d-flex align-items-center ml-2">
                             <span class="staked-coin icon"></span>
-                            <span class="badge badge-primary">{{transaction.tokens}} {{coin_details.company_symbol}}</span>
+                            <span class="badge badge-primary">{{transaction.tokens}} {{dictionary_dataValue token_ransaction_details.contract_address contract_address 'company_symbol'}}</span>
                             <span class="ml-1">({{math transaction.tokens '/' coin_details.price}} OST)</span>
                          </div>
                     </div>
@@ -40,9 +40,9 @@
                     <div class="d-flex align-items-center">
                         <span class="key-color mr-1"> Token </span>
                         <div class="circle circle-xs ml-4">
-                            <div>{{coin_details.company_symbol}}</div>
+                            <div>{{dictionary_dataValue token_ransaction_details.contract_address contract_address 'company_symbol'}}</div>
                         </div>
-                        <div class="ml-2 name">{{coin_details.company_name}}</div>
+                        <div class="ml-2 name">{{dictionary_dataValue token_ransaction_details.contract_address contract_address 'company_name'}}</div>
                     </div>
 
                 </div>

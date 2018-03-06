@@ -31,13 +31,19 @@ module.exports = {
     lvalue = parseFloat(lvalue);
     rvalue = parseFloat(rvalue);
 
-    return {
+    var value =  {
       "+": lvalue + rvalue,
       "-": lvalue - rvalue,
       "*": lvalue * rvalue,
       "/": lvalue / rvalue,
       "%": lvalue % rvalue
     }[operator];
+
+    if (isNaN(value)){
+      return '0';
+    }else{
+      return value;
+    }
   },
 
   randomStr: function(){
@@ -70,5 +76,10 @@ module.exports = {
     var finalBigNumber = new bigNumber(mathValue.toString());
     return finalBigNumber.toFormat(decimalPrecision);
   },
+
+  dictionary_dataValue : function(hashKey, hash, requiredValueKey){
+    const hashData = hash[hashKey];
+    return hashData[requiredValueKey];
+  }
 
 };
