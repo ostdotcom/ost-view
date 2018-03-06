@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-"use strict"
+"use strict";
 /**
  * Job to fetch blocks from the chain and feed them into the provided DB.
  *
@@ -55,11 +55,12 @@ var state = {
 var setFetchBlockCron = function (blockNumber) {
   setTimeout(function () {
     if ((startRunTime + maxRunTime) > (new Date).getTime()) {
+      state.blockNumber = blockNumber;
       block_fetcher.fetchAndUpdateBlock(blockNumber, setFetchBlockCron);
     } else {
       process.exit(1);
     }
-  }, state.config.poll_interval);
+  }, blockNumber === state.blockNumber ? 5000 : state.config.poll_interval);
 };
 
 
