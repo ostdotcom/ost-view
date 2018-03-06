@@ -96,6 +96,13 @@ function processBlockResponse (blockHash, req, res){
       transaction_url: "/chain-id/"+req.chainId+"/block/"+req.blockNumber+"/transactions",
       chain_id:req.chainId,
       q:req.blockNumber
+    },
+    page_meta: {
+      title: 'OST VIEW | Block Details - '+req.blockNumber,
+      description: 'OST VIEW is the home grown block explorer from OST for OpenST Utility Blockchains.',
+      keywords: 'OST, Simple Token, Utility Chain, Blockchain',
+      robots: 'noindex, nofollow',
+      image: 'https://dxwfxs8b4lg24.cloudfront.net/ost-view/images/ost-view-meta-data-logo.jpg'
     }
   });
 

@@ -2,15 +2,29 @@
 <html>
 <head>
     <meta charset="utf-8" />
-
+    <title>{{#if page_meta}}{{page_meta.title}}{{else}}{{title}}{{/if}}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    {{#if page_meta}}
+    <meta name="description" content="{{page_meta.description}}">
+    <meta name="keywords" content="{{page_meta.keywords}}">
+    <meta name="robots" content="{{page_meta.robots}}">
+    <meta property="og:title" content="{{page_meta.title}}"/>
+    <meta property="og:description" content="{{page_meta.description}}"/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="https://kit.ost.com"/>
+    <meta property="og:site_name" content="kit.ost.com"/>
+    <meta property="og:image" content="{{page_meta.image}}"/>
+    <meta name="twitter:card" content="summary_large_image"/>
+    <meta name="twitter:title" content="{{page_meta.title}}"/>
+    <meta name="twitter:description" content="{{page_meta.description}}"/>
+    <meta name="twitter:image" content="{{page_meta.image}}"/>
+    {{/if}}
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
     {{{css 'mCommon.css'}}}
     {{#each mCss}}
     {{{css this}}}
     {{/each}}
-    <title>{{title}}</title>
     <script>window.name = "{{randomStr}}";</script>
 </head>
 <body contenteditable="false">

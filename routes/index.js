@@ -80,7 +80,6 @@ function fetchHomeData (req, res){
           "summary":req.homeInstance.getChainInfo(requestResponse),
           "graph_stats": req.homeInstance.getChainStats(requestResponse)
         },
-
         meta:{
           "chain_id" : req.chainId,
           "contract_address" : coreConstant['BASE_CONTRACT_ADDRESS'],
@@ -88,6 +87,13 @@ function fetchHomeData (req, res){
           "latest_token_transfer_url" : "/chain-id/"+req.chainId+"/tokens/transactions/recent",
           "token_transfer_graph_url" : "/chain-id/"+req.chainId+"/tokenDetails/"+coreConstant['BASE_CONTRACT_ADDRESS']+"/graph-date/numberOfTransactions/",
           "token_volume_graph_url" : "/chain-id/"+req.chainId+"/tokenDetails/"+coreConstant['BASE_CONTRACT_ADDRESS']+"/graph-date/numberOfTransactions/"
+        },
+        page_meta: {
+          title: 'OST VIEW - Block Explorer for OpenST Utility Blockchains',
+          description: 'OST VIEW is the home grown block explorer from OST for OpenST Utility Blockchains.',
+          keywords: 'OST, Simple Token, Utility Chain, Blockchain',
+          robots: 'index, follow',
+          image: 'https://dxwfxs8b4lg24.cloudfront.net/ost-view/images/ost-view-meta-data-logo.jpg'
         }
       });
 

@@ -131,7 +131,6 @@ router.get("/:contractAddress", contractMiddleware, function (req, res) {
         result_type: "token_details",
         mCss: ['mTokenDetails.css'],
         mJs: ['mTokenDetails.js'],
-
         meta:{
           transactions_url: '/chain-id/'+req.chainId+'/contract/'+req.contractAddress+'/internal-transactions',
           token_holders_url:'/chain-id/'+req.chainId+'/tokendetails/'+req.contractAddress+'/holders',
@@ -139,6 +138,13 @@ router.get("/:contractAddress", contractMiddleware, function (req, res) {
           token_volume_graph_url: "/chain-id/"+req.chainId+"/tokenDetails/"+req.contractAddress+"/graph-date/numberOfTransactions/",
           contract_address:req.contractAddress,
           chain_id:req.chainId
+        },
+        page_meta: {
+          title: 'OST VIEW | '+req.contractAddress,
+          description: 'OST VIEW is the home grown block explorer from OST for OpenST Utility Blockchains.',
+          keywords: 'OST, Simple Token, Utility Chain, Blockchain',
+          robots: 'noindex, nofollow',
+          image: 'https://dxwfxs8b4lg24.cloudfront.net/ost-view/images/ost-view-meta-data-logo.jpg'
         },
         view_data:{
           summary: req.contractInstance.getTokenDetailsInfo(response),

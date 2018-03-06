@@ -69,6 +69,13 @@ router.get("/:hash", transactionMiddleware, function (req, res) {
             block: '/chain-id/'+req.chainId+'/block/'+requestResponse['transactionDetails']['block_number']
           }
         },
+        page_meta: {
+          title: 'OST VIEW | Tx Details - '+req.hash,
+          description: 'OST VIEW is the home grown block explorer from OST for OpenST Utility Blockchains.',
+          keywords: 'OST, Simple Token, Utility Chain, Blockchain',
+          robots: 'noindex, nofollow',
+          image: 'https://dxwfxs8b4lg24.cloudfront.net/ost-view/images/ost-view-meta-data-logo.jpg'
+        },
         mCss: ['mTransactionDetails.css'],
         mJs: [],
         title:'Transaction Details - '+ req.hash,

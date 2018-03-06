@@ -76,6 +76,13 @@ router.get('/:address', addressMiddleware, function (req, res) {
           address:req.addressValue,
           transaction_url: '/chain-id/'+req.chainId+'/address/'+req.addressValue+'/transactions'
         },
+        page_meta: {
+          title: 'OST VIEW | Address Details - '+req.addressValue,
+          description: 'OST VIEW is the home grown block explorer from OST for OpenST Utility Blockchains.',
+          keywords: 'OST, Simple Token, Utility Chain, Blockchain',
+          robots: 'noindex, nofollow',
+          image: 'https://dxwfxs8b4lg24.cloudfront.net/ost-view/images/ost-view-meta-data-logo.jpg'
+        },
         result_type: 'address_details',
         title: 'Address Details - '+req.addressValue,
       });
