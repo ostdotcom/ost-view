@@ -446,7 +446,21 @@ contract.prototype = {
   ,getTopTokens : function(pageSize, pagePayload){
     const oThis = this;
 
-    return oThis._dbInstance.getTopTokens(pageSize, pagePayload);
+    return new Promise(function (resolve, reject) {
+      oThis._dbInstance.getTopTokens(pageSize, pagePayload)
+        .then(function(queryResponse){
+            var pageNumber = (pagePayload && !isNaN(parseInt(pagePayload.page_no))) ? parseInt(pagePayload.page_no) : 1;
+            var startRank = ((pageNumber-1)*(pageSize-1)+1);
+            queryResponse.forEach(function(element) {
+              element['rank'] = startRank;
+              startRank++;
+            });
+          resolve(queryResponse);
+        })
+        .catch(function(reason){
+          reject(reason);
+        });
+    });
   }
 
 

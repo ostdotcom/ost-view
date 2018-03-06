@@ -146,7 +146,7 @@ router.get("/top", contractMiddleware, function (req, res) {
   req.contractInstance.getTopTokens(pageSize, req.pagePayload)
     .then(function (queryResponse) {
 
-      const nextPagePayload = getNextPagePaylaodForTopTokens(queryResponse, pageSize);
+      const nextPagePayload = getNextPagePaylaodForTopTokens(queryResponse, pageSize, req.pagePayload);
       const prevPagePayload = getPrevPagePaylaodForTopTokens(queryResponse, req.pagePayload, pageSize);
 
       // For all the pages remove last row if its equal to page size.
@@ -176,7 +176,7 @@ router.get("/top", contractMiddleware, function (req, res) {
 });
 
 
-function getNextPagePaylaodForTopTokens (requestResponse, pageSize){
+function getNextPagePaylaodForTopTokens (requestResponse, pageSize, pagePayload){
 
   const response = requestResponse,
     count = response.length;
@@ -184,7 +184,17 @@ function getNextPagePaylaodForTopTokens (requestResponse, pageSize){
   if(count <= pageSize -1){
     return {};
   }
+  var pageNumber = 0;
+  if (pagePayload){
+    if (!isNaN(parseInt(pagePayload.page_no))){
+      pageNumber = parseInt(pagePayload.page_no) + 1
+    }
+  }else{
+    pageNumber += 2;
+  }
+
   return {
+    page_no: pageNumber,
     market_cap:response[count-1].market_cap,
     direction: "next"
   };
@@ -202,7 +212,17 @@ function getPrevPagePaylaodForTopTokens (requestResponse, pagePayload, pageSize)
     return {};
   }
 
+  var pageNumber = 0;
+  if (pagePayload){
+    if (!isNaN(parseInt(pagePayload.page_no))){
+      pageNumber = parseInt(pagePayload.page_no) - 1
+    }
+  }else{
+    pageNumber += 1;
+  }
+
   return {
+    page_no: pageNumber,
     market_cap:response[0].market_cap,
     direction: "prev"
   };
