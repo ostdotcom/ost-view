@@ -309,9 +309,20 @@ contract.prototype = {
             .then(function (brandedTokenId) {
               oThis._dbInstance.getTokenStatsData(brandedTokenId)
                 .then(function (stateResponse) {
+
                   response["token_transfers"] = stateResponse.token_transfers == undefined? 0: stateResponse.token_transfers;
                   response["token_volume"] = stateResponse.token_volume == undefined? 0: stateResponse.token_volume;
-                  resolve(response);
+
+                  configHelper.getContractDetailsOfAddressArray(oThis._dbInstance, [contractAddress])
+                    .then(function(addressHash){
+                      response["contractAddresses"] = addressHash
+                      resolve(response);
+                    })
+                    .catch(function(){
+
+                      resolve(response);
+                    })
+
                 }, reject);
             }, reject);
         })

@@ -126,6 +126,8 @@ router.get("/:contractAddress", contractMiddleware, function (req, res) {
   req.contractInstance.getTokenDetails( req.contractAddress )
     .then(function(response){
 
+      const contractAddresses = response['contractAddresses'];
+
       const responseData = responseHelper.successWithData({
         token_details : response,
         result_type: "token_details",
@@ -140,7 +142,7 @@ router.get("/:contractAddress", contractMiddleware, function (req, res) {
           chain_id:req.chainId
         },
         page_meta: {
-          title: 'OST VIEW | '+req.contractAddress,
+          title: 'OST VIEW | '+ contractAddresses[req.contractAddress].company_name,
           description: 'OST VIEW is the home grown block explorer from OST for OpenST Utility Blockchains.',
           keywords: 'OST, Simple Token, Utility Chain, Blockchain',
           robots: 'noindex, nofollow',
