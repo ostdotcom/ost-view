@@ -27,6 +27,9 @@ var job3 = new CronJob('*/5 * * * *', function() {
     startAggregator()
 }, null, false, 'Asia/Kolkata');
 
+startBlockFetcher();
+startBlockVerifier();
+startAggregator();
 
 job1.start();
 job2.start();
