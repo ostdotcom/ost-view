@@ -61,7 +61,7 @@ module.exports = {
   bigNumber_toFromat: function(number_string){
 
     return number_string;
-    //return new bigNumber(number_string).toFormat(5);
+    return new bigNumber(number_string).toFormat(5);
   },
 
   bigNumber_toFromat_mathCalculation: function(decimalPrecision, lvalue, operator, rvalue){
