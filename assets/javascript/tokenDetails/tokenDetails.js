@@ -57,6 +57,7 @@
               render: function(data, type, full, meta){
                 return Handlebars.compile_fe($('#dt-col-2').text())({
                   tokens: data.tokens,
+                  coin_symbol: data.company_symbol,
                   value: data.ost_amount
                 });
               }
