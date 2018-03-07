@@ -84,7 +84,7 @@ var createCompanyTokenTable = function (db) {
     contract_address: { type: 'string', notNull: true, primaryKey: true, length: 42},
     company_symbol: { type: 'string', notNull: true , length: 8},
     uuid: { type: 'string', notNull: true , length: 66},
-    price: { type: 'int', notNull: true, default: 0 },
+    price: { type: 'decimal', notNull: true, length: '15,5' },
     token_holders: { type: 'int', notNull: true, default: 0 },
     market_cap: {type: 'decimal', notNull: true, length: '40,5'},
     circulation: {type: 'decimal', notNull: true, length: '40,5'},
