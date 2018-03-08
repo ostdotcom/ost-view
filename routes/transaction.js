@@ -56,10 +56,12 @@ router.get("/:hash", transactionMiddleware, function (req, res) {
   req.transactionInstance.getTransaction(req.hash)
     .then(function (requestResponse) {
 
+        console.log("*************************************************************************")
+      console.log(requestResponse)
       const response = responseHelper.successWithData({
         transaction: requestResponse['transactionDetails'],
-        token_ransaction_details:requestResponse['tokenTransactionDetails'],
-        contract_address: requestResponse['contractAddresses'],
+        token_transaction_details:requestResponse['tokenTransactionDetails'],
+        contract_addresses: requestResponse['contractAddresses'],
         result_type: "transaction",
         meta:{
           q:req.hash,

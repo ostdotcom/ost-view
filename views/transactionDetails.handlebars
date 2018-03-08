@@ -25,41 +25,66 @@
                 </div>
 
                 <div class="card-body">
+                    <table class="table">
+                        <tbody>
+                        {{#each token_transaction_details}}
+                            <tr scope="row">
+                                <td>
+                                    <div class="cell d-flex align-items-center">
+                                        <div class="circle circle-sm">
+                                            <div>{{dictionary_dataValue contract_address contract_addresses 'company_symbol'}}</div>
+                                        </div>
+                                        <div class="ml-2 name">{{dictionary_dataValue contract_address contract_addresses 'company_name'}}</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="cell d-flex align-items-center">
+                                        <span class="staked-coin icon"></span>
+                                        <span class="badge badge-primary">{{bigNumber_toFromat tokens}} {{dictionary_dataValue contract_address contract_addresses 'company_symbol'}}</span>
+                                        <span class="ml-1">{{getOstBalance tokens contract_address contract_addresses}}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="cell d-flex align-items-center">
+                                        <span class="time icon"></span>
+                                        <span>{{toTimeAgo timestamp}}</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="cell d-flex align-items-center">
+                                        <span>From</span>
+                                        <a href="[[redirect_url]]" class="d-inline-block text-truncate ml-1">{{t_from}}</a>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="cell d-flex align-items-center">
+                                        <div class="text-center w-100" style="color:#597a84">&#8594;</div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="cell d-flex align-items-center">
+                                        <span>To</span>
+                                        <a href="[[redirect_url]]" class="d-inline-block text-truncate ml-1">{{t_to}}</a>
+                                    </div>
+                                </td>
+
+                            </tr>
+                        {{/each}}
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card-body">
                     <div class="d-flex align-items-center">
 
                         <span class="key-color mr-1"> Amount </span>
                         <div class="cell d-flex align-items-center ml-2">
                             <span class="staked-coin icon"></span>
-                            <span class="badge badge-primary">{{bigNumber_toFromat token_ransaction_details.tokens}} {{dictionary_dataValue token_ransaction_details.contract_address contract_address 'company_symbol'}}</span>
-                            <span class="ml-1">({{getOstBalance token_ransaction_details.tokens token_ransaction_details.contract_address contract_address}} OST)</span>
+                            <span class="ml-1">{{bigNumber_toFromat transaction.tokens}} OST</span>
 
                          </div>
                     </div>
-                </div>
-
-                <div class="card-body">
-                    <div class="d-flex align-items-center">
-                        <span class="key-color mr-1"> Token </span>
-                        <div class="circle circle-xs ml-4">
-                            <div>{{dictionary_dataValue token_ransaction_details.contract_address contract_address 'company_symbol'}}</div>
-                        </div>
-                        <div class="ml-2 name">{{dictionary_dataValue token_ransaction_details.contract_address contract_address 'company_name'}}</div>
-                    </div>
-
-                </div>
-
-                <div class="card-body">
-
-                    <span class="key-color mr-1"> From </span>
-                    <a class="default_bright_blue font-weight-light text-truncate ml-1" href="{{meta.redirect_url.from}}">{{transaction.t_from}}</a>
-
-                </div>
-
-                <div class="card-body">
-
-                    <span class="key-color mr-1"> To </span>
-                    <a class="default_bright_blue font-weight-light text-truncate ml-1" href="{{meta.redirect_url.to}}">{{transaction.t_to}}</a>
-
                 </div>
 
                 <div class="card-body">

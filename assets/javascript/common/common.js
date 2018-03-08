@@ -32,12 +32,12 @@ function bigNumberToFormat(number_string){
   }
 
 
-  if ((typeof number_string !== 'string') && !(BigNumber.isBigNumber(number_string))){
+  if ((typeof number_string !== 'string') && (typeof number_string !== BigNumber)){
     number_string = number_string.toString();
   }
 
   var finalBigNumber;
-  if (!BigNumber.isBigNumber(number_string)){
+  if (typeof number_string !== BigNumber){
     var format = {
       decimalSeparator: '.',
       groupSeparator: ',',
@@ -55,5 +55,5 @@ function bigNumberToFormat(number_string){
   var dp = 5;
 
 
-  return finalBigNumber.toFormat(5).toString();
+  return finalBigNumber.toFormat(dp).toString();
 }

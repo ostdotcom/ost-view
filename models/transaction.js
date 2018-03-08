@@ -15,6 +15,10 @@ const rootPrefix           = ".."
     , TokenUnits = require(rootPrefix + '/helpers/tokenUnits')
   ;
 
+const  und = require('underscore')
+  ;
+
+
 /**
  * @constructor
  *
@@ -51,17 +55,22 @@ transaction.prototype = {
 
             oThis._dbInstance.getTokenTransaction(transactionAddress)
               .then(function(tokenTransactionResponse){
-                var tokenTransactions = tokenTransactionResponse[0];
-                tokenTransactions.tokens = TokenUnits.convertToNormal(tokenTransactions.tokens);
+                var tokenTransactions = tokenTransactionResponse;
+                var contractAddressArray = [];
+                tokenTransactions.forEach(function(element){
+                  element.tokens = TokenUnits.convertToNormal(element.tokens);
+                  contractAddressArray.push(element.contract_address);
+                })
                 transactionData["tokenTransactionDetails"] = tokenTransactions
+                contractAddressArray = und.uniq(contractAddressArray);
 
-                configHelper.getContractDetailsOfAddressArray(oThis._dbInstance, [tokenTransactionResponse[0].contract_address])
+                configHelper.getContractDetailsOfAddressArray(oThis._dbInstance, contractAddressArray)
                   .then(function(contractDetails){
                     transactionData["contractAddresses"] = contractDetails;
                     resolve(transactionData);
                   })
-                  .catch(function(reason){
-                    reject(reason);
+                  .catch(function(){
+                    resolve(transactionData);
                   });
               })
               .catch(function(reason){

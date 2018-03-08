@@ -209,16 +209,16 @@
                 });
               }
             },
-            {
-              title:'Circulating Supply (bt)',
-              data: null,
-              width:'23%',
-              render: function (data, type, full, meta) {
-                return Handlebars.compile_fe($('#dt-tokens-col-5').text())({
-                  circulating_supply: bigNumberToFormat(data.circulation),
-                });
-              }
-            },
+            //{
+            //  title:'Circulating Supply (bt)',
+            //  data: null,
+            //  render: function (data, type, full, meta) {
+            //
+            //    return Handlebars.compile_fe($('#dt-tokens-col-5').text())({
+            //      circulating_supply: bigNumberToFormat(data.circulation),
+            //    });
+            //  }
+            //},
           ],
           ordering: false
         },

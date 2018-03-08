@@ -79,23 +79,13 @@ tokenUnits.sub = function(num1, num2) {
 
 tokenUnits.toBigNumber = function(num) {
 
-    if (BigNumber.isBigNumber(num)){
+    if (typeof num === BigNumber){
         return num;
     }
 
     if(num == undefined || num == null) {
         num = 0;
     }
-
-    var format = {
-        decimalSeparator: '.',
-        groupSeparator: ',',
-        groupSize: 3,
-        secondaryGroupSize: 0,
-        fractionGroupSeparator: ' ',
-        fractionGroupSize: 0
-    };
-    BigNumber.config({ FORMAT: format });
     return new BigNumber(num.toString());
 };
 
@@ -104,7 +94,7 @@ tokenUnits.convertToBigNumber= function (number) {
 };
 
 tokenUnits.convertToNormal = function (numInWei) {
-    return this.convertToBigNumber(numInWei).div(this.convertToBigNumber(10).exponentiatedBy(18));
+    return this.convertToBigNumber(numInWei).div(this.convertToBigNumber(10).toPower(18));
 };
 
 module.exports = tokenUnits;

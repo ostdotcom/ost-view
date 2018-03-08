@@ -42,7 +42,7 @@ module.exports = {
     if (isNaN(value)){
       return '0';
     }else{
-      return new bigNumber(value.toString()).sd(5);
+      return new bigNumber(value.toString()).toFormat(5);
     }
   },
 
@@ -70,15 +70,25 @@ module.exports = {
   },
 
   dictionary_dataValue : function(hashKey, hash, requiredValueKey){
-    const hashData = hash[hashKey];
-    return hashData[requiredValueKey];
+    if (hash !== undefined){
+      const hashData = hash[hashKey];
+      return hashData[requiredValueKey];
+    }else{
+      return '';
+    }
+
   },
 
   getOstBalance : function(tokens, addresssContract, contractArray){
-    var price = contractArray[addresssContract].price;
-    var ostValue =  tokens/price;
+    if (contractArray !== undefined) {
+      var price = contractArray[addresssContract].price;
+      var ostValue = tokens / price;
 
-    return new bigNumber(ostValue.toString()).toFormat(5);
+      var bigNumberValue = new bigNumber(ostValue.toString()).toFormat(5);
+      return '('+bigNumberValue+'OST)';
+    }else{
+      return '';
+    }
 
   }
 
