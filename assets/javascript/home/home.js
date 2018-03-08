@@ -7,7 +7,7 @@
 
   var btx  = ns("btx");
 
-  var oThis = btx.tokenDetails = {
+  var oThis = btx.home = {
 
     config: {},
 
@@ -38,16 +38,14 @@
     },
 
     triggerClick: function(){
-      $('.graph-1 .interval[data-interval="Hour"]').trigger('click');
-      $('.graph-2 .interval[data-interval="Hour"]').trigger('click');
+      $('.graph-1 .interval[data-interval="Day"]').trigger('click');
+      $('.graph-2 .interval[data-interval="Day"]').trigger('click');
 
     },
 
-
-
     initDatatable: function(){
       var oThis = this;
-      var recentTokenTransactions = new TokenTable({
+      oThis.recentTokenTransactions = new TokenTable({
         ajaxURL: oThis.config.latest_token_transfer_url,
         selector: '#homeRecentTokenTransactions',
         dtConfig : {
@@ -157,7 +155,7 @@
         }
       });
 
-      var topTokens = new TokenTable({
+      oThis.topTokens = new TokenTable({
         ajaxURL: oThis.config.top_tokens_url,
         selector: '#homeTopTokens',
         dtConfig: {
@@ -165,6 +163,7 @@
             {
               title:'',
               data: null,
+              width:'8%',
               render: function (data, type, full, meta) {
                 return Handlebars.compile_fe($('#dt-tokens-col-1').text())({
                   rank: data.rank
@@ -174,8 +173,8 @@
             {
               title:'Token',
               data: null,
+              width:'23%',
               render: function (data, type, full, meta) {
-
                 return Handlebars.compile_fe($('#dt-tokens-col-2').text())({
                   symbol: data.company_symbol,
                   name: data.company_name,
@@ -186,8 +185,8 @@
             {
               title:'Market Cap (OST α)',
               data: null,
+              width:'23%',
               render: function (data, type, full, meta) {
-
                 return Handlebars.compile_fe($('#dt-tokens-col-3').text())({
                   market_cap: data.market_cap,
                 });
@@ -196,8 +195,8 @@
             {
               title:'Price (OST α)',
               data: null,
+              width:'23%',
               render: function (data, type, full, meta) {
-
                 return Handlebars.compile_fe($('#dt-tokens-col-4').text())({
                   price: data.price,
                 });
@@ -206,8 +205,8 @@
             {
               title:'Circulating Supply (bt)',
               data: null,
+              width:'23%',
               render: function (data, type, full, meta) {
-
                 return Handlebars.compile_fe($('#dt-tokens-col-5').text())({
                   circulating_supply: data.circulation,
                 });

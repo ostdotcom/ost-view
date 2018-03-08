@@ -11,6 +11,7 @@
       "serverSide": true,
       "paging":true,
       "responsive": true,
+      "autoWidth": false,
       "pagingType": 'simple',
       "language": {
         "info": "",

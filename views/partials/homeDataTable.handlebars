@@ -7,7 +7,7 @@
 
                 <div class="nav-tab-ost mt-3 mb-3">
 
-                    <ul class="nav nav-pills" id="myTab" role="tablist">
+                    <ul class="nav nav-pills" role="tablist">
                         <li class="nav-item">
                             <a class="nav-link active" id="topTokenTab" data-toggle="pill" href="#topTokens" role="tab" aria-controls="topTokenTab" aria-selected="true">Top Tokens</a>
                         </li>
@@ -15,17 +15,11 @@
                             <a class="nav-link" id="latestTokenTransferTab" data-toggle="pill" href="#latestTokenTransfer" role="tab" aria-controls="latestTokenTransferTab" aria-selected="false">Latest Token Transfer</a>
                         </li>
                     </ul>
-                    <div class="tab-content mt-2" id="myTabContent">
+                    <div class="tab-content mt-2">
 
                         <div class="tab-pane show active" id="topTokens" role="tabpanel" aria-labelledby="topTokenTab">
 
-                            <table id="homeTopTokens" class="table table-hover table-responsive token-table" cellspacing="0" width="100%">
-                                <thead class="">
-
-                                </thead>
-                                <tfoot hidden>
-
-                                </tfoot>
+                            <table id="homeTopTokens" class="table table-hover table-responsive-sm token-table" cellspacing="0" width="100%">
 
                                 <script type="custom/ost" id="dt-tokens-col-1">
                                     <div class="cell d-flex align-items-center">
@@ -61,13 +55,7 @@
                         </div>
                         <div class="tab-pane" id="latestTokenTransfer" role="tabpanel" aria-labelledby="latestTokenTransferTab">
 
-                            <table id="homeRecentTokenTransactions" class="table table-hover table-responsive token-table" cellspacing="0" width="100%">
-                                <thead hidden>
-
-                                </thead>
-                                <tfoot hidden>
-
-                                </tfoot>
+                            <table id="homeRecentTokenTransactions" class="table table-hover table-responsive-sm token-table" cellspacing="0" width="100%">
 
                                 <script type="custom/ost" id="dt-col-1">
                                     <div class="cell d-flex align-items-center">
@@ -129,7 +117,7 @@
 {{#contentFor "pageScripts"}}
 <script type="text/javascript">
     $(document).ready(function() {
-        btx.tokenDetails.init({
+        btx.home.init({
             top_tokens_url: "{{meta.top_tokens_url}}",
             latest_token_transfer_url:"{{meta.latest_token_transfer_url}}",
             token_transfer_graph_url: "{{meta.token_transfer_graph_url}}",

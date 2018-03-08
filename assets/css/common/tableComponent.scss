@@ -46,10 +46,16 @@
 
 table.token-table {
 
-  th{
-    border-collapse: collapse !important;
-    background-color: #ffffff !important;
-    border: none;
+  thead {
+    th{
+      color: #438bad;
+      text-transform: uppercase;
+      font-size: 0.75rem;
+      font-weight: 500;
+      border-collapse: collapse !important;
+      background-color: #ffffff !important;
+      border: none;
+    }
   }
 
 
@@ -62,7 +68,6 @@ table.token-table {
   td {
     padding: 0 !important;
     font-size: 0.75rem;
-    width: 16%;
     border-top: 1rem solid #ffffff;
     a,
     a:visited,
@@ -85,8 +90,8 @@ table.token-table {
     }
 
     .rank{
-      width: 50px;
       height: 100%;
+      width: 45px;
       text-align: center;
       font-weight: 500;
       font-size: 1.2rem;
@@ -96,22 +101,11 @@ table.token-table {
     }
   }
 
-  thead {
-    th{
-      color: #438bad;
-      text-transform: uppercase;
-      font-size: 0.75rem;
-      font-weight: 500;
-      border-bottom: none;
-    }
-  }
-
   td{
     color: #597a84;
   }
 
   td.arrow {
-    width: 4%;
     @media (max-width: 576px) {
       .cell{
         min-width: 30px;
