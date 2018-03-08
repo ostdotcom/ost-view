@@ -219,23 +219,27 @@
       var url = oThis.config.token_transfer_graph_url+interval;
       switch(interval) {
         case 'Day':
-          var format = 'H';
-          var count = 24;
+          var format = "h aa";
+          var count = 12;
           break;
         case 'Hour':
           var format = 'm';
           var count = 12;
           break;
         case 'Week':
-          var format = 'EE';
+          var format = 'EEE';
           var count = 7;
           break;
         case 'Month':
           var format = 'd';
-          var count = 30;
+          var count = 15;
           break;
         case 'Year':
-          var format = 'MMM';
+          var format = "MMM''yy";
+          var count = 12;
+          break;
+        case 'All':
+          var format = "MMM''yy";
           var count = 12;
           break;
       }
@@ -304,23 +308,27 @@
       var url = oThis.config.token_volume_graph_url+interval;
       switch(interval) {
         case 'Day':
-          var format = 'H';
-          var count = 24;
+          var format = "h aa";
+          var count = 12;
           break;
         case 'Hour':
           var format = 'm';
           var count = 12;
           break;
         case 'Week':
-          var format = 'EE';
+          var format = 'EEE';
           var count = 7;
           break;
         case 'Month':
           var format = 'd';
-          var count = 30;
+          var count = 15;
           break;
         case 'Year':
-          var format = 'MMM';
+          var format = "MMM''yy";
+          var count = 12;
+          break;
+        case 'All':
+          var format = "MMM''yy";
           var count = 12;
           break;
       }
