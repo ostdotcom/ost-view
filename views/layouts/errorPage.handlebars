@@ -2,13 +2,45 @@
 <html>
 <head>
     <meta charset="utf-8" />
+
+    <title>OST VIEW - Something went wrong!</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    {{#if page_meta}}
+        <meta name="description" content="{{page_meta.description}}">
+        <meta name="keywords" content="{{page_meta.keywords}}">
+        <meta name="robots" content="{{page_meta.robots}}">
+        <meta property="og:title" content="{{page_meta.title}}"/>
+        <meta property="og:description" content="{{page_meta.description}}"/>
+        <meta property="og:type" content="website"/>
+        <meta property="og:url" content="https://kit.ost.com"/>
+        <meta property="og:site_name" content="kit.ost.com"/>
+        <meta property="og:image" content="{{page_meta.image}}"/>
+        <meta name="twitter:card" content="summary_large_image"/>
+        <meta name="twitter:title" content="{{page_meta.title}}"/>
+        <meta name="twitter:description" content="{{page_meta.description}}"/>
+        <meta name="twitter:image" content="{{page_meta.image}}"/>
+    {{/if}}
+
+    <link rel="icon" type="image/png" sizes="64x64" href="https://dxwfxs8b4lg24.cloudfront.net/ost-kit/images/fav-icons/64x64.png"/>
+    <link rel="apple-touch-icon" sizes="57x57" href="https://dxwfxs8b4lg24.cloudfront.net/ost-kit/images/fav-icons/57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="https://dxwfxs8b4lg24.cloudfront.net/ost-kit/images/fav-icons/60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="https://dxwfxs8b4lg24.cloudfront.net/ost-kit/images/fav-icons/72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="https://dxwfxs8b4lg24.cloudfront.net/ost-kit/images/fav-icons/76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="https://dxwfxs8b4lg24.cloudfront.net/ost-kit/images/fav-icons/114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="https://dxwfxs8b4lg24.cloudfront.net/ost-kit/images/fav-icons/120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="https://dxwfxs8b4lg24.cloudfront.net/ost-kit/images/fav-icons/144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="https://dxwfxs8b4lg24.cloudfront.net/ost-kit/images/fav-icons/152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="https://dxwfxs8b4lg24.cloudfront.net/ost-kit/images/fav-icons/180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="https://dxwfxs8b4lg24.cloudfront.net/ost-kit/images/fav-icons/192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://dxwfxs8b4lg24.cloudfront.net/ost-kit/images/fav-icons/32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="https://dxwfxs8b4lg24.cloudfront.net/ost-kit/images/fav-icons/96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="https://dxwfxs8b4lg24.cloudfront.net/ost-kit/images/fav-icons/16x16.png">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     {{{css 'mCommon.css'}}}
     {{#each mCss}}
         {{{css this}}}
     {{/each}}
-    <title>{{title}}</title>
     <script>window.name = "{{randomStr}}";</script>
 </head>
 <body contenteditable="false">

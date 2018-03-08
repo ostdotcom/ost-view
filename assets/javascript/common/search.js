@@ -12,15 +12,22 @@
     },
 
     bindButtons: function(){
+
       $('#btxSearch').on('submit', function(e){
         e.preventDefault();
-        $.ajax({
-          url: $(this).attr('action'),
-          data: $(this).serialize(),
-          success: function(response){
-            window.location = response.data[response.data.result_type];
-          }
-        });
+        if($("input[type=search]").val().trim() != ''){
+          $.ajax({
+            url: $(this).attr('action'),
+            data: $(this).serialize(),
+            success: function(response){
+              window.location = response.data[response.data.result_type];
+            }
+          });
+        }
+      });
+
+      $('.search-icon').on('click', function(){
+        $('#btxSearch').trigger('submit');
       });
     },
 
