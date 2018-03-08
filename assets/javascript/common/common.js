@@ -39,5 +39,5 @@ function bigNumberFormatter(bigNum){
   };
   var dp = 5;
   BigNumber.config({ FORMAT: format });
-  return bigNum.sd(dp).toString(10);
+  return bigNum.toFormat(dp).toString(10);
 }
