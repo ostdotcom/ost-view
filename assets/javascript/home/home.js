@@ -82,7 +82,7 @@
             },
             {
               data: null,
-              width:'17%',
+              width:'11%',
               render: function(data, type, full, meta){
                 return Handlebars.compile_fe($('#dt-col-4').text())({
                   tx: data.transaction_hash,

@@ -342,12 +342,12 @@ contract.prototype = {
         value: TokenUnits.toBigNumber(token_details['market_cap']).toFormat(0),
         is_badge_visible:true
       },
-      {
-        img:"circulating-supply",
-        title:"Circulating Supply",
-        value: TokenUnits.toBigNumber(token_details['circulation']).toFormat(0),
-        is_badge_visible:false
-      },
+      //{
+      //  img:"circulating-supply",
+      //  title:"Circulating Supply",
+      //  value: TokenUnits.toBigNumber(token_details['circulation']).toFormat(0),
+      //  is_badge_visible:false
+      //},
       {
         img:"total-supply",
         title:"Total Supply",
