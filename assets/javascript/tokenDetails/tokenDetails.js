@@ -32,8 +32,8 @@
     },
 
     triggerClick: function(){
-      $('.graph-1 .interval[data-interval="Hour"]').trigger('click');
-      $('.graph-2 .interval[data-interval="Hour"]').trigger('click');
+      $('.graph-1 .interval[data-interval="Day"]').trigger('click');
+      $('.graph-2 .interval[data-interval="Day"]').trigger('click');
     },
 
     initDatatable: function(){

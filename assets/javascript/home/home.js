@@ -52,6 +52,7 @@
           columns: [
             {
               data: null,
+              width:'16%',
               render: function(data, type, full, meta){
                 return Handlebars.compile_fe($('#dt-col-1').text())({
                   symbol: data["company_symbol"],
@@ -61,6 +62,7 @@
             },
             {
               data: null,
+              width:'18%',
               render: function(data, type, full, meta){
                 return Handlebars.compile_fe($('#dt-col-2').text())({
                   tokens: data.tokens,
@@ -71,6 +73,7 @@
             },
             {
               data: null,
+              width:'11%',
               render: function(data, type, full, meta){
                 return Handlebars.compile_fe($('#dt-col-3').text())({
                   timestamp: moment(data.timestamp * 1000).startOf('day').fromNow()
@@ -79,6 +82,7 @@
             },
             {
               data: null,
+              width:'17%',
               render: function(data, type, full, meta){
                 return Handlebars.compile_fe($('#dt-col-4').text())({
                   tx: data.transaction_hash,
@@ -89,6 +93,7 @@
             },
             {
               data: null,
+              width:'17%',
               render: function(data, type, full, meta){
                 return Handlebars.compile_fe($('#dt-col-5').text())({
                   from: data.t_from,
@@ -99,6 +104,7 @@
             },
             {
               data: null,
+              width:'4%',
               className: 'arrow',
               render: function(data, type, full, meta){
                 return Handlebars.compile_fe($('#dt-col-6').text());
@@ -106,6 +112,7 @@
             },
             {
               data: null,
+              width:'17%',
               render: function(data, type, full, meta){
                 return Handlebars.compile_fe($('#dt-col-7').text())({
                   to: data.t_to,
@@ -242,23 +249,27 @@
       var url = oThis.config.token_transfer_graph_url+interval;
       switch(interval) {
         case 'Day':
-          var format = 'H';
-          var count = 24;
+          var format = "h aa";
+          var count = 12;
           break;
         case 'Hour':
           var format = 'm';
           var count = 12;
           break;
         case 'Week':
-          var format = 'EE';
+          var format = 'EEE';
           var count = 7;
           break;
         case 'Month':
           var format = 'd';
-          var count = 30;
+          var count = 15;
           break;
         case 'Year':
-          var format = 'MMM';
+          var format = "MMM''yy";
+          var count = 12;
+          break;
+        case 'All':
+          var format = "MMM''yy";
           var count = 12;
           break;
       }
@@ -327,23 +338,27 @@
       var url = oThis.config.token_volume_graph_url+interval;
       switch(interval) {
         case 'Day':
-          var format = 'H';
-          var count = 24;
+          var format = "h aa";
+          var count = 12;
           break;
         case 'Hour':
           var format = 'm';
           var count = 12;
           break;
         case 'Week':
-          var format = 'EE';
+          var format = 'EEE';
           var count = 7;
           break;
         case 'Month':
           var format = 'd';
-          var count = 30;
+          var count = 15;
           break;
         case 'Year':
-          var format = 'MMM';
+          var format = "MMM''yy";
+          var count = 12;
+          break;
+        case 'All':
+          var format = "MMM''yy";
           var count = 12;
           break;
       }

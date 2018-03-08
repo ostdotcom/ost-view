@@ -52,6 +52,7 @@ table.token-table {
       text-transform: uppercase;
       font-size: 0.75rem;
       font-weight: 500;
+      letter-spacing: 1px;
       border-collapse: collapse !important;
       background-color: #ffffff !important;
       border: none;
@@ -78,8 +79,12 @@ table.token-table {
 
     .cell {
       height: 40px;
+      .badge-primary{
+        min-width: 80px;
+        text-align: left;
+      }
       .text-truncate {
-        max-width: 150px
+        max-width: 170px
       }
       @media (max-width: 576px) {
         min-width: 100px;
