@@ -70,7 +70,7 @@ home.prototype = {
       {
         img: "market-cap",
         title: "Market Cap",
-        value: TokenUnits.toBigNumber(chain_data.marketCap).toFormat(0),
+        value: TokenUnits.convertToNormal(chain_data.marketCap).toFormat(0),
         is_badge_visible: true
       }
     ];
@@ -81,7 +81,7 @@ home.prototype = {
   getChainStats: function (chain_data) {
     var details = {
       token_transfers: TokenUnits.toBigNumber(chain_data['token_transfers']).toFormat(0),
-      token_volume: TokenUnits.toBigNumber(chain_data['token_volume']).toFormat(0)
+      token_volume: TokenUnits.convertToNormal(chain_data['token_volume']).toFormat(0)
     };
 
     return details;

@@ -300,35 +300,14 @@ contract.prototype = {
       if (!contractAddress) {
         return(reject("invalid input"));
       }
-
-      oThis._dbInstance.getCoinFromContractAddress(contractAddress)
-        .then(function (response) {
-          if(!response){
-            return(reject("invalid input"));
-          }
-          configHelper.getIdOfContractByPromise(oThis._dbInstance, contractAddress)
-            .then(function (brandedTokenId) {
-              oThis._dbInstance.getTokenStatsData(brandedTokenId)
-                .then(function (stateResponse) {
-
-                  var transfers  = stateResponse.token_transfers == undefined? 0: stateResponse.token_transfers
-                    , volume = stateResponse.token_volume == undefined? 0: stateResponse.token_volume
-                  ;
-
-                  response["token_transfers"] = transfers;
-                  response["token_volume"] = TokenUnits.convertToNormal(volume);
-
-                    configHelper.getContractDetailsOfAddressArray(oThis._dbInstance, [contractAddress])
-                    .then(function(addressHash){
-                      response["contractAddresses"] = addressHash;
-                      resolve(response);
-                    })
-                    .catch(function(){
-
-                      resolve(response);
-                    })
-
-                }, reject);
+      configHelper.getIdOfContractByPromise(oThis._dbInstance, contractAddress)
+        .then(function (brandedTokenId) {
+          oThis._dbInstance.getBrandedTokenFromId(brandedTokenId)
+            .then(function (btResponse) {
+              if (!btResponse) {
+                return reject("invalid input");
+              }
+              resolve(btResponse);
             }, reject);
         })
         .catch(function (reason) {
@@ -343,7 +322,7 @@ contract.prototype = {
       {
         img:"market-cap",
         title:"Market Cap",
-        value: TokenUnits.toBigNumber(token_details['market_cap']).toFormat(0),
+        value: TokenUnits.convertToNormal(token_details['market_cap']).toFormat(0),
         is_badge_visible:true
       },
       //{
@@ -365,7 +344,7 @@ contract.prototype = {
   getTokenStats: function (chain_data) {
     var details = {
       token_transfers: TokenUnits.toBigNumber(chain_data['token_transfers']).toFormat(0),
-      token_volume: TokenUnits.toBigNumber(chain_data['token_volume']).toFormat(0)
+      token_volume: TokenUnits.convertToNormal(chain_data['token_ost_volume']).toFormat(0)
     };
 
     return details;
