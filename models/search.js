@@ -53,7 +53,7 @@ search.prototype = {
         oThis._utilityInteractInstance.isContract(argument)
           .then(function(response){
 
-            resolve("/contract/"+argument);
+            resolve("/tokendetails/"+argument);
           })
           .catch(function(reason){
 

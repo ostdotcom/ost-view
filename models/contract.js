@@ -311,10 +311,14 @@ contract.prototype = {
               oThis._dbInstance.getTokenStatsData(brandedTokenId)
                 .then(function (stateResponse) {
 
-                  response["token_transfers"] = stateResponse.token_transfers == undefined? 0: stateResponse.token_transfers;
-                  response["token_volume"] = stateResponse.token_volume == undefined? 0: stateResponse.token_volume;
+                  var transfers  = stateResponse.token_transfers == undefined? 0: stateResponse.token_transfers
+                    , volume = stateResponse.token_volume == undefined? 0: stateResponse.token_volume
+                  ;
 
-                  configHelper.getContractDetailsOfAddressArray(oThis._dbInstance, [contractAddress])
+                  response["token_transfers"] = transfers;
+                  response["token_volume"] = TokenUnits.convertToNormal(volume);
+
+                    configHelper.getContractDetailsOfAddressArray(oThis._dbInstance, [contractAddress])
                     .then(function(addressHash){
                       response["contractAddresses"] = addressHash;
                       resolve(response);
@@ -351,7 +355,7 @@ contract.prototype = {
       {
         img:"total-supply",
         title:"Total Supply",
-        value: TokenUnits.toBigNumber(token_details['total_supply']).toFormat(0),
+        value: TokenUnits.convertToNormal(token_details['total_supply']).toFormat(0),
         is_badge_visible:false
       }
     ];

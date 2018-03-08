@@ -162,23 +162,18 @@ address.prototype = {
         return;
       }
 
-      var addressDetails={};
-      oThis._dbInstance.getAddressDetailsFromDB(address)
+      oThis._dbInstance.getAddressDetailsWithOutOST(address)
         .then(function (rsp) {
           if(undefined !== rsp){
-            addressDetails['address_details'] = rsp;
-            oThis._dbInstance.getBrandedTokenFromId(rsp['branded_token_id'])
-              .then(function (response){
-                if(undefined !== response){
-                  addressDetails['token_details'] = response;
 
-                  resolve(addressDetails);
-                }else{
-                  resolve();
-                }
+            configHelper.getContractDetailsOfIdArray(oThis._dbInstance, [rsp['branded_token_id']])
+              .then(function(addressHash){
+
+                resolve({addressDetails: rsp, contractAddress: addressHash});
               })
-              .catch(function(reason){
-                resolve()
+              .catch(function(){
+
+                resolve({addressDetails: rsp})
               });
           }else{
             resolve();

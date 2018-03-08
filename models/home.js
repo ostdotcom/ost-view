@@ -37,8 +37,12 @@ home.prototype = {
         .then(function (response) {
           oThis._dbInstance.getChainStatsData()
             .then(function (stateResponse) {
-              response["token_transfers"] = stateResponse.token_transfers == undefined? 0: stateResponse.token_transfers;
-              response["token_volume"] = stateResponse.token_volume == undefined? 0: stateResponse.token_volume;
+              var transfers = stateResponse.token_transfers == undefined? 0: stateResponse.token_transfers
+                ,voulume  = stateResponse.token_volume == undefined? 0: stateResponse.token_volume
+              ;
+
+              response["token_transfers"] = transfers;
+              response["token_volume"] = TokenUnits.convertToNormal(voulume);
               resolve(response);
             });
         })
@@ -54,19 +58,19 @@ home.prototype = {
       {
         img: "communities",
         title: "Communities",
-        value: TokenUnits.toBigNumber(chain_data['MAX(id)']).toFormat(0),
+        value: TokenUnits.toBigNumber(chain_data.maxId).toFormat(0),
         is_badge_visible: false
       },
       {
         img: "token-holders",
         title: "Token Holders",
-        value: TokenUnits.toBigNumber(chain_data['SUM(token_holders)']).toFormat(0),
+        value: TokenUnits.toBigNumber(chain_data.tokenHolders).toFormat(0),
         is_badge_visible: false
       },
       {
         img: "market-cap",
         title: "Market Cap",
-        value: TokenUnits.toBigNumber(chain_data['SUM(market_cap)']).toFormat(0),
+        value: TokenUnits.toBigNumber(chain_data.marketCap).toFormat(0),
         is_badge_visible: true
       }
     ];

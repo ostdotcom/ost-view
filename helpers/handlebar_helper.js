@@ -42,7 +42,7 @@ module.exports = {
     if (isNaN(value)){
       return '0';
     }else{
-      return value;
+      return new bigNumber(value.toString()).sd(5);
     }
   },
 
@@ -66,20 +66,20 @@ module.exports = {
 
   bigNumber_toFromat: function(number_string){
 
-    return number_string;
-    return new bigNumber(number_string).toFormat(5);
-  },
-
-  bigNumber_toFromat_mathCalculation: function(decimalPrecision, lvalue, operator, rvalue){
-    var mathValue = mathOperation(lvalue, operator, rvalue);
-
-    var finalBigNumber = new bigNumber(mathValue.toString());
-    return finalBigNumber.toFormat(decimalPrecision);
+    return new bigNumber(number_string.toString()).toFormat(5);
   },
 
   dictionary_dataValue : function(hashKey, hash, requiredValueKey){
     const hashData = hash[hashKey];
     return hashData[requiredValueKey];
+  },
+
+  getOstBalance : function(tokens, addresssContract, contractArray){
+    var price = contractArray[addresssContract].price;
+    var ostValue =  tokens/price;
+
+    return new bigNumber(ostValue.toString()).toFormat(5);
+
   }
 
 };

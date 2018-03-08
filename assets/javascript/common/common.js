@@ -25,19 +25,19 @@ if(Handlebars){
 }
 
 // BigNumber formatter wrapper
-function bigNumberToFormat(number_string, dp){
+function bigNumberToFormat(number_string){
 
   if (number_string === undefined){
     return '';
   }
 
 
-  if ((typeof number_string !== 'string') && (typeof  number_string !== BigNumber)){
+  if ((typeof number_string !== 'string') && !(BigNumber.isBigNumber(number_string))){
     number_string = number_string.toString();
   }
 
   var finalBigNumber;
-  if (typeof  number_string !== BigNumber){
+  if (!BigNumber.isBigNumber(number_string)){
     var format = {
       decimalSeparator: '.',
       groupSeparator: ',',
@@ -52,10 +52,8 @@ function bigNumberToFormat(number_string, dp){
     finalBigNumber = number_string;
   }
 
+  var dp = 5;
 
-  if(typeof dp === 'undefined'){
-    dp = 5;
-  }
 
-  return finalBigNumber.sd(dp).toString();
+  return finalBigNumber.toFormat(5).toString();
 }

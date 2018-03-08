@@ -67,8 +67,8 @@ router.get('/:address', addressMiddleware, function (req, res) {
     .then(function(response){
 
       const responseData = responseHelper.successWithData({
-        address_info: (response === undefined) ? '' : response['address_details'],
-        token_details:(response === undefined) ? '' : response['token_details'],
+        address_info: (response.addressDetails === undefined) ? '' : response.addressDetails,
+        contract_address:(response.contractAddress === undefined) ? '' : response.contractAddress,
         mCss: ['mAddressDetails.css'],
         mJs: ['mAddressDetails.js'],
         meta: {

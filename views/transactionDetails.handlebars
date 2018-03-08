@@ -30,8 +30,9 @@
                         <span class="key-color mr-1"> Amount </span>
                         <div class="cell d-flex align-items-center ml-2">
                             <span class="staked-coin icon"></span>
-                            <span class="badge badge-primary">{{transaction.tokens}} {{dictionary_dataValue token_ransaction_details.contract_address contract_address 'company_symbol'}}</span>
-                            <span class="ml-1">({{math transaction.tokens '/' coin_details.price}} OST)</span>
+                            <span class="badge badge-primary">{{bigNumber_toFromat token_ransaction_details.tokens}} {{dictionary_dataValue token_ransaction_details.contract_address contract_address 'company_symbol'}}</span>
+                            <span class="ml-1">({{getOstBalance token_ransaction_details.tokens token_ransaction_details.contract_address contract_address}} OST)</span>
+
                          </div>
                     </div>
                 </div>
@@ -99,3 +100,5 @@
         </div>
     </div>
 </div>
+
+

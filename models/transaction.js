@@ -12,6 +12,7 @@ const rootPrefix           = ".."
     , constants = require(rootPrefix + '/config/core_constants')
 	  , coreConfig = require(rootPrefix + '/config')
     , configHelper = require(rootPrefix + '/helpers/configHelper')
+    , TokenUnits = require(rootPrefix + '/helpers/tokenUnits')
   ;
 
 /**
@@ -50,7 +51,9 @@ transaction.prototype = {
 
             oThis._dbInstance.getTokenTransaction(transactionAddress)
               .then(function(tokenTransactionResponse){
-                transactionData["tokenTransactionDetails"] = tokenTransactionResponse[0];
+                var tokenTransactions = tokenTransactionResponse[0];
+                tokenTransactions.tokens = TokenUnits.convertToNormal(tokenTransactions.tokens);
+                transactionData["tokenTransactionDetails"] = tokenTransactions
 
                 configHelper.getContractDetailsOfAddressArray(oThis._dbInstance, [tokenTransactionResponse[0].contract_address])
                   .then(function(contractDetails){

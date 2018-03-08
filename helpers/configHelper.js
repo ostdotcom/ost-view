@@ -150,5 +150,32 @@ ConfigHelper.prototype.getContractDetailsOfAddressArray = function (dbInteract, 
     });
 };
 
+/**
+ * Get Hashes of contract addresses
+ * @param dbInteract Db interact
+ * @param contractIdArray Contract id Array
+ * @returns {*}
+ */
+ConfigHelper.prototype.getContractDetailsOfIdArray = function (dbInteract, contractIdArray) {
+  var oThis = this;
+  var result = {};
+  return oThis.syncUpContractMap(dbInteract)
+    .then(function () {
+      contractIdArray.forEach(function (contractId) {
+        var value = oThis.idContractMap[contractId];
+        if (undefined !== value) {
+          result[contractId] = value;
+        } else {
+          result[contractId] = {};
+        }
+      });
+      return Promise.resolve(result);
+    })
+    .catch(function (error) {
+      logger.error("configHelper#getContractDetailsOfAddressArray :: Error", error);
+      return Promise.resolve(result);
+    });
+};
+
 
 module.exports = new ConfigHelper();

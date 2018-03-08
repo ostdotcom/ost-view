@@ -67,7 +67,7 @@
                 return Handlebars.compile_fe($('#dt-col-2').text())({
                   tokens: data.tokens,
                   coin_symbol: data.company_symbol,
-                  value: data.ost_amount
+                  value: bigNumberToFormat(data.ost_amount)
                 });
               }
             },
@@ -153,8 +153,8 @@
               address: to
             });
 
-            element['tokens'] = bigNumberToFormat(tokens)
-            element['ost_amount'] = bigNumberToFormat(tokens/ contractAddresses[contarct_address].price);
+            element['tokens'] = bigNumberToFormat(tokens);
+            element['ost_amount'] = bigNumberToFormat(tokens/contractAddresses[contarct_address].price);
             element['company_name'] = contractAddresses[contarct_address].company_name;
             element['company_symbol'] = contractAddresses[contarct_address].company_symbol;
 
@@ -195,7 +195,7 @@
               width:'23%',
               render: function (data, type, full, meta) {
                 return Handlebars.compile_fe($('#dt-tokens-col-3').text())({
-                  market_cap: data.market_cap,
+                  market_cap: bigNumberToFormat(data.market_cap),
                 });
               }
             },
@@ -205,7 +205,7 @@
               width:'23%',
               render: function (data, type, full, meta) {
                 return Handlebars.compile_fe($('#dt-tokens-col-4').text())({
-                  price: data.price,
+                  price: bigNumberToFormat(data.price),
                 });
               }
             },
@@ -215,7 +215,7 @@
               width:'23%',
               render: function (data, type, full, meta) {
                 return Handlebars.compile_fe($('#dt-tokens-col-5').text())({
-                  circulating_supply: data.circulation,
+                  circulating_supply: bigNumberToFormat(data.circulation),
                 });
               }
             },
