@@ -24,36 +24,20 @@ if(Handlebars){
   }
 }
 
-// BigNumber formatter wrapper
-function bigNumberToFormat(number_string){
+function convertToBigNumber(number) {
+  return (number instanceof BigNumber) ? number : new BigNumber(number);
+}
 
-  if (number_string === undefined){
-    return '';
-  }
-
-
-  if ((typeof number_string !== 'string') && (typeof number_string !== BigNumber)){
-    number_string = number_string.toString();
-  }
-
-  var finalBigNumber;
-  if (typeof number_string !== BigNumber){
-    var format = {
-      decimalSeparator: '.',
-      groupSeparator: ',',
-      groupSize: 3,
-      secondaryGroupSize: 0,
-      fractionGroupSeparator: ' ',
-      fractionGroupSize: 0
-    };
-    BigNumber.config({ FORMAT: format });
-    finalBigNumber = new BigNumber(number_string)
-  }else{
-    finalBigNumber = number_string;
-  }
-
+function bigNumberFormatter(bigNum){
+  var format = {
+    decimalSeparator: '.',
+    groupSeparator: ',',
+    groupSize: 3,
+    secondaryGroupSize: 0,
+    fractionGroupSeparator: ' ',
+    fractionGroupSize: 0
+  };
   var dp = 5;
-
-
-  return finalBigNumber.toFormat(dp).toString();
+  BigNumber.config({ FORMAT: format });
+  return bigNum.sd(dp).toString(10);
 }

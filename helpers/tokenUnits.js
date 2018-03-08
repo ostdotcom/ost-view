@@ -97,4 +97,8 @@ tokenUnits.convertToNormal = function (numInWei) {
     return this.convertToBigNumber(numInWei).div(this.convertToBigNumber(10).toPower(18));
 };
 
+tokenUnits.convertToGwei = function (numInWei) {
+    return this.convertToBigNumber(numInWei).div(this.convertToBigNumber(10).toPower(9));
+};
+
 module.exports = tokenUnits;

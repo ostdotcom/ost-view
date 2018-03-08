@@ -25,23 +25,23 @@
                 </div>
 
                 <div class="card-body">
-                    <table class="table">
+                    <table class="table token-table">
                         <tbody>
                         {{#each token_transaction_details}}
                             <tr scope="row">
                                 <td>
                                     <div class="cell d-flex align-items-center">
                                         <div class="circle circle-sm">
-                                            <div>{{dictionary_dataValue contract_address contract_addresses 'company_symbol'}}</div>
+                                            <div>{{dictionary_dataValue contract_address ../contract_addresses 'company_symbol'}}</div>
                                         </div>
-                                        <div class="ml-2 name">{{dictionary_dataValue contract_address contract_addresses 'company_name'}}</div>
+                                        <div class="ml-2 name">{{dictionary_dataValue contract_address ../contract_addresses 'company_name'}}</div>
                                     </div>
                                 </td>
                                 <td>
                                     <div class="cell d-flex align-items-center">
                                         <span class="staked-coin icon"></span>
-                                        <span class="badge badge-primary">{{bigNumber_toFromat tokens}} {{dictionary_dataValue contract_address contract_addresses 'company_symbol'}}</span>
-                                        <span class="ml-1">{{getOstBalance tokens contract_address contract_addresses}}</span>
+                                        <span class="badge badge-primary">{{bigNumber_toFromat tokens}} {{dictionary_dataValue contract_address ../contract_addresses 'company_symbol'}}</span>
+                                        <span class="ml-1">{{getOstBalance tokens contract_address ../contract_addresses 'price'}}</span>
                                     </div>
                                 </td>
                                 <td>
@@ -53,7 +53,7 @@
                                 <td>
                                     <div class="cell d-flex align-items-center">
                                         <span>From</span>
-                                        <a href="[[redirect_url]]" class="d-inline-block text-truncate ml-1">{{t_from}}</a>
+                                        <a href="{{dictionary_dataValue 'redirect_url' ../meta 'address_placeholder_url'}}{{t_from}}" class="d-inline-block text-truncate ml-1">{{t_from}}</a>
                                     </div>
                                 </td>
                                 <td>
@@ -64,7 +64,7 @@
                                 <td>
                                     <div class="cell d-flex align-items-center">
                                         <span>To</span>
-                                        <a href="[[redirect_url]]" class="d-inline-block text-truncate ml-1">{{t_to}}</a>
+                                        <a href="{{dictionary_dataValue 'redirect_url' ../meta 'address_placeholder_url'}}{{t_to}}" class="d-inline-block text-truncate ml-1">{{t_to}}</a>
                                     </div>
                                 </td>
 
@@ -76,6 +76,7 @@
                 </div>
 
                 <div class="card-body">
+
                     <div class="d-flex align-items-center">
 
                         <span class="key-color mr-1"> Amount </span>
@@ -90,7 +91,7 @@
                 <div class="card-body">
 
                     <span class="key-color mr-1"> Block Number </span>
-                    <a class="default_bright_blue font-weight-light" href="{{meta.redirect_url.block}}">{{transaction.block_number}}</a>
+                    <a class="default_bright_blue font-weight-light" href="{{meta.redirect_url.block_placeholder_url}}{{transaction.block_number}}">{{transaction.block_number}}</a>
 
                 </div>
 
@@ -104,7 +105,7 @@
                 <div class="card-body">
 
                     <span class="key-color mr-1"> Gas Price </span>
-                    <span class="value-color font-weight-light">  {{transaction.gas_price}} (OST) </span>
+                    <span class="value-color font-weight-light">  {{transaction.gas_price}} (OST α Gwei) </span>
 
                 </div>
 

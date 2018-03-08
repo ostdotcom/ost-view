@@ -126,7 +126,8 @@
             var from = element.t_from;
             var to = element.t_to
               , contarct_address = element.contract_address
-              ,tokens = element.tokens
+              , tokens = element.tokens
+              , price = contractAddresses[contarct_address].price
             ;
 
             var txURL = meta.transaction_placeholder_url;
@@ -143,8 +144,9 @@
               addr: to
             });
 
-            element['tokens'] = bigNumberToFormat(tokens)
-            element['ost_amount'] = bigNumberToFormat(tokens/ contractAddresses[contarct_address].price);
+            element['tokens'] = bigNumberFormatter(convertToBigNumber(tokens));
+            element['ost_amount'] = bigNumberFormatter(convertToBigNumber(tokens).multipliedBy(convertToBigNumber(price)));
+
             element['company_name'] = contractAddresses[contarct_address].company_name;
             element['company_symbol'] = contractAddresses[contarct_address].company_symbol;
           });
@@ -193,6 +195,7 @@
           dataToProceess.forEach(function(element) {
             var name = element.address
               ,tokens = element.tokens
+              ,price = contractAddresses[contarct_address].price
             ;
 
             var addressURL = meta.address_placeholder_url;
@@ -200,8 +203,10 @@
             element['address_redirect_url'] =  Handlebars.compile(addressURL)({
               address: name
             });
-            element['tokens'] = bigNumberToFormat(tokens)
-            element['ost_amount'] = bigNumberToFormat(tokens/ contractAddresses[contarct_address].price);
+
+            element['tokens'] = bigNumberFormatter(convertToBigNumber(tokens));
+            element['ost_amount'] = bigNumberFormatter(convertToBigNumber(tokens).multipliedBy(convertToBigNumber(price)));
+
             element['company_name'] = contractAddresses[contarct_address].company_name;
             element['company_symbol'] = contractAddresses[contarct_address].company_symbol;
           });

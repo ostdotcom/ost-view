@@ -67,7 +67,7 @@
                 return Handlebars.compile_fe($('#dt-col-2').text())({
                   tokens: data.tokens,
                   coin_symbol: data.company_symbol,
-                  value: bigNumberToFormat(data.ost_amount)
+                  value: data.ost_amount
                 });
               }
             },
@@ -139,6 +139,7 @@
             ,addressURL = meta.address_placeholder_url
               , contarct_address = element.contract_address
               ,tokens = element.tokens
+              , price = contractAddresses[contarct_address].price
               ;
 
             element['tx_redirect_url'] =  Handlebars.compile(txURL)({
@@ -153,8 +154,8 @@
               address: to
             });
 
-            element['tokens'] = bigNumberToFormat(tokens);
-            element['ost_amount'] = bigNumberToFormat(tokens/contractAddresses[contarct_address].price);
+            element['tokens'] = bigNumberFormatter(convertToBigNumber(tokens));
+            element['ost_amount'] = bigNumberFormatter(convertToBigNumber(tokens).multipliedBy(convertToBigNumber(price)));
             element['company_name'] = contractAddresses[contarct_address].company_name;
             element['company_symbol'] = contractAddresses[contarct_address].company_symbol;
 
@@ -195,7 +196,7 @@
               width:'23%',
               render: function (data, type, full, meta) {
                 return Handlebars.compile_fe($('#dt-tokens-col-3').text())({
-                  market_cap: bigNumberToFormat(data.market_cap),
+                  market_cap: data.market_cap
                 });
               }
             },
@@ -205,20 +206,10 @@
               width:'23%',
               render: function (data, type, full, meta) {
                 return Handlebars.compile_fe($('#dt-tokens-col-4').text())({
-                  price: bigNumberToFormat(data.price),
+                  price: data.price
                 });
               }
-            },
-            //{
-            //  title:'Circulating Supply (bt)',
-            //  data: null,
-            //  render: function (data, type, full, meta) {
-            //
-            //    return Handlebars.compile_fe($('#dt-tokens-col-5').text())({
-            //      circulating_supply: bigNumberToFormat(data.circulation),
-            //    });
-            //  }
-            //},
+            }
           ],
           ordering: false
         },
@@ -233,13 +224,12 @@
             var contractAddress = element.contract_address;
 
             var tokenDetailsURL = meta.token_details_redirect_url;
-            console.log("tokenDetailsURL :: ",tokenDetailsURL);
 
             element['token_details_redirect_url'] =  Handlebars.compile(tokenDetailsURL)({
               contract_addr: contractAddress
             });
-            element['price'] = 1/element.price;
-
+            element['price'] = bigNumberFormatter(convertToBigNumber(element.price));
+            element['market_cap'] = bigNumberFormatter(convertToBigNumber(element.market_cap));
           });
         }
       });

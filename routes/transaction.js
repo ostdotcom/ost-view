@@ -67,9 +67,8 @@ router.get("/:hash", transactionMiddleware, function (req, res) {
           q:req.hash,
           chain_id:req.chainId,
           redirect_url:{
-            from: '/chain-id/'+req.chainId+'/address/'+requestResponse['transactionDetails']['t_from'],
-            to:  '/chain-id/'+req.chainId+'/address/'+requestResponse['transactionDetails']['t_to'],
-            block: '/chain-id/'+req.chainId+'/block/'+requestResponse['transactionDetails']['block_number']
+            address_placeholder_url: '/chain-id/'+req.chainId+'/address/',
+            block_placeholder_url: '/chain-id/'+req.chainId+'/block/'
           }
         },
         page_meta: {

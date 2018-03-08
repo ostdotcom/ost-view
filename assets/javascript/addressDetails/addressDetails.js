@@ -104,6 +104,7 @@
               , addressURL = meta.address_placeholder_url
               , contarct_address = element.contract_address
               ,tokens = element.tokens
+              , price = contractAddresses[contarct_address].price
             ;
 
 
@@ -119,9 +120,9 @@
               addr: to
             });
 
-            element.tokens = bigNumberToFormat(tokens);
-            var ostAmount = tokens/contractAddresses[contarct_address].price;
-            element['ost_amount'] = bigNumberToFormat(ostAmount)
+
+            element['tokens'] = bigNumberFormatter(convertToBigNumber(tokens));
+            element['ost_amount'] = bigNumberFormatter(convertToBigNumber(tokens).multipliedBy(convertToBigNumber(price)));
 
             element['company_name'] = contractAddresses[contarct_address].company_name;
             element['company_symbol'] = contractAddresses[contarct_address].company_symbol;

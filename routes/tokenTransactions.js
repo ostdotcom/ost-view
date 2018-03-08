@@ -74,8 +74,6 @@ router.get("/transactions/recent", contractMiddleware, function (req, res) {
       }
 
       const response = responseHelper.successWithData({
-        draw : req.query.draw,
-        recordsTotal : 120,
         meta:{
           next_page_payload :nextPagePayload,
           prev_page_payload :prevPagePayload,

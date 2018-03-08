@@ -66,11 +66,16 @@ module.exports = {
 
   bigNumber_toFromat: function(number_string){
 
-    return new bigNumber(number_string.toString()).toFormat(5);
+    console.log("bigNumber_toFromat :: number_string ::" , number_string);
+    if(!number_string){
+      return '';
+    } else {
+      return new bigNumber(number_string.toString()).toFormat(5);
+    }
   },
 
   dictionary_dataValue : function(hashKey, hash, requiredValueKey){
-    if (hash !== undefined){
+    if (hash){
       const hashData = hash[hashKey];
       return hashData[requiredValueKey];
     }else{
@@ -80,12 +85,12 @@ module.exports = {
   },
 
   getOstBalance : function(tokens, addresssContract, contractArray){
-    if (contractArray !== undefined) {
+    if (contractArray) {
       var price = contractArray[addresssContract].price;
-      var ostValue = tokens / price;
+      var ostValue = tokens * price;
 
       var bigNumberValue = new bigNumber(ostValue.toString()).toFormat(5);
-      return '('+bigNumberValue+'OST)';
+      return '('+bigNumberValue+' OST)';
     }else{
       return '';
     }
