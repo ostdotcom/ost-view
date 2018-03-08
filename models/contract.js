@@ -316,7 +316,7 @@ contract.prototype = {
 
                   configHelper.getContractDetailsOfAddressArray(oThis._dbInstance, [contractAddress])
                     .then(function(addressHash){
-                      response["contractAddresses"] = addressHash
+                      response["contractAddresses"] = addressHash;
                       resolve(response);
                     })
                     .catch(function(){

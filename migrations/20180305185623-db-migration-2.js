@@ -31,7 +31,7 @@ exports._meta = {
 var addBrandedTokenTableRequiredAttributes = function (db) {
   return db.addColumn(constants.BRANDED_TOKEN_TABLE_NAME, "token_transfers", {type: 'decimal', notNull: true, length: '40,0'})
     .then(function(){
-      return db.addColumn(constants.BRANDED_TOKEN_TABLE_NAME, "token_ost_volume", {type: 'decimal', notNull: true, length: '40,5'})
+      return db.addColumn(constants.BRANDED_TOKEN_TABLE_NAME, "token_ost_volume", {type: 'decimal', notNull: true, length: '40,0'})
     })
     .then(function(){
       return db.addColumn(constants.BRANDED_TOKEN_TABLE_NAME, "creation_time", { type: 'int', notNull: true, default: 0 })
