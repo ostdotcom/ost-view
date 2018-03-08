@@ -245,6 +245,7 @@ contract.prototype = {
               return oThis._dbInstance.getBrandedTokenTopUsers(contractId, topUsersCount);
             })
             .then(function (response) {
+
               return memCache.set("getBrandedTokenTopUsers" + contractAddress + topUsersCount, response)
                 .then(function () {
                   return Promise.resolve(response);
