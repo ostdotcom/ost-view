@@ -29,7 +29,7 @@
                         <tbody>
                         {{#each token_transaction_details}}
                             <tr scope="row">
-                                <td>
+                                <td style="width: 16%">
                                     <div class="cell d-flex align-items-center">
                                         <div class="circle circle-sm">
                                             <div>{{dictionary_dataValue contract_address ../contract_addresses 'company_symbol'}}</div>
@@ -37,31 +37,31 @@
                                         <div class="ml-2 name">{{dictionary_dataValue contract_address ../contract_addresses 'company_name'}}</div>
                                     </div>
                                 </td>
-                                <td>
+                                <td style="width: 24%">
                                     <div class="cell d-flex align-items-center">
                                         <span class="staked-coin icon"></span>
                                         <span class="badge badge-primary">{{bigNumber_toFromat tokens}} {{dictionary_dataValue contract_address ../contract_addresses 'company_symbol'}}</span>
-                                        <span class="ml-1">{{getOstBalance tokens contract_address ../contract_addresses 'price'}}</span>
+                                        <span class="ml-1 ost-value">{{getOstBalance tokens contract_address ../contract_addresses 'price'}}</span>
                                     </div>
                                 </td>
-                                <td>
+                                <td style="width: 16%">
                                     <div class="cell d-flex align-items-center">
                                         <span class="time icon"></span>
                                         <span>{{toTimeAgo timestamp}}</span>
                                     </div>
                                 </td>
-                                <td>
+                                <td style="width: 20%">
                                     <div class="cell d-flex align-items-center">
                                         <span>From</span>
                                         <a href="{{dictionary_dataValue 'redirect_url' ../meta 'address_placeholder_url'}}{{t_from}}" class="d-inline-block text-truncate ml-1">{{t_from}}</a>
                                     </div>
                                 </td>
-                                <td>
+                                <td style="width: 4%">
                                     <div class="cell d-flex align-items-center">
                                         <div class="text-center w-100" style="color:#597a84">&#8594;</div>
                                     </div>
                                 </td>
-                                <td>
+                                <td style="width: 20%">
                                     <div class="cell d-flex align-items-center">
                                         <span>To</span>
                                         <a href="{{dictionary_dataValue 'redirect_url' ../meta 'address_placeholder_url'}}{{t_to}}" class="d-inline-block text-truncate ml-1">{{t_to}}</a>
@@ -83,7 +83,6 @@
                         <div class="cell d-flex align-items-center ml-2">
                             <span class="staked-coin icon"></span>
                             <span class="ml-1">{{bigNumber_toFromat transaction.tokens}} OST</span>
-
                          </div>
                     </div>
                 </div>
@@ -118,7 +117,7 @@
                 <div class="justify-content-start card-body">
                     <span class="key-color align-top"> Input Data </span>
                     <div class="p-2 input-data-break-all">
-                        <span class="value-color font-weight-light"> {{{getMethodNameFromInputData transaction.input_data}}} </span>
+                        <pre class="value-color font-weight-light"> {{{getMethodNameFromInputData transaction.input_data}}} </pre>
                     </div>
                 </div>
             </div>
