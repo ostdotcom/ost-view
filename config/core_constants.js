@@ -26,7 +26,7 @@ define("TRANSACTION_TYPE_ID_TABLE_NAME", 'transaction_type_id');
 define("BLOCKS_DATA_SEQUENCE", '(block_number, block_hash, parent_hash, miner, difficulty, total_difficulty, gas_limit, gas_used, total_transactions, timestamp, verified, nonce, sha3_uncles, uncles, logs_bloom, transactions_root, transactions, state_root, receipt_root, size, extra_data, mix_hash)');
 define("TRANSACTION_DATA_SEQUENCE", '(transaction_hash, block_number, transaction_index, contract_address, t_from, t_to, tokens, gas_used, gas_price, nounce, input_data, logs, timestamp, status, logs_bloom, r, s, v)');
 define("ADDRESS_TRANSACTION_DATA_SEQUENCE", '(address, corresponding_address, tokens, transaction_hash, transaction_fees, inflow, timestamp)');
-define("TOKEN_TRANSACTION_DATA_SEQUENCE", '(transaction_hash, contract_address, t_from, t_to, tokens, timestamp)');
+define("TOKEN_TRANSACTION_DATA_SEQUENCE", '(transaction_hash, contract_address, t_from, t_to, tokens, timestamp, block_number)');
 define("ADDRESS_TOKEN_TRANSACTION_DATA_SEQUENCE", '(address, corresponding_address, tokens, contract_address, transaction_hash, inflow, timestamp)');
 define("AGGREGATE_DATA_SEQUENCE", '(total_transactions, total_transaction_value, total_transfers, total_transfer_value, transaction_type_id, branded_token_id, time_id)');
 define("ADDRESS_DATA_SEQUENCE", '(address.address, address.branded_token_id, address.tokens,address.tokens_earned, address.tokens_spent, address.total_transactions)');
@@ -37,7 +37,7 @@ define("BRANDED_TOKEN_DATA_SEQUENCE", '(branded_token.id, branded_token.company_
 
 // Index Map
 define("TRANSACTION_INDEX_MAP", {'transaction_hash':0, 'block_number':1, 'transaction_index':2, 'contract_address':3, 't_from':4, 't_to':5, 'tokens':6, 'gas_used':7, 'gas_price':8, 'nounce':9, 'input_data': 10, 'logs':11, 'timestamp':12});
-define("TOKEN_TRANSACTION_INDEX_MAP", {'transaction_hash':0, 'contract_address':1, 't_from':2, 't_to':3, 'tokens':4, 'timestamp':5});
+define("TOKEN_TRANSACTION_INDEX_MAP", {'transaction_hash':0, 'contract_address':1, 't_from':2, 't_to':3, 'tokens':4, 'timestamp':5, 'block_number': 6});
 
 //constants
 define('ACCOUNT_HASH_LENGTH',42);
