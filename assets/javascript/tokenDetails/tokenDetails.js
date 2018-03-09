@@ -160,6 +160,7 @@
           columns: [
             {
               data: null,
+              width:'20%',
               render: function(data, type, full, meta){
                 return Handlebars.compile_fe($('#dt-holders-col-1').text())({
                   name: data.address,
@@ -169,18 +170,21 @@
             },
             {
               data: null,
-              render: function(data, type, full, meta){
-                return $('#dt-holders-col-2').text();
-              }
-            },
-            {
-              data: null,
+              width:'35%',
               render: function(data, type, full, meta){
                 return Handlebars.compile_fe($('#dt-holders-col-3').text())({
                   tokens: data.tokens,
                   coin_name : data.company_symbol,
                   value: data.ost_amount
                 });
+              }
+            },
+            {
+              title:'',
+              data: null,
+              width:'45%',
+              render: function (data, type, full, meta) {
+                return '';
               }
             }
           ]

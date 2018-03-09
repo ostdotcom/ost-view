@@ -171,7 +171,7 @@
             {
               title:'',
               data: null,
-              width:'8%',
+              width:'10%',
               render: function (data, type, full, meta) {
                 return Handlebars.compile_fe($('#dt-tokens-col-1').text())({
                   rank: data.rank
@@ -181,7 +181,7 @@
             {
               title:'Token',
               data: null,
-              width:'23%',
+              width:'25%',
               render: function (data, type, full, meta) {
                 return Handlebars.compile_fe($('#dt-tokens-col-2').text())({
                   symbol: data.company_symbol,
@@ -191,9 +191,9 @@
               }
             },
             {
-              title:'Market Cap (OST α)',
+              title:'Market Cap (OST)',
               data: null,
-              width:'23%',
+              width:'25%',
               render: function (data, type, full, meta) {
                 return Handlebars.compile_fe($('#dt-tokens-col-3').text())({
                   market_cap: data.market_cap
@@ -201,13 +201,21 @@
               }
             },
             {
-              title:'Price (OST α)',
+              title:'Price (OST)',
               data: null,
-              width:'23%',
+              width:'25%',
               render: function (data, type, full, meta) {
                 return Handlebars.compile_fe($('#dt-tokens-col-4').text())({
                   price: data.price
                 });
+              }
+            },
+            {
+              title:'',
+              data: null,
+              width:'15%',
+              render: function (data, type, full, meta) {
+                return '';
               }
             }
           ],
