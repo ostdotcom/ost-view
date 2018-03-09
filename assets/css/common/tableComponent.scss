@@ -20,15 +20,18 @@
           position: relative;
           &:after{
             content: '';
+            z-index: 1;
+            position: absolute;
             width: 0;
             height: 0;
-            border-left: 6px solid transparent;
-            border-right: 6px solid transparent;
-            border-top: 6px solid #fff;
-            position: absolute;
-            left: calc(50% - 6px);
-            top: 40px;
-            z-index: 1;
+            margin-left: -0.5em;
+            bottom: -10px;
+            left: 50%;
+            box-sizing: border-box;
+            border: 6px solid #ffffff;
+            transform-origin: 0 0;
+            transform: rotate(-45deg);
+            box-shadow: -2px 2px 1px 0 #c6e9ee;
           }
         }
 
