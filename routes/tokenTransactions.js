@@ -141,6 +141,16 @@ function getPrevPagePaylaodForRecentTransactions (requestResponse, pagePayload, 
 router.get("/top", contractMiddleware, function (req, res) {
   var pageSize = constants.DEFAULT_PAGE_SIZE+1;
 
+  if (!req.pagePayload){
+    var time = Math.floor(new Date() / 1000);
+
+    var payload = {
+      timestamp : time,
+      page_no : 1
+    };
+    req.pagePayload = payload
+  }
+
   req.contractInstance.getTopTokens(pageSize, req.pagePayload)
     .then(function (queryResponse) {
 
@@ -193,7 +203,7 @@ function getNextPagePaylaodForTopTokens (requestResponse, pageSize, pagePayload)
 
   return {
     page_no: pageNumber,
-    market_cap:response[count-1].market_cap,
+    timestamp: pagePayload.timestamp,
     direction: "next"
   };
 
@@ -201,16 +211,15 @@ function getNextPagePaylaodForTopTokens (requestResponse, pageSize, pagePayload)
 
 function getPrevPagePaylaodForTopTokens (requestResponse, pagePayload, pageSize){
 
-  const response = requestResponse,
-    count = response.length;
+  var pageNumber = pagePayload.page_no;
+
 
   // If page payload is null means its a request for 1st page
-  // OR direction is previous and count if less than page size means there is no previous page
-  if(!pagePayload || (pagePayload.direction === 'prev' && count < pageSize)){
+  // OR direction is previous and pageNumber if less than or equal to 1 means there is no previous page
+  if(!pagePayload || (pagePayload.direction === 'prev' && pageNumber <= 1)){
     return {};
   }
 
-  var pageNumber = 0;
   if (pagePayload){
     if (!isNaN(parseInt(pagePayload.page_no))){
       pageNumber = parseInt(pagePayload.page_no) - 1
@@ -221,7 +230,7 @@ function getPrevPagePaylaodForTopTokens (requestResponse, pagePayload, pageSize)
 
   return {
     page_no: pageNumber,
-    market_cap:response[0].market_cap,
+    timestamp: pagePayload.timestamp,
     direction: "prev"
   };
 }

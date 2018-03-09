@@ -44,7 +44,6 @@
       var payload;
       var previousStartIndex;
 
-
       oThis.dtConfig.ajax = function (data, callback, settings) {
 
         var currentStart = settings.oAjaxData.start;
@@ -54,10 +53,15 @@
           if (currentStart > previousStartIndex) {
             payload = {next_page_payload: meta.next_page_payload};
 
+            if(Object.keys(meta.next_page_payload).length <= 1) {
+              $(settings.nTableWrapper).find('.dataTables_processing').hide();
+              return;
+            }
+
           } else {
             payload = {prev_page_payload: meta.prev_page_payload};
-
           }
+
         }
 
         $.ajax({
@@ -68,12 +72,19 @@
             meta = response.data.meta;
             oThis.responseReceived.apply( oThis, arguments );
             previousStartIndex = settings.oAjaxData.start;
+
+            var recordsFilteredCount = 0;
+
+            if(Object.keys(meta.next_page_payload).length > 1){
+              recordsFilteredCount = settings.oAjaxData.start + settings.oAjaxData.length + 1;
+            }else{
+              recordsFilteredCount = settings.oAjaxData.start + settings.oAjaxData.length
+            }
+
             callback({
               data: response.data[response.data.result_type],
-              recordsTotal: response.data.recordsTotal,
-              draw: settings.oAjaxData.draw,
               meta: response.data.meta,
-              recordsFiltered: response.data.recordsTotal,
+              recordsFiltered: recordsFilteredCount,
             });
           }
         })
