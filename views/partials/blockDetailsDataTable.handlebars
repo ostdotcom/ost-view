@@ -30,7 +30,7 @@
                     <div class="cell d-flex align-items-center">
                         <span class="staked-coin icon"></span>
                         <span class="badge badge-primary">[[tokens]] [[coin_symbol]]</span>
-                        <span class="ml-1">[[value]]</span>
+                        <span class="ml-1">([[value]] OST)</span>
                     </div>
                 </script>
                 <script type="custom/ost" id="dt-col-3">
@@ -146,8 +146,8 @@
                 },
                 responseReceived : function ( response ) {
                     var dataToProceess = response.data[response.data.result_type]
-                            , meta =  response.data.meta
-                            , contractAddresses = response.data['contract_addresses']
+                        , meta =  response.data.meta
+                        , contractAddresses = response.data['contract_addresses']
 
                     ;
 
@@ -160,6 +160,7 @@
                             ,addressURL = meta.address_placeholder_url
                                 ,contarct_address = element.contract_address
                                 ,tokens = element.tokens
+                                ,price = contractAddresses[contarct_address].price
                         ;
 
                         element['tx_redirect_url'] =  Handlebars.compile(txURL)({
@@ -174,7 +175,8 @@
                         });
 
                         if(contarct_address){
-                            element['ost_amount'] = '('+tokens/ contractAddresses[contarct_address].price+' OST)';
+                            element['tokens'] = bigNumberFormatter(convertToBigNumber(tokens));
+                            element['ost_amount'] = bigNumberFormatter(convertToBigNumber(tokens).multipliedBy(convertToBigNumber(price)));
                             element['company_name'] = contractAddresses[contarct_address].company_name;
                             element['company_symbol'] = contractAddresses[contarct_address].company_symbol;
                         }else{

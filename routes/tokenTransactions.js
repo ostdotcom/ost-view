@@ -80,7 +80,9 @@ router.get("/transactions/recent", contractMiddleware, function (req, res) {
 
           chain_id:req.chainId,
           address_placeholder_url:'/chain-id/'+req.chainId+'/address/{{address}}',
-          transaction_placeholder_url:"/chain-id/"+req.chainId+"/transaction/{{tr_hash}}"
+          transaction_placeholder_url:"/chain-id/"+req.chainId+"/transaction/{{tr_hash}}",
+          token_details_redirect_url: "/chain-id/"+req.chainId+"/tokendetails/{{contract_addr}}"
+
         },
         token_transactions:tokenTransactions,
         contract_addresses:queryResponse.contractAddress,
@@ -188,7 +190,7 @@ function getNextPagePaylaodForTopTokens (requestResponse, pageSize, pagePayload)
 
   const response = requestResponse
     , count = response.length
-    , maxTopTokens = constants.TOP_TOKENS_LIMT_COUNT
+    , maxTopTokens = constants.TOP_TOKENS_LIMIT_COUNT
     , currentTokenCount = pagePayload.page_no * (pageSize-1)
     ;
 

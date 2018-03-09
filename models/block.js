@@ -11,7 +11,11 @@ const rootPrefix = ".."
   , dbInteract = require(rootPrefix + '/lib/storage/interact')
   , constants = require(rootPrefix + '/config/core_constants')
   , coreConfig = require(rootPrefix + '/config')
-;
+  , configHelper = require(rootPrefix + '/helpers/configHelper')
+  ;
+
+const und = require('underscore');
+
 
 /**
  * @constructor
@@ -103,6 +107,48 @@ block.prototype = {
         return oThis._dbInstance.getBlockTransactionsFromBlockNumber(blockNumber, pageSize, pagePayload);
 
       }
+  }
+
+  /**
+   * Get list of token transactions available in a given block number.
+   *
+   * @param {Integer} blockNumber - block number
+   * @param {Integer} page - page number
+   * @param {hash} pagePayload - page payload
+   *
+   * @return {Promise<Object>} List of transactions available in database for particular batch.
+   */
+  , getBlockTokenTransactions: function (blockNumber, pageSize, pagePayload) {
+    const oThis = this;
+
+    return new Promise(function(resolve, reject){
+
+      if (blockNumber == undefined) {
+        reject("invalid input");
+        return;
+      }
+
+      oThis._dbInstance.getBlockTokenTransactionsFromBlockNumber(blockNumber, pageSize, pagePayload)
+        .then(function(queryResponse){
+
+          var contractArray = [];
+          queryResponse.forEach(function(object){
+            contractArray.push(object.contract_address);
+          });
+          contractArray = und.uniq(contractArray);
+
+          configHelper.getContractDetailsOfAddressArray(oThis._dbInstance, contractArray)
+            .then(function(addressHash){
+              resolve({tokenTransactions: queryResponse, contractAddresses: addressHash});
+            })
+            .catch(function(reason){
+              resolve({tokenTransactions:queryResponse})
+            });
+        })
+        .catch(function(reason){
+          reject(reason);
+        });
+    });
   }
 
 

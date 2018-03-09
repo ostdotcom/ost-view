@@ -93,7 +93,7 @@ function processBlockResponse (blockHash, req, res){
     mJs: ['mBlockDetails.js'],
     title:'Block Details - ' +req.blockNumber,
     meta:{
-      transaction_url: "/chain-id/"+req.chainId+"/block/"+req.blockNumber+"/transactions",
+      transaction_url: "/chain-id/"+req.chainId+"/block/"+req.blockNumber+"/token-transactions",
       chain_id:req.chainId,
       q:req.blockNumber
     },
@@ -120,7 +120,7 @@ function processBlockError(reason, req, res){
  *
  * @name Block Transactions
  *
- * @route {GET} {base_url}/:block_number/transactions/:page
+ * @route {GET} {base_url}/:block_number/transactions
  *
  * @routeparam {Integer} :block_number - number of block need to be fetched
  */
@@ -198,5 +198,96 @@ function getPrevPagePaylaodForBlockTransactions (requestResponse, pagePayload, p
     direction: "prev"
   };
 }
+
+
+/**
+ * Get paginated token transactions for a given block number
+ *
+ * @name Block Token Transactions
+ *
+ * @route {GET} {base_url}/:block_number/token-transactions
+ *
+ * @routeparam {Integer} :block_number - number of block need to be fetched
+ */
+router.get("/:blockNumber/token-transactions", blockMiddleware, function (req, res) {
+
+  var pageSize = coreConstant.DEFAULT_PAGE_SIZE+1;
+
+  req.blockInstance.getBlockTokenTransactions(req.blockNumber, pageSize, req.pagePayload)
+    .then(function (queryResponse) {
+
+      var tokenTransactions = queryResponse.tokenTransactions
+        , contractAddresses = queryResponse.contractAddresses
+      ;
+
+      const nextPagePayload = getNextPagePaylaodForBlockTokenTransactions(tokenTransactions, pageSize),
+        prevPagePayload = getPrevPagePaylaodForBlockTokenTransactions(tokenTransactions, req.pagePayload, pageSize)
+        ;
+
+      // For all the pages remove last row if its equal to page size.
+      if(tokenTransactions.length == pageSize){
+        tokenTransactions.pop();
+      }
+
+      const response = responseHelper.successWithData({
+        block_transactions: tokenTransactions,
+        contract_addresses:contractAddresses,
+        result_type: "block_transactions",
+        layout:'empty',
+        meta:{
+          next_page_payload :nextPagePayload,
+          prev_page_payload :prevPagePayload,
+
+          block_number:req.blockNumber,
+
+          transaction_placeholder_url:"/chain-id/"+req.chainId+"/transaction/{{tr_hash}}",
+          address_placeholder_url:"/chain-id/"+req.chainId+"/address/{{addr}}"
+        }
+      });
+      return renderResult(response, res,'application/json');
+    })
+    .catch(function (reason) {
+      logger.log(req.originalUrl + " : " + reason);
+      return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
+    });
+});
+
+
+function getNextPagePaylaodForBlockTokenTransactions (requestResponse, pageSize){
+
+  const response = requestResponse,
+    count = response.length;
+
+  if(count <= pageSize -1){
+    return {};
+  }
+
+  return {
+    id: response[count-1].id,
+    timestamp: response[count-1].timestamp,
+    direction: "next"
+  };
+
+}
+
+function getPrevPagePaylaodForBlockTokenTransactions (requestResponse, pagePayload, pageSize){
+
+  const response = requestResponse,
+    count = response.length;
+
+  // If page payload is null means its a request for 1st page
+  // OR direction is previous and count if less than page size means there is no previous page
+  if(!pagePayload || (pagePayload.direction === 'prev' && count < pageSize)){
+    return {};
+  }
+
+  return {
+    id: response[0].id,
+    timestamp: response[0].timestamp,
+    direction: "prev"
+  };
+}
+
+
 
 module.exports = router;

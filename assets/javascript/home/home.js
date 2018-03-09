@@ -56,7 +56,8 @@
               render: function(data, type, full, meta){
                 return Handlebars.compile_fe($('#dt-col-1').text())({
                   symbol: data["company_symbol"],
-                  name: data["company_name"]
+                  name: data["company_name"],
+                  redirect_url:data.token_details_redirect_url
                 });
               }
             },
@@ -133,14 +134,15 @@
           dataToProceess.forEach(function(element) {
 
             var txHash = element.transaction_hash
-            ,from = element.t_from
-            ,to = element.t_to
-            ,txURL = meta.transaction_placeholder_url
-            ,addressURL = meta.address_placeholder_url
-              , contarct_address = element.contract_address
-              ,tokens = element.tokens
-              , price = contractAddresses[contarct_address].price
-              ;
+            , from = element.t_from
+            , to = element.t_to
+            , txURL = meta.transaction_placeholder_url
+            , addressURL = meta.address_placeholder_url
+            , tokenDetailsURL = meta.token_details_redirect_url
+            , contarctAddress = element.contract_address
+            , tokens = element.tokens
+            , price = contractAddresses[contarctAddress].price
+            ;
 
             element['tx_redirect_url'] =  Handlebars.compile(txURL)({
               tr_hash: txHash
@@ -154,10 +156,14 @@
               address: to
             });
 
+            element['token_details_redirect_url'] =  Handlebars.compile(tokenDetailsURL)({
+              contract_addr: contarctAddress
+            });
+
             element['tokens'] = bigNumberFormatter(convertToBigNumber(tokens));
             element['ost_amount'] = bigNumberFormatter(convertToBigNumber(tokens).multipliedBy(convertToBigNumber(price)));
-            element['company_name'] = contractAddresses[contarct_address].company_name;
-            element['company_symbol'] = contractAddresses[contarct_address].company_symbol;
+            element['company_name'] = contractAddresses[contarctAddress].company_name;
+            element['company_symbol'] = contractAddresses[contarctAddress].company_symbol;
 
           });
         }
