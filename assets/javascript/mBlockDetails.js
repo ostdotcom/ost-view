@@ -3,3 +3,4 @@
  */
 
 //= require common/TokenTable.js
+//= require blockDetails/blockDetails.js

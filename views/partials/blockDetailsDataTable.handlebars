@@ -5,63 +5,14 @@
         <div class="row">
             <div class="col-12">
 
-                <H4 class="p-1 title-color">
-                    Transactions
-                </H4>
+                <h4 class="p-1 title-color">Transactions</h4>
 
                 <table id="blockDetailsTransactions" class="table table-hover table-responsive token-table" cellspacing="0" width="100%">
-                    <thead hidden>
 
-                    </thead>
-                    <tfoot hidden>
+                    {{>transactionsDataColumns}}
 
-                    </tfoot>
                 </table>
 
-                <script type="custom/ost" id="dt-col-1">
-                    <div class="cell d-flex align-items-center">
-                        <div class="circle circle-sm">
-                           <div>[[symbol]]</div>
-                        </div>
-                        <div class="ml-2 name">[[name]]</div>
-                    </div>
-                </script>
-                <script type="custom/ost" id="dt-col-2">
-                    <div class="cell d-flex align-items-center">
-                        <span class="staked-coin icon"></span>
-                        <span class="badge badge-primary">[[tokens]] [[coin_symbol]]</span>
-                        <span class="ml-1">([[value]] OST)</span>
-                    </div>
-                </script>
-                <script type="custom/ost" id="dt-col-3">
-                    <div class="cell d-flex align-items-center">
-                        <span class="time icon"></span>
-                        <span>[[timestamp]]</span>
-                    </div>
-                </script>
-                <script type="custom/ost" id="dt-col-4">
-                    <div class="cell d-flex align-items-center">
-                        <span>TX#</span>
-                        <a href="[[redirect_url]]" class="d-inline-block text-truncate ml-1">[[tx]]</a>
-                    </div>
-                </script>
-                <script type="custom/ost" id="dt-col-5">
-                    <div class="cell d-flex align-items-center">
-                        <span>From</span>
-                        <a href="[[redirect_url]]" class="d-inline-block text-truncate ml-1">[[from]]</a>
-                    </div>
-                </script>
-                <script type="custom/ost" id="dt-col-6">
-                    <div class="cell d-flex align-items-center">
-                        <div class="text-center w-100" style="color:#597a84">&#8594;</div>
-                    </div>
-                </script>
-                <script type="custom/ost" id="dt-col-7">
-                    <div class="cell d-flex align-items-center">
-                        <span>To</span>
-                        <a href="[[redirect_url]]" class="d-inline-block text-truncate ml-1">[[to]]</a>
-                    </div>
-                </script>
             </div>
         </div>
 
@@ -72,124 +23,8 @@
 {{#contentFor "pageScripts"}}
     <script type="text/javascript">
         $(document).ready(function() {
-            var blockDetails = new TokenTable({
-                ajaxURL: "{{meta.transaction_url}}",
-                selector: '#blockDetailsTransactions',
-                dtConfig : {
-                    columns: [
-                        {
-                            data: null,
-                            render: function(data, type, full, meta){
-                                return Handlebars.compile_fe($('#dt-col-1').text())({
-                                    symbol: data.company_symbol,
-                                    name: data.company_name
-                                });
-                            }
-                        },
-                        {
-                            data: null,
-                            render: function(data, type, full, meta){
-
-                                return Handlebars.compile_fe($('#dt-col-2').text())({
-                                    tokens: data.tokens,
-                                    coin_symbol:data.company_symbol,
-                                    value: data.ost_amount
-                                });
-                            }
-                        },
-                        {
-                            data: null,
-                            render: function(data, type, full, meta){
-                                return Handlebars.compile_fe($('#dt-col-3').text())({
-                                    timestamp: moment(data.timestamp * 1000).startOf('day').fromNow()
-                                });
-                            }
-                        },
-                        {
-                            data: null,
-                            render: function(data, type, full, meta){
-                                return Handlebars.compile_fe($('#dt-col-4').text())({
-                                    tx: data.transaction_hash,
-                                    redirect_url: data.tx_redirect_url
-
-                                });
-                            }
-                        },
-                        {
-                            data: null,
-                            render: function(data, type, full, meta){
-                                console.log("data :: ",data);
-                                return Handlebars.compile_fe($('#dt-col-5').text())({
-                                    from: data.t_from,
-                                    redirect_url: data.from_redirect_url
-                                });
-                            }
-                        },
-                        {
-                            data: null,
-                            className: 'arrow',
-                            render: function(data, type, full, meta){
-                                return Handlebars.compile_fe($('#dt-col-6').text());
-                            }
-                        },
-                        {
-                            data: null,
-                            render: function(data, type, full, meta){
-                                return Handlebars.compile_fe($('#dt-col-7').text())({
-                                    to: data.t_to,
-                                    redirect_url: data.to_redirect_url
-
-                                });
-                            }
-                        }
-                    ]
-                },
-                responseReceived : function ( response ) {
-                    var dataToProceess = response.data[response.data.result_type]
-                        , meta =  response.data.meta
-                        , contractAddresses = response.data['contract_addresses']
-
-                    ;
-
-
-                    dataToProceess.forEach(function(element) {
-                        var txHash = element.transaction_hash
-                            ,from = element.t_from
-                            ,to = element.t_to
-                            ,txURL = meta.transaction_placeholder_url
-                            ,addressURL = meta.address_placeholder_url
-                                ,contarct_address = element.contract_address
-                                ,tokens = element.tokens
-                                ,price = contractAddresses[contarct_address].price
-                        ;
-
-                        element['tx_redirect_url'] =  Handlebars.compile(txURL)({
-                            tr_hash: txHash
-                        });
-
-                        element['from_redirect_url'] =  Handlebars.compile(addressURL)({
-                            addr: from
-                        });
-                        element['to_redirect_url'] =  Handlebars.compile(addressURL)({
-                            addr: to
-                        });
-
-                        if(contarct_address){
-                            element['tokens'] = bigNumberFormatter(convertToBigNumber(tokens));
-                            element['ost_amount'] = bigNumberFormatter(convertToBigNumber(tokens).multipliedBy(convertToBigNumber(price)));
-                            element['company_name'] = contractAddresses[contarct_address].company_name;
-                            element['company_symbol'] = contractAddresses[contarct_address].company_symbol;
-                        }else{
-                            element['ost_amount'] = '';
-                            element['company_name'] = '';
-                            element['company_symbol'] = '';
-                        }
-
-
-
-
-                    });
-                }
+            btx.blockDetails.init({
+                transactions_url : "{{meta.transaction_url}}",
             });
         });
     </script>
