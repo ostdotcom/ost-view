@@ -45,6 +45,7 @@ define('TRANSACTION_HASH_LENGTH', 66);
 define('DEFAULT_PAGE_SIZE', 10);
 define('DEFAULT_PAGE_NUMBER',1);
 define('AGGREGATE_CONSTANT', 5 * 60);
+define('TOP_TOKENS_LIMT_COUNT',500);
 
 //template map
 define("contract_internal_transactions", "transactionList");

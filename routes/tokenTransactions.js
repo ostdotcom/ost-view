@@ -186,12 +186,16 @@ router.get("/top", contractMiddleware, function (req, res) {
 
 function getNextPagePaylaodForTopTokens (requestResponse, pageSize, pagePayload){
 
-  const response = requestResponse,
-    count = response.length;
+  const response = requestResponse
+    , count = response.length
+    , maxTopTokens = constants.TOP_TOKENS_LIMT_COUNT
+    , currentTokenCount = pagePayload.page_no * (pageSize-1)
+    ;
 
-  if(count <= pageSize -1){
+  if(count <= pageSize -1 || maxTopTokens <= currentTokenCount){
     return {};
   }
+
   var pageNumber = 0;
   if (pagePayload){
     if (!isNaN(parseInt(pagePayload.page_no))){
