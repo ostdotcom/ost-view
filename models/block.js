@@ -46,13 +46,26 @@ block.prototype = {
         return;
       }
 
-      oThis._dbInstance.getBlockFromBlockNumber(blockNumber)
-        .then(function (response) {
-          resolve(response);
+      var promiseResolver = [];
+
+      promiseResolver.push(oThis._dbInstance.getBlockFromBlockNumber(blockNumber));
+      promiseResolver.push(oThis._dbInstance.getBlockTokenTransactionNumber(blockNumber));
+
+      Promise.all(promiseResolver)
+        .then(function(values){
+
+          var blockDetails = values[0]
+          ,tokenTransactionCount = values[1]
+          ;
+
+          blockDetails['total_token_transactions'] = tokenTransactionCount;
+
+          resolve(blockDetails);
         })
-        .catch(function (reason) {
+        .catch(function(reason){
           reject(reason);
         });
+
     });
   }
 

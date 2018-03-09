@@ -39,5 +39,8 @@ function bigNumberFormatter(bigNum){
   };
   var dp = 5;
   BigNumber.config({ FORMAT: format });
-  return bigNum.toFormat(dp).toString(10);
+
+  var toSd = bigNum.precision(dp);
+  return toSd.toFormat().toString(10);
+
 }
