@@ -144,8 +144,8 @@
               addr: to
             });
 
-            element['tokens'] = bigNumberFormatter(convertToBigNumber(tokens));
-            element['ost_amount'] = bigNumberFormatter(convertToBigNumber(tokens).multipliedBy(convertToBigNumber(price)));
+            element['tokens'] = PriceOracle.getDisplayBt(tokens);
+            element['ost_amount'] = PriceOracle.inverseDisplayBtToOst(tokens, price);
 
             element['company_name'] = contractAddresses[contarct_address].company_name;
             element['company_symbol'] = contractAddresses[contarct_address].company_symbol;
@@ -208,8 +208,8 @@
               address: name
             });
 
-            element['tokens'] = bigNumberFormatter(convertToBigNumber(tokens));
-            element['ost_amount'] = bigNumberFormatter(convertToBigNumber(tokens).multipliedBy(convertToBigNumber(price)));
+            element['tokens'] = PriceOracle.getDisplayBt(tokens);
+            element['ost_amount'] = PriceOracle.inverseDisplayBtToOst(tokens, price);
 
             element['company_name'] = contractAddresses[contarct_address].company_name;
             element['company_symbol'] = contractAddresses[contarct_address].company_symbol;

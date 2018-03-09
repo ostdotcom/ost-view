@@ -18,7 +18,7 @@
     initDatatable: function() {
       var oThis = this;
 
-      var addressTransactions = new TokenTable({
+      var blockDetails = new TokenTable({
         ajaxURL: oThis.config.transactions_url,
         selector: '#blockDetailsTransactions',
         dtConfig: {
@@ -29,7 +29,8 @@
               render: function (data, type, full, meta) {
                 return Handlebars.compile_fe($('#dt-col-1').text())({
                   symbol: data['company_symbol'],
-                  name: data['company_name']
+                  name: data['company_name'],
+                  redirect_url:data.token_details_redirect_url
                 });
               }
             },
@@ -106,6 +107,7 @@
               ,to = element.t_to
               ,txURL = meta.transaction_placeholder_url
               ,addressURL = meta.address_placeholder_url
+              , tokenDetailsURL = meta.token_details_redirect_url
               ,contract_address = element.contract_address
               ,tokens = element.tokens
               ,price = contractAddresses[contract_address].price
@@ -121,10 +123,15 @@
             element['to_redirect_url'] =  Handlebars.compile(addressURL)({
               addr: to
             });
+            element['token_details_redirect_url'] =  Handlebars.compile(tokenDetailsURL)({
+              contract_addr: contract_address
+            });
 
             if(contract_address){
-              element['tokens'] = bigNumberFormatter(convertToBigNumber(tokens));
-              element['ost_amount'] = bigNumberFormatter(convertToBigNumber(tokens).multipliedBy(convertToBigNumber(price)));
+
+              element['tokens'] = PriceOracle.getDisplayBt(tokens);
+              element['ost_amount'] = PriceOracle.inverseDisplayBtToOst(tokens, price);
+
               element['company_name'] = contractAddresses[contract_address].company_name;
               element['company_symbol'] = contractAddresses[contract_address].company_symbol;
             }else{
@@ -135,7 +142,7 @@
 
           });
         }
-        
+
       });
     }
 

@@ -160,8 +160,9 @@
               contract_addr: contarctAddress
             });
 
-            element['tokens'] = bigNumberFormatter(convertToBigNumber(tokens));
-            element['ost_amount'] = bigNumberFormatter(convertToBigNumber(tokens).multipliedBy(convertToBigNumber(price)));
+            element['tokens'] = PriceOracle.getDisplayBt(tokens);
+            element['ost_amount'] = PriceOracle.inverseDisplayBtToOst(tokens, price);
+
             element['company_name'] = contractAddresses[contarctAddress].company_name;
             element['company_symbol'] = contractAddresses[contarctAddress].company_symbol;
 
@@ -242,8 +243,9 @@
             element['token_details_redirect_url'] =  Handlebars.compile(tokenDetailsURL)({
               contract_addr: contractAddress
             });
-            element['price'] = bigNumberFormatter(convertToBigNumber(element.price));
-            element['market_cap'] = bigNumberFormatter(convertToBigNumber(element.market_cap));
+            element['price'] = PriceOracle.getDisplayFiat(element.price);
+            element['market_cap'] = PriceOracle.getDisplayFiat(element.market_cap);
+
           });
         }
       });

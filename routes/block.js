@@ -241,7 +241,8 @@ router.get("/:blockNumber/token-transactions", blockMiddleware, function (req, r
           block_number:req.blockNumber,
 
           transaction_placeholder_url:"/chain-id/"+req.chainId+"/transaction/{{tr_hash}}",
-          address_placeholder_url:"/chain-id/"+req.chainId+"/address/{{addr}}"
+          address_placeholder_url:"/chain-id/"+req.chainId+"/address/{{addr}}",
+          token_details_redirect_url: "/chain-id/"+req.chainId+"/tokendetails/{{contract_addr}}"
         }
       });
       return renderResult(response, res,'application/json');
