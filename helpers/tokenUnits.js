@@ -90,15 +90,15 @@ tokenUnits.toBigNumber = function(num) {
 };
 
 tokenUnits.convertToBigNumber= function (number) {
-    return (number instanceof BigNumber) ? number : this.toBigNumber(number);
+    return (number instanceof BigNumber) ? number : tokenUnits.toBigNumber(number);
 };
 
 tokenUnits.convertToNormal = function (numInWei) {
-    return this.convertToBigNumber(numInWei).div(this.convertToBigNumber(10).toPower(18));
+    return tokenUnits.convertToBigNumber(numInWei).div(tokenUnits.convertToBigNumber(10).toPower(18));
 };
 
 tokenUnits.convertToGwei = function (numInWei) {
-    return this.convertToBigNumber(numInWei).div(this.convertToBigNumber(10).toPower(9));
+    return tokenUnits.convertToBigNumber(numInWei).div(tokenUnits.convertToBigNumber(10).toPower(9));
 };
 
 module.exports = tokenUnits;

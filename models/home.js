@@ -38,11 +38,11 @@ home.prototype = {
           oThis._dbInstance.getChainStatsData()
             .then(function (stateResponse) {
               var transfers = stateResponse.token_transfers == undefined? 0: stateResponse.token_transfers
-                ,voulume  = stateResponse.token_volume == undefined? 0: stateResponse.token_volume
+                ,volume  = stateResponse.token_volume == undefined? 0: stateResponse.token_volume
               ;
 
               response["token_transfers"] = transfers;
-              response["token_volume"] = TokenUnits.convertToNormal(voulume);
+              response["token_volume"] = volume;
               resolve(response);
             });
         })
