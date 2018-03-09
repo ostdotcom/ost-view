@@ -35,11 +35,11 @@ home.prototype = {
     return new Promise(function (resolve, reject) {
       oThis._dbInstance.getChainHomeData()
         .then(function (response) {
-          oThis._dbInstance.getChainStatsData()
+          oThis._dbInstance.getBrandedTokenFromId(0)
             .then(function (stateResponse) {
-              var transfers = stateResponse.token_transfers == undefined? 0: stateResponse.token_transfers
-                ,volume  = stateResponse.token_volume == undefined? 0: stateResponse.token_volume
-              ;
+              var transfers = stateResponse.token_transfers
+                , volume = stateResponse.token_ost_volume
+                ;
 
               response["token_transfers"] = transfers;
               response["token_volume"] = volume;
