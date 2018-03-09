@@ -140,7 +140,7 @@ router.get("/:contractAddress", contractMiddleware, function (req, res) {
           chain_id:req.chainId
         },
         page_meta: {
-          title: 'OST VIEW | '+ response.company_name,
+          title: 'OST VIEW | '+ response.company_name +' ('+response.company_symbol+') token',
           description: 'OST VIEW is the home grown block explorer from OST for OpenST Utility Blockchains.',
           keywords: 'OST, Simple Token, Utility Chain, Blockchain',
           robots: 'noindex, nofollow',
