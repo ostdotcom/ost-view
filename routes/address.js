@@ -154,8 +154,6 @@ router.get('/:address/transactions', addressMiddleware, function (req, res) {
         transactions: tokenTransactions,
         contract_addresses: contractAddress,
         result_type: "transactions",
-        draw : req.query.draw,
-        recordsTotal : 120,
         meta:{
           next_page_payload :nextPagePayload,
           prev_page_payload :prevPagePayload,

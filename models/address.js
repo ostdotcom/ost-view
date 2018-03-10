@@ -161,26 +161,35 @@ address.prototype = {
         reject("invalid input");
         return;
       }
+      var promiseResolver = [];
 
-      oThis._dbInstance.getAddressDetailsWithOutOST(address)
-        .then(function (rsp) {
-          if(undefined !== rsp){
+      promiseResolver.push(oThis._dbInstance.getAddressDetailsWithOutOST(address));
+      promiseResolver.push(oThis._dbInstance.getAddressDetailsTotalTransactionCount(address));
 
-            configHelper.getContractDetailsOfIdArray(oThis._dbInstance, [rsp['branded_token_id']])
+      Promise.all(promiseResolver)
+        .then(function(values){
+          var addressDetails = values[0]
+            , total_transactions = values[1]
+            ;
+
+          if(undefined !== addressDetails){
+            addressDetails.total_transactions = total_transactions;
+
+            configHelper.getContractDetailsOfIdArray(oThis._dbInstance, [addressDetails['branded_token_id']])
               .then(function(addressHash){
 
-                resolve({addressDetails: rsp, contractAddress: addressHash});
+                resolve({addressDetails: addressDetails, contractAddress: addressHash});
               })
               .catch(function(){
 
-                resolve({addressDetails: rsp})
+                resolve({addressDetails: addressDetails});
               });
           }else{
             resolve();
           }
         })
         .catch(function(reason){
-          resolve(reason)
+          reject(reason);
         });
     });
   }
