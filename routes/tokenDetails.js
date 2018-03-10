@@ -303,7 +303,6 @@ function getNextPagePaylaodForHolders (requestResponse, pageSize){
 
   return {
     id: response[count-1].id,
-    timestamp: response[count-1].timestamp,
     direction: "next"
   };
 
@@ -322,7 +321,6 @@ function getPrevPagePaylaodForHolders (requestResponse, pagePayload, pageSize){
 
   return {
     id: response[0].id,
-    timestamp: response[0].timestamp,
     direction: "prev"
   };
 }
