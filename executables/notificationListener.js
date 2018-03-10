@@ -60,11 +60,15 @@ var processNotification = function (msgContent) {
         onResolve();
       });
     } else if (msgContent['kind'] == 'shared_entity') {
-
-      unAckCount--;
-      //TODO: function call to update branded token info.
-      onResolve();
-
+        notificationProcessor.processBrandedTokenEvent(msgContent.payload).then(function () {
+        unAckCount--;
+        onResolve();
+        logger.log("NotificationProcessor#processBrandedTokenEvent :: Branded token event updated successfully");
+      }).catch(function (err) {
+        logger.error("NotificationProcessor#processBrandedTokenEvent :: Branded token event updating error", err);
+        unAckCount--;
+        onResolve();
+      });
     } else {
       unAckCount--;
       onResolve();
@@ -75,10 +79,10 @@ var processNotification = function (msgContent) {
 process.on('SIGINT', function () {
   console.log('Received SIGINT, checking unAckCount.');
   var f = function () {
-    if (unAckCount === 0) {
+    if (unAckCount <= 0) {
       process.exit(1);
     } else {
-      console.log('waiting for open tasks to be done.');
+      console.log('waiting for open tasks to be done, still remaining tasks are ', unAckCount);
       setTimeout(f, 1000);
     }
   };
