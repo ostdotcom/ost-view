@@ -76,7 +76,7 @@ router.get("/:hash", transactionMiddleware, function (req, res) {
           description: 'OST VIEW is the home grown block explorer from OST for OpenST Utility Blockchains.',
           keywords: 'OST, Simple Token, Utility Chain, Blockchain',
           robots: 'noindex, nofollow',
-          image: 'https://dxwfxs8b4lg24.cloudfront.net/ost-view/images/ost-view-meta-data-logo.jpg'
+          image: 'https://dxwfxs8b4lg24.cloudfront.net/ost-view/images/ost-view-og-image-1.jpg.jpg'
         },
         mCss: ['mTransactionDetails.css'],
         mJs: [],

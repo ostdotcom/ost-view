@@ -131,6 +131,17 @@ table.dataTable.no-footer {
 
 .dataTables_wrapper {
 
+  .dataTables_processing{
+    background: inherit;
+    .loader{
+      background: url('https://dxwfxs8b4lg24.cloudfront.net/ost-kit/images/processed-loader-1.gif');
+      height: 60px;
+      width: 60px;
+      margin: 0 auto;
+      background-size: 60px;
+    }
+  }
+
   .dataTables_info{
     @media (min-width: 576px) {
       right: 100px;
@@ -142,6 +153,9 @@ table.dataTable.no-footer {
   }
 
   .dataTables_paginate{
+
+    padding-top: 1.25rem;
+
     .paginate_button{
 
       color: #597a84;

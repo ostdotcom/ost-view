@@ -17,6 +17,7 @@
         "info": "",
         "infoEmpty": "",
         "infoFiltered": "",
+        "processing": "<div class='loader'></div>",
         "paginate": {
           "next": "❯",
           "previous" : "❮"
