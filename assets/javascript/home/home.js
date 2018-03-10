@@ -142,7 +142,7 @@
             , contarctAddress = element.contract_address
             , tokens = element.tokens
             , price = contractAddresses[contarctAddress].price
-            ,timestamp = element.timeStamp
+            ,timestamp = element.timestamp
             ;
 
             element['timestamp'] = toTimeAgo(timestamp);

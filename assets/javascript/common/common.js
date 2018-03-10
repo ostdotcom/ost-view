@@ -56,7 +56,7 @@ function toTimeAgo(timestamp) {
     return  moment(timeInMilli).fromNow()
 
   }else{
-    return moment().format('Do MMM YYYY')
+    return moment(timeInMilli).format('Do MMM YYYY');
   }
 
 }
