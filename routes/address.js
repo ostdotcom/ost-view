@@ -91,7 +91,7 @@ router.get('/:address', addressMiddleware, function (req, res) {
 
     })
     .catch(function (reason){
-      return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
+      return renderResult(responseHelper.error('', coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, req.headers['content-type']);
     });
 
 });
@@ -118,7 +118,7 @@ router.get('/:address/balance', addressMiddleware, function (req, res) {
     })
     .catch(function (reason) {
       logger.log(req.originalUrl + " : " + reason);
-      return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
+      return renderResult(responseHelper.error('', coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, req.headers['content-type']);
     });
 });
 
@@ -170,7 +170,7 @@ router.get('/:address/transactions', addressMiddleware, function (req, res) {
     })
     .catch(function (reason) {
       logger.log(req.originalUrl + " : " + reason);
-      return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
+      return renderResult(responseHelper.error('', coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, 'application/json');
     });
 });
 
@@ -234,7 +234,7 @@ router.get('/:address/contract/:contractAddress/:page', addressMiddleware, funct
     })
     .catch(function (reason) {
       logger.log(req.originalUrl + " : " + reason);
-      return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
+      return renderResult(responseHelper.error('', coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, req.headers['content-type']);
     });
 });
 

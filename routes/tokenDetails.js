@@ -156,7 +156,7 @@ router.get("/:contractAddress", contractMiddleware, function (req, res) {
     })
     .catch(function(reason){
       logger.log(req.originalUrl + " : " + reason);
-      return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
+      return renderResult(responseHelper.error('', coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, req.headers['content-type']);
     })
 
 
@@ -196,7 +196,7 @@ router.get("/:contractAddress/graph/numberOfTransactions/:duration",decodeJwt, c
   })
     .catch(function(reason){
       logger.log(req.originalUrl + " : " + reason);
-      return renderResult(responseHelper.error('', reason), res, 'application/json');
+      return renderResult(responseHelper.error('', coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, 'application/json');
     });
 
 });
@@ -235,7 +235,7 @@ router.get("/:contractAddress/graph-date/numberOfTransactions/:duration", contra
     })
     .catch(function(reason){
       logger.log(req.originalUrl + " : " + reason);
-      return renderResult(responseHelper.error('', reason), res, 'application/json');
+      return renderResult(responseHelper.error('', coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, 'application/json');
     });
 
 });
@@ -287,7 +287,7 @@ router.get("/:contractAddress/holders", contractMiddleware, function (req, res) 
     })
     .catch(function(reason){
       logger.log(req.originalUrl + " : " + reason);
-      return renderResult(responseHelper.error('', reason), res, 'application/json');
+      return renderResult(responseHelper.error('', coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, 'application/json');
     })
 });
 
@@ -353,7 +353,7 @@ router.get("/:contractAddress/graph/transactionsByType/:duration",decodeJwt, con
       renderResult(responseData, res, 'application/json');
     })
     .catch(function (reason) {
-      return renderResult(responseHelper.error('', reason), res, 'application/json');
+      return renderResult(responseHelper.error('', coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, 'application/json');
     });
 
 });
@@ -388,7 +388,7 @@ router.get("/:contractAddress/topUsers", decodeJwt ,contractMiddleware, function
       renderResult(responseData, res, 'application/json');
     })
     .catch(function (reason) {
-      return renderResult(responseHelper.error('', reason), res, 'application/json');
+      return renderResult(responseHelper.error('', coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, 'application/json');
     });
 
 });
@@ -406,7 +406,7 @@ router.get("/:contractAddress/ostSupply", contractMiddleware, function (req, res
     })
     .catch(function (reason) {
       logger.log(req.originalUrl + " : " + reason);
-      return renderResult(responseHelper.error('', reason), res, 'application/json');
+      return renderResult(responseHelper.error('', coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, 'application/json');
     });
 
 });

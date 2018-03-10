@@ -58,7 +58,7 @@ export OST_REDIS_PASS=''
 export OST_REDIS_TLS_ENABLED='0'
 
 # Notification
-export OST_RMQ_SUPPORT='1'
+export OST_RMQ_SUPPORT='0'
 export OST_RMQ_HOST='127.0.0.1'
 export OST_RMQ_PORT='5672'
 export OST_RMQ_USERNAME='guest'

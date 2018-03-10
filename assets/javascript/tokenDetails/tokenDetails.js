@@ -69,7 +69,7 @@
               width:'11%',
               render: function(data, type, full, meta){
                 return Handlebars.compile_fe($('#dt-col-3').text())({
-                  timestamp: moment(data.timestamp * 1000).startOf('day').fromNow()
+                  timestamp: data.timestamp
                 });
               }
             },
@@ -128,7 +128,11 @@
               , contarct_address = element.contract_address
               , tokens = element.tokens
               , price = contractAddresses[contarct_address].price
-            ;
+              ,timestamp = element.timeStamp
+              ;
+
+            element['timestamp'] = toTimeAgo(timestamp);
+
 
             var txURL = meta.transaction_placeholder_url;
             var addressURL = meta.address_placeholder_url;

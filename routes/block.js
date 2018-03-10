@@ -112,7 +112,7 @@ function processBlockResponse (blockHash, req, res){
 function processBlockError(reason, req, res){
   logger.log(req.originalUrl + ":" + reason);
 
-  return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
+  return renderResult(responseHelper.error('', coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, req.headers['content-type']);
 }
 
 /**
@@ -159,7 +159,7 @@ router.get("/:blockNumber/transactions", blockMiddleware, function (req, res) {
     })
     .catch(function (reason) {
       logger.log(req.originalUrl + " : " + reason);
-      return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
+      return renderResult(responseHelper.error('', coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, 'application/json');
     });
 });
 
@@ -249,7 +249,7 @@ router.get("/:blockNumber/token-transactions", blockMiddleware, function (req, r
     })
     .catch(function (reason) {
       logger.log(req.originalUrl + " : " + reason);
-      return renderResult(responseHelper.error('', reason), res, req.headers['content-type']);
+      return renderResult(responseHelper.error('', coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, 'application/json');
     });
 });
 

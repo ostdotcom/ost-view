@@ -44,3 +44,19 @@ function bigNumberFormatter(bigNum){
   return toSd.toFormat().toString(10);
 
 }
+
+function toTimeAgo(timestamp) {
+  var timeInMilli = timestamp * 1000
+    , currentTimeInMilli = new Date().getTime()
+    , timeInMilliDiff = currentTimeInMilli - timeInMilli
+    , milliSecIn2Days = 86400000*2
+  ;
+
+  if (timeInMilliDiff < milliSecIn2Days){
+    return  moment(timeInMilli).fromNow()
+
+  }else{
+    return moment().format('Do MMM YYYY')
+  }
+
+}

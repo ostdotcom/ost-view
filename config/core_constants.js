@@ -62,7 +62,7 @@ define("search_results","searchResult");
 define("BASE_URL",process.env.BASE_URL);
 define("CHAIN_ID",process.env.CHAIN_ID);
 define("BASE_CONTRACT_ADDRESS",process.env.BASE_CONTRACT_ADDRESS);
-
+define("DEFAULT_DATA_NOT_AVAILABLE_TEXT","Data not available. Please check the input parameters.");
 
 // JWT details
 define('JWT_API_SECRET_KEY', process.env.JWT_API_SECRET_KEY);

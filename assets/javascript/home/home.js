@@ -77,7 +77,7 @@
               width:'11%',
               render: function(data, type, full, meta){
                 return Handlebars.compile_fe($('#dt-col-3').text())({
-                  timestamp: moment(data.timestamp * 1000).startOf('day').fromNow()
+                  timestamp: data.timestamp
                 });
               }
             },
@@ -142,7 +142,10 @@
             , contarctAddress = element.contract_address
             , tokens = element.tokens
             , price = contractAddresses[contarctAddress].price
+            ,timestamp = element.timeStamp
             ;
+
+            element['timestamp'] = toTimeAgo(timestamp);
 
             element['tx_redirect_url'] =  Handlebars.compile(txURL)({
               tr_hash: txHash

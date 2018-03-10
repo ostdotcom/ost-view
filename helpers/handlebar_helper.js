@@ -22,7 +22,7 @@ module.exports = {
   },
 
   toTimeAgo: function (timestamp){
-    const formattedDate = moment((timestamp * 1000)).startOf('day').fromNow();
+    const formattedDate = moment((timestamp * 1000)).fromNow();
 
     return formattedDate;
   },
