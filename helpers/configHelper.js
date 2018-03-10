@@ -20,7 +20,8 @@ ConfigHelper.prototype.syncUpContractMap = function (dbInteract) {
           company_name: contractHash.company_name,
           contract_address: contractHash.contract_address.toLowerCase(),
           company_symbol: contractHash.company_symbol,
-          price: contractHash.price
+          price: contractHash.price,
+          symbol_icon: contractHash.symbol_icon
         };
 
         oThis.contractIdMap[contractHash.contract_address] = brandedTokenDetails;
