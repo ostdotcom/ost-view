@@ -215,7 +215,7 @@ router.get("/:contractAddress/graph/numberOfTransactions/:duration",decodeJwt, c
 
 router.get("/:contractAddress/graph-date/numberOfTransactions/:duration", contractMiddleware, function (req, res) {
 
-  req.contractInstance.getValuesAndVolumesOfBrandedTokenTransactions(req.contractAddress, req.duration)
+  req.contractInstance.getTransfersAndVolumesOfBrandedTokenTransactions(req.contractAddress, req.duration)
     .then(function (response) {
       if (response !== undefined){
         const responseData = responseHelper.successWithData({

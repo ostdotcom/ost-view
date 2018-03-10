@@ -180,6 +180,51 @@ contract.prototype = {
   },
 
   /**
+   * Get graph data for transfers and volume of transactions.
+   *
+   * @param {String} contractAddress - Contract address
+   * @param {Integer} duration  - duration
+   *
+   * @return {Promise<Object>} List of contract value of transactions
+   */
+  getTransfersAndVolumesOfBrandedTokenTransactions: function (contractAddress, duration) {
+    const oThis = this;
+
+    if (contractAddress == undefined) {
+      return Promise.reject("invalid contract address");
+    }
+
+    if (duration == undefined) {
+      duration = "All";
+    }
+
+    return memCache.getObject("getTransfersAndVolumesOfBrandedTokenTransactions" + contractAddress + duration)
+      .then(function (cacheResponse) {
+        if (!cacheResponse.isSuccess() || cacheResponse.data.response == null) {
+          return configHelper.getIdOfContractByPromise(oThis._dbInstance, contractAddress)
+            .then(function (contractId) {
+              return oThis._dbInstance.getTransfersAndVolumesOfBrandedTokenTransactions(contractId)
+                .then(function (response) {
+                  if (response[duration] !== undefined) {
+                    return memCache.setObject("getTransfersAndVolumesOfBrandedTokenTransactions" + contractAddress + duration, response[duration])
+                      .then(function () {
+                        return Promise.resolve(response[duration]);
+                      });
+                  } else {
+                    return Promise.resolve([]);
+                  }
+                })
+                .catch(function (reason) {
+                  return Promise.reject("Data not available. Please check the input parameters.");
+                });
+            });
+        } else {
+          return Promise.resolve(cacheResponse.data.response);
+        }
+      });
+  },
+
+  /**
    * Get branded token Id graph data for transaction by type.
    *
    * @param {String} contractAddress - Contract address
