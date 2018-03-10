@@ -67,4 +67,7 @@ define("BASE_CONTRACT_ADDRESS",process.env.BASE_CONTRACT_ADDRESS);
 // JWT details
 define('JWT_API_SECRET_KEY', process.env.JWT_API_SECRET_KEY);
 
+//Cache
+define('CACHING_ENGINE', process.env.OST_CACHING_ENGINE);
+
 module.exports = constants;

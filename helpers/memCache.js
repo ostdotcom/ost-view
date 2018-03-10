@@ -3,6 +3,10 @@
 /**
  * MemCache client to interact with MemCached
  */
+
+const rooPrefix = ".."
+  , constants = require(rooPrefix + '/config/core_constants');
+
 var crypto = require('crypto');
 var mysql = require('mysql');
 var cacheModule = require('@openstfoundation/openst-cache');
@@ -11,7 +15,7 @@ module.exports = new MemCache();
 
 function MemCache() {
     this.cacheTimeout = 300;
-    this.MemcachedConnection = cacheModule.cache;
+    this.MemcachedConnection = new cacheModule.cache(constants.CACHING_ENGINE, true);
     this.name = 'ostview'
 }
 
