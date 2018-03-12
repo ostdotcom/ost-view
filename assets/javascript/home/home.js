@@ -221,11 +221,13 @@
               }
             },
             {
-              title:'',
+              title:'volume',
               data: null,
               width:'15%',
               render: function (data, type, full, meta) {
-                return '';
+                return Handlebars.compile_fe($('#dt-tokens-col-5').text())({
+                  circulating_supply: data.token_ost_volume
+                });
               }
             }
           ],
@@ -246,6 +248,7 @@
             element['token_details_redirect_url'] =  Handlebars.compile(tokenDetailsURL)({
               contract_addr: contractAddress
             });
+            element['token_ost_volume'] = PriceOracle.getDisplayFiat(element.token_ost_volume);
             element['price'] = PriceOracle.getDisplayFiat(element.price);
             element['market_cap'] = PriceOracle.getDisplayFiat(element.market_cap);
 
