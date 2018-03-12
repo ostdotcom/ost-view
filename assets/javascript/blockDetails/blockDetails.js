@@ -111,9 +111,9 @@
               ,contract_address = element.contract_address
               ,tokens = element.tokens
               ,price = contractAddresses[contract_address].price
-              ,timeStamp = element.timestamp
+              ,timestamp = element.timestamp
               ;
-            element['timeStamp'] = toTiemAgo(timeStamp);
+            element['timestamp'] = toTimeAgo(timestamp);
 
             element['tx_redirect_url'] =  Handlebars.compile(txURL)({
               tr_hash: txHash

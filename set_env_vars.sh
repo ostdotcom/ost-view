@@ -48,6 +48,20 @@ export OST_VIEW_2_DB_HOST="localhost"
 
 export OST_VIEW_2_DB_CONNECTION_LIMIT=10
 
+# chain env 199
+export OST_VIEW_2_CHAIN_ID="199"
+export OST_VIEW_2_WEB_RPC="http://devUtilityChain.com:9546"
+
+#DB env
+export OST_VIEW_2_DB_USER="root"
+export OST_VIEW_2_DB_PWD="root"
+
+export OST_VIEW_2_DB_NAME="ost_explorer_199"
+
+export OST_VIEW_2_DB_HOST="localhost"
+
+export OST_VIEW_2_DB_CONNECTION_LIMIT=10
+
 # Cache
 export OST_CACHING_ENGINE='memcached'
 export OST_DEFAULT_TTL='3600'
