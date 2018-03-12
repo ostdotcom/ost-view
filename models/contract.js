@@ -347,13 +347,13 @@ contract.prototype = {
       }
       configHelper.getIdOfContractByPromise(oThis._dbInstance, contractAddress)
         .then(function (brandedTokenId) {
-          oThis._dbInstance.getBrandedTokenFromId(brandedTokenId)
-            .then(function (btResponse) {
-              if (!btResponse) {
-                return reject("invalid input");
-              }
-              resolve(btResponse);
-            }, reject);
+            oThis._dbInstance.getBrandedTokenFromId(brandedTokenId)
+              .then(function (btResponse) {
+                if (!btResponse) {
+                  return reject("invalid input");
+                }
+                resolve(btResponse);
+              }, resolve);
         })
         .catch(function (reason) {
           reject(reason);

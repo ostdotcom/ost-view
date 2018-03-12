@@ -65,10 +65,13 @@ router.get('/:address', addressMiddleware, function (req, res) {
 
   req.addressInstance.getAddressDetails(req.addressValue)
     .then(function(response){
+      const addressDetails = (response=== undefined || response.addressDetails === undefined) ? '' : response.addressDetails
+        , contractAddresses = (response=== undefined || response.contractAddress === undefined) ? '' : response.contractAddress
+        ;
 
       const responseData = responseHelper.successWithData({
-        address_info: (response.addressDetails === undefined) ? '' : response.addressDetails,
-        contract_address:(response.contractAddress === undefined) ? '' : response.contractAddress,
+        address_info: addressDetails,
+        contract_address:contractAddresses,
         mCss: ['mAddressDetails.css'],
         mJs: ['mAddressDetails.js'],
         meta: {
