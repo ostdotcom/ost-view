@@ -8,6 +8,7 @@
 // load all internal dependencies
 const rootPrefix = ".."
   , constants = require(rootPrefix + '/config/core_constants')
+  , dbInteract = require(rootPrefix + '/lib/storage/interact')
   , coreConfig = require(rootPrefix + '/config')
   , rpcInteract = require(rootPrefix + '/lib/web3/interact/rpc_interact')
 
@@ -27,6 +28,7 @@ var search = module.exports = function (chainId) {
 
   this.chainId = chainId;
   this._utilityInteractInstance = rpcInteract.getInstance(chainId);
+  this._dbInstance = dbInteract.getInstance(coreConfig.getChainDbConfig(chainId));
 
 };
 
@@ -45,7 +47,7 @@ search.prototype = {
 
     return new Promise(function (resolve, reject) {
 
-      if (argument == undefined) {
+      if (argument === undefined) {
         reject(argument);
         return;
       }
@@ -68,7 +70,14 @@ search.prototype = {
           resolve("/block/"+argument);
       }else{
 
-        reject(argument);
+        oThis._dbInstance.getContractAddressFromBrandedTokenNameOrSymbol(argument)
+          .then(function(contractAddress){
+            resolve("/tokendetails/"+contractAddress);
+          })
+          .catch(function(){
+            reject(argument);
+          });
+
       }
     });
   }
