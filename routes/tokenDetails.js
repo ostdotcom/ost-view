@@ -51,7 +51,7 @@ const contractMiddleware = function (req, res, next) {
   req.chainId = chainId;
   req.contractAddress = contractAddress;
   req.duration = duration;
-  req.pagePayload = pagePayload
+  req.pagePayload = pagePayload;
 
   next();
 };
