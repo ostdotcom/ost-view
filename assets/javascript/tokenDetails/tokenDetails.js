@@ -301,6 +301,7 @@
             textStyle: oThis.chartTextStyle
           }
         },
+        loadingHTML: "<div class='loader'></div>",
         selector: '#transactionsValue',
         type: 'LineChart'
       });
@@ -390,6 +391,7 @@
             textStyle: oThis.chartTextStyle
           }
         },
+        loadingHTML: "<div class='loader'></div>",
         selector: '#transactionsVolume',
         type: 'LineChart'
       });

@@ -37,8 +37,15 @@
     }
 
     .graph-container{
+      position: relative;
       width: 100%;
       height: 300px;
+      display: -webkit-box!important;
+      display: -ms-flexbox!important;
+      display: flex!important;
+      -webkit-box-align: center!important;
+      -ms-flex-align: center!important;
+      align-items: center!important;
     }
   }
 
