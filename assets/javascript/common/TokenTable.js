@@ -47,6 +47,9 @@
 
       oThis.dtConfig.ajax = function (data, callback, settings) {
 
+        // Disabling pagination while ajax is in process
+        $(settings.nTableWrapper).find('.dataTables_paginate').css({pointerEvents: 'none'});
+
         var currentStart = settings.oAjaxData.start;
 
         if (meta !== undefined) {
@@ -71,7 +74,7 @@
           contentType: "application/json",
           success: function (response) {
 
-              meta = response.data.meta;
+            meta = response.data.meta;
             oThis.responseReceived.apply( oThis, arguments );
             previousStartIndex = settings.oAjaxData.start;
 
@@ -88,6 +91,9 @@
               meta: response.data.meta,
               recordsFiltered: recordsFilteredCount,
             });
+
+            // Enabling pagination after ajax completion
+            $(settings.nTableWrapper).find('.dataTables_paginate').css({pointerEvents: 'inherit'});
           }
         })
       };
