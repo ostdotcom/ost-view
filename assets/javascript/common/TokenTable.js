@@ -44,8 +44,15 @@
       var meta;
       var payload;
       var previousStartIndex;
+      var isRequestInProgress;
 
       oThis.dtConfig.ajax = function (data, callback, settings) {
+
+        if (isRequestInProgress){
+          console.log("************** --> 1");
+          callback();
+          return;
+        }
 
         var currentStart = settings.oAjaxData.start;
 
@@ -64,13 +71,15 @@
           }
 
         }
-
+        console.log("************** --> 2");
+        isRequestInProgress = true;
         $.ajax({
           url: oThis.ajaxURL,
           data: payload,
           contentType: "application/json",
           success: function (response) {
-            meta = response.data.meta;
+
+              meta = response.data.meta;
             oThis.responseReceived.apply( oThis, arguments );
             previousStartIndex = settings.oAjaxData.start;
 
@@ -87,6 +96,11 @@
               meta: response.data.meta,
               recordsFiltered: recordsFilteredCount,
             });
+            setTimeout(function(){
+              isRequestInProgress = false;
+              console.log("************** --> 3");
+
+            },1000)
           }
         })
       };
