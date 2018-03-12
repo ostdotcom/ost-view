@@ -164,7 +164,7 @@
             });
 
             element['tokens'] = PriceOracle.getDisplayBt(tokens);
-            element['ost_amount'] = PriceOracle.inverseDisplayBtToOst(tokens, price);
+            element['ost_amount'] = PriceOracle.getDisplayBtToOst(tokens, price);
 
             element['company_name'] = contractAddresses[contarctAddress].company_name;
             element['company_symbol'] = contractAddresses[contarctAddress].company_symbol;

@@ -132,7 +132,7 @@
             if(contract_address){
 
               element['tokens'] = PriceOracle.getDisplayBt(tokens);
-              element['ost_amount'] = PriceOracle.inverseDisplayBtToOst(tokens, price);
+              element['ost_amount'] = PriceOracle.getDisplayBtToOst(tokens, price);
 
               element['company_name'] = contractAddresses[contract_address].company_name;
               element['company_symbol'] = contractAddresses[contract_address].company_symbol;
