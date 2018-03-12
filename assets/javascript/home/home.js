@@ -201,7 +201,7 @@
               }
             },
             {
-              title:'Market Cap (OST)',
+              title:'Market Cap (OST<span class="text-lowercase">⍺</span>)',
               data: null,
               width:'25%',
               render: function (data, type, full, meta) {
@@ -211,7 +211,7 @@
               }
             },
             {
-              title:'Price (OST)',
+              title:'Price (OST<span class="text-lowercase">⍺</span>)',
               data: null,
               width:'25%',
               render: function (data, type, full, meta) {

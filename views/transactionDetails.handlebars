@@ -85,7 +85,7 @@
                         <div class="cell d-flex align-items-center ml-2">
                             <span class="staked-coin icon"></span>
                             {{#if transaction.tokens}}
-                                <span class="ml-1">{{bigNumber_toFromat transaction.tokens}} OST</span>
+                                <span class="value-color font-weight-light ml-1">{{bigNumber_toFromat transaction.tokens}} OST<span class="text-lowercase">⍺</span></span>
                             {{/if}}
                          </div>
                     </div>
@@ -94,7 +94,7 @@
                 <div class="card-body">
 
                     <span class="key-color mr-1"> Block Number </span>
-                    <a class="default_bright_blue font-weight-light" href="{{meta.redirect_url.block_placeholder_url}}{{transaction.block_number}}">{{transaction.block_number}}</a>
+                    <a class="font-weight-light" href="{{meta.redirect_url.block_placeholder_url}}{{transaction.block_number}}">{{transaction.block_number}}</a>
 
                 </div>
 
@@ -108,7 +108,7 @@
                 <div class="card-body">
                     <span class="key-color mr-1"> Gas Price </span>
                     {{#if transaction.gas_price}}
-                        <span class="value-color font-weight-light">  {{transaction.gas_price}} (OST α GWei) </span>
+                        <span class="value-color font-weight-light">  {{transaction.gas_price}} OST<span class="text-lowercase">⍺</span> GWei </span>
                     {{/if}}
                 </div>
 
