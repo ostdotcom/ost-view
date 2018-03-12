@@ -104,10 +104,11 @@ table.token-table {
       height: 100%;
       width: 45px;
       text-align: center;
-      font-weight: 500;
-      font-size: 1.2rem;
+      font-weight: 300;
+      font-size: 1rem;
       line-height: 40px;
-      background: #f1f5f8;
+      background: #9cc5c1;
+      color: #fff;
       border-right: 5px solid #fff;
     }
   }
@@ -158,23 +159,24 @@ table.dataTable.no-footer {
 
     .paginate_button{
 
-      color: #597a84;
+      color: #9cc5c1 !important;
       background: #ffffff;
-      border: 1px solid #597a84;
+      border: 1px solid #9cc5c1;
       border-radius: inherit;
       margin-left: 5px;
+      padding: 0.2em 1em;
 
       &:hover{
         color: #ffffff;
-        background: #597a84;
-        border: 1px solid #597a84;
+        background: #9cc5c1;
+        border: 1px solid #9cc5c1;
       }
 
       &.disabled,
       &.disabled:hover{
-        color: #acb1ae;
-        background: #dadfdc;
-        border: 1px solid #dadfdc;
+        color: #acb1ae !important;
+        background: #f3f3f3;
+        border: 1px solid #f3f3f3;
       }
 
     }

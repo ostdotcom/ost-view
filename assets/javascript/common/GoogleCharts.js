@@ -20,6 +20,7 @@
     type: null,
     tsUnixToJs: true,
     noDataHTML: 'No data to populate graphs',
+    loadingHTML: 'Loading...',
 
     /*
      * Initiates Google Charts by google.charts.load
