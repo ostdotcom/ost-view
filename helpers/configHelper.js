@@ -24,7 +24,7 @@ ConfigHelper.prototype.syncUpContractMap = function (dbInteract) {
           symbol_icon: contractHash.symbol_icon
         };
 
-        oThis.contractIdMap[contractHash.contract_address] = brandedTokenDetails;
+        oThis.contractIdMap[contractHash.contract_address.toLowerCase()] = brandedTokenDetails;
         oThis.idContractMap[contractHash.id] = brandedTokenDetails;
       });
     });
