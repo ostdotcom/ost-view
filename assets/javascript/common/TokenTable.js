@@ -44,15 +44,8 @@
       var meta;
       var payload;
       var previousStartIndex;
-      var isRequestInProgress;
 
       oThis.dtConfig.ajax = function (data, callback, settings) {
-
-        if (isRequestInProgress){
-          console.log("************** --> 1");
-          callback();
-          return;
-        }
 
         var currentStart = settings.oAjaxData.start;
 
@@ -71,8 +64,7 @@
           }
 
         }
-        console.log("************** --> 2");
-        isRequestInProgress = true;
+
         $.ajax({
           url: oThis.ajaxURL,
           data: payload,
@@ -96,11 +88,6 @@
               meta: response.data.meta,
               recordsFiltered: recordsFilteredCount,
             });
-            setTimeout(function(){
-              isRequestInProgress = false;
-              console.log("************** --> 3");
-
-            },1000)
           }
         })
       };
