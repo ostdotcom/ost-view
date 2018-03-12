@@ -221,7 +221,7 @@
               }
             },
             {
-              title:'volume',
+              title:'volume (OST<span class="text-lowercase">⍺</span>)',
               data: null,
               width:'15%',
               render: function (data, type, full, meta) {
