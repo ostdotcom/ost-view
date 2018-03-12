@@ -15,7 +15,9 @@
 
                 <div class="card-body">
                     <span class="key-color mr-1"> Status </span>
-                    <span class="transaction-status-color font-weight-light"> Processed </span>
+                    {{#if transaction.gas_used}}
+                        <span class="transaction-status-color font-weight-light"> Processed </span>
+                    {{/if}}
                 </div>
 
                 <div class="card-body">
@@ -82,7 +84,9 @@
                         <span class="key-color mr-1"> Amount </span>
                         <div class="cell d-flex align-items-center ml-2">
                             <span class="staked-coin icon"></span>
-                            <span class="ml-1">{{bigNumber_toFromat transaction.tokens}} OST</span>
+                            {{#if transaction.tokens}}
+                                <span class="ml-1">{{bigNumber_toFromat transaction.tokens}} OST</span>
+                            {{/if}}
                          </div>
                     </div>
                 </div>
@@ -102,14 +106,14 @@
                 </div>
 
                 <div class="card-body">
-
                     <span class="key-color mr-1"> Gas Price </span>
-                    <span class="value-color font-weight-light">  {{transaction.gas_price}} (OST α GWei) </span>
-
+                    {{#if transaction.gas_price}}
+                        <span class="value-color font-weight-light">  {{transaction.gas_price}} (OST α GWei) </span>
+                    {{/if}}
                 </div>
 
                 <div class="card-body">
-                    <span class="default_black_color mr-1"> Gas Usage </span>
+                    <span class="key-color mr-1"> Gas Usage </span>
                     <span class="value-color font-weight-light"> {{transaction.gas_used}} </span>
 
                 </div>
