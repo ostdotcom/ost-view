@@ -390,7 +390,7 @@ contract.prototype = {
     var details = {
       token_transfers: TokenUnits.toBigNumber(tokenDetails['token_transfers']).toFormat(0),
       //chain_data['token_ost_volume'] is actually token volume.. should be rename in table.
-      token_volume: TokenUnits.convertToNormal(tokenDetails['token_ost_volume']).mul(TokenUnits.toBigNumber(tokenDetails['price'])).toFormat(0)
+      token_volume: TokenUnits.convertToNormal(tokenDetails['token_ost_volume']).div(TokenUnits.toBigNumber(tokenDetails['price'])).toFormat(0)
     };
 
     return details;
