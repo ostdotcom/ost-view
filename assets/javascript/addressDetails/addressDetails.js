@@ -29,7 +29,8 @@
               render: function (data, type, full, meta) {
                 return Handlebars.compile_fe($('#dt-col-1').text())({
                   symbol: data['company_symbol'],
-                  name: data['company_name']
+                  name: data['company_name'],
+                  redirect_url: data['token_details_redirect_url']
                 });
               }
             },
@@ -105,6 +106,7 @@
              , to = element.corresponding_address
               , txURL = meta.transaction_placeholder_url
               , addressURL = meta.address_placeholder_url
+              , tokenDetailsPlaceholderUrl = meta.token_details_redirect_url
               , contarct_address = element.contract_address
               ,tokens = element.tokens
               , price = contractAddresses[contarct_address].price
@@ -123,7 +125,9 @@
             element['to_redirect_url'] = Handlebars.compile(addressURL)({
               addr: to
             });
-
+            element['token_details_redirect_url'] = Handlebars.compile(tokenDetailsPlaceholderUrl)({
+              contract_addr: contarct_address
+            });
 
             element['tokens'] = PriceOracle.getDisplayBt(tokens);
             element['ost_amount'] = PriceOracle.inverseDisplayBtToOst(tokens, price);

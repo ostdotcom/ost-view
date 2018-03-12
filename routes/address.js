@@ -163,7 +163,8 @@ router.get('/:address/transactions', addressMiddleware, function (req, res) {
 
           transaction_placeholder_url:"/chain-id/"+req.chainId+"/transaction/{{tr_hash}}",
           address_placeholder_url:"/chain-id/"+req.chainId+"/address/{{addr}}",
-          q:req.addressValue
+          token_details_redirect_url: "/chain-id/"+req.chainId+"/tokendetails/{{contract_addr}}",
+           q:req.addressValue
         }
       });
 
