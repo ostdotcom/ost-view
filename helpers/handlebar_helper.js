@@ -21,7 +21,7 @@ module.exports = {
       return '';
     }
 
-    const formattedDate = moment(timestamp * 1000).format("MM/DD/YYYY  h:mm:ss a");
+    const formattedDate = moment(timestamp * 1000).utc().format("MM/DD/YYYY  h:mm:ss a");
     return formattedDate;
   },
 
