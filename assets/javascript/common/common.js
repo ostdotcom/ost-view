@@ -28,23 +28,6 @@ function convertToBigNumber(number) {
   return (number instanceof BigNumber) ? number : new BigNumber(number);
 }
 
-function bigNumberFormatter(bigNum){
-  var format = {
-    decimalSeparator: '.',
-    groupSeparator: ',',
-    groupSize: 3,
-    secondaryGroupSize: 0,
-    fractionGroupSeparator: ' ',
-    fractionGroupSize: 0
-  };
-  var dp = 5;
-  BigNumber.config({ FORMAT: format });
-
-  var toSd = bigNum.precision(dp);
-  return toSd.toFormat().toString(10);
-
-}
-
 function toTimeAgo(timestamp) {
   var timeInMilli = timestamp * 1000
     , currentTimeInMilli = new Date().getTime()

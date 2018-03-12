@@ -164,7 +164,7 @@
           columns: [
             {
               data: null,
-              width:'20%',
+              width:'30%',
               render: function(data, type, full, meta){
                 return Handlebars.compile_fe($('#dt-holders-col-1').text())({
                   name: data.address,
@@ -184,9 +184,8 @@
               }
             },
             {
-              title:'',
               data: null,
-              width:'45%',
+              width:'35%',
               render: function (data, type, full, meta) {
                 return '';
               }
