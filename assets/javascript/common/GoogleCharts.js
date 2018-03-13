@@ -53,7 +53,7 @@
         return false;
       }
 
-      $(oThis.selector).append('<div style="position:absolute;z-index:1;width:100%;">'+oThis.loadingHTML+'</div>');
+      $(oThis.selector).prepend('<div style="position:absolute;left:0;z-index:1;width:100%;">'+oThis.loadingHTML+'</div>');
 
       if(!$.isEmptyObject(oThis.ajax)){
         var ajaxObj = {
