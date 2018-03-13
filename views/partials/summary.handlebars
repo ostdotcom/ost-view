@@ -1,0 +1,27 @@
+<section class="container-summary">
+    <div class="container">
+
+        <div class="row mt-4 mb-4">
+
+            {{#each view_data.summary}}
+                <div class="col-sm">
+                    <div class="card mb-3">
+                        <span class="{{img}} icon mx-auto card-img-top"></span>
+                        <div class="card-body">
+                            {{#if is_badge_visible}}
+                                <span class="ost-alpha-badge icon"></span>
+                            {{/if}}
+                            <div class="card-text text-center mt-2">
+                                <h3 class="name">{{title}}</h3>
+                                <div class="value">{{value}}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {{/each}}
+
+        </div>
+
+    </div>
+
+</section>

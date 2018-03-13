@@ -9,9 +9,10 @@ OPENST-EXPLORER
 
 ## Setup OpenST utility chains 
 
-* Go to OpenST Explorer repo directory
+* Go to OpenST Explorer repo directory and create home directory env path
 ```
-  > cd openst-explorer 
+  > cd openst-explorer
+  > export OST_VIEW_PATH=$(pwd)
 ```
 
 * Install Packages
@@ -23,41 +24,59 @@ OPENST-EXPLORER
 
 * Create database in MySQL
 
-* Configure database details in config.js
-```
-  > vim config.js
-```
-  > under chain_config hash update following values and pest 
-```
-    '<chain_id>': {
-        chainId       : <chain_id>,
-        database_type : "mysql",
-        web_rpc       : "<Geth RPC URL>",
-        poll_interval : <chain poll interval in milliseconds>,
-        db_config     : {
-            chainId         : <chain_id>,
-            driver          : 'mysql',
-            user            : '<mysql username>',
-            password        : '<mysql password>',
-            host            : '<mysql host>',
-            database        : '<database name (created in above step)>',
-            blockAttributes : ['miner','difficulty','totalDifficulty','gasLimit','gasUsed'], # Block attributes need to be populated in database, other columns will be null
-            txnAttributes   : ['gas', 'gasPrice', 'input','nonce', 'contractAddress'] # Transaction attributes need to be populated in database, other columns will be null
-        }
-    }, 
-```
+ * Run migration
+  > To run migrations for specific chain specify chain Id
+  ```
+    > $OST_VIEW_PATH/executables/db_migrate.js up -c <chain_id>
+  ```
+  > To run migrations for all the configured chains (make sure all databases are created.)
+  ```
+    > $OST_VIEW_PATH/node executables/db_migrate.js up
+  ```
 
-* Run migration
-```
-  > node executables/db_migrate.js up
-```
+* Define chain configurations in set_env_vars.sh file
+  > '0' in environment variable define configurations for one particular chain.
+  > To Define configuration for multiple chains, define another set of environment
+    variables having consecutive number.
+    For example: OST_VIEW_1_CHAIN_ID, OST_VIEW_2_CHAIN_ID...
 
-* Start block fetcher
-```
-  > nohup node executables/block_fetcher_cron.js --chainID <chain_id> >> log/block_fetcher_cron.log &
-```
+  ```
+     # chain env
+     export OST_VIEW_0_CHAIN_ID=<CHAIN_ID>
+     export OST_VIEW_0_WEB_RPC=<WEB_RPC_URL>
 
-* Start block verifier
-```
-  > nohup node executables/block_verifier_cron.js --chainID <chain_id> >> log/block_verifier_cron.log &
-```
+     #DB env
+     export OST_VIEW_0_DB_USER=<DB_USER_NAME>
+     export OST_VIEW_0_DB_PWD=<DB_PASSWORD>
+
+     export OST_VIEW_0_DB_NAME=<DB_NAME>
+
+     export OST_VIEW_0_DB_HOST=<DB_URL>
+
+     export OST_VIEW_0_DB_CONNECTION_LIMIT=<DB_CONNECTION_LIMT>
+  ```
+
+## In terminal 1
+   * (Optional) Start notification listener(rabbitmq)
+       > rabbitmq is required for notificationListener
+       ```
+           > cd openst-explorer
+           > source set_env_vars.sh
+           > ./executables/notificationListener.js
+       ```
+
+## In terminal 2
+* Start cron services
+   > It will run block fetcher, block verifier and block aggregator cron.
+    ```
+     > cd openst-explorer
+     > source set_env_vars.sh
+     > ./executables/cron.js -c <chain_id>
+    ```
+## In terminal 3
+* Start node
+   > It will run block fetcher, block verifier and block aggregator cron.
+    ```
+     > cd openst-explorer
+     > source set_env_vars.sh
+     > npm start

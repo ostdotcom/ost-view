@@ -11,7 +11,10 @@ const rootPrefix = ".."
   , dbInteract = require(rootPrefix + '/lib/storage/interact')
   , constants = require(rootPrefix + '/config/core_constants')
   , coreConfig = require(rootPrefix + '/config')
+  , configHelper = require(rootPrefix + '/helpers/configHelper')
 ;
+
+const und = require('underscore');
 
 /**
  * @constructor
@@ -40,7 +43,7 @@ address.prototype = {
         return;
       }
 
-      oThis._utilityInteractInstance.getBalance(address)
+      oThis._dbInstance.getBalance(address)
         .then(function (response) {
           resolve(response);
         })
@@ -83,9 +86,9 @@ address.prototype = {
   /**
    * Fetches transactions from database done from particular user in given contract in batches.
    *
-   * @param  {Sting} address - address
-   * @param  {Sting} contractAddress - Contract address
-   * @param  {interger} page - page number
+   * @param  {String} address - address
+   * @param  {String} contractAddress - Contract address
+   * @param  {Integer} page - page number
    *
    * @return {promise<Object>}  List of transactions available in database for particular batch.
    */
@@ -118,12 +121,12 @@ address.prototype = {
   /**
    * Fetches token transactions from database done from particular address in batches.
    *
-   * @param  {Sting} address - address
-   * @param  {Interger} page - page number
+   * @param  {String} address - address
+   * @param  {Integer} page - page number
    *
    * @return {promise<Object>}  list of token transactions available in database for particular batch.
    */
-  , getAddressTokenTransactions: function (address, page) {
+  , getAddressTokenTransactions: function (address, pageSize, pagePayload) {
     const oThis = this;
     return new Promise(function (resolve, reject) {
       if (address == undefined || address.length != constants.ACCOUNT_HASH_LENGTH) {
@@ -131,17 +134,63 @@ address.prototype = {
         return;
       }
 
-      if (page == undefined || !page || isNaN(page) || page < 1) {
-        page = constants.DEFAULT_PAGE_NUMBER;
-      }
-      oThis._dbInstance.getAddressTokenTransactions(address, page, constants.DEFAULT_PAGE_SIZE)
+      oThis._dbInstance.getAddressTokenTransactions(address, pageSize, pagePayload)
         .then(function (response) {
-          resolve(response);
+          var contractArray = [];
+          response.forEach(function(object){
+            contractArray.push(object.contract_address);
+          });
+          contractArray = und.uniq(contractArray);
+          return configHelper.getContractDetailsOfAddressArray(oThis._dbInstance, contractArray)
+            .then(function(addressHash){
+               resolve({tokenTransactions: response, contractAddress: addressHash});
+            });
+
         })
         .catch(function (reason) {
           reject(reason);
         });
 
+    });
+  }
+
+  , getAddressDetails: function (address){
+    const oThis = this;
+    return new Promise(function (resolve, reject) {
+      if (address == undefined || address.length != constants.ACCOUNT_HASH_LENGTH) {
+        reject("invalid input");
+        return;
+      }
+      var promiseResolver = [];
+
+      promiseResolver.push(oThis._dbInstance.getAddressDetailsWithOutOST(address));
+      promiseResolver.push(oThis._dbInstance.getAddressDetailsTotalTransactionCount(address));
+
+      Promise.all(promiseResolver)
+        .then(function(values){
+          var addressDetails = values[0]
+            , total_transactions = values[1]
+            ;
+
+          if(undefined !== addressDetails){
+            addressDetails.total_transactions = total_transactions;
+
+            configHelper.getContractDetailsOfIdArray(oThis._dbInstance, [addressDetails['branded_token_id']])
+              .then(function(addressHash){
+
+                resolve({addressDetails: addressDetails, contractAddress: addressHash});
+              })
+              .catch(function(){
+
+                resolve({addressDetails: addressDetails});
+              });
+          }else{
+            resolve();
+          }
+        })
+        .catch(function(reason){
+          reject(reason);
+        });
     });
   }
 

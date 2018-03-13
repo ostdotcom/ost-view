@@ -16,31 +16,38 @@ const rootPrefix = ".."
   , responseHelper = require(rootPrefix + '/lib/formatter/response')
   , coreConfig = require(rootPrefix + '/config')
   , logger = require(rootPrefix + '/helpers/custom_console_logger')
-;
+  , coreConstant = require(rootPrefix + '/config/core_constants')
+  ;
 
-// Class related constants
-const balanceIndex = 0
-  , transactionsIndex = 1
-  , defaultPageNumber = 1;
 
 // Render final response
-const renderResult = function (requestResponse, responseObject) {
-  return requestResponse.renderResponse(responseObject);
+const renderResult = function (requestResponse, responseObject, contentType) {
+  return requestResponse.renderResponse(responseObject, 200, contentType);
 };
 
 // define parameters from url, generate web rpc instance and database connect
 const addressMiddleware = function (req, res, next) {
   const chainId = req.params.chainId
     , addressValue = req.params.address
-    , page = req.params.page
-    , contractAddress = req.params.contractAddress;
+    , contractAddress = req.params.contractAddress
+    , nextPagePayload = req.query.next_page_payload
+    , prevPagePayload = req.query.prev_page_payload
+    ;
+
+  var pagePayload = null;
+  if (nextPagePayload){
+    pagePayload = nextPagePayload;
+  }else if (prevPagePayload){
+    pagePayload = prevPagePayload;
+  }
 
   // create instance of address class
   req.addressInstance = new address(chainId);
 
   req.addressValue = addressValue;
-  req.page = page;
+  req.pagePayload = pagePayload;
   req.contractAddress = contractAddress;
+  req.chainId = chainId;
 
   next();
 };
@@ -56,23 +63,40 @@ const addressMiddleware = function (req, res, next) {
  */
 router.get('/:address', addressMiddleware, function (req, res) {
 
-  var promiseResolvers = [];
+  req.addressInstance.getAddressDetails(req.addressValue)
+    .then(function(response){
+      const addressDetails = (response=== undefined || response.addressDetails === undefined) ? '' : response.addressDetails
+        , contractAddresses = (response=== undefined || response.contractAddress === undefined) ? '' : response.contractAddress
+        ;
 
-  promiseResolvers.push(req.addressInstance.getAddressBalance(req.addressValue));
-  promiseResolvers.push(req.addressInstance.getAddressTransactions(req.addressValue, defaultPageNumber));
+      const responseData = responseHelper.successWithData({
+        address_info: addressDetails,
+        contract_address:contractAddresses,
+        mCss: ['mAddressDetails.css'],
+        mJs: ['mAddressDetails.js'],
+        meta: {
+          q: req.addressValue,
+          address:req.addressValue,
+          transaction_url: '/chain-id/'+req.chainId+'/address/'+req.addressValue+'/transactions'
+        },
+        page_meta: {
+          title: 'OST VIEW | Address Details - '+req.addressValue,
+          description: 'OST VIEW is the home grown block explorer from OST for OpenST Utility Blockchains.',
+          keywords: 'OST, Simple Token, Utility Chain, Blockchain',
+          robots: 'noindex, nofollow',
+          image: 'https://dxwfxs8b4lg24.cloudfront.net/ost-view/images/ost-view-og-image-1.jpg'
+        },
+        result_type: 'address_details',
+        title: 'Address Details - '+req.addressValue,
+      });
 
-  Promise.all(promiseResolvers).then(function (rsp) {
+      return renderResult(responseData, res, req.headers['content-type']);
 
-    const balanceValue = rsp[balanceIndex];
-    const transactionsValue = rsp[transactionsIndex]
-
-    const response = responseHelper.successWithData({
-      balance: balanceValue,
-      transactions: transactionsValue
+    })
+    .catch(function (reason){
+      return renderResult(responseHelper.error('', coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, req.headers['content-type']);
     });
 
-    return renderResult(response, res);
-  });
 });
 
 /**
@@ -93,11 +117,11 @@ router.get('/:address/balance', addressMiddleware, function (req, res) {
         result_type: "balance"
       });
 
-      return renderResult(response, res);
+      return renderResult(response, res, req.headers['content-type']);
     })
     .catch(function (reason) {
       logger.log(req.originalUrl + " : " + reason);
-      return renderResult(responseHelper.error('', reason), res);
+      return renderResult(responseHelper.error('', coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, req.headers['content-type']);
     });
 });
 
@@ -111,23 +135,81 @@ router.get('/:address/balance', addressMiddleware, function (req, res) {
  * @routeparam {String} :address - Address whose balance need to be fetched (42 chars length)
  * @routeparam {Integer} :page - Page number for getting data in batch.
  */
-router.get('/:address/transactions/:page', addressMiddleware, function (req, res) {
+router.get('/:address/transactions', addressMiddleware, function (req, res) {
 
+  var pageSize = coreConstant.DEFAULT_PAGE_SIZE+1;
 
-  req.addressInstance.getAddressTransactions(req.addressValue, req.page)
-    .then(function (requestResponse) {
+  req.addressInstance.getAddressTokenTransactions(req.addressValue, pageSize, req.pagePayload)
+    .then(function (queryResponse) {
+
+      const tokenTransactions =  queryResponse.tokenTransactions,
+        contractAddress = queryResponse.contractAddress,
+        nextPagePayload = getNextPagePaylaodForAddressTransactions(tokenTransactions, pageSize),
+        prevPagePayload = getPrevPagePaylaodForAddressTransactions(tokenTransactions, req.pagePayload, pageSize)
+        ;
+
+      // For all the pages remove last row if its equal to page size.
+      if(tokenTransactions.length == pageSize){
+        tokenTransactions.pop();
+      }
+
       const response = responseHelper.successWithData({
-        transactions: requestResponse,
-        result_type: "transactions"
+        transactions: tokenTransactions,
+        contract_addresses: contractAddress,
+        result_type: "transactions",
+        meta:{
+          next_page_payload :nextPagePayload,
+          prev_page_payload :prevPagePayload,
+
+          transaction_placeholder_url:"/chain-id/"+req.chainId+"/transaction/{{tr_hash}}",
+          address_placeholder_url:"/chain-id/"+req.chainId+"/address/{{addr}}",
+          token_details_redirect_url: "/chain-id/"+req.chainId+"/tokendetails/{{contract_addr}}",
+           q:req.addressValue
+        }
       });
 
-      return renderResult(response, res);
+      return renderResult(response, res, 'application/json');
     })
     .catch(function (reason) {
       logger.log(req.originalUrl + " : " + reason);
-      return renderResult(responseHelper.error('', reason), res);
+      return renderResult(responseHelper.error('', coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, 'application/json');
     });
 });
+
+function getNextPagePaylaodForAddressTransactions (requestResponse, pageSize){
+
+  const response = requestResponse,
+    count = response.length;
+
+  if(count <= pageSize -1){
+    return {};
+  }
+
+  return {
+    id: response[count-1].id,
+    timestamp: response[count-1].timestamp,
+    direction: "next"
+  };
+
+}
+
+function getPrevPagePaylaodForAddressTransactions (requestResponse, pagePayload, pageSize){
+
+  const response = requestResponse,
+    count = response.length;
+
+  // If page payload is null means its a request for 1st page
+  // OR direction is previous and count if less than page size means there is no previous page
+  if(!pagePayload || (pagePayload.direction === 'prev' && count < pageSize)){
+    return {};
+  }
+
+  return {
+    id: response[0].id,
+    timestamp: response[0].timestamp,
+    direction: "prev"
+  };
+}
 
 /**
  * Get paginated address transactions in given contracts
@@ -150,11 +232,11 @@ router.get('/:address/contract/:contractAddress/:page', addressMiddleware, funct
         result_type: "contract_transactions"
       });
 
-      return renderResult(response, res);
+      return renderResult(response, res, req.headers['content-type']);
     })
     .catch(function (reason) {
       logger.log(req.originalUrl + " : " + reason);
-      return renderResult(responseHelper.error('', reason), res);
+      return renderResult(responseHelper.error('', coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, req.headers['content-type']);
     });
 });
 

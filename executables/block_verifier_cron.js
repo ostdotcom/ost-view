@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-"use strict"
+"use strict";
 /**
  * Job to verify fetched blocks and update in DB, if inconsistent
  *
@@ -53,7 +53,7 @@ var setBlockVerifier = function (blockNumber) {
   state.blockNumber = blockNumber;
   setTimeout(function () {
     if ((startRunTime + maxRunTime) > (new Date).getTime()) {
-      dbInteract.getHigestInsertedBlock()
+      dbInteract.getHighestInsertedBlock()
         .then(function (resBlockNumber) {
           logger.log("Higest Block Number ", resBlockNumber);
           if (resBlockNumber != null && +resBlockNumber - 10 > state.blockNumber) {
@@ -61,6 +61,7 @@ var setBlockVerifier = function (blockNumber) {
           } else {
             //Need to set up the cron again.
             logger.log("Done verification of all the blocks, Need to run the job again after new block mining.");
+            process.exit(1);
           }
         })
         .catch(function (err) {
@@ -107,7 +108,7 @@ const lockProcess = {
 // Check if process with same arguments already running or not
 ps.lookup({
   command: lockProcess.command,
-  arguments: lockProcess.script + "," + lockProcess.arguments.join(","),
+  arguments: lockProcess.script + "," + lockProcess.arguments.join(",")
 }, function (err, resultList) {
   if (err) {
     throw new Error(err);
@@ -133,7 +134,7 @@ ps.lookup({
   // Create required connections and objects
   dbInteract = DbInteract.getInstance(state.config.db_config);
   web3Interact = Web3Interact.getInstance(state.config.chainId);
-  block_verifier = BlockVerifier.newInstance(web3Interact, dbInteract);
+  block_verifier = BlockVerifier.newInstance(web3Interact, dbInteract, state.config.chainId);
   logger.log('State Configuration', state);
 
   dbInteract.getLowestUnVerifiedBlockNumber()

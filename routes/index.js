@@ -7,8 +7,39 @@
  */
 const express = require('express');
 
-// Express router to mount index routes
-var router = express.Router();
+// Express router to mount search related routes
+const router = express.Router({mergeParams: true});
+
+const rootPrefix = ".."
+  , home = require(rootPrefix + '/models/home')
+  , responseHelper = require(rootPrefix + '/lib/formatter/response')
+  , coreConfig = require(rootPrefix + '/config')
+  , logger = require(rootPrefix + '/helpers/custom_console_logger')
+  , coreConstant = require(rootPrefix + '/config/core_constants')
+  , search = require(rootPrefix + '/models/search')
+
+  ;
+
+// Render final response
+const renderResult = function (requestResponse, responseObject, contentType) {
+  return requestResponse.renderResponse(responseObject, 200, contentType);
+};
+
+// define parameters from url, generate web rpc instance and database connect
+const homeMiddleware = function (req, res, next) {
+  var chainId = req.params.chainId
+    ;
+  if(undefined === chainId){
+    chainId = coreConstant['CHAIN_ID'];
+  }
+  // Get instance of contract class
+  req.homeInstance = new home(chainId);
+
+  req.chainId = chainId;
+
+  next();
+};
+
 
 /**
  * Index route
@@ -18,11 +49,111 @@ var router = express.Router();
  * @route {GET} {base_url}
  *
  */
-router.get("/:format?", function(req, res, next){
-  if (req.params.format) { 
-  	res.json({title:'Hello World'}); 
-  }else {
-    res.render('index', { title: 'Hello Block Scanner' });
-  }
+router.get("/",homeMiddleware, function(req, res){
+  fetchHomeData(req, res);
 });
+
+
+/**
+ * Index route
+ *
+ * @name Index route
+ *
+ * @route {GET} {base_url}
+ *
+ */
+router.get("/home",homeMiddleware, function(req, res){
+    fetchHomeData(req, res);
+});
+
+
+function fetchHomeData (req, res){
+  req.homeInstance.getHomeData()
+    .then(function (requestResponse) {
+      const response = responseHelper.successWithData({
+        home: requestResponse,
+        result_type: "home",
+        title: "OST View - OST SideChains Explorer and Search",
+        mCss:['mHome.css','mTokenDetails.css'],
+        mJs:['mHome.js'],
+        view_data: {
+          "summary":req.homeInstance.getChainInfo(requestResponse),
+          "graph_stats": req.homeInstance.getChainStats(requestResponse)
+        },
+        meta:{
+          "chain_id" : req.chainId,
+          "contract_address" : coreConstant['BASE_CONTRACT_ADDRESS'],
+          "top_tokens_url" : "/chain-id/"+req.chainId+"/tokens/top",
+          "latest_token_transfer_url" : "/chain-id/"+req.chainId+"/tokens/transactions/recent",
+          "token_transfer_graph_url" : "/chain-id/"+req.chainId+"/tokenDetails/"+coreConstant['BASE_CONTRACT_ADDRESS']+"/graph-date/numberOfTransactions/",
+          "token_volume_graph_url" : "/chain-id/"+req.chainId+"/tokenDetails/"+coreConstant['BASE_CONTRACT_ADDRESS']+"/graph-date/numberOfTransactions/"
+        },
+        page_meta: {
+          title: 'OST VIEW - Block Explorer for OpenST Utility Blockchains',
+          description: 'OST VIEW is the home grown block explorer from OST for OpenST Utility Blockchains.',
+          keywords: 'OST, Simple Token, Utility Chain, Blockchain',
+          robots: 'index, follow',
+          image: 'https://dxwfxs8b4lg24.cloudfront.net/ost-view/images/ost-view-og-image-1.jpg.jpg'
+        }
+      });
+
+      return renderResult(response, res, req.headers['content-type']);
+    })
+    .catch(function (reason) {
+      logger.log(req.originalUrl + " : " + reason);
+      return renderResult(responseHelper.error('', coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, req.headers['content-type']);
+    });
+}
+
+
+
+// define parameters from url, generate web rpc instance and database connect
+const searchMiddleware = function (req, res, next) {
+  var chainId = req.query.chain_id
+    , q = req.query.q
+    ;
+
+  if(undefined === chainId){
+    chainId = coreConstant['CHAIN_ID'];
+  }
+  // create instance of search class
+  req.searchInstance = new search(chainId);
+
+  req.q = q;
+  req.chainId = chainId
+
+  next();
+};
+
+/**
+ * Search by address, contract address, transaction hash, block number
+ *
+ * @name Search
+ *
+ * @route {GET} {base_url}/:param
+ *
+ * @routeparam {String} :params - search string
+ */
+router.get('/search', searchMiddleware, function (req, res) {
+
+  req.searchInstance.getParamData(req.q)
+    .then(function (requestResponse) {
+      const response = responseHelper.successWithData({
+        redirect_url: "/chain-id/"+req.chainId +requestResponse,
+        result_type: "redirect_url"
+      });
+
+      return renderResult(response, res, 'application/json');
+    })
+    .catch(function (reason) {
+      const response = responseHelper.successWithData({
+        redirect_url: "/search-results?q="+reason,
+        result_type: "redirect_url"
+      });
+
+      return renderResult(response, res, 'application/json');
+    });
+});
+
+
 module.exports = router;

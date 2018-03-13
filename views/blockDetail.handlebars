@@ -1,0 +1,51 @@
+{{>pageTitle title="Block Details"}}
+
+<div class="container container-block-details">
+    <div class="row">
+        <div class="col-12">
+
+            <div class="mt-4 mb-4 info-card card">
+                <div class="text-truncate card-body">
+                    <span class="key-color mr-1"> Block Number </span>
+                    <span class="value-color font-weight-light"> {{block.block_number}} </span>
+                </div>
+            </div>
+
+            <div class="mt-4 mb-4 details-card card">
+
+                <div class="card-body">
+                    <span class="key-color mr-1"> Chain Id</span>
+                    <span class="value-color font-weight-light"> {{meta.chain_id}} </span>
+                </div>
+
+                <div class="card-body">
+                    <span class="key-color mr-1"> Time </span>
+                    <span class="value-color font-weight-light"> <span class="time icon"></span> {{toDate block.timestamp}} </span>
+                </div>
+
+                <div class="card-body text-truncate">
+                    <span class="key-color mr-1"> Block Hash </span>
+                    <span class="value-color font-weight-light"> {{block.block_hash}} </span>
+                </div>
+
+                <div class="card-body">
+                    <span class="key-color mr-1"> Total Transactions </span>
+                    <span class="value-color font-weight-light"> {{block.total_transactions}} </span>
+                </div>
+
+                <div class="card-body">
+                    <span class="key-color mr-1"> Total Token Transfers </span>
+                    <span class="value-color font-weight-light"> {{block.total_token_transactions}} </span>
+                </div>
+
+                <div class="card-body">
+                    <span class="key-color mr-1"> Gas Used </span>
+                    <span class="value-color font-weight-light"> {{block.gas_used}} </span>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+{{>blockDetailsDataTable}}

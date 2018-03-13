@@ -16,12 +16,14 @@ const rootPrefix = ".."
   , responseHelper = require(rootPrefix + '/lib/formatter/response')
   , coreConfig = require(rootPrefix + '/config')
   , logger = require(rootPrefix + '/helpers/custom_console_logger')
+  , coreConstant = require(rootPrefix + '/config/core_constants')
 ;
 
 // Render final response
-const renderResult = function (requestResponse, responseObject) {
-  return requestResponse.renderResponse(responseObject);
+const renderResult = function (requestResponse, responseObject, contentType) {
+  return requestResponse.renderResponse(responseObject, 200, contentType);
 };
+
 
 // define parameters from url, generate web rpc instance and database connect
 const transactionMiddleware = function (req, res, next) {
@@ -35,6 +37,7 @@ const transactionMiddleware = function (req, res, next) {
 
   req.hash = hash;
   req.page = page;
+  req.chainId = chainId;
 
   next();
 };
@@ -54,15 +57,36 @@ router.get("/:hash", transactionMiddleware, function (req, res) {
     .then(function (requestResponse) {
 
       const response = responseHelper.successWithData({
-        transaction: requestResponse,
-        result_type: "transaction"
+        transaction: requestResponse['transactionDetails'],
+        token_transaction_details:requestResponse['tokenTransactionDetails'],
+        contract_addresses: requestResponse['contractAddresses'],
+        result_type: "transaction",
+        meta:{
+          q:req.hash,
+          chain_id:req.chainId,
+          redirect_url:{
+            address_placeholder_url: '/chain-id/'+req.chainId+'/address/',
+            block_placeholder_url: '/chain-id/'+req.chainId+'/block/',
+            token_details_redirect_url: '/chain-id/'+req.chainId+'/tokendetails/',
+          }
+        },
+        page_meta: {
+          title: 'OST VIEW | Tx Details - '+req.hash,
+          description: 'OST VIEW is the home grown block explorer from OST for OpenST Utility Blockchains.',
+          keywords: 'OST, Simple Token, Utility Chain, Blockchain',
+          robots: 'noindex, nofollow',
+          image: 'https://dxwfxs8b4lg24.cloudfront.net/ost-view/images/ost-view-og-image-1.jpg.jpg'
+        },
+        mCss: ['mTransactionDetails.css'],
+        mJs: [],
+        title:'Transaction Details - '+ req.hash,
       });
 
-      return renderResult(response, res);
+      return renderResult(response, res, req.headers['content-type']);
     })
     .catch(function (reason) {
       logger.log(req.originalUrl + " : " + reason);
-      return renderResult(responseHelper.error('', reason), res);
+      return renderResult(responseHelper.error('', coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, req.headers['content-type']);
     });
 });
 
@@ -85,11 +109,11 @@ router.get("/:hash/internal-transactions/:page", transactionMiddleware, function
         result_type: "address_transaction"
       });
 
-      return renderResult(response, res);
+      return renderResult(response, res, req.headers['content-type']);
     })
     .catch(function (reason) {
       logger.log(req.originalUrl + " : " + reason);
-      return renderResult(responseHelper.error('', reason), res);
+      return renderResult(responseHelper.error('', coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, req.headers['content-type']);
     });
 });
 

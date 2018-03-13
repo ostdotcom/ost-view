@@ -11,7 +11,11 @@ const rootPrefix = ".."
   , dbInteract = require(rootPrefix + '/lib/storage/interact')
   , constants = require(rootPrefix + '/config/core_constants')
   , coreConfig = require(rootPrefix + '/config')
-;
+  , configHelper = require(rootPrefix + '/helpers/configHelper')
+  ;
+
+const und = require('underscore');
+
 
 /**
  * @constructor
@@ -28,21 +32,67 @@ block.prototype = {
   /**
    * Fetches block details for requested block number.
    *
-   * @param {Integer} block_number - Number of block to be fetched.
+   * @param {Integer} blockNumber - Number of block to be fetched.
    *
    * @return {Promise<Object>} A hash of block data.
    */
-  getBlock: function (block_number) {
+  getBlockFromBlockNumber: function (blockNumber) {
 
     const oThis = this;
 
     return new Promise(function (resolve, reject) {
-      if (block_number == undefined || isNaN(block_number)) {
+      if (blockNumber == undefined || isNaN(blockNumber)) {
         reject("invalid input");
         return;
       }
 
-      oThis._dbInstance.getBlock(block_number)
+      var promiseResolver = [];
+
+      promiseResolver.push(oThis._dbInstance.getBlockFromBlockNumber(blockNumber));
+      promiseResolver.push(oThis._dbInstance.getBlockTokenTransactionNumber(blockNumber));
+
+      Promise.all(promiseResolver)
+        .then(function(values){
+          if (values.length > 0 && values[0]) {
+
+            var blockDetails = values[0]
+              , tokenTransactionCount = values[1]
+              ;
+
+            blockDetails['total_token_transactions'] = tokenTransactionCount;
+
+            resolve(blockDetails);
+          }else{
+            resolve();
+          }
+        })
+        .catch(function(reason){
+          console.log("***********  1 :: ",reason);
+
+          reject(reason);
+        });
+
+    });
+  }
+
+  /**
+   * Fetches block details for requested block hash.
+   *
+   * @param {Integer} blockHash - hash of block to be fetched.
+   *
+   * @return {Promise<Object>} A hash of block data.
+   */
+  , getBlockFromBlockHash: function (blockHash) {
+
+    const oThis = this;
+
+    return new Promise(function (resolve, reject) {
+      if (!blockHash.startsWith("0x")) {
+        reject("invalid input");
+        return;
+      }
+
+      oThis._dbInstance.getBlockFromBlockHash(blockHash)
         .then(function (response) {
           resolve(response[0]);
         })
@@ -55,33 +105,71 @@ block.prototype = {
   /**
    * Get list of transactions available in a given block number.
    *
-   * @param {Integer} block_number - block number
+   * @param {Integer} blockNumber - block number
    * @param {Integer} page - page number
    *
    * @return {Promise<Object>} List of transactions available in database for particular batch.
    */
-  , getBlockTransactions: function (block_number, page) {
-    const oThis = this;
-    return new Promise(function (resolve, reject) {
+  , getBlockTransactions: function (blockNumber, pageSize, pagePayload) {
+      const oThis = this;
 
-      if (block_number == undefined || isNaN(page)) {
+      if (blockNumber == undefined) {
+
+        return Promise.reject("invalid input");
+
+      }
+
+      if (blockNumber.startsWith("0x")) {
+        return oThis._dbInstance.getBlockTransactionsFromBlockHash(blockNumber, pageSize, pagePayload);
+
+      } else {
+        return oThis._dbInstance.getBlockTransactionsFromBlockNumber(blockNumber, pageSize, pagePayload);
+
+      }
+  }
+
+  /**
+   * Get list of token transactions available in a given block number.
+   *
+   * @param {Integer} blockNumber - block number
+   * @param {Integer} page - page number
+   * @param {hash} pagePayload - page payload
+   *
+   * @return {Promise<Object>} List of transactions available in database for particular batch.
+   */
+  , getBlockTokenTransactions: function (blockNumber, pageSize, pagePayload) {
+    const oThis = this;
+
+    return new Promise(function(resolve, reject){
+
+      if (blockNumber == undefined) {
         reject("invalid input");
         return;
       }
 
-      if (page == undefined || !page || page < 0) {
-        page = constants.DEFAULT_PAGE_NUMBER;
-      }
+      oThis._dbInstance.getBlockTokenTransactionsFromBlockNumber(blockNumber, pageSize, pagePayload)
+        .then(function(queryResponse){
 
-      oThis._dbInstance.getBlockTransactions(block_number, page, constants.ACCOUNT_HASH_LENGTH)
-        .then(function (response) {
-          resolve(response);
+          var contractArray = [];
+          queryResponse.forEach(function(object){
+            contractArray.push(object.contract_address);
+          });
+          contractArray = und.uniq(contractArray);
+
+          configHelper.getContractDetailsOfAddressArray(oThis._dbInstance, contractArray)
+            .then(function(addressHash){
+              resolve({tokenTransactions: queryResponse, contractAddresses: addressHash});
+            })
+            .catch(function(reason){
+              resolve({tokenTransactions:queryResponse})
+            });
         })
-        .catch(function (reason) {
+        .catch(function(reason){
           reject(reason);
         });
-    })
+    });
   }
+
 
   /**
    * Get list of recent blocks for given page number.
@@ -111,6 +199,5 @@ block.prototype = {
         });
     });
   }
-
 };
 

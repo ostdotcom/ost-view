@@ -1,0 +1,64 @@
+.key-color {
+    color: #5d6d6e;
+}
+
+.value-color {
+    color: #597a84;
+}
+
+.container-token-details {
+
+    .info-card {
+        border: none;
+        font-size: 14px;
+
+        .card-body {
+            padding: 0.8rem;
+            background-color: #f1f5f8;
+        }
+    }
+
+    .details-card{
+
+        border-radius: 2px;
+        font-size: 14px;
+
+        .card-body{
+            padding: 0.8rem;
+            &:nth-of-type(even){
+                background-color: #f1f5f8;
+            }
+
+            .transaction-status-color{
+                color: #78a124;
+            }
+
+            .token-icon {
+                border-radius: 50%;
+                width: 1.5rem;
+            }
+
+            //.icon {
+            //    border-radius: 50%;
+            //    width: 1.3rem;
+            //}
+
+            .coin-amount {
+                background-color: #9cc5c1;
+                color: #ffffff;
+                border-radius: 0.3rem;
+                padding: 0.16rem;
+            }
+
+            .input-data-break-all{
+                word-break: break-all;
+            }
+        }
+    }
+}
+
+.token-table {
+    tr {
+        background-color: #ffffff !important;
+    }
+}

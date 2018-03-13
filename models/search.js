@@ -8,6 +8,7 @@
 // load all internal dependencies
 const rootPrefix = ".."
   , constants = require(rootPrefix + '/config/core_constants')
+  , dbInteract = require(rootPrefix + '/lib/storage/interact')
   , coreConfig = require(rootPrefix + '/config')
   , rpcInteract = require(rootPrefix + '/lib/web3/interact/rpc_interact')
 
@@ -24,10 +25,12 @@ const balanceIndex = 0
  */
 
 var search = module.exports = function (chainId) {
-  
-  this._utilityInteractInstance = rpcInteract.getInstance(chainId);
 
-}
+  this.chainId = chainId;
+  this._utilityInteractInstance = rpcInteract.getInstance(chainId);
+  this._dbInstance = dbInteract.getInstance(coreConfig.getChainDbConfig(chainId));
+
+};
 
 search.prototype = {
 
@@ -44,16 +47,15 @@ search.prototype = {
 
     return new Promise(function (resolve, reject) {
 
-      if (argument == undefined) {
-        reject('invalid input');
+      if (argument === undefined) {
+        reject(argument);
         return;
-
       }
-
       if (argument.length === constants.ACCOUNT_HASH_LENGTH) {
         oThis._utilityInteractInstance.isContract(argument)
           .then(function(response){
-            resolve("/contract/"+argument);
+
+            resolve("/tokendetails/"+argument);
           })
           .catch(function(reason){
 
@@ -64,11 +66,18 @@ search.prototype = {
 
           resolve("/transaction/"+argument);
       }else if(!isNaN(argument)){
-                          console.log("*** 4 ***");
 
           resolve("/block/"+argument);
       }else{
-          reject('invalid input');
+
+        oThis._dbInstance.getContractAddressFromBrandedTokenNameOrSymbol(argument)
+          .then(function(contractAddress){
+            resolve("/tokendetails/"+contractAddress);
+          })
+          .catch(function(){
+            reject(argument);
+          });
+
       }
     });
   }

@@ -22,7 +22,7 @@ function parseFile(filePath, options) {
  */
 function CoreAbis() {
   this.abiHash = {};
-  var jsonFile = ['ERC20Token'];
+  var jsonFile = ['ERC20Token', 'OpenSTUtility', 'Airdrop'];
 
   for (var i = 0; i < jsonFile.length; i++) {
     var value = jsonFile[i];
@@ -32,8 +32,16 @@ function CoreAbis() {
 };
 
 CoreAbis.prototype = {
-  getABI: function () {
+  getERC20TokenABI: function () {
     return this.abiHash['ERC20Token'];
+  },
+
+  getOpenSTUtilityABI: function () {
+    return this.abiHash['OpenSTUtility'];
+  },
+
+  getAirDropABI: function () {
+    return this.abiHash['Airdrop'];
   }
 };
 

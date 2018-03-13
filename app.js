@@ -14,21 +14,34 @@ const express = require('express')
   , sanitizer = require('express-sanitized')
   , http = require('http')
   , cluster = require('cluster')
-;
+  , exphbs  = require('express-handlebars')
+  , basicAuth = require('express-basic-auth')
+  , morgan = require('morgan')
+  , customUrlParser = require('url')
+  ;
+
+morgan.token('id', function getId(req) {
+  return req.id;
+});
 
 // Load all required internal files
-const rootPrefix    = "."
-  , indexRoutes     = require( rootPrefix + '/routes/index')
-  , blockRoutes     = require( rootPrefix + '/routes/block')
-  , blocksRoutes     = require( rootPrefix + '/routes/blocks')
-  , transactionsRoutes     = require( rootPrefix + '/routes/transactions')
-  , transactionRoutes     = require( rootPrefix + '/routes/transaction')
-  , addressRoutes   = require( rootPrefix + '/routes/address')
-  , searchRoutes   = require( rootPrefix + '/routes/search')
+const rootPrefix = "."
+  , indexRoutes = require(rootPrefix + '/routes/index')
+  , blockRoutes = require(rootPrefix + '/routes/block')
+  // , blocksRoutes = require(rootPrefix + '/routes/blocks')
+  , transactionsRoutes = require(rootPrefix + '/routes/transactions')
+  , transactionRoutes = require(rootPrefix + '/routes/transaction')
+  , addressRoutes = require(rootPrefix + '/routes/address')
   , contractRoutes = require(rootPrefix + '/routes/contract')
-  , responseHelper = require(rootPrefix+'/lib/formatter/response')
+  , responseHelper = require(rootPrefix + '/lib/formatter/response')
   , logger = require(rootPrefix + '/helpers/custom_console_logger')
-;
+  , handlebarHelper = require(rootPrefix + '/helpers/handlebar_helper')
+  , tokenDetailsRoutes = require(rootPrefix + '/routes/tokenDetails')
+  , tokenTransactionsRoutes = require (rootPrefix + '/routes/tokenTransactions')
+  , chainDetailsRoutes = require(rootPrefix + '/routes/chainDetails')
+  , customMiddleware = require(rootPrefix + '/helpers/custom_middleware')
+  , searchResultRoutes = require(rootPrefix + '/routes/searchResults')
+  ;
 
 // if the process is a master.
 if (cluster.isMaster) {
@@ -36,7 +49,7 @@ if (cluster.isMaster) {
   process.title = "OpenST Explorer master node";
 
   // Fork workers equal to number of CPUs
-  const numWorkers = process.env.WORKERS || require('os').cpus().length;
+  const numWorkers = 1;//process.env.WORKERS || require('os').cpus().length;
 
   for (var i = 0; i < numWorkers; i++) {
     // Spawn a new worker process.
@@ -45,38 +58,38 @@ if (cluster.isMaster) {
 
   // Worker started listening and is ready
   cluster.on('listening', function(worker, address) {
-    logger.info(`[worker-${worker.id} ] is listening to ${address.address}:${address.port}`);
+    logger.info('[worker-${worker.id} ] is listening to '+ address.address +':' + address.port);
   });
 
   // Worker came online. Will start listening shortly
-  cluster.on('online', function(worker) {
-    logger.info(`[worker-${worker.id}] is online`);
+  cluster.on('online', function (worker) {
+    logger.info('[worker-' + worker.id + '] is online');
   });
 
   //  Called when all workers are disconnected and handles are closed.
-  cluster.on('disconnect', function(worker) {
-    logger.error(`[worker-${worker.id}] is disconnected`);
+  cluster.on('disconnect', function (worker) {
+    logger.error('[worker-' + worker.id + '] is disconnected');
   });
 
   // When any of the workers die the cluster module will emit the 'exit' event.
-  cluster.on('exit', function(worker, code, signal) {
+  cluster.on('exit', function (worker, code, signal) {
     if (worker.exitedAfterDisconnect === true) {
       // don't restart worker as voluntary exit
-      logger.info(`[worker-${worker.id}] voluntary exit. signal: ${signal}. code: ${code}`);
+      logger.info('[worker-' + worker.id + '] voluntary exit. signal: ${signal}. code: ${code}');
     } else {
       // restart worker as died unexpectedly
-      logger.error(`[worker-${worker.id}] restarting died. signal: ${signal}. code: ${code}`, worker.id, signal, code);
+      logger.error('[worker-' + worker.id + '] restarting died. signal: ${signal}. code: ${code}', worker.id, signal, code);
       cluster.fork();
     }
   });
 
   // When someone try to kill the master process
   // kill <master process id>
-  process.on('SIGTERM', function() {
+  process.on('SIGTERM', function () {
     for (var id in cluster.workers) {
       cluster.workers[id].exitedAfterDisconnect = true;
     }
-    cluster.disconnect(function() {
+    cluster.disconnect(function () {
       logger.info('Master received SIGTERM. Killing/disconnecting it.');
     });
   });
@@ -85,10 +98,14 @@ if (cluster.isMaster) {
   // if the process is not a master
 
   // Set worker process title
-  process.title = "OpenST Explorer worker-"+cluster.worker.id;
+  process.title = "OpenST Explorer worker-" + cluster.worker.id;
 
 
   var app = express();
+
+  // Load custom middleware and set the worker id
+  app.use(customMiddleware({worker_id: cluster.worker.id}));
+  app.use(morgan('[:id] :remote-addr - :remote-user [:date[clf]] :method :url :response-time HTTP/:http-version" :status :res[content-length] :referrer :user-agent'));
 
   // app.use(function(req, res, next) {
   //   inputRequest.run(function() {
@@ -108,16 +125,67 @@ if (cluster.isMaster) {
   //Docs: https://www.npmjs.com/package/express-sanitized
   app.use(sanitizer());
 
+  ////For authentication
+  //const userName = process.env.OST_VIEW_2000_UNAME;
+  //var userPwd = process.env.OST_VIEW_2000_PWD;
+  //var usersHash = {};
+  //usersHash[userName] = userPwd;
+  //app.use(basicAuth({
+  //  users: usersHash,
+  //  challenge: true
+  //}));
+
+  //Setting view engine template handlebars
+  app.set('views', path.join(__dirname, 'views'));
+  //Helper is used to ease stringifying JSON
+  app.engine('handlebars', exphbs({
+    defaultLayout: 'main',
+    helpers: handlebarHelper,
+    partialsDir: path.join(__dirname, 'views/partials'),
+    layoutsDir: path.join(__dirname, 'views/layouts')
+  }));
+  app.set('view engine', 'handlebars');
+
+  var connectAssets = require("connect-assets")({
+    paths: [
+      path.join(__dirname, 'assets/css'),
+      path.join(__dirname, 'assets/javascript')
+    ],
+    fingerprinting: true,
+    servePath: "assets"
+  });
+  app.use(connectAssets);
+
+  var hbs = require('handlebars');
+  hbs.registerHelper('css', function () {
+    var css = connectAssets.options.helperContext.css.apply(this, arguments);
+    return new hbs.SafeString(css);
+  });
+
+  hbs.registerHelper('js', function () {
+    var js = connectAssets.options.helperContext.js.apply(this, arguments);
+    return new hbs.SafeString(js);
+  });
+
+  hbs.registerHelper('with', function (context, options) {
+    return options.fn(context);
+  });
+
+  app.use(express.static(path.join(__dirname, 'public')));
+
   // load route files
   app.use('/', indexRoutes);
 
   app.use('/chain-id/:chainId/block', blockRoutes);
-  app.use('/chain-id/:chainId/blocks', blocksRoutes);
+  // app.use('/chain-id/:chainId/blocks', blocksRoutes);
   app.use('/chain-id/:chainId/transactions', transactionsRoutes);
   app.use('/chain-id/:chainId/transaction', transactionRoutes);
   app.use('/chain-id/:chainId/address', addressRoutes);
-  app.use('/chain-id/:chainId/search', searchRoutes);
   app.use('/chain-id/:chainId/contract', contractRoutes);
+  app.use('/chain-id/:chainId/tokendetails', tokenDetailsRoutes);
+  app.use('/chain-id/:chainId/tokens', tokenTransactionsRoutes);
+  app.use('/chain-id/:chainId/chainDetails', chainDetailsRoutes);
+  app.use('/search-results', searchResultRoutes);
 
   // catch 404 and forward to error handler
   app.use(function (req, res, next) {
@@ -135,7 +203,8 @@ if (cluster.isMaster) {
    * Get port from environment and store in Express.
    */
 
-  var port = normalizePort(process.env.PORT || '3000');
+  var port = normalizePort(process.env.PORT || '7000');
+
   app.set('port', port);
 
   /**

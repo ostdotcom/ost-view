@@ -1,0 +1,71 @@
+$sprite-retina-location: "/Sprite-2X.png";
+$sprite-location: "/Sprite-1X.png";
+
+@mixin icon-generator($width,$height,$posX,$posY,$offsetHover,$offsetActive,$scale:100) {
+  background-image: url($sprite-location);
+  background-size: 1250px * $scale/100 1250px * $scale/100;
+  @media only screen and (-webkit-min-device-pixel-ratio: 2),
+  only screen and (min--moz-device-pixel-ratio: 2),
+  only screen and (-o-min-device-pixel-ratio: 2/1),
+  only screen and (min-device-pixel-ratio: 2),
+  only screen and (min-resolution: 192dpi),
+  only screen and (min-resolution: 2dppx) {
+    background-image: url($sprite-retina-location);
+    background-size: 1250px * $scale/100 1250px * $scale/100;
+  }
+  display: inline-block;
+  outline: none !important;
+  &:focus {
+    outline: none;
+    background-position: $posX * $scale/100 $posY * $scale/100;
+  }
+  width: $width * $scale/100;
+  height: $height * $scale/100;
+  background-position: $posX * $scale/100 $posY * $scale/100;
+  &:hover {
+    background-position: $offsetHover * $scale/100 $posY * $scale/100;
+  }
+  &:active {
+    background-position: $offsetActive * $scale/100 $posY * $scale/100;
+  }
+}
+
+.ost-view-logo.icon{
+  @include icon-generator(150px, 30px, -320px, -85px, -320px, -320px);
+}
+
+.communities.icon{
+  @include icon-generator(135px, 65px, -285px, -15px, -285px, -285px);
+}
+
+.token-holders.icon{
+  @include icon-generator(135px, 65px, -140px, -15px, -140px, -140px);
+}
+
+.market-cap.icon{
+  @include icon-generator(135px, 65px, -5px, -10px, -5px, -5px);
+}
+
+.circulating-supply.icon{
+  @include icon-generator(135px, 65px, -429px, -15px, -429px, -429px);
+}
+
+.total-supply.icon{
+  @include icon-generator(135px, 65px, -570px, -15px, -570px, -570px);
+}
+
+.ost-alpha-badge.icon{
+  @include icon-generator(60px, 30px, -90px, -85px, -90px, -90px);
+}
+
+.search.icon{
+  @include icon-generator(20px, 20px, -470px, -97px, -470px, -470px);
+}
+
+.staked-coin.icon{
+  @include icon-generator(15px, 15px, -9px, -100px, -9px, -9px);
+}
+
+.time.icon{
+  @include icon-generator(15px, 15px, -35px, -100px, -35px, -35px);
+}

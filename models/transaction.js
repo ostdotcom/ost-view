@@ -11,7 +11,13 @@ const rootPrefix           = ".."
     , dbInteract = require(rootPrefix + '/lib/storage/interact')
     , constants = require(rootPrefix + '/config/core_constants')
 	  , coreConfig = require(rootPrefix + '/config')
-;
+    , configHelper = require(rootPrefix + '/helpers/configHelper')
+    , TokenUnits = require(rootPrefix + '/helpers/tokenUnits')
+  ;
+
+const  und = require('underscore')
+  ;
+
 
 /**
  * @constructor
@@ -21,7 +27,7 @@ const rootPrefix           = ".."
 var transaction = module.exports = function(chainId){
   this._utilityInteractInstance = rpcInteract.getInstance(chainId);
   this._dbInstance = dbInteract.getInstance(coreConfig.getChainDbConfig(chainId));
-}
+};
 
 
 transaction.prototype = {
@@ -29,28 +35,53 @@ transaction.prototype = {
   /** 
   	*Get list of transactions for given transaction address.
   	*
-  	*@param {String} address - transaction address.
+  	*@param {String} transactionAddress - transaction address.
   	*
   	*@return {Promise} List of transactions
   	*/
-	getTransaction : function(address){
+	getTransaction : function(transactionAddress){
 
 		const oThis = this;
 	    return new Promise(function(resolve, reject){
 
-			if (!address || address == undefined || address.length != constants.TRANSACTION_HASH_LENGTH) {
+			if (!transactionAddress || transactionAddress == undefined || transactionAddress.length != constants.TRANSACTION_HASH_LENGTH) {
 				reject('invalid input');
 				return;
 			}
-			
-			oThis._dbInstance.getTransaction(address)
-				.then(function(response){
-					resolve(response);
-				})
-				.catch(function(reason){
-					reject(reason);
-				});
-		})	
+        var transactionData ={};
+        oThis._dbInstance.getTransaction(transactionAddress)
+          .then(function(transactionResponse){
+            transactionData["transactionDetails"] = transactionResponse[0];
+
+            oThis._dbInstance.getTokenTransaction(transactionAddress)
+              .then(function(tokenTransactionResponse){
+                var tokenTransactions = tokenTransactionResponse;
+                var contractAddressArray = [];
+                tokenTransactions.forEach(function(element){
+                  element.tokens = TokenUnits.convertToNormal(element.tokens);
+                  contractAddressArray.push(element.contract_address);
+                })
+                transactionData["tokenTransactionDetails"] = tokenTransactions
+                contractAddressArray = und.uniq(contractAddressArray);
+
+                configHelper.getContractDetailsOfAddressArray(oThis._dbInstance, contractAddressArray)
+                  .then(function(contractDetails){
+                    transactionData["contractAddresses"] = contractDetails;
+                    resolve(transactionData);
+                  })
+                  .catch(function(){
+                    resolve(transactionData);
+                  });
+              })
+              .catch(function(reason){
+                reject(reason);
+              });
+          })
+          .catch(function(reason){
+            reject(reason);
+          });
+
+      })
 	}
 
 	/**
@@ -87,6 +118,7 @@ transaction.prototype = {
 				});
 		})
 	}
+
 
 	/**
    * Get list of recent transactions in batches.
@@ -139,5 +171,5 @@ transaction.prototype = {
 
     });
   }
-	
-}
+
+};

@@ -1,0 +1,31 @@
+<section class="container-datatable">
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col-12 mb-3">
+
+                <h4 class="p-1 title">Token Transfers</h4>
+
+                <table id="blockDetailsTransactions" class="table table-hover table-responsive-sm token-table" cellspacing="0" width="100%">
+
+                    {{>transactionsDataColumnsOnlySymbol}}
+
+                </table>
+
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+{{#contentFor "pageScripts"}}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            btx.blockDetails.init({
+                transactions_url : "{{meta.transaction_url}}"
+            });
+        });
+    </script>
+{{/contentFor}}

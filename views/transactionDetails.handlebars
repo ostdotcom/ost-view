@@ -1,0 +1,138 @@
+{{>pageTitle title="Transaction Details"}}
+
+<div class="container container-token-details">
+    <div class="row">
+        <div class="col-12">
+
+            <div class="mt-4 mb-4 info-card card">
+                <div class="text-truncate card-body">
+                    <span class="key-color"> TX# </span>
+                    <span class="value-color font-weight-light"> {{transaction.transaction_hash}} </span>
+                </div>
+            </div>
+
+            <div class="mt-4 mb-4 details-card card">
+
+                <div class="card-body">
+                    <span class="key-color mr-1"> Status </span>
+                    {{#if transaction.gas_used}}
+                        <span class="transaction-status-color font-weight-light"> Processed </span>
+                    {{/if}}
+                </div>
+
+                <div class="card-body">
+                    <span class="key-color mr-1"> Time</span>
+                    <span class="time icon"></span>
+                    <span class="value-color font-weight-light"> {{ toDate transaction.timestamp }} </span>
+                </div>
+
+                <div class="card-body">
+                    <table class="table table-hover table-responsive-sm token-table">
+                        <tbody>
+                        {{#each token_transaction_details}}
+                            <tr scope="row">
+                                <td style="width: 6%">
+                                    <div class="cell d-flex align-items-center">
+                                        <a href="{{dictionary_dataValue 'redirect_url' ../meta 'token_details_redirect_url'}}{{contract_address}}" class="d-inline-block text-truncate symbol ml-1">
+                                            <div class="circle circle-sm {{dictionary_dataValue contract_address ../contract_addresses 'symbol_icon'}}">
+                                                <div>{{dictionary_dataValue contract_address ../contract_addresses 'company_symbol'}}</div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </td>
+                                <td style="width: 14%">
+                                    <div class="cell d-flex align-items-center">
+                                        <span class="staked-coin icon"></span>
+                                        <span class="badge badge-primary">{{bigNumber_toFromat tokens}} {{dictionary_dataValue contract_address ../contract_addresses 'company_symbol'}}</span>
+                                    </div>
+                                </td>
+                                <td style="width: 14%">
+                                    <div class="cell d-flex align-items-center">
+                                        <span class="ml-1">{{getOstBalance tokens contract_address ../contract_addresses 'price'}} OST <span class="text-lowercase">⍺</span></span>
+                                    </div>
+                                </td>
+                                <td style="width: 16%">
+                                    <div class="cell d-flex align-items-center">
+                                        <span class="time icon"></span>
+                                        <span>{{toTimeAgo timestamp}}</span>
+                                    </div>
+                                </td>
+                                <td style="width: 23%">
+                                    <div class="cell d-flex align-items-center">
+                                        <span>From</span>
+                                        <a href="{{dictionary_dataValue 'redirect_url' ../meta 'address_placeholder_url'}}{{t_from}}" class="d-inline-block text-truncate ml-1">{{t_from}}</a>
+                                    </div>
+                                </td>
+                                <td style="width: 4%">
+                                    <div class="cell d-flex align-items-center">
+                                        <div class="text-center w-100" style="color:#597a84">&#8594;</div>
+                                    </div>
+                                </td>
+                                <td style="width: 23%">
+                                    <div class="cell d-flex align-items-center">
+                                        <span>To</span>
+                                        <a href="{{dictionary_dataValue 'redirect_url' ../meta 'address_placeholder_url'}}{{t_to}}" class="d-inline-block text-truncate ml-1">{{t_to}}</a>
+                                    </div>
+                                </td>
+
+                            </tr>
+                        {{/each}}
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="card-body">
+
+                    <div class="d-flex align-items-center">
+
+                        <span class="key-color mr-1"> Amount </span>
+                        <div class="cell d-flex align-items-center ml-2">
+                            <span class="staked-coin icon"></span>
+                            {{#if transaction.tokens}}
+                                <span class="value-color font-weight-light ml-1">{{bigNumber_toFromat transaction.tokens}} OST<span class="text-lowercase">⍺</span></span>
+                            {{/if}}
+                         </div>
+                    </div>
+                </div>
+
+                <div class="card-body">
+
+                    <span class="key-color mr-1"> Block Number </span>
+                    <a class="font-weight-light" href="{{meta.redirect_url.block_placeholder_url}}{{transaction.block_number}}">{{transaction.block_number}}</a>
+
+                </div>
+
+                <div class="card-body">
+
+                    <span class="key-color mr-1"> Chain Id </span>
+                    <span class="value-color font-weight-light">{{meta.chain_id}}  </span>
+
+                </div>
+
+                <div class="card-body">
+                    <span class="key-color mr-1"> Gas Price </span>
+                    {{#if transaction.gas_price}}
+                        <span class="value-color font-weight-light">  {{transaction.gas_price}} OST<span class="text-lowercase">⍺</span> GWei </span>
+                    {{/if}}
+                </div>
+
+                <div class="card-body">
+                    <span class="key-color mr-1"> Gas Usage </span>
+                    <span class="value-color font-weight-light"> {{transaction.gas_used}} </span>
+
+                </div>
+
+                <div class="justify-content-start card-body">
+                    <span class="key-color align-top"> Input Data </span>
+                    <div class="p-2 input-data-break-all">
+                        <pre class="value-color font-weight-light"> {{{getMethodNameFromInputData transaction.input_data}}} </pre>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+

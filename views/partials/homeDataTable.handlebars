@@ -1,0 +1,85 @@
+<section class="container-datatable">
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col-12">
+
+                <div class="nav-tab-ost mt-3 mb-3">
+
+                    <ul class="nav nav-pills" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="topTokenTab" data-toggle="pill" href="#topTokens" role="tab" aria-controls="topTokenTab" aria-selected="true">Top Tokens</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="latestTokenTransferTab" data-toggle="pill" href="#latestTokenTransfer" role="tab" aria-controls="latestTokenTransferTab" aria-selected="false">Latest Token Transfer</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content mt-2" style="min-height: 620px">
+
+                        <div class="tab-pane show active" id="topTokens" role="tabpanel" aria-labelledby="topTokenTab">
+
+                            <table id="homeTopTokens" class="table table-hover table-responsive-sm token-table" cellspacing="0" width="100%">
+
+                                <script type="custom/ost" id="dt-tokens-col-1">
+                                    <div class="cell d-flex align-items-center">
+                                       <div class="rank">[[rank]]</div>
+                                    </div>
+                                </script>
+                                <script type="custom/ost" id="dt-tokens-col-2">
+                                    <div class="cell d-flex align-items-center">
+                                        <div class="circle circle-sm [[symbol_icon]]">
+                                           <div>[[symbol]]</div>
+                                        </div>
+                                        <a href="[[redirect_url]]" class="d-inline-block text-truncate ml-2">[[name]]</a>
+                                    </div>
+                                </script>
+                                <script type="custom/ost" id="dt-tokens-col-3">
+                                        <div class="cell d-flex align-items-center">
+                                            <span>[[market_cap]]</span>
+                                        </div>
+                                </script>
+                                <script type="custom/ost" id="dt-tokens-col-4">
+                                        <div class="cell d-flex align-items-center">
+                                            <span>[[price]]</span>
+                                        </div>
+                                </script>
+                                <script type="custom/ost" id="dt-tokens-col-5">
+                                        <div class="cell d-flex align-items-center">
+                                            <span>[[circulating_supply]]</span>
+                                        </div>
+                                </script>
+
+
+                            </table>
+                        </div>
+                        <div class="tab-pane" id="latestTokenTransfer" role="tabpanel" aria-labelledby="latestTokenTransferTab">
+
+                            <table id="homeRecentTokenTransactions" class="table table-hover table-responsive-sm token-table" cellspacing="0" width="100%">
+
+                                {{>transactionsDataColumnsOnlySymbol}}
+
+                            </table>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+{{#contentFor "pageScripts"}}
+<script type="text/javascript">
+    $(document).ready(function() {
+        btx.home.init({
+            top_tokens_url: "{{meta.top_tokens_url}}",
+            latest_token_transfer_url:"{{meta.latest_token_transfer_url}}",
+            token_transfer_graph_url: "{{meta.token_transfer_graph_url}}",
+            token_volume_graph_url:"{{meta.token_volume_graph_url}}"
+        });
+    });
+</script>
+{{/contentFor}}

@@ -1,0 +1,48 @@
+<section class="container-graphs">
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md">
+                <div class="card card-graph graph-1 mb-2">
+                    <div class="card-body">
+                        <div class="card-title">
+                            <h3>Total No. of Token Transfers <small>{{view_data.graph_stats.token_transfers}}</small></h3>
+                        </div>
+                        <div class="d-flex graph-header">
+                            <div class="mr-auto pt-2 pb-2">Token Transfers</div>
+                            <div class="p-2 interval" data-interval="Hour">1H</div>
+                            <div class="p-2 interval" data-interval="Day">1D</div>
+                            <div class="p-2 interval" data-interval="Week">1W</div>
+                            <div class="p-2 interval" data-interval="Month">1M</div>
+                            <div class="p-2 interval" data-interval="Year">1Y</div>
+                            <div class="p-2 interval" data-interval="All">All</div>
+                        </div>
+                        <div id="transactionsValue" class="graph-container"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md">
+                <div class="card card-graph graph-2 mb-2">
+                    <div class="card-body">
+                        <div class="card-title">
+                            <h3>Volume OST<span class="text-lowercase">⍺</span> <small>{{view_data.graph_stats.token_volume}}</small></h3>
+                        </div>
+                        <div class="d-flex graph-header">
+                            <div class="mr-auto pt-2 pb-2">Volume OST<span class="text-lowercase">⍺</span></div>
+                            <div class="p-2 interval" data-interval="Hour">1H</div>
+                            <div class="p-2 interval" data-interval="Day">1D</div>
+                            <div class="p-2 interval" data-interval="Week">1W</div>
+                            <div class="p-2 interval" data-interval="Month">1M</div>
+                            <div class="p-2 interval" data-interval="Year">1Y</div>
+                            <div class="p-2 interval" data-interval="All">All</div>
+                        </div>
+                        <div id="transactionsVolume" class="graph-container"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</section>
