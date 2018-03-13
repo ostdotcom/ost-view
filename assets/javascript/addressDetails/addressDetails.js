@@ -42,7 +42,8 @@
                 return Handlebars.compile_fe($('#dt-col-2').text())({
                   tokens: data.tokens,
                   coin_symbol: data.company_symbol,
-                  value: data.ost_amount
+                  value: data.ost_amount,
+                  inflow: data.inflow
                 });
               }
             },
