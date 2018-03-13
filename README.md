@@ -24,30 +24,6 @@ OPENST-EXPLORER
 
 * Create database in MySQL
 
-* Configure database details in config.js
-```
-  > vim $OST_VIEW_PATH/config.js
-```
-  > under chain_config hash update following values and pest 
-```
-    '<chain_id>': {
-        chainId       : <chain_id>,
-        database_type : "mysql",
-        web_rpc       : "<Geth RPC URL>",
-        poll_interval : <chain poll interval in milliseconds>,
-        db_config     : {
-            chainId         : <chain_id>,
-            driver          : 'mysql',
-            user            : '<mysql username>',
-            password        : '<mysql password>',
-            host            : '<mysql host>',
-            database        : '<database name (created in above step)>',
-            blockAttributes : ['miner','difficulty','totalDifficulty','gasLimit','gasUsed'], # Block attributes need to be populated in database, other columns will be null
-            txnAttributes   : ['gas', 'gasPrice', 'input','nonce', 'contractAddress'] # Transaction attributes need to be populated in database, other columns will be null
-        }
-    }, 
-```
-
  * Run migration
   > To run migrations for specific chain specify chain Id
   ```
@@ -57,6 +33,29 @@ OPENST-EXPLORER
   ```
     > $OST_VIEW_PATH/node executables/db_migrate.js up
   ```
+
+* Define chain configurations in set_env_vars.sh file
+  > '0' in environment variable define configurations for one particular chain.
+  > To Define configuration for multiple chains just define another set of environment
+    variables having consecutive number.
+    For example: OST_VIEW_1_CHAIN_ID, OST_VIEW_2_CHAIN_ID...
+
+  ```
+     # chain env
+     export OST_VIEW_0_CHAIN_ID=<CHAIN_ID>
+     export OST_VIEW_0_WEB_RPC=<WEB_RPC_URL>
+
+     #DB env
+     export OST_VIEW_0_DB_USER=<DB_USER_NAME>
+     export OST_VIEW_0_DB_PWD=<DB_PASSORD>
+
+     export OST_VIEW_0_DB_NAME=<DB_NAME>
+
+     export OST_VIEW_0_DB_HOST=<DB_URL>
+
+     export OST_VIEW_0_DB_CONNECTION_LIMIT=<DB_CONNECTION_LIMT>
+  ```
+
 ## In terminal 1
    * (Optional) Start notification listener(rabbitmq)
        > rabbitmq is required for notificationListener
