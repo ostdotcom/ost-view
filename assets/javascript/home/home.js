@@ -193,7 +193,7 @@
             {
               title:'Token',
               data: null,
-              width:'25%',
+              width:'20%',
               render: function (data, type, full, meta) {
                 return Handlebars.compile_fe($('#dt-tokens-col-2').text())({
                   symbol: data.company_symbol,
@@ -206,7 +206,7 @@
             {
               title:'Market Cap (OST<span class="text-lowercase">⍺</span>)',
               data: null,
-              width:'25%',
+              width:'20%',
               render: function (data, type, full, meta) {
                 return Handlebars.compile_fe($('#dt-tokens-col-3').text())({
                   market_cap: data.market_cap
@@ -216,7 +216,7 @@
             {
               title:'Price (OST<span class="text-lowercase">⍺</span>)',
               data: null,
-              width:'25%',
+              width:'20%',
               render: function (data, type, full, meta) {
                 return Handlebars.compile_fe($('#dt-tokens-col-4').text())({
                   price: data.price
@@ -224,9 +224,9 @@
               }
             },
             {
-              title:'volume (OST<span class="text-lowercase">⍺</span>)',
+              title:'Volume (OST<span class="text-lowercase">⍺</span>)',
               data: null,
-              width:'15%',
+              width:'30%',
               render: function (data, type, full, meta) {
                 return Handlebars.compile_fe($('#dt-tokens-col-5').text())({
                   circulating_supply: data.token_ost_volume
