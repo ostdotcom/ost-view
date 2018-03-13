@@ -19,7 +19,7 @@
     selector: null,
     type: null,
     tsUnixToJs: true,
-    noDataHTML: 'No data to populate graphs',
+    noDataHTML: '<div class="noDataHTML">No data to populate graphs</div>',
     loadingHTML: '<div style="width:60px;font-size:12px;margin:0 auto">Loading...</div>',
 
     /*
@@ -121,7 +121,11 @@
      * dataSrc to specify custom data source in ajax response
      */
     dataSrc: function(response){
-      return response.data[response.data.result_type];
+      if(response.data){
+        return response.data[response.data.result_type];
+      } else {
+        return [];
+      }
     },
 
     /*
