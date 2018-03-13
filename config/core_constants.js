@@ -33,7 +33,7 @@ define("ADDRESS_DATA_SEQUENCE", '(address.address, address.branded_token_id, add
 define("BRANDED_TOKEN_DATA_SEQUENCE", '(branded_token.id, branded_token.company_name, branded_token.contract_address, branded_token.company_symbol, ' +
 'branded_token.uuid, branded_token.price, branded_token.token_holders, branded_token.market_cap, branded_token.circulation, branded_token.total_supply, ' +
 'branded_token.transactions_data, branded_token.transactions_volume_data, branded_token.tokens_transfer_data, branded_token.tokens_volume_data, ' +
-'branded_token.transaction_type_data, branded_token.token_transfers, branded_token.token_ost_volume, branded_token.creation_time)');
+'branded_token.transaction_type_data, branded_token.token_transfers, branded_token.token_ost_volume, branded_token.creation_time, branded_token.symbol_icon)');
 
 // Index Map
 define("TRANSACTION_INDEX_MAP", {'transaction_hash':0, 'block_number':1, 'transaction_index':2, 'contract_address':3, 't_from':4, 't_to':5, 'tokens':6, 'gas_used':7, 'gas_price':8, 'nounce':9, 'input_data': 10, 'logs':11, 'timestamp':12});
