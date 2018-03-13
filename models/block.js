@@ -53,16 +53,22 @@ block.prototype = {
 
       Promise.all(promiseResolver)
         .then(function(values){
+          if (values.length > 0 && values[0]) {
 
-          var blockDetails = values[0]
-          ,tokenTransactionCount = values[1]
-          ;
+            var blockDetails = values[0]
+              , tokenTransactionCount = values[1]
+              ;
 
-          blockDetails['total_token_transactions'] = tokenTransactionCount;
+            blockDetails['total_token_transactions'] = tokenTransactionCount;
 
-          resolve(blockDetails);
+            resolve(blockDetails);
+          }else{
+            resolve();
+          }
         })
         .catch(function(reason){
+          console.log("***********  1 :: ",reason);
+
           reject(reason);
         });
 

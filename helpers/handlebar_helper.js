@@ -32,15 +32,15 @@ module.exports = {
   },
 
   math: function (lvalue, operator, rvalue){
-    lvalue = parseFloat(lvalue);
-    rvalue = parseFloat(rvalue);
+    lvalue = new bigNumber(lvalue.toString());
+    rvalue = new bigNumber(rvalue.toString());
 
     var value =  {
-      "+": lvalue + rvalue,
-      "-": lvalue - rvalue,
-      "*": lvalue * rvalue,
-      "/": lvalue / rvalue,
-      "%": lvalue % rvalue
+      "+": lvalue.plus(rvalue),
+      "-": lvalue.minus(rvalue),
+      "*": lvalue.times(rvalue),
+      "/": lvalue.dividedBy(rvalue),
+      "%": lvalue.modulo(rvalue)
     }[operator];
 
     if (isNaN(value)){
