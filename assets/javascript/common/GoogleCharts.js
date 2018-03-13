@@ -21,6 +21,9 @@
     tsUnixToJs: true,
     noDataHTML: '<div class="noDataHTML">No data to populate graphs</div>',
     loadingHTML: '<div style="width:60px;font-size:12px;margin:0 auto">Loading...</div>',
+    loadingCSS: {
+      'filter' : 'blur(5px)'
+    },
 
     /*
      * Initiates Google Charts by google.charts.load
@@ -51,6 +54,11 @@
       if(!$(oThis.selector)[0]){
         console.warn('Selector '+oThis.selector+' not found in DOM');
         return false;
+      }
+
+      var jELBlur = $(oThis.selector).find('> div');
+      if( jELBlur && oThis.loadingCSS ) {
+        jELBlur.css( oThis.loadingCSS );
       }
 
       $(oThis.selector).prepend('<div style="position:absolute;left:0;z-index:1;width:100%;">'+oThis.loadingHTML+'</div>');
@@ -121,11 +129,7 @@
      * dataSrc to specify custom data source in ajax response
      */
     dataSrc: function(response){
-      if(response.data){
-        return response.data[response.data.result_type];
-      } else {
-        return [];
-      }
+      return response.data[response.data.result_type];
     },
 
     /*
