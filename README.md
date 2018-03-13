@@ -36,7 +36,7 @@ OPENST-EXPLORER
 
 * Define chain configurations in set_env_vars.sh file
   > '0' in environment variable define configurations for one particular chain.
-  > To Define configuration for multiple chains just define another set of environment
+  > To Define configuration for multiple chains, define another set of environment
     variables having consecutive number.
     For example: OST_VIEW_1_CHAIN_ID, OST_VIEW_2_CHAIN_ID...
 
@@ -47,7 +47,7 @@ OPENST-EXPLORER
 
      #DB env
      export OST_VIEW_0_DB_USER=<DB_USER_NAME>
-     export OST_VIEW_0_DB_PWD=<DB_PASSORD>
+     export OST_VIEW_0_DB_PWD=<DB_PASSWORD>
 
      export OST_VIEW_0_DB_NAME=<DB_NAME>
 
