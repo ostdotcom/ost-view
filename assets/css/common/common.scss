@@ -15,7 +15,31 @@
     color: #fff;
     line-height: 60px;
     text-align: center;
-    background: #000
+    background: #cccccc;
+
+    &.token_icon_1 {
+        background-color: #92e1d1;
+    }
+
+    &.token_icon_2 {
+        background-color: #34445b;
+    }
+
+    &.token_icon_3 {
+        background-color: #e4b030;
+    }
+
+    &.token_icon_4 {
+        background-color: #9064a2;
+    }
+
+    &.token_icon_5 {
+        background-color: #84d1d4;
+    }
+
+    &.token_icon_6 {
+        background-color: #ff5f59;
+    }
 }
 .circle-sm{
     width: 40px;

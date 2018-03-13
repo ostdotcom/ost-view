@@ -28,8 +28,9 @@
               width:'16%',
               render: function (data, type, full, meta) {
                 return Handlebars.compile_fe($('#dt-col-1').text())({
-                  symbol: data['company_symbol'],
-                  name: data['company_name'],
+                  symbol: data.company_symbol,
+                  name: data.company_name,
+                  symbol_icon: data.symbol_icon,
                   redirect_url:data.token_details_redirect_url
                 });
               }
@@ -136,6 +137,7 @@
 
               element['company_name'] = contractAddresses[contract_address].company_name;
               element['company_symbol'] = contractAddresses[contract_address].company_symbol;
+              element['symbol_icon'] = contractAddresses[contract_address].symbol_icon;
             }else{
               element['ost_amount'] = '';
               element['company_name'] = '';

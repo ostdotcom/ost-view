@@ -28,9 +28,10 @@
               width:'16%',
               render: function (data, type, full, meta) {
                 return Handlebars.compile_fe($('#dt-col-1').text())({
-                  symbol: data['company_symbol'],
-                  name: data['company_name'],
-                  redirect_url: data['token_details_redirect_url']
+                  symbol: data.company_symbol,
+                  name: data.company_name,
+                  symbol_icon: data.symbol_icon,
+                  redirect_url: data.token_details_redirect_url
                 });
               }
             },
@@ -107,9 +108,9 @@
               , txURL = meta.transaction_placeholder_url
               , addressURL = meta.address_placeholder_url
               , tokenDetailsPlaceholderUrl = meta.token_details_redirect_url
-              , contarct_address = element.contract_address
+              , contract_address = element.contract_address
               ,tokens = element.tokens
-              , price = contractAddresses[contarct_address].price
+              , price = contractAddresses[contract_address].price
               ,timestamp = element.timestamp
               ;
 
@@ -126,14 +127,15 @@
               addr: to
             });
             element['token_details_redirect_url'] = Handlebars.compile(tokenDetailsPlaceholderUrl)({
-              contract_addr: contarct_address
+              contract_addr: contract_address
             });
 
             element['tokens'] = PriceOracle.getDisplayBt(tokens);
             element['ost_amount'] = PriceOracle.getDisplayBtToOst(tokens, price);
 
-            element['company_name'] = contractAddresses[contarct_address].company_name;
-            element['company_symbol'] = contractAddresses[contarct_address].company_symbol;
+            element['company_name'] = contractAddresses[contract_address].company_name;
+            element['company_symbol'] = contractAddresses[contract_address].company_symbol;
+            element['symbol_icon'] = contractAddresses[contract_address].symbol_icon;
 
           });
         }

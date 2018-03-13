@@ -49,7 +49,8 @@
               render: function(data, type, full, meta){
                 return Handlebars.compile_fe($('#dt-col-1').text())({
                   symbol: data.company_symbol,
-                  name: data.company_name
+                  name: data.company_name,
+                  symbol_icon: data.symbol_icon,
                 });
               }
             },
@@ -125,9 +126,9 @@
             var txHash = element.transaction_hash;
             var from = element.t_from;
             var to = element.t_to
-              , contarct_address = element.contract_address
+              , contract_address = element.contract_address
               , tokens = element.tokens
-              , price = contractAddresses[contarct_address].price
+              , price = contractAddresses[contract_address].price
               ,timestamp = element.timestamp
               ;
 
@@ -151,8 +152,9 @@
             element['tokens'] = PriceOracle.getDisplayBt(tokens);
             element['ost_amount'] = PriceOracle.getDisplayBtToOst(tokens, price);
 
-            element['company_name'] = contractAddresses[contarct_address].company_name;
-            element['company_symbol'] = contractAddresses[contarct_address].company_symbol;
+            element['company_name'] = contractAddresses[contract_address].company_name;
+            element['company_symbol'] = contractAddresses[contract_address].company_symbol;
+            element['symbol_icon'] = contractAddresses[contract_address].symbol_icon;
           });
         }
       });
@@ -196,13 +198,13 @@
           var dataToProceess = response.data[response.data.result_type];
           var meta =  response.data.meta
             ,contractAddresses = response.data['contract_address']
-            , contarct_address = meta.q
+            , contract_address = meta.q
             ;
 
           dataToProceess.forEach(function(element) {
             var name = element.address
               ,tokens = element.tokens
-              ,price = contractAddresses[contarct_address].price
+              ,price = contractAddresses[contract_address].price
             ;
 
             var addressURL = meta.address_placeholder_url;
@@ -214,8 +216,8 @@
             element['tokens'] = PriceOracle.getDisplayBt(tokens);
             element['ost_amount'] = PriceOracle.getDisplayBtToOst(tokens, price);
 
-            element['company_name'] = contractAddresses[contarct_address].company_name;
-            element['company_symbol'] = contractAddresses[contarct_address].company_symbol;
+            element['company_name'] = contractAddresses[contract_address].company_name;
+            element['company_symbol'] = contractAddresses[contract_address].company_symbol;
           });
         }
 

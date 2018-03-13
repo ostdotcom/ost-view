@@ -55,8 +55,9 @@
               width:'16%',
               render: function(data, type, full, meta){
                 return Handlebars.compile_fe($('#dt-col-1').text())({
-                  symbol: data["company_symbol"],
-                  name: data["company_name"],
+                  symbol: data.company_symbol,
+                  name: data.company_name,
+                  symbol_icon: data.symbol_icon,
                   redirect_url:data.token_details_redirect_url
                 });
               }
@@ -139,9 +140,9 @@
             , txURL = meta.transaction_placeholder_url
             , addressURL = meta.address_placeholder_url
             , tokenDetailsURL = meta.token_details_redirect_url
-            , contarctAddress = element.contract_address
+            , contractAddress = element.contract_address
             , tokens = element.tokens
-            , price = contractAddresses[contarctAddress].price
+            , price = contractAddresses[contractAddress].price
             ,timestamp = element.timestamp
             ;
 
@@ -160,14 +161,15 @@
             });
 
             element['token_details_redirect_url'] =  Handlebars.compile(tokenDetailsURL)({
-              contract_addr: contarctAddress
+              contract_addr: contractAddress
             });
 
             element['tokens'] = PriceOracle.getDisplayBt(tokens);
             element['ost_amount'] = PriceOracle.getDisplayBtToOst(tokens, price);
 
-            element['company_name'] = contractAddresses[contarctAddress].company_name;
-            element['company_symbol'] = contractAddresses[contarctAddress].company_symbol;
+            element['company_name'] = contractAddresses[contractAddress].company_name;
+            element['company_symbol'] = contractAddresses[contractAddress].company_symbol;
+            element['symbol_icon'] = contractAddresses[contractAddress].symbol_icon;
 
           });
         }
@@ -196,6 +198,7 @@
                 return Handlebars.compile_fe($('#dt-tokens-col-2').text())({
                   symbol: data.company_symbol,
                   name: data.company_name,
+                  symbol_icon: data.symbol_icon,
                   redirect_url:data.token_details_redirect_url
                 });
               }
