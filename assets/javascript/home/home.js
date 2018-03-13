@@ -340,7 +340,7 @@
               contract_addr: contractAddress
             });
             element['token_ost_volume'] = PriceOracle.getDisplayFiat(element.token_ost_volume);
-            element['price'] = PriceOracle.getDisplayFiat(element.price);
+            element['price'] =PriceOracle.getDisplayBtToOst(1, element.price);
             element['market_cap'] = PriceOracle.getDisplayFiat(element.market_cap);
 
           });
