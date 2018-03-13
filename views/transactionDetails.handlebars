@@ -31,19 +31,24 @@
                         <tbody>
                         {{#each token_transaction_details}}
                             <tr scope="row">
-                                <td style="width: 16%">
+                                <td style="width: 6%">
                                     <div class="cell d-flex align-items-center">
-                                        <div class="circle circle-sm {{dictionary_dataValue contract_address ../contract_addresses 'symbol_icon'}}">
-                                            <div>{{dictionary_dataValue contract_address ../contract_addresses 'company_symbol'}}</div>
-                                        </div>
-                                        <a href="{{dictionary_dataValue 'redirect_url' ../meta 'token_details_redirect_url'}}{{contract_address}}" class="d-inline-block text-truncate ml-1">{{dictionary_dataValue contract_address ../contract_addresses 'company_name'}}</a>
+                                        <a href="{{dictionary_dataValue 'redirect_url' ../meta 'token_details_redirect_url'}}{{contract_address}}" class="d-inline-block text-truncate symbol ml-1">
+                                            <div class="circle circle-sm {{dictionary_dataValue contract_address ../contract_addresses 'symbol_icon'}}">
+                                                <div>{{dictionary_dataValue contract_address ../contract_addresses 'company_symbol'}}</div>
+                                            </div>
+                                        </a>
                                     </div>
                                 </td>
-                                <td style="width: 24%">
+                                <td style="width: 14%">
                                     <div class="cell d-flex align-items-center">
                                         <span class="staked-coin icon"></span>
                                         <span class="badge badge-primary">{{bigNumber_toFromat tokens}} {{dictionary_dataValue contract_address ../contract_addresses 'company_symbol'}}</span>
-                                        <span class="ml-1 ost-value">{{getOstBalance tokens contract_address ../contract_addresses 'price'}}</span>
+                                    </div>
+                                </td>
+                                <td style="width: 14%">
+                                    <div class="cell d-flex align-items-center">
+                                        <span class="ml-1">{{getOstBalance tokens contract_address ../contract_addresses 'price'}} OST <span class="text-lowercase">⍺</span></span>
                                     </div>
                                 </td>
                                 <td style="width: 16%">
@@ -52,7 +57,7 @@
                                         <span>{{toTimeAgo timestamp}}</span>
                                     </div>
                                 </td>
-                                <td style="width: 20%">
+                                <td style="width: 23%">
                                     <div class="cell d-flex align-items-center">
                                         <span>From</span>
                                         <a href="{{dictionary_dataValue 'redirect_url' ../meta 'address_placeholder_url'}}{{t_from}}" class="d-inline-block text-truncate ml-1">{{t_from}}</a>
@@ -63,7 +68,7 @@
                                         <div class="text-center w-100" style="color:#597a84">&#8594;</div>
                                     </div>
                                 </td>
-                                <td style="width: 20%">
+                                <td style="width: 23%">
                                     <div class="cell d-flex align-items-center">
                                         <span>To</span>
                                         <a href="{{dictionary_dataValue 'redirect_url' ../meta 'address_placeholder_url'}}{{t_to}}" class="d-inline-block text-truncate ml-1">{{t_to}}</a>

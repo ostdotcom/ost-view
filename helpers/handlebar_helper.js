@@ -94,7 +94,7 @@ module.exports = {
       var ostValue = new bigNumber(tokens).div(new bigNumber(price));
 
       var bigNumberValue = ostValue.toFormat(5);
-      return '('+bigNumberValue+' OST⍺)';
+      return bigNumberValue;
     }else{
       return '';
     }
