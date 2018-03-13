@@ -249,7 +249,7 @@
           break;
         case 'All':
           var format = "MMM''yy";
-          var count = 12;
+          var count = -1;
           break;
       }
       oThis.googleCharts_1.draw({
@@ -339,7 +339,7 @@
           break;
         case 'All':
           var format = "MMM''yy";
-          var count = 12;
+          var count = -1;
           break;
       }
       oThis.googleCharts_2.draw({
