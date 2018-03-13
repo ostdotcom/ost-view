@@ -91,7 +91,7 @@ module.exports = {
   getOstBalance : function(tokens, addresssContract, contractArray){
     if (contractArray) {
       var price = contractArray[addresssContract].price;
-      var ostValue = new bigNumber(tokens).mul(new bigNumber(price));
+      var ostValue = new bigNumber(tokens).div(new bigNumber(price));
 
       var bigNumberValue = ostValue.toFormat(5);
       return '('+bigNumberValue+' OST⍺)';
