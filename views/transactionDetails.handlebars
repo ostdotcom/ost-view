@@ -113,7 +113,7 @@
                 <div class="card-body">
                     <span class="key-color mr-1"> Gas Price </span>
                     {{#if transaction.gas_price}}
-                        <span class="value-color font-weight-light">  {{transaction.gas_price}} OST<span class="text-lowercase">⍺</span> GWei </span>
+                        <span class="value-color font-weight-light"> {{toOSTAlpha transaction.gas_price 9}} OST<span class="text-lowercase">⍺</span> ({{transaction.gas_price}} wei) </span>
                     {{/if}}
                 </div>
 

@@ -98,7 +98,12 @@ module.exports = {
     }else{
       return '';
     }
+  },
 
+  toOSTAlpha : function(amount, precision){
+    var bigNumberAmount = new bigNumber(amount)
+    var bigNumberDivisor = new bigNumber(10).toPower(18);
+    return bigNumberAmount.div(bigNumberDivisor).toFormat(precision);
   }
 
 };
