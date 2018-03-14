@@ -15,7 +15,8 @@ const express = require('express')
   , http = require('http')
   , cluster = require('cluster')
   , exphbs  = require('express-handlebars')
-  , basicAuth = require('express-basic-auth')
+  // , basicAuth = require('express-basic-auth')
+  , basicAuth = require('basic-auth')
   , morgan = require('morgan')
   , customUrlParser = require('url')
   ;
@@ -42,6 +43,32 @@ const rootPrefix = "."
   , customMiddleware = require(rootPrefix + '/helpers/custom_middleware')
   , searchResultRoutes = require(rootPrefix + '/routes/searchResults')
   ;
+
+////For authentication
+const basicAuthKey = 'OST_VIEW_'+process.env.CHAIN_ID
+  , uKey = basicAuthKey + "_UNAME"
+  , pKey = basicAuthKey + "_PWD"
+  , userName = process.env[ uKey ]
+  , userPwd = process.env[ pKey ]
+;
+var basicAuthentication = function (req, res, next) {
+  function unauthorized(res) {
+    res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
+    return res.send(401);
+  }
+
+  var user = basicAuth(req);
+
+  if (!user || !user.name || !user.pass) {
+    return unauthorized(res);
+  }
+
+  if (user.name === userName && user.pass === userPwd) {
+    return next();
+  } else {
+    return unauthorized(res);
+  }
+};
 
 // if the process is a master.
 if (cluster.isMaster) {
@@ -125,19 +152,19 @@ if (cluster.isMaster) {
   //Docs: https://www.npmjs.com/package/express-sanitized
   app.use(sanitizer());
 
-  ////For authentication
-  const basicAuthKey = 'OST_VIEW_'+process.env.CHAIN_ID
-      , uKey = basicAuthKey + "_UNAME"
-      , pKey = basicAuthKey + "_PWD"
-      , userName = process.env[ uKey ]
-      , userPwd = process.env[ pKey ]
-    ;
-  var usersHash = {};
-  usersHash[userName] = userPwd;
-  app.use(basicAuth({
-    users: usersHash,
-    challenge: true
-  }));
+  // ////For authentication
+  // const basicAuthKey = 'OST_VIEW_'+process.env.CHAIN_ID
+  //     , uKey = basicAuthKey + "_UNAME"
+  //     , pKey = basicAuthKey + "_PWD"
+  //     , userName = process.env[ uKey ]
+  //     , userPwd = process.env[ pKey ]
+  //   ;
+  // var usersHash = {};
+  // usersHash[userName] = userPwd;
+  // app.use(basicAuth({
+  //   users: usersHash,
+  //   challenge: true
+  // }));
 
   //Setting view engine template handlebars
   app.set('views', path.join(__dirname, 'views'));
@@ -180,18 +207,18 @@ if (cluster.isMaster) {
   app.use(express.static(path.join(__dirname, 'public')));
 
   // load route files
-  app.use('/', indexRoutes);
+  app.use('/', basicAuthentication, indexRoutes);
 
-  app.use('/chain-id/:chainId/block', blockRoutes);
+  app.use('/chain-id/:chainId/block', basicAuthentication, blockRoutes);
   // app.use('/chain-id/:chainId/blocks', blocksRoutes);
-  app.use('/chain-id/:chainId/transactions', transactionsRoutes);
-  app.use('/chain-id/:chainId/transaction', transactionRoutes);
-  app.use('/chain-id/:chainId/address', addressRoutes);
-  app.use('/chain-id/:chainId/contract', contractRoutes);
+  app.use('/chain-id/:chainId/transactions', basicAuthentication, transactionsRoutes);
+  app.use('/chain-id/:chainId/transaction', basicAuthentication, transactionRoutes);
+  app.use('/chain-id/:chainId/address', basicAuthentication, addressRoutes);
+  app.use('/chain-id/:chainId/contract', basicAuthentication, contractRoutes);
   app.use('/chain-id/:chainId/tokendetails', tokenDetailsRoutes);
-  app.use('/chain-id/:chainId/tokens', tokenTransactionsRoutes);
-  app.use('/chain-id/:chainId/chainDetails', chainDetailsRoutes);
-  app.use('/search-results', searchResultRoutes);
+  app.use('/chain-id/:chainId/tokens', basicAuthentication, tokenTransactionsRoutes);
+  app.use('/chain-id/:chainId/chainDetails', basicAuthentication, chainDetailsRoutes);
+  app.use('/search-results', basicAuthentication, searchResultRoutes);
 
   // catch 404 and forward to error handler
   app.use(function (req, res, next) {
