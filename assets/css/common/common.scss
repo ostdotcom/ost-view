@@ -16,6 +16,7 @@
     line-height: 60px;
     text-align: center;
     background: #cccccc;
+    text-transform: uppercase;
 
     &.token_icon_1 {
         background-color: #92e1d1;
@@ -61,6 +62,9 @@
 }
 .badge-primary {
     background: #9cc5c1;
+    &.inflow-0{
+        background: #FF5F5A;
+    }
 }
 a,
 a:hover,

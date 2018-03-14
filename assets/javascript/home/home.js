@@ -48,11 +48,88 @@
       oThis.recentTokenTransactions = new TokenTable({
         ajaxURL: oThis.config.latest_token_transfer_url,
         selector: '#homeRecentTokenTransactions',
+        //dtConfig : {
+        //  columns: [
+        //    {
+        //      data: null,
+        //      width:'16%',
+        //      render: function(data, type, full, meta){
+        //        return Handlebars.compile_fe($('#dt-col-1').text())({
+        //          symbol: data.company_symbol,
+        //          name: data.company_name,
+        //          symbol_icon: data.symbol_icon,
+        //          redirect_url:data.token_details_redirect_url
+        //        });
+        //      }
+        //    },
+        //    {
+        //      data: null,
+        //      width:'18%',
+        //      render: function(data, type, full, meta){
+        //        return Handlebars.compile_fe($('#dt-col-2').text())({
+        //          tokens: data.tokens,
+        //          coin_symbol: data.company_symbol,
+        //          value: data.ost_amount
+        //        });
+        //      }
+        //    },
+        //    {
+        //      data: null,
+        //      width:'11%',
+        //      render: function(data, type, full, meta){
+        //        return Handlebars.compile_fe($('#dt-col-3').text())({
+        //          timestamp: data.timestamp
+        //        });
+        //      }
+        //    },
+        //    {
+        //      data: null,
+        //      width:'11%',
+        //      render: function(data, type, full, meta){
+        //        return Handlebars.compile_fe($('#dt-col-4').text())({
+        //          tx: data.transaction_hash,
+        //          redirect_url: data.tx_redirect_url
+        //
+        //        });
+        //      }
+        //    },
+        //    {
+        //      data: null,
+        //      width:'17%',
+        //      render: function(data, type, full, meta){
+        //        return Handlebars.compile_fe($('#dt-col-5').text())({
+        //          from: data.t_from,
+        //          redirect_url: data.from_redirect_url
+        //
+        //        });
+        //      }
+        //    },
+        //    {
+        //      data: null,
+        //      width:'4%',
+        //      className: 'arrow',
+        //      render: function(data, type, full, meta){
+        //        return Handlebars.compile_fe($('#dt-col-6').text());
+        //      }
+        //    },
+        //    {
+        //      data: null,
+        //      width:'17%',
+        //      render: function(data, type, full, meta){
+        //        return Handlebars.compile_fe($('#dt-col-7').text())({
+        //          to: data.t_to,
+        //          redirect_url: data.to_redirect_url
+        //
+        //        });
+        //      }
+        //    }
+        //  ]
+        //},
         dtConfig : {
           columns: [
             {
               data: null,
-              width:'16%',
+              width:'6%',
               render: function(data, type, full, meta){
                 return Handlebars.compile_fe($('#dt-col-1').text())({
                   symbol: data.company_symbol,
@@ -64,9 +141,20 @@
             },
             {
               data: null,
-              width:'18%',
+              width:'14%',
               render: function(data, type, full, meta){
-                return Handlebars.compile_fe($('#dt-col-2').text())({
+                return Handlebars.compile_fe($('#dt-col-2-1').text())({
+                  tokens: data.tokens,
+                  coin_symbol: data.company_symbol,
+                  value: data.ost_amount
+                });
+              }
+            },
+            {
+              data: null,
+              width:'14%',
+              render: function(data, type, full, meta){
+                return Handlebars.compile_fe($('#dt-col-2-2').text())({
                   tokens: data.tokens,
                   coin_symbol: data.company_symbol,
                   value: data.ost_amount
@@ -183,7 +271,7 @@
             {
               title:'',
               data: null,
-              width:'10%',
+              width:'12%',
               render: function (data, type, full, meta) {
                 return Handlebars.compile_fe($('#dt-tokens-col-1').text())({
                   rank: data.rank
@@ -193,7 +281,7 @@
             {
               title:'Token',
               data: null,
-              width:'25%',
+              width:'22%',
               render: function (data, type, full, meta) {
                 return Handlebars.compile_fe($('#dt-tokens-col-2').text())({
                   symbol: data.company_symbol,
@@ -206,7 +294,7 @@
             {
               title:'Market Cap (OST<span class="text-lowercase">⍺</span>)',
               data: null,
-              width:'25%',
+              width:'22%',
               render: function (data, type, full, meta) {
                 return Handlebars.compile_fe($('#dt-tokens-col-3').text())({
                   market_cap: data.market_cap
@@ -216,7 +304,7 @@
             {
               title:'Price (OST<span class="text-lowercase">⍺</span>)',
               data: null,
-              width:'25%',
+              width:'22%',
               render: function (data, type, full, meta) {
                 return Handlebars.compile_fe($('#dt-tokens-col-4').text())({
                   price: data.price
@@ -224,9 +312,9 @@
               }
             },
             {
-              title:'volume (OST<span class="text-lowercase">⍺</span>)',
+              title:'Volume (OST<span class="text-lowercase">⍺</span>)',
               data: null,
-              width:'15%',
+              width:'22%',
               render: function (data, type, full, meta) {
                 return Handlebars.compile_fe($('#dt-tokens-col-5').text())({
                   circulating_supply: data.token_ost_volume
@@ -252,7 +340,7 @@
               contract_addr: contractAddress
             });
             element['token_ost_volume'] = PriceOracle.getDisplayFiat(element.token_ost_volume);
-            element['price'] = PriceOracle.getDisplayFiat(element.price);
+            element['price'] =PriceOracle.getDisplayBtToOst(1, element.price);
             element['market_cap'] = PriceOracle.getDisplayFiat(element.market_cap);
 
           });
@@ -285,7 +373,7 @@
           break;
         case 'All':
           var format = "MMM''yy";
-          var count = 12;
+          var count = -1;
           break;
       }
       oThis.googleCharts_1.draw({
@@ -375,7 +463,7 @@
           break;
         case 'All':
           var format = "MMM''yy";
-          var count = 12;
+          var count = -1;
           break;
       }
       oThis.googleCharts_2.draw({

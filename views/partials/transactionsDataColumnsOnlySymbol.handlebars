@@ -1,16 +1,21 @@
 <script type="custom/ost" id="dt-col-1">
     <div class="cell d-flex align-items-center">
-        <div class="circle circle-sm [[symbol_icon]]">
-           <div>[[symbol]]</div>
-        </div>
-        <a href="[[redirect_url]]" class="ml-2 name">[[name]]</a>
+        <a href="[[redirect_url]]" class="ml-2 symbol">
+            <div class="circle circle-sm [[symbol_icon]]">
+               <div>[[symbol]]</div>
+            </div>
+        </a>
     </div>
 </script>
-<script type="custom/ost" id="dt-col-2">
+<script type="custom/ost" id="dt-col-2-1">
     <div class="cell d-flex align-items-center">
         <span class="staked-coin icon"></span>
         <span class="badge badge-primary inflow-[[inflow]] ml-1 pr-2">[[tokens]] [[coin_symbol]]</span>
-        <span class="ml-1 ost-value">([[value]] OST<span class="text-lowercase">⍺</span>)</span>
+    </div>
+</script>
+<script type="custom/ost" id="dt-col-2-2">
+    <div class="cell d-flex align-items-center">
+        <span class="ml-1">[[value]] OST<span class="text-lowercase">⍺</span></span>
     </div>
 </script>
 <script type="custom/ost" id="dt-col-3">

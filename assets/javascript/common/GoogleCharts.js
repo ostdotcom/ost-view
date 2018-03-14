@@ -19,8 +19,11 @@
     selector: null,
     type: null,
     tsUnixToJs: true,
-    noDataHTML: 'No data to populate graphs',
+    noDataHTML: '<div class="noDataHTML">No data to populate graphs</div>',
     loadingHTML: '<div style="width:60px;font-size:12px;margin:0 auto">Loading...</div>',
+    loadingCSS: {
+      'filter' : 'blur(5px)'
+    },
 
     /*
      * Initiates Google Charts by google.charts.load
@@ -53,7 +56,12 @@
         return false;
       }
 
-      $(oThis.selector).append('<div style="position:absolute;z-index:1;width:100%;">'+oThis.loadingHTML+'</div>');
+      var jELBlur = $(oThis.selector).find('> div');
+      if( jELBlur && oThis.loadingCSS ) {
+        jELBlur.css( oThis.loadingCSS );
+      }
+
+      $(oThis.selector).prepend('<div style="position:absolute;left:0;z-index:1;width:100%;">'+oThis.loadingHTML+'</div>');
 
       if(!$.isEmptyObject(oThis.ajax)){
         var ajaxObj = {

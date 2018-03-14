@@ -13,9 +13,9 @@
 
     bindButtons: function(){
 
-      $('#btxSearch').on('submit', function(e){
+      $('.btxSearch').on('submit', function(e){
         e.preventDefault();
-        if($("input[type=search]").val().trim() != ''){
+        if($(this).find("input[type=search]").val().trim() != ''){
           $.ajax({
             url: $(this).attr('action'),
             data: $(this).serialize(),

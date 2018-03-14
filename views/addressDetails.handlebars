@@ -18,7 +18,7 @@
                     <span class="staked-coin icon"></span>
                     {{#if address_info.tokens}}
                          <span class="badge badge-primary"> {{bigNumber_toFromat address_info.tokens}} {{dictionary_dataValue address_info.branded_token_id contract_address 'company_symbol'}} </span>
-                         <span class="value-color font-weight-bold"> {{getOstBalance address_info.tokens address_info.branded_token_id contract_address}} </span>
+                         <span class="value-color font-weight-bold"> ({{getOstBalance address_info.tokens address_info.branded_token_id contract_address}} OST <span class="text-lowercase">⍺</span>) </span>
                     {{/if}}
                 </div>
 

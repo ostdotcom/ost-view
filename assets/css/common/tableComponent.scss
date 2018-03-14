@@ -82,6 +82,9 @@ table.token-table {
 
     .cell {
       height: 40px;
+      .symbol:hover{
+        text-decoration: none;
+      }
       .badge-primary{
         min-width: 80px;
         text-align: left;
@@ -92,8 +95,8 @@ table.token-table {
       .text-truncate {
         max-width: 170px
       }
-      @media (max-width: 576px) {
-        min-width: 100px;
+      @media (max-width: 768px) {
+        min-width: 80px;
         .text-truncate {
           max-width: 75px
         }

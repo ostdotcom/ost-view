@@ -109,7 +109,7 @@ function fetchHomeData (req, res){
 
 // define parameters from url, generate web rpc instance and database connect
 const searchMiddleware = function (req, res, next) {
-  var chainId = req.params.chainId
+  var chainId = req.query.chain_id
     , q = req.query.q
     ;
 

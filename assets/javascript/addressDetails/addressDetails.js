@@ -21,11 +21,84 @@
       var addressTransactions = new TokenTable({
         ajaxURL: oThis.config.transactions_url,
         selector: '#addressDetailsTransactions',
+        //dtConfig: {
+        //  columns: [
+        //    {
+        //      data: null,
+        //      width:'16%',
+        //      render: function (data, type, full, meta) {
+        //        return Handlebars.compile_fe($('#dt-col-1').text())({
+        //          symbol: data.company_symbol,
+        //          name: data.company_name,
+        //          symbol_icon: data.symbol_icon,
+        //          redirect_url: data.token_details_redirect_url
+        //        });
+        //      }
+        //    },
+        //    {
+        //      data: null,
+        //      width:'18%',
+        //      render: function (data, type, full, meta) {
+        //        return Handlebars.compile_fe($('#dt-col-2').text())({
+        //          tokens: data.tokens,
+        //          coin_symbol: data.company_symbol,
+        //          value: data.ost_amount
+        //        });
+        //      }
+        //    },
+        //    {
+        //      data: null,
+        //      width:'11%',
+        //      render: function (data, type, full, meta) {
+        //        return Handlebars.compile_fe($('#dt-col-3').text())({
+        //          timestamp: data.timestamp
+        //        });
+        //      }
+        //    },
+        //    {
+        //      data: null,
+        //      width:'11%',
+        //      render: function (data, type, full, meta) {
+        //        return Handlebars.compile_fe($('#dt-col-4').text())({
+        //          tx: data.transaction_hash,
+        //          redirect_url: data.tx_redirect_url
+        //        });
+        //      }
+        //    },
+        //    {
+        //      data: null,
+        //      width:'17%',
+        //      render: function (data, type, full, meta) {
+        //        return Handlebars.compile_fe($('#dt-col-5').text())({
+        //          from: data.address,
+        //          redirect_url: data.from_redirect_url
+        //        });
+        //      }
+        //    },
+        //    {
+        //      data: null,
+        //      width:'4%',
+        //      render: function (data, type, full, meta) {
+        //        return Handlebars.compile_fe($('#dt-col-6').text());
+        //      }
+        //    },
+        //    {
+        //      data: null,
+        //      width:'17%',
+        //      render: function (data, type, full, meta) {
+        //        return Handlebars.compile_fe($('#dt-col-7').text())({
+        //          to: data.corresponding_address,
+        //          redirect_url: data.to_redirect_url
+        //        });
+        //      }
+        //    }
+        //  ]
+        //},
         dtConfig: {
           columns: [
             {
               data: null,
-              width:'16%',
+              width:'6%',
               render: function (data, type, full, meta) {
                 return Handlebars.compile_fe($('#dt-col-1').text())({
                   symbol: data.company_symbol,
@@ -37,9 +110,21 @@
             },
             {
               data: null,
-              width:'18%',
+              width:'14%',
               render: function (data, type, full, meta) {
-                return Handlebars.compile_fe($('#dt-col-2').text())({
+                return Handlebars.compile_fe($('#dt-col-2-1').text())({
+                  tokens: data.tokens,
+                  coin_symbol: data.company_symbol,
+                  value: data.ost_amount,
+                  inflow: data.inflow
+                });
+              }
+            },
+            {
+              data: null,
+              width:'14%',
+              render: function (data, type, full, meta) {
+                return Handlebars.compile_fe($('#dt-col-2-2').text())({
                   tokens: data.tokens,
                   coin_symbol: data.company_symbol,
                   value: data.ost_amount
