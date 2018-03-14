@@ -28,6 +28,15 @@ function convertToBigNumber(number) {
   return (number instanceof BigNumber) ? number : new BigNumber(number);
 }
 
+moment.updateLocale('en', {
+  relativeTime : {
+    s  : 'few sec',
+    ss : '%d sec',
+    m:  "a min",
+    mm: "%d mins",
+  }
+});
+
 function toTimeAgo(timestamp) {
   var timeInMilli = timestamp * 1000
     , currentTimeInMilli = new Date().getTime()

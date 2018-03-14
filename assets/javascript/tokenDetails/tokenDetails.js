@@ -371,7 +371,7 @@
             position: 'none'
           },
           chartArea: {
-            width: '90%',
+            width: '85%',
             height: '80%'
           },
           hAxis: {
@@ -383,6 +383,7 @@
             textStyle: oThis.chartTextStyle
           },
           vAxis: {
+            format: "short",
             gridlines: {
               color: 'e3eef3'
             },
@@ -461,7 +462,7 @@
             position: 'none'
           },
           chartArea: {
-            width: '90%',
+            width: '85%',
             height: '80%'
           },
           hAxis: {
@@ -473,6 +474,7 @@
             textStyle: oThis.chartTextStyle
           },
           vAxis: {
+            format: "short",
             gridlines: {
               color: 'e3eef3'
             },
