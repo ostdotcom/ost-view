@@ -437,7 +437,7 @@
 
     chartTextStyle: {
       color: '597a84',
-      fontSize: 10
+      fontSize: 9
     },
 
     printVolumeChart: function(interval){
