@@ -339,7 +339,8 @@
             element['token_details_redirect_url'] =  Handlebars.compile(tokenDetailsURL)({
               contract_addr: contractAddress
             });
-            element['token_ost_volume'] = PriceOracle.getDisplayFiat(element.token_ost_volume);
+            var tokenOstVolume = convertToBigNumber(element.token_ost_volume).dividedBy(convertToBigNumber(element.price))
+            element['token_ost_volume'] = PriceOracle.getDisplayFiat(tokenOstVolume);
             element['price'] =PriceOracle.getDisplayBtToOst(1, element.price);
             element['market_cap'] = PriceOracle.getDisplayFiat(element.market_cap);
 
