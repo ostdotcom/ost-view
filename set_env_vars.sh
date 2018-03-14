@@ -93,3 +93,5 @@ export BASE_CONTRACT_ADDRESS='0';
 
 export OST_VIEW_199_UNAME="root";
 export OST_VIEW_199_PWD="root";
+
+export OST_VIEW_ENVIRONMENT='development'

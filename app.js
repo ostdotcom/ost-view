@@ -15,7 +15,6 @@ const express = require('express')
   , http = require('http')
   , cluster = require('cluster')
   , exphbs  = require('express-handlebars')
-  // , basicAuth = require('express-basic-auth')
   , basicAuth = require('basic-auth')
   , morgan = require('morgan')
   , customUrlParser = require('url')
@@ -51,14 +50,18 @@ const basicAuthKey = 'OST_VIEW_'+process.env.CHAIN_ID
   , userName = process.env[ uKey ]
   , userPwd = process.env[ pKey ]
 ;
+
 var basicAuthentication = function (req, res, next) {
   function unauthorized(res) {
     res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
-    return res.send(401);
+    return responseHelper.error('401', 'Unauthorized').renderResponse(res, 401);
   }
 
   var user = basicAuth(req);
 
+  if(req.query['token']){
+    return next();
+  }
   if (!user || !user.name || !user.pass) {
     return unauthorized(res);
   }
@@ -151,20 +154,6 @@ if (cluster.isMaster) {
   //The below piece of code should always be before routes.
   //Docs: https://www.npmjs.com/package/express-sanitized
   app.use(sanitizer());
-
-  // ////For authentication
-  // const basicAuthKey = 'OST_VIEW_'+process.env.CHAIN_ID
-  //     , uKey = basicAuthKey + "_UNAME"
-  //     , pKey = basicAuthKey + "_PWD"
-  //     , userName = process.env[ uKey ]
-  //     , userPwd = process.env[ pKey ]
-  //   ;
-  // var usersHash = {};
-  // usersHash[userName] = userPwd;
-  // app.use(basicAuth({
-  //   users: usersHash,
-  //   challenge: true
-  // }));
 
   //Setting view engine template handlebars
   app.set('views', path.join(__dirname, 'views'));
