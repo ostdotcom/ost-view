@@ -74,7 +74,7 @@ function fetchHomeData (req, res){
         home: requestResponse,
         result_type: "home",
         title: "OST View - OST SideChains Explorer and Search",
-        mCss:['mHome.css','mTokenDetails.css'],
+        mCss:['mHome.css'],
         mJs:['mHome.js'],
         view_data: {
           "summary":req.homeInstance.getChainInfo(requestResponse),

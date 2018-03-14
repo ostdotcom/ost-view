@@ -80,8 +80,8 @@ home.prototype = {
 
   getChainStats: function (chain_data) {
     var details = {
-      token_transfers: TokenUnits.toBigNumber(chain_data['token_transfers']).toFormat(0),
-      token_volume: TokenUnits.convertToNormal(chain_data['token_volume']).toFormat(0)
+      token_transfers: TokenUnits.toBigNumber(chain_data['token_transfers']).toFormat(0).toString(10),
+      token_volume: TokenUnits.convertToNormal(chain_data['token_volume']).toFormat(0).toString(10)
     };
 
     return details;

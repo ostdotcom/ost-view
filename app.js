@@ -126,14 +126,18 @@ if (cluster.isMaster) {
   app.use(sanitizer());
 
   ////For authentication
-  //const userName = process.env.OST_VIEW_2000_UNAME;
-  //var userPwd = process.env.OST_VIEW_2000_PWD;
-  //var usersHash = {};
-  //usersHash[userName] = userPwd;
-  //app.use(basicAuth({
-  //  users: usersHash,
-  //  challenge: true
-  //}));
+  const basicAuthKey = 'OST_VIEW_'+process.env.CHAIN_ID
+      , uKey = basicAuthKey + "_UNAME"
+      , pKey = basicAuthKey + "_PWD"
+      , userName = process.env[ uKey ]
+      , userPwd = process.env[ pKey ]
+    ;
+  var usersHash = {};
+  usersHash[userName] = userPwd;
+  app.use(basicAuth({
+    users: usersHash,
+    challenge: true
+  }));
 
   //Setting view engine template handlebars
   app.set('views', path.join(__dirname, 'views'));
@@ -146,14 +150,16 @@ if (cluster.isMaster) {
   }));
   app.set('view engine', 'handlebars');
 
-  var connectAssets = require("connect-assets")({
+  var connectAssetConfig = {
     paths: [
       path.join(__dirname, 'assets/css'),
       path.join(__dirname, 'assets/javascript')
     ],
     fingerprinting: true,
     servePath: "assets"
-  });
+  };
+
+  var connectAssets = require("connect-assets")(connectAssetConfig);
   app.use(connectAssets);
 
   var hbs = require('handlebars');
