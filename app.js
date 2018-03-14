@@ -146,14 +146,16 @@ if (cluster.isMaster) {
   }));
   app.set('view engine', 'handlebars');
 
-  var connectAssets = require("connect-assets")({
+  var connectAssetConfig = {
     paths: [
       path.join(__dirname, 'assets/css'),
       path.join(__dirname, 'assets/javascript')
     ],
     fingerprinting: true,
     servePath: "assets"
-  });
+  };
+
+  var connectAssets = require("connect-assets")(connectAssetConfig);
   app.use(connectAssets);
 
   var hbs = require('handlebars');
