@@ -101,9 +101,14 @@ module.exports = {
   },
 
   toOSTAlpha : function(amount, precision){
-    var bigNumberAmount = new bigNumber(amount)
-    var bigNumberDivisor = new bigNumber(10).toPower(18);
-    return bigNumberAmount.div(bigNumberDivisor).toFormat(precision);
+    if (amount){
+      var bigNumberAmount = new bigNumber(amount)
+      var bigNumberDivisor = new bigNumber(10).toPower(18);
+      return bigNumberAmount.div(bigNumberDivisor).toFormat(precision).toString(10);
+    }else{
+      return  new bigNumber(0).toFormat(precision).toString(10);
+    }
+
   }
 
 };
