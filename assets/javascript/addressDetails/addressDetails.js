@@ -188,8 +188,6 @@
 
           dataToProceess.forEach(function (element) {
             var txHash = element.transaction_hash
-             , from = element.address
-             , to = element.corresponding_address
               , txURL = meta.transaction_placeholder_url
               , addressURL = meta.address_placeholder_url
               , tokenDetailsPlaceholderUrl = meta.token_details_redirect_url
@@ -197,6 +195,9 @@
               ,tokens = element.tokens
               , price = contractAddresses[contract_address].price
               ,timestamp = element.timestamp
+              ,inflow = element.inflow
+              ,to = inflow ? element.address : element.corresponding_address
+              ,from = inflow ? element.corresponding_address : element.address
               ;
 
             element['timestamp'] = toTimeAgo(timestamp);
@@ -214,6 +215,9 @@
             element['token_details_redirect_url'] = Handlebars.compile(tokenDetailsPlaceholderUrl)({
               contract_addr: contract_address
             });
+
+            element.corresponding_address = to;
+            element.address = from;
 
             element['tokens'] = PriceOracle.getDisplayBt(tokens);
             element['ost_amount'] = PriceOracle.getDisplayBtToOst(tokens, price);
