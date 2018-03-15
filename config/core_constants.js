@@ -72,6 +72,6 @@ define('CACHING_ENGINE', process.env.OST_CACHING_ENGINE);
 
 //Basic auth
 
-define('ENVIRONMENT',process.env.OST_VIEW_ENVIRONMENT);
+define('ENVIRONMENT',process.env.NODE_ENV);
 
 module.exports = constants;
