@@ -1,1 +1,0 @@
-$(document).ready(function(){var n=document.getElementById("transactionUrl").innerHTML,t=document.getElementById("transactionTable");$("#test").on("click",function(){console.log("test clicked!")}),$.ajax({url:n,contentType:"application",type:"GET",success:function(n,e){console.log("success",n),t.innerHTML=n},error:function(n,t,e){console.log("Error Data: "+n+"\nStatus: "+t)}})});
