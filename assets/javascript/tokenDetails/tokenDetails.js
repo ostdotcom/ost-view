@@ -313,29 +313,59 @@
     printTransfersChart: function(interval){
       var url = oThis.config.token_transfer_graph_url+interval;
       switch(interval) {
-        case 'Day':
-          var format = "h aa";
-          var count = 12;
-          break;
         case 'Hour':
           var format = 'm';
           var count = 12;
+          var columns_1 = {
+            type: 'datetime',
+            opt_label: 'Date',
+            opt_id: 'timestamp'
+          };
+          break;
+        case 'Day':
+          var format = "h aa";
+          var count = 12;
+          var columns_1 = {
+            type: 'datetime',
+            opt_label: 'Date',
+            opt_id: 'timestamp'
+          };
           break;
         case 'Week':
           var format = 'EEE';
           var count = 7;
+          var columns_1 = {
+            type: 'date',
+            opt_label: 'Date',
+            opt_id: 'timestamp'
+          };
           break;
         case 'Month':
           var format = 'd';
           var count = 15;
+          var columns_1 = {
+            type: 'date',
+            opt_label: 'Date',
+            opt_id: 'timestamp'
+          };
           break;
         case 'Year':
           var format = "MMM''yy";
           var count = 12;
+          var columns_1 = {
+            type: 'date',
+            opt_label: 'Date',
+            opt_id: 'timestamp'
+          };
           break;
         case 'All':
           var format = "MMM''yy";
           var count = -1;
+          var columns_1 = {
+            type: 'date',
+            opt_label: 'Date',
+            opt_id: 'timestamp'
+          };
           break;
       }
       oThis.googleCharts_1.draw({
@@ -343,11 +373,7 @@
           url: url
         },
         columns: [
-          {
-            type: 'datetime',
-            opt_label: 'Date',
-            opt_id: 'timestamp'
-          },
+          columns_1,
           {
             type: 'number',
             opt_label: 'Transaction Count',
@@ -372,7 +398,8 @@
           },
           chartArea: {
             width: '90%',
-            height: '80%'
+            height: '80%',
+            right: '2%'
           },
           hAxis: {
             format: format,
@@ -383,6 +410,7 @@
             textStyle: oThis.chartTextStyle
           },
           vAxis: {
+            format: "short",
             gridlines: {
               color: 'e3eef3'
             },
@@ -397,35 +425,65 @@
 
     chartTextStyle: {
       color: '597a84',
-      fontSize: 10
+      fontSize: 9
     },
 
     printVolumeChart: function(interval){
       var url = oThis.config.token_volume_graph_url+interval;
       switch(interval) {
-        case 'Day':
-          var format = "h aa";
-          var count = 12;
-          break;
         case 'Hour':
           var format = 'm';
           var count = 12;
+          var columns_1 = {
+            type: 'datetime',
+            opt_label: 'Date',
+            opt_id: 'timestamp'
+          };
+          break;
+        case 'Day':
+          var format = "h aa";
+          var count = 12;
+          var columns_1 = {
+            type: 'datetime',
+            opt_label: 'Date',
+            opt_id: 'timestamp'
+          };
           break;
         case 'Week':
           var format = 'EEE';
           var count = 7;
+          var columns_1 = {
+            type: 'date',
+            opt_label: 'Date',
+            opt_id: 'timestamp'
+          };
           break;
         case 'Month':
           var format = 'd';
           var count = 15;
+          var columns_1 = {
+            type: 'date',
+            opt_label: 'Date',
+            opt_id: 'timestamp'
+          };
           break;
         case 'Year':
           var format = "MMM''yy";
           var count = 12;
+          var columns_1 = {
+            type: 'date',
+            opt_label: 'Date',
+            opt_id: 'timestamp'
+          };
           break;
         case 'All':
           var format = "MMM''yy";
           var count = -1;
+          var columns_1 = {
+            type: 'date',
+            opt_label: 'Date',
+            opt_id: 'timestamp'
+          };
           break;
       }
       oThis.googleCharts_2.draw({
@@ -433,11 +491,7 @@
           url: url
         },
         columns: [
-          {
-            type: 'datetime',
-            opt_label: 'Date',
-            opt_id: 'timestamp'
-          },
+          columns_1,
           {
             type: 'number',
             opt_label: 'Transaction Volume',
@@ -462,7 +516,8 @@
           },
           chartArea: {
             width: '90%',
-            height: '80%'
+            height: '80%',
+            right: '2%'
           },
           hAxis: {
             format: format,
@@ -473,6 +528,7 @@
             textStyle: oThis.chartTextStyle
           },
           vAxis: {
+            format: "short",
             gridlines: {
               color: 'e3eef3'
             },

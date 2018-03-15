@@ -15,20 +15,34 @@ header.container-fluid{
     }
 
     .input-group{
-        .input-group-prepend{
+        .input-group-append{
             .input-group-text{
-                border-top-left-radius: 20px;
-                border-bottom-left-radius: 20px;
+                padding-right: 0.8rem ;
+                border-top-right-radius: 20px;
+                border-bottom-right-radius: 20px;
                 background: #fff;
+                border-left: none;
+            }
+            .btn{
+                &:hover,
+                &:active{
+                    border-color: #ced4da;
+                    background: #f1f4f7;
+                }
+                &:focus{
+                    border-color: #ced4da;
+                    box-shadow: none;
+                }
             }
         }
         input[type=search]{
-            padding-left: 0;
-            border-top-right-radius: 20px;
-            border-bottom-right-radius: 20px;
-            border-left: none;
+            padding-left: 1rem ;
+            padding-right: 0;
+            border-top-left-radius: 20px;
+            border-bottom-left-radius: 20px;
+            border-right: none;
             font-size: 0.8rem;
-            width: 245px;
+            width: 255px;
             &:focus{
                 border-color: #ced4da;
                 outline:none;

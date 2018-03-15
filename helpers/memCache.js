@@ -14,7 +14,7 @@ var cacheModule = require('@openstfoundation/openst-cache');
 module.exports = new MemCache();
 
 function MemCache() {
-    this.cacheTimeout = 300;
+    this.cacheTimeout = 120000;
     this.MemcachedConnection = new cacheModule.cache(constants.CACHING_ENGINE, true);
     this.name = 'ostview'
 }

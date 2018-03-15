@@ -7,6 +7,12 @@ const preRoot = "../",
 
 
 module.exports = {
+  isNODE_ENV_PROD : function(options){
+    if(process.env.NODE_ENV && process.env.NODE_ENV.toLowerCase() == 'production') {
+      return options.fn(this);
+    }
+    return options.inverse(this);
+  },
 
   getMethodNameFromInputData: function (inputData){
     return erc20Tokens.decodeMethodFromInputData(inputData);
@@ -98,7 +104,41 @@ module.exports = {
     }else{
       return '';
     }
+  },
 
-  }
+  toOSTAlpha : function(amount, precision){
+    precision = Number( precision );
+    if ( isNaN( precision ) || !precision ) {
+      precision = 5;
+    }
+    if (amount){
+      var bigNumberAmount = new bigNumber(amount)
+      var bigNumberDivisor = new bigNumber(10).toPower(18);
+      return bigNumberAmount.div(bigNumberDivisor).toFormat(precision).toString(10);
+    }else{
+      return  new bigNumber(0).toFormat(precision).toString(10);
+    }
+  },
+
+  toOstGasPrice : function(amount){
+    if (amount){
+      var bigNumberAmount = new bigNumber(amount)
+      var bigNumberDivisor = new bigNumber(10).toPower(18);
+      return bigNumberAmount.div(bigNumberDivisor).toString(10);
+    }else{
+      return  new bigNumber(0).toString(10);
+    }
+  },
+
+
+  toGWai: function(amount, precision){
+    if (amount){
+      var bigNumberAmount = new bigNumber(amount)
+      var bigNumberDivisor = new bigNumber(10).toPower(9);
+      return bigNumberAmount.div(bigNumberDivisor).toString(10);
+    }else{
+      return  new bigNumber(0).toString(10);
+    }
+  },
 
 };

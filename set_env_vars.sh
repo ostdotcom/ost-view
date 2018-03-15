@@ -87,9 +87,11 @@ export OST_VIEW_PATH='.'
 
 #Web env variables
 
-export CHAIN_ID='2000';
+export CHAIN_ID='199';
 
 export BASE_CONTRACT_ADDRESS='0';
 
-export OST_VIEW_2000_UNAME="root";
-export OST_VIEW_2000_PWD="root";
+export OST_VIEW_199_UNAME="root";
+export OST_VIEW_199_PWD="root";
+
+export OST_VIEW_ENVIRONMENT='development'

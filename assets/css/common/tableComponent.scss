@@ -36,8 +36,10 @@
         }
 
         @media (max-width: 576px){
-          font-size: 0.8rem;
+          font-size: 0.75rem;
           letter-spacing: 1px;
+          padding-left: 0.5rem;
+
         }
       }
 
@@ -95,8 +97,8 @@ table.token-table {
       .text-truncate {
         max-width: 170px
       }
-      @media (max-width: 576px) {
-        min-width: 100px;
+      @media (max-width: 768px) {
+        min-width: 80px;
         .text-truncate {
           max-width: 75px
         }
