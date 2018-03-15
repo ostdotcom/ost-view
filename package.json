@@ -6,8 +6,8 @@
     "start": "node app.js"
   },
   "dependencies": {
-    "@openstfoundation/openst-cache": "1.0.1-beta.2",
-    "@openstfoundation/openst-notification": "1.0.0-beta.12",
+    "@openstfoundation/openst-cache": "1.0.1",
+    "@openstfoundation/openst-notification": "1.0.0",
     "abi-decoder": "1.0.9",
     "basic-auth": "2.0.0",
     "bignumber.js": "4.1.0",
@@ -33,8 +33,8 @@
     "morgan": "1.9.0",
     "mout": "1.1.0",
     "mysql": "2.15.0",
-    "node-sass": "4.7.2",
     "node-cron": "1.2.1",
+    "node-sass": "4.7.2",
     "ps-node": "0.1.6",
     "underscore": "1.8.3",
     "uuid": "3.1.0",
