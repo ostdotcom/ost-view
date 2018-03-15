@@ -171,6 +171,7 @@ if (cluster.isMaster) {
       path.join(__dirname, 'assets/css'),
       path.join(__dirname, 'assets/javascript')
     ],
+    buildDir: path.join(__dirname, 'builtAssets'),
     fingerprinting: true,
     servePath: "assets"
   };

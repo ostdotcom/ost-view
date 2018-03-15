@@ -73,3 +73,6 @@ docs/
 
 # config
 config.js
+
+# Assets
+builtAssets
