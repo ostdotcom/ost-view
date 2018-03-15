@@ -70,4 +70,8 @@ define('JWT_API_SECRET_KEY', process.env.JWT_API_SECRET_KEY);
 //Cache
 define('CACHING_ENGINE', process.env.OST_CACHING_ENGINE);
 
+//Basic auth
+
+define('ENVIRONMENT',process.env.OST_VIEW_ENVIRONMENT);
+
 module.exports = constants;

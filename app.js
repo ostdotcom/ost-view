@@ -41,6 +41,7 @@ const rootPrefix = "."
   , chainDetailsRoutes = require(rootPrefix + '/routes/chainDetails')
   , customMiddleware = require(rootPrefix + '/helpers/custom_middleware')
   , searchResultRoutes = require(rootPrefix + '/routes/searchResults')
+  , coreConstant = require(rootPrefix + '/config/core_constants')
   ;
 
 ////For authentication
@@ -52,6 +53,11 @@ const basicAuthKey = 'OST_VIEW_'+process.env.CHAIN_ID
 ;
 
 var basicAuthentication = function (req, res, next) {
+
+  //if (coreConstant.ENVIRONMENT === 'production'){
+  //  return next();
+  //}
+
   function unauthorized(res) {
     res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
     return responseHelper.error('401', 'Unauthorized').renderResponse(res, 401);
