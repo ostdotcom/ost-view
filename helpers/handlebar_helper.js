@@ -7,14 +7,6 @@ const preRoot = "../",
 
 
 module.exports = {
-
-  isNODE_ENV_PROD : function(options){
-     if(process.env.NODE_ENV && process.env.NODE_ENV.toLowerCase() == 'production') {
-       return options.fn(this);
-    }
-    return options.inverse(this);
-  },
-
   getMethodNameFromInputData: function (inputData){
     return erc20Tokens.decodeMethodFromInputData(inputData);
   },
