@@ -45,6 +45,10 @@
     {{/each}}
     <script>window.name = "{{randomStr}}";</script>
 
+    {{#isNODE_ENV_PROD}}
+    {{>gaConfig}}
+    {{/isNODE_ENV_PROD}}
+
 </head>
 <body contenteditable="false">
 
