@@ -23,12 +23,12 @@ module.exports = {
   },
 
   toDate: function (timestamp) {
-    if (timestamp === undefined){
+    if ( timestamp ){
+      const formattedDate = moment(timestamp * 1000).utc().format("MM/DD/YYYY  h:mm:ss a z");
+      return formattedDate;
+    }else{
       return '';
     }
-
-    const formattedDate = moment(timestamp * 1000).utc().format("MM/DD/YYYY  h:mm:ss a z");
-    return formattedDate;
   },
 
   toTimeAgo: function (timestamp){
