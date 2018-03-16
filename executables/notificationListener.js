@@ -25,7 +25,7 @@ function subscribe() {
     {
       queue: 'OpenST-Explorer-Notification-Listener',
       ackRequired: 1,
-      prefetch: 1
+      prefetch: 20
     },
     function (msgContent) {
       logger.info('[RECEIVED]', msgContent, '\n');

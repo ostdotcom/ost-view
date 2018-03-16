@@ -85,7 +85,7 @@ if (cluster.isMaster) {
   process.title = "OpenST Explorer master node";
 
   // Fork workers equal to number of CPUs
-  const numWorkers = 1;//process.env.WORKERS || require('os').cpus().length;
+  const numWorkers = process.env.WORKERS || require('os').cpus().length;
 
   for (var i = 0; i < numWorkers; i++) {
     // Spawn a new worker process.
