@@ -105,6 +105,8 @@ const resetUp = function () {
           process.exit(1);
         }
         logger.log('ResetUp Migration Successful');
+        process.exit(1);
+
       });
     });
   });
@@ -130,6 +132,8 @@ const reset = function () {
         process.exit(1);
       }
       logger.log('Reset Migration Successful');
+      process.exit(1);
+
     });
   });
 };
@@ -159,6 +163,8 @@ const up = function (version) {
         process.exit(1);
       }
       logger.log('Up Migration Successful');
+      process.exit(1);
+
     });
   });
 };
