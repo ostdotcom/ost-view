@@ -20,6 +20,12 @@ exports.up = function(db) {
   return createIndexOnTransactionTable(db) 
     .then(function(result){ 
       return createIndexOnTokenTransactionTable(db); 
+    })
+    .then(function(result){
+      return removeIndexOnAddressTransactionTable(db);
+    })
+    .then(function(result){
+      return createIndexOnAddressTransactionTable(db);
     });
 };
 
@@ -38,3 +44,12 @@ var createIndexOnTransactionTable = function(db) { 
 var createIndexOnTokenTransactionTable = function(db) { 
   return db.addIndex(constants.TOKEN_TRANSACTION_TABLE_NAME, 'c_ttx_index', 'transaction_hash', false);
  };
+
+var removeIndexOnAddressTransactionTable = function(db) {
+
+  return db.removeIndex(constants.ADDRESS_TRANSACTION_TABLE_NAME, 'a_t_index');
+};
+var createIndexOnAddressTransactionTable = function(db) {
+
+  return db.addIndex(constants.ADDRESS_TRANSACTION_TABLE_NAME, 'a_t_index', ['address', 'timestamp'], false);
+};
