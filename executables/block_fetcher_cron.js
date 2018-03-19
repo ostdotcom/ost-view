@@ -14,7 +14,7 @@
 // Load external libraries
 const cliHandler = require('commander')
   , ps = require('ps-node')
-;
+  ;
 
 // Load internal files
 const rootPrefix = ".."
@@ -26,7 +26,7 @@ const rootPrefix = ".."
   , version = require(rootPrefix + '/package.json').version
   , maxRunTime = (2 * 60 * 60 * 1000) // 2 hrs in milliseconds
   , startRunTime = (new Date).getTime() // milliseconds since epoch
-;
+  ;
 
 // Variables to hold different objects
 var dbInteract
@@ -41,7 +41,7 @@ var state = {
   chainID: null,
   blockNumber: 0,
   config: null,
-  lastBlock: 0
+  lastBlock: null
 };
 
 /**
@@ -55,11 +55,11 @@ var state = {
  */
 var setFetchBlockCron = function (blockNumber) {
   setTimeout(function () {
-    if (blockNumber < state.lastBlock) {
+    if (((startRunTime + maxRunTime) > (new Date).getTime()) && (!state.lastBlock || (blockNumber < state.lastBlock))) {
       state.blockNumber = blockNumber;
       block_fetcher.fetchAndUpdateBlock(blockNumber, setFetchBlockCron);
     } else {
-      console.log("Completion of block fetching done till" ,state.lastBlock);
+      console.log("Completion of block fetching done");
       process.exit(1);
     }
   }, blockNumber === state.blockNumber ? 5000 : state.config.poll_interval);
@@ -93,8 +93,10 @@ if (isNaN(cliHandler.blockNumber)) {
   state.blockNumber = cliHandler.blockNumber;
 }
 
-state.blockNumber = cliHandler.firstBlock;
-state.lastBlock = cliHandler.lastBlock;
+if (cliHandler.firstBlock && cliHandler.lastBlock) {
+  state.blockNumber = cliHandler.firstBlock;
+  state.lastBlock = cliHandler.lastBlock;
+}
 
 // console.log("First block : ", state.blockNumber, "Second Block :",state.lastBlock);
 // Handle process locking
@@ -104,21 +106,21 @@ const lockProcess = {
   arguments: ['-c', state.chainID, '-n', state.blockNumber]
 };
 
-// Check if process with same arguments already running or not
-// ps.lookup({
-//   command: lockProcess.command,
-//   arguments: lockProcess.script + "," + lockProcess.arguments.join(",")
-// }, function (err, resultList) {
-//   if (err) {
-//     throw new Error(err);
-//   }
+//Check if process with same arguments already running or not
+ps.lookup({
+  command: lockProcess.command,
+  arguments: lockProcess.script + "," + lockProcess.arguments.join(",")
+}, function (err, resultList) {
+  if (err) {
+    throw new Error(err);
+  }
 
-  // resultList.forEach(function (r) {
-  //   if (r) {
-  //     logger.error('\n Process already exists with same arguments \n');
-  //     process.exit(1);
-  //   }
-  // });
+  resultList.forEach(function (r) {
+    if (r) {
+      logger.error('\n Process already exists with same arguments \n');
+      process.exit(1);
+    }
+  });
 
   // Set process title for locking
   process.title = lockProcess.command + " " + lockProcess.script + " " + lockProcess.arguments.join(" ");
@@ -138,20 +140,22 @@ const lockProcess = {
   block_fetcher.state.lastBlock = state.lastBlock;
   logger.log('State Configuration', state);
 
-  setFetchBlockCron(block_fetcher.state.blockNumber);
-
-  // // Start processing blocks
-  // dbInteract.getHighestInsertedBlock()
-  //   .then(function (blockNumber) {
-  //     logger.log("Highest Block Number ", blockNumber);
-  //     if (block_fetcher.state.blockNumber == 0 && blockNumber != null) {
-  //       block_fetcher.state.blockNumber = +blockNumber + 1;
-  //     }
-  //     setFetchBlockCron(block_fetcher.state.blockNumber);
-  //   })
-  //   .catch(function (err) {
-  //     logger.error('\nNot able to fetch block number)\n', err);
-  //     process.exit(1);
-  //   });
-
-// });
+  // Start processing blocks
+  if (!block_fetcher.state.blockNumber) {
+    dbInteract.getHighestInsertedBlock()
+      .then(function (blockNumber) {
+        logger.log("Highest Block Number ", blockNumber);
+        if (!blockNumber) {
+          block_fetcher.state.blockNumber = 0;
+        }
+        setFetchBlockCron(block_fetcher.state.blockNumber);
+      })
+      .catch(function (err) {
+        logger.error('\nNot able to fetch block number)\n', err);
+        process.exit(1);
+      });
+  }
+  else {
+    setFetchBlockCron(block_fetcher.state.blockNumber);
+  }
+});

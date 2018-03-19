@@ -15,37 +15,32 @@ if (process.argv[2] == '-c' && process.argv[3] != undefined){
     console.log("Passed Chain Id", chainId);
 }
 
-// var job1 = new CronJob('*/1 * * * *', function() {
-//     startBlockFetcher()
-// }, null, false, 'Asia/Kolkata');
-//
-// var job2 = new CronJob('*/1 * * * *', function() {
-//     startBlockVerifier()
-// }, null, false, 'Asia/Kolkata');
-//
-// var job3 = new CronJob('*/1 * * * *', function() {
-//     startAggregator()
-// }, null, false, 'Asia/Kolkata');
+ var job1 = new CronJob('*/1 * * * *', function() {
+     startBlockFetcher()
+ }, null, false, 'Asia/Kolkata');
 
-// startBlockFetcher(65750, 65760);
-startBlockFetcher(66290,662900);
-// startBlockFetcher(65770,65780);
+ var job2 = new CronJob('*/1 * * * *', function() {
+     startBlockVerifier()
+ }, null, false, 'Asia/Kolkata');
 
-// startBlockFetcher(65739, 70000);
-// startBlockFetcher(70000,75000);
-// startBlockFetcher(75000,100000000);
-//startBlockVerifier();
-//startAggregator();
+ var job3 = new CronJob('*/1 * * * *', function() {
+     startAggregator()
+ }, null, false, 'Asia/Kolkata');
 
-// job1.start();
-//job2.start();
-//job3.start();
 
-function startBlockFetcher(firstBN, lastBN) {
+startBlockFetcher();
+startBlockVerifier();
+startAggregator();
+
+job1.start();
+job2.start();
+job3.start();
+
+function startBlockFetcher() {
 
     console.log("BlockFetcher initiated");
 
-    const blockFetcher = spawn('./executables/block_fetcher_cron.js', ['-c', chainId, '-f', firstBN, '-l', lastBN]);
+    const blockFetcher = spawn('./executables/block_fetcher_cron.js', ['-c', chainId]);
 
     blockFetcher.stdout.on('data', function(data) {
         writeLogsToFile("blockFetcher_process_logs.txt", data);
