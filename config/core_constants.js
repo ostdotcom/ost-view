@@ -24,6 +24,7 @@ define("TRANSACTION_TYPE_ID_TABLE_NAME", 'transaction_type_id');
 
 // Available columns in tables
 define("BLOCKS_DATA_SEQUENCE", '(block_number, block_hash, parent_hash, miner, difficulty, total_difficulty, gas_limit, gas_used, total_transactions, timestamp, verified, nonce, sha3_uncles, uncles, logs_bloom, transactions_root, transactions, state_root, receipt_root, size, extra_data, mix_hash)');
+define("BLOCKS_DATA_SEQUENCE_ARRAY", ['block_number', 'block_hash', 'parent_hash', 'miner', 'difficulty', 'total_difficulty', 'gas_limit', 'gas_used', 'total_transactions', 'timestamp', 'verified', 'nonce', 'sha3_uncles', 'uncles', 'logs_bloom', 'transactions_root', 'transactions', 'state_root', 'receipt_root', 'size', 'extra_data', 'mix_hash']);
 define("TRANSACTION_DATA_SEQUENCE", '(transaction_hash, block_number, transaction_index, contract_address, t_from, t_to, tokens, gas_used, gas_price, nounce, input_data, logs, timestamp, status, logs_bloom, r, s, v)');
 define("ADDRESS_TRANSACTION_DATA_SEQUENCE", '(address, corresponding_address, tokens, transaction_hash, transaction_fees, inflow, timestamp)');
 define("TOKEN_TRANSACTION_DATA_SEQUENCE", '(transaction_hash, contract_address, t_from, t_to, tokens, timestamp, block_number)');

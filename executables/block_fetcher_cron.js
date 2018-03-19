@@ -57,9 +57,10 @@ var setFetchBlockCron = function (blockNumber) {
   setTimeout(function () {
     if (((startRunTime + maxRunTime) > (new Date).getTime()) && (!state.lastBlock || (blockNumber < state.lastBlock))) {
       state.blockNumber = blockNumber;
+      logger.log("Start fetchBlock for blockNumber", blockNumber);
       block_fetcher.fetchAndUpdateBlock(blockNumber, setFetchBlockCron);
     } else {
-      console.log("Completion of block fetching done");
+      logger.log("Completion of block fetching done for blockNumber ", blockNumber);
       process.exit(1);
     }
   }, blockNumber === state.blockNumber ? 5000 : state.config.poll_interval);
