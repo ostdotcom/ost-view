@@ -136,19 +136,20 @@ ps.lookup({
   dbInteract = DbInteract.getInstance(state.config.db_config);
   web3Interact = Web3Interact.getInstance(state.config.chainId);
   block_fetcher = BlockFetcher.newInstance(web3Interact, dbInteract, state.config.chainId, false);
-  block_fetcher.state.blockNumber = state.blockNumber;
   block_fetcher.state.lastBlock = state.lastBlock;
   logger.log('State Configuration', state);
 
   // Start processing blocks
-  if (!block_fetcher.state.blockNumber) {
+  if (!state.blockNumber) {
     dbInteract.getHighestInsertedBlock()
       .then(function (blockNumber) {
         logger.log("Highest Block Number ", blockNumber);
-        if (!blockNumber) {
-          block_fetcher.state.blockNumber = 0;
+        if (blockNumber) {
+          state.blockNumber = blockNumber + 1;
+        }else{
+          state.blockNumber = 0;
         }
-        setFetchBlockCron(block_fetcher.state.blockNumber);
+        setFetchBlockCron(state.blockNumber);
       })
       .catch(function (err) {
         logger.error('\nNot able to fetch block number)\n', err);
@@ -156,6 +157,6 @@ ps.lookup({
       });
   }
   else {
-    setFetchBlockCron(block_fetcher.state.blockNumber);
+    setFetchBlockCron(state.blockNumber);
   }
 });
