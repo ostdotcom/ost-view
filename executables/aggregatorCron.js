@@ -4,7 +4,7 @@
  * Job to aggregate data for analytics and insert it into DB.
  *
  * @example
- * node executables/aggregatorCron.js -c 1141
+ * node executables/aggregatorCron.js -c 199
  * @example
  * node executables/aggregatorCron.js -h
  *
@@ -136,6 +136,7 @@ ps.lookup({
   dataAggregator = DataAggregator.newInstance(web3Interact, dbInteract, state.config.chainId);
   logger.log('State Configuration', state);
 
+  // GET LAST PROCESSED time id from a status table
   dbInteract.getAggregateLastInsertedTimeId()
     .then(function (timeId) {
       logger.log("Last Aggregated time_id ", timeId);
@@ -154,7 +155,7 @@ ps.lookup({
             aggregateByTimeId(timeId);
           });
       } else {
-        configHelper.syncUpContractMap(dbInteract)
+        return configHelper.syncUpContractMap(dbInteract)
           .then(function () {
             aggregateByTimeId(timeId + constants.AGGREGATE_CONSTANT);
           });
