@@ -70,6 +70,13 @@ define('JWT_API_SECRET_KEY', process.env.JWT_API_SECRET_KEY);
 //Cache
 define('CACHING_ENGINE', process.env.OST_CACHING_ENGINE);
 
+
+
+define("DEFAULT_MYSQL_HOST", process.env.OV_DEFAULT_MYSQL_HOST);
+define("DEFAULT_MYSQL_USER", process.env.OV_DEFAULT_MYSQL_USER);
+define("DEFAULT_MYSQL_PASSWORD", process.env.OV_DEFAULT_MYSQL_PASSWORD);
+
+
 //Basic auth
 
 define('ENVIRONMENT',process.env.NODE_ENV);

@@ -62,6 +62,16 @@ export OST_VIEW_2_DB_HOST="localhost"
 
 export OST_VIEW_2_DB_CONNECTION_LIMIT=10
 
+
+
+#DB env
+
+export OV_DEFAULT_MYSQL_HOST="localhost"
+export OV_DEFAULT_MYSQL_USER="root"
+export OV_DEFAULT_MYSQL_PASSWORD="root"
+
+
+
 # Cache
 export OST_CACHING_ENGINE='memcached'
 export OST_DEFAULT_TTL='3600'
