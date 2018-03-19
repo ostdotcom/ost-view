@@ -14,7 +14,7 @@
 // Load external libraries
 const cliHandler = require('commander')
   , ps = require('ps-node')
-  ;
+;
 
 // Load internal files
 const rootPrefix = ".."
@@ -28,7 +28,7 @@ const rootPrefix = ".."
   , maxRunTime = (2 * 60 * 60 * 1000) // 2 hrs in milliseconds
   , startRunTime = (new Date).getTime() // milliseconds since epoch
   , configHelper = require(rootPrefix + "/helpers/configHelper")
-  ;
+;
 
 // Variables to hold different objects
 var dbInteract
@@ -160,7 +160,7 @@ ps.lookup({
           });
       }
     })
-    .catch(function (err) {
+    .catch(function(err) {
       logger.error('\nNot able to fetch last aggregated timestamp)\n', err);
       process.exit(1);
     });
