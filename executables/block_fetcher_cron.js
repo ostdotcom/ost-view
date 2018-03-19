@@ -93,8 +93,35 @@ if (isNaN(cliHandler.blockNumber)) {
   state.blockNumber = cliHandler.blockNumber;
 }
 
-state.blockNumber = cliHandler.firstBlock;
-state.lastBlock = cliHandler.lastBlock;
+if ( !cliHandler.firstBlock || cliHandler.firstBlock < 1 ) {
+  var startBlockNumber = (async function () {
+     return await dbInteract.getHighestInsertedBlock()
+      .then(function (blockNumber) {
+        logger.log("Highest Block Number ", blockNumber);
+        var nBlockNumber = Number(blockNumber);
+        if ( isNaN( nBlockNumber ) ) {
+          nBlockNumber = 1;
+        }
+        return  nBlockNumber + 1;
+      })
+      .catch(function (err) {
+        logger.error('\nNot able to fetch block number)\n', err);
+        process.exit(1);
+      });
+  })();
+  state.blockNumber = startBlockNumber;
+} else {
+  state.blockNumber = cliHandler.firstBlock;
+}
+
+logger.log("state.blockNumber set to", state.blockNumber);
+
+var nLastBlockNumber = Number( cliHandler.lastBlock );
+if ( isNaN( nLastBlockNumber ) ) {
+  nLastBlockNumber = Number.MAX_SAFE_INTEGER;
+}
+
+state.lastBlock = nLastBlockNumber;
 
 // console.log("First block : ", state.blockNumber, "Second Block :",state.lastBlock);
 // Handle process locking
