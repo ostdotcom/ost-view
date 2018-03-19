@@ -54,9 +54,9 @@ const basicAuthKey = 'OST_VIEW_'+process.env.CHAIN_ID
 
 var basicAuthentication = function (req, res, next) {
 
-  // if (coreConstant.ENVIRONMENT === 'production'){
-  //   return next();
-  // }
+   if (coreConstant.ENVIRONMENT === 'production'){
+     return next();
+   }
 
   function unauthorized(res) {
     res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
