@@ -23,7 +23,7 @@ function subscribe() {
   openSTNotification.subscribeEvent.rabbit(
     ['transfer.#', 'entity.#'],
     {
-      queue: 'OpenST-Explorer-Notification-Listener',
+      queue: 'OpenST-Explorer-Notification-Listen',
       ackRequired: 1,
       prefetch: 20
     },
