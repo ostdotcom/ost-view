@@ -18,16 +18,16 @@ const cliHandler = require('commander')
 
 // Load internal files
 const rootPrefix = ".."
-  , Web3Interact = require(rootPrefix + "/lib/web3/interact/rpc_interact")
-  , DbInteract = require(rootPrefix + "/lib/storage/interact")
-  , logger = require(rootPrefix + "/helpers/custom_console_logger")
-  , core_config = require(rootPrefix + "/config")
-  , constants = require(rootPrefix + "/config/core_constants")
-  , DataAggregator = require(rootPrefix + "/lib/block_utils/dataAggregator")
+  , Web3Interact = require(rootPrefix + '/lib/web3/interact/rpc_interact')
+  , DbInteract = require(rootPrefix + '/lib/storage/interact')
+  , logger = require(rootPrefix + '/helpers/custom_console_logger')
+  , core_config = require(rootPrefix + '/config')
+  , constants = require(rootPrefix + '/config/core_constants')
+  , DataAggregator = require(rootPrefix + '/lib/block_utils/data_aggregator')
   , version = require(rootPrefix + '/package.json').version
   , maxRunTime = (2 * 60 * 60 * 1000) // 2 hrs in milliseconds
   , startRunTime = (new Date).getTime() // milliseconds since epoch
-  , configHelper = require(rootPrefix + "/helpers/configHelper")
+  , configHelper = require(rootPrefix + '/helpers/configHelper')
 ;
 
 // Variables to hold different objects
