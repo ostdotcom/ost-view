@@ -17,46 +17,19 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db) {
-  return null;
+  return createAutoIncrementInTransactionTypeTable(db);
 };
 
 exports.down = function(db) {
-  return createAggregateStatusTable(db)
-    .then(function (result) { return createBlockStatusTable(db);})
-    .then(function (result) { return createIndexOnBlockStatusTable(db);})
-    .then(function (result) { return createAutoIncrementInTransactionTypeTable(db)}
-    ,
-    function(err) {
-      throw err;
-    }
-  );
+  return null;
 };
 
 exports._meta = {
-  "version": 1
+  "version": 6
 };
 
-var createAggregateStatusTable = function(db) {
-  return db.createTable(constants.AGGREGATE_STATUS_TABLE_NAME, {
-    id: {type: 'int', notNull: true, primaryKey: true, autoIncrement: true},
-    step_status: { type: 'int', notNull: true },
-    last_updated_bt_ids: { type: 'blob', notNull: false },
-    timestamp: { type: 'int', notNull: true }
-  });
-};
-
-var createBlockStatusTable = function(db) {
-  return db.createTable(constants.BLOCK_STATUS_TABLE_NAME, {
-    block_number: { type: 'bigint', primaryKey: true },
-    step_status: { type: 'int', notNull: true },
-    extraData: { type: 'blob', notNull: false }
-  });
-};
-
-var createIndexOnBlockStatusTable = function(db) {
-  return db.addIndex(constants.BLOCK_STATUS_TABLE_NAME, 'b_s_is', 'insertion_status', false);
-};
-
-var createAutoIncrementInTransactionTypeTable = function (db) {
-  return db.addColumn(constants.TRANSACTION_TYPE_TABLE_NAME, "id", { type: 'int', notNull: true, autoIncrement: true});
+const createAutoIncrementInTransactionTypeTable = function (db) {
+  return db.runSql('ALTER TABLE '+constants.TRANSACTION_TYPE_TABLE_NAME+' DROP PRIMARY KEY;')
+    .then(db.addColumn(constants.TRANSACTION_TYPE_TABLE_NAME, "id", { type: 'int', notNull: true}))
+    .then(db.runSql('ALTER TABLE '+constants.TRANSACTION_TYPE_TABLE_NAME+' MODIFY id INT NOT NULL PRIMARY KEY AUTO_INCREMENT;'));
 };
