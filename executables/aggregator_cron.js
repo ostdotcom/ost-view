@@ -57,7 +57,10 @@ var aggregateByTimeId = function (timeId) {
         .then(function (timestamp) {
           logger.log("Last Verified Block Timestamp ", timestamp);
           if (timestamp != null && +timestamp - timeId >= constants.AGGREGATE_CONSTANT) {
-            dataAggregator.aggregateData(timeId, aggregateByTimeId);
+            configHelper.syncUpContractMap(dbInteract)
+              .then(function () {
+                dataAggregator.aggregateData(timeId, aggregateByTimeId);
+              });
           } else {
             //Need to set up the cron again.
             logger.log("Done aggregation of all the blocks, Need to run the job again after new block verification.");
@@ -140,13 +143,10 @@ ps.lookup({
   dbInteract.getAggregateLastInsertedTimeId()
     .then(function (timeId) {
       logger.log("Last Aggregated time_id ", timeId);
-      if (null === timeId) {
-        return configHelper.syncUpContractMap(dbInteract)
-          .then(function () {
-            return dbInteract.getBlockFromBlockNumber(1)
-          })
+      if ( !timeId ) {
+        return dbInteract.getBlockFromBlockNumber(1)
           .then(function (block) {
-            if (block == undefined) {
+            if ( !block ) {
               logger.log("#getBlockFromBlockNumber(1) returned is undefined");
               process.exit(1);
             }
@@ -155,13 +155,10 @@ ps.lookup({
             aggregateByTimeId(timeId);
           });
       } else {
-        return configHelper.syncUpContractMap(dbInteract)
-          .then(function () {
-            aggregateByTimeId(timeId + constants.AGGREGATE_CONSTANT);
-          });
+        aggregateByTimeId(timeId + constants.AGGREGATE_CONSTANT);
       }
     })
-    .catch(function(err) {
+    .catch(function (err) {
       logger.error('\nNot able to fetch last aggregated timestamp)\n', err);
       process.exit(1);
     });
