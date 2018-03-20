@@ -1,6 +1,6 @@
 "use strict";
 /**
- * Core Constants file 
+ * Core Constants file
  */
 
 const constants = {};
@@ -21,6 +21,8 @@ define("AGGREGATE_TABLE_NAME", 'aggregate');
 define("TRANSACTION_TYPE_TABLE_NAME", 'transaction_type');
 define("ADDRESS_TABLE_NAME", 'address');
 define("TRANSACTION_TYPE_ID_TABLE_NAME", 'transaction_type_id');
+define("BLOCK_STATUS_TABLE_NAME", 'block_status');
+define("AGGREGATE_STATUS_TABLE_NAME", 'aggregate_status');
 
 // Available columns in tables
 define("BLOCKS_DATA_SEQUENCE", '(block_number, block_hash, parent_hash, miner, difficulty, total_difficulty, gas_limit, gas_used, total_transactions, timestamp, verified, nonce, sha3_uncles, uncles, logs_bloom, transactions_root, transactions, state_root, receipt_root, size, extra_data, mix_hash)');
