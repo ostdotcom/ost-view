@@ -4,11 +4,11 @@
  * Job to aggregate data for analytics and insert it into DB.
  *
  * @example
- * node executables/aggregatorCron.js -c 199
+ * node executables/aggregator_cron.js -c 199
  * @example
- * node executables/aggregatorCron.js -h
+ * node executables/aggregator_cron.js -h
  *
- * @module executables/aggregatorCron.js
+ * @module executables/aggregator_cron.js
  */
 
 // Load external libraries
@@ -84,13 +84,13 @@ var aggregateByTimeId = function (timeId) {
  */
 cliHandler
   .version(version)
-  .usage('Please Specify chain ID \n$>aggregatorCron.js -c <chainID> ')
+  .usage('Please Specify chain ID \n$>aggregator_cron.js -c <chainID> ')
   .option('-c, --chainID <n>', 'Id of the chain', parseInt)
   .parse(process.argv);
 
 // Check if chain id exits
 if (!cliHandler.chainID) {
-  logger.error('\n\tPlease Specify chain ID \n\t$>aggregatorCron.js -c <chainID>\n');
+  logger.error('\n\tPlease Specify chain ID \n\t$>aggregator_cron.js -c <chainID>\n');
   process.exit(1);
 }
 
@@ -100,7 +100,7 @@ state.chainID = cliHandler.chainID;
 // Handle process locking
 const lockProcess = {
   command: 'node',
-  script: 'aggregatorCron.js',
+  script: 'aggregator_cron.js',
   arguments: ['-p', state.chainID]
 };
 

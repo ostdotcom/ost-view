@@ -126,7 +126,7 @@ function startAggregator() {
 
     console.log("Aggregator initiated");
 
-    const blockFetcher = spawn('./executables/aggregatorCron.js', ['-c', chainId]);
+    const blockFetcher = spawn('./executables/aggregator_cron.js', ['-c', chainId]);
 
     blockFetcher.stdout.on('data', function(data) {
         writeLogsToFile("aggregator_process_logs.txt", data);
@@ -137,7 +137,7 @@ function startAggregator() {
     });
 
     blockFetcher.on('close', function(code) {
-        console.log("aggregatorCron child process exited with code", code);
+        console.log("aggregator_cron child process exited with code", code);
     });
 }
 
