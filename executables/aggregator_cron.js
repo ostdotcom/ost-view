@@ -44,6 +44,17 @@ var state = {
   config: null
 };
 
+var continueExecution = true;
+
+// Using a single function to handle multiple signals
+function handle() {
+  logger.info('Received Signal');
+  continueExecution = false;
+}
+
+process.on('SIGINT', handle);
+process.on('SIGTERM', handle);
+
 /**
  * Methods to set timeout for the aggregate data api
  *
@@ -52,7 +63,7 @@ var state = {
  */
 var aggregateByTimeId = function (timeId) {
   setTimeout(function () {
-    if ((startRunTime + maxRunTime) > (new Date).getTime()) {
+    if (continueExecution && ((startRunTime + maxRunTime) > (new Date).getTime())) {
       dbInteract.getLastVerifiedBlockTimestamp()
         .then(function (timestamp) {
           logger.log("Last Verified Block Timestamp ", timestamp);

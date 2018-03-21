@@ -44,6 +44,17 @@ var state = {
   lastBlock: null
 };
 
+var continueExecution = true;
+
+// Using a single function to handle multiple signals
+function handle() {
+  logger.info('Received Signal');
+  continueExecution = false;
+}
+
+process.on('SIGINT', handle);
+process.on('SIGTERM', handle);
+
 /**
  * setFetchBlockCron
  *
@@ -55,7 +66,7 @@ var state = {
  */
 var setFetchBlockCron = function (blockNumber) {
   setTimeout(function () {
-    if (((startRunTime + maxRunTime) > (new Date).getTime()) && (!state.lastBlock || (blockNumber < state.lastBlock))) {
+    if (continueExecution && ((startRunTime + maxRunTime) > (new Date).getTime()) && (!state.lastBlock || (blockNumber < state.lastBlock))) {
       state.blockNumber = blockNumber;
       logger.log("Start fetchBlock for blockNumber", blockNumber);
       block_fetcher.fetchAndUpdateBlock(blockNumber, setFetchBlockCron);
