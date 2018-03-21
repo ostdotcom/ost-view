@@ -125,7 +125,7 @@ if (!state.config) {
 dbInteract = DbInteract.getInstance(state.config.db_config);
 web3Interact = Web3Interact.getInstance(state.config.chainId);
 dataAggregator = DataAggregator.newInstance(web3Interact, dbInteract, state.config.chainId);
-logger.log('State Configuration', state);
+// logger.log('State Configuration', state);
 
 // GET LAST PROCESSED time id from a status table
 dbInteract.getAggregateLastInsertedTimeId()

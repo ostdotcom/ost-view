@@ -139,7 +139,7 @@ dbInteract = DbInteract.getInstance(state.config.db_config);
 web3Interact = Web3Interact.getInstance(state.config.chainId);
 block_fetcher = BlockFetcher.newInstance(web3Interact, dbInteract, state.config.chainId, false);
 block_fetcher.state.lastBlock = state.lastBlock;
-logger.log('State Configuration', state);
+// logger.log('State Configuration', state);
 
 // Start processing blocks
 if (!state.blockNumber) {
