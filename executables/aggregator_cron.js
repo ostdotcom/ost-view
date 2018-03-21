@@ -11,22 +11,23 @@
  * @module executables/aggregator_cron.js
  */
 
+const rootPrefix = "..";
+
 // Load external libraries
-const cliHandler = require('commander')
-  , ps = require('ps-node')
+// Include Process Locker File
+const ProcessLockerKlass = require(rootPrefix + '/lib/process_locker')
+  , ProcessLocker = new ProcessLockerKlass()
+  , cliHandler = require('commander')
 ;
 
 // Load internal files
-const rootPrefix = ".."
-  , Web3Interact = require(rootPrefix + '/lib/web3/interact/rpc_interact')
+const Web3Interact = require(rootPrefix + '/lib/web3/interact/rpc_interact')
   , DbInteract = require(rootPrefix + '/lib/storage/interact')
   , logger = require(rootPrefix + '/helpers/custom_console_logger')
   , core_config = require(rootPrefix + '/config')
   , constants = require(rootPrefix + '/config/core_constants')
   , DataAggregator = require(rootPrefix + '/lib/block_utils/data_aggregator')
   , version = require(rootPrefix + '/package.json').version
-  , maxRunTime = (2 * 60 * 60 * 1000) // 2 hrs in milliseconds
-  , startRunTime = (new Date).getTime() // milliseconds since epoch
   , configHelper = require(rootPrefix + '/helpers/configHelper')
 ;
 
@@ -63,7 +64,7 @@ process.on('SIGTERM', handle);
  */
 var aggregateByTimeId = function (timeId) {
   setTimeout(function () {
-    if (continueExecution && ((startRunTime + maxRunTime) > (new Date).getTime())) {
+    if (continueExecution) {
       dbInteract.getLastVerifiedBlockTimestamp()
         .then(function (timestamp) {
           logger.log("Last Verified Block Timestamp ", timestamp);
@@ -111,66 +112,41 @@ if (!cliHandler.chainID) {
 // Set chain id and block number
 state.chainID = cliHandler.chainID;
 
-// Handle process locking
-const lockProcess = {
-  command: 'node',
-  script: 'aggregator_cron.js',
-  arguments: ['-p', state.chainID]
-};
+ProcessLocker.canStartProcess({process_title: 'view_cron_block_aggregator_c_' + cliHandler.chainID });
+ProcessLocker.endAfterTime({time_in_minutes: 120});
 
-// Check if process with same arguments already running or not
-ps.lookup({
-  command: lockProcess.command,
-  arguments: lockProcess.script + "," + lockProcess.arguments.join(",")
-}, function (err, resultList) {
-  if (err) {
-    throw new Error(err);
-  }
+state.config = core_config.getChainConfig(state.chainID);
+if (!state.config) {
+  logger.error('\n\tInvalid chain ID \n');
+  process.exit(1);
+}
 
-  resultList.forEach(function (r) {
-    if (r) {
-      logger.error('\n Process already exists with same arguments \n');
-      process.exit(1);
+// Create required connections and objects
+dbInteract = DbInteract.getInstance(state.config.db_config);
+web3Interact = Web3Interact.getInstance(state.config.chainId);
+dataAggregator = DataAggregator.newInstance(web3Interact, dbInteract, state.config.chainId);
+logger.log('State Configuration', state);
+
+// GET LAST PROCESSED time id from a status table
+dbInteract.getAggregateLastInsertedTimeId()
+  .then(function (timeId) {
+    logger.log("Last Aggregated time_id ", timeId);
+    if (!timeId) {
+      return dbInteract.getBlockFromBlockNumber(1)
+        .then(function (block) {
+          if (!block) {
+            logger.log("#getBlockFromBlockNumber(1) returned is undefined");
+            process.exit(1);
+          }
+          timeId = block.timestamp - (block.timestamp % constants.AGGREGATE_CONSTANT);
+          logger.log("First timeId ", timeId);
+          aggregateByTimeId(timeId);
+        });
+    } else {
+      aggregateByTimeId(timeId + constants.AGGREGATE_CONSTANT);
     }
-  });
-
-  // Set process title for locking
-  process.title = lockProcess.command + " " + lockProcess.script + " " + lockProcess.arguments.join(" ");
-  logger.info(process.title);
-
-  state.config = core_config.getChainConfig(state.chainID);
-  if (!state.config) {
-    logger.error('\n\tInvalid chain ID \n');
+  })
+  .catch(function (err) {
+    logger.error('\nNot able to fetch last aggregated timestamp)\n', err);
     process.exit(1);
-  }
-
-  // Create required connections and objects
-  dbInteract = DbInteract.getInstance(state.config.db_config);
-  web3Interact = Web3Interact.getInstance(state.config.chainId);
-  dataAggregator = DataAggregator.newInstance(web3Interact, dbInteract, state.config.chainId);
-  logger.log('State Configuration', state);
-
-  // GET LAST PROCESSED time id from a status table
-  dbInteract.getAggregateLastInsertedTimeId()
-    .then(function (timeId) {
-      logger.log("Last Aggregated time_id ", timeId);
-      if ( !timeId ) {
-        return dbInteract.getBlockFromBlockNumber(1)
-          .then(function (block) {
-            if ( !block ) {
-              logger.log("#getBlockFromBlockNumber(1) returned is undefined");
-              process.exit(1);
-            }
-            timeId = block.timestamp - (block.timestamp % constants.AGGREGATE_CONSTANT);
-            logger.log("First timeId ", timeId);
-            aggregateByTimeId(timeId);
-          });
-      } else {
-        aggregateByTimeId(timeId + constants.AGGREGATE_CONSTANT);
-      }
-    })
-    .catch(function (err) {
-      logger.error('\nNot able to fetch last aggregated timestamp)\n', err);
-      process.exit(1);
-    });
-});
+  });
