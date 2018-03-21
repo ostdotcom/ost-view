@@ -64,6 +64,7 @@ define("search_results","searchResult");
 
 
 define("BASE_URL",process.env.BASE_URL);
+//TODO::Should be removed and used from config object
 define("CHAIN_ID",process.env.CHAIN_ID);
 define("BASE_CONTRACT_ADDRESS",process.env.BASE_CONTRACT_ADDRESS);
 define("DEFAULT_DATA_NOT_AVAILABLE_TEXT","Data not available. Please check the input parameters.");
