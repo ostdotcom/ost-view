@@ -11,22 +11,23 @@
  * @module executables/block_fetcher_cron
  */
 
+const rootPrefix = "..";
+
 // Load external libraries
-const cliHandler = require('commander')
-  , ps = require('ps-node')
-  ;
+// Include Process Locker File
+const ProcessLockerKlass = require(rootPrefix + '/lib/process_locker')
+  , ProcessLocker = new ProcessLockerKlass()
+  , cliHandler = require('commander')
+;
 
 // Load internal files
-const rootPrefix = ".."
-  , Web3Interact = require(rootPrefix + "/lib/web3/interact/rpc_interact")
+const Web3Interact = require(rootPrefix + "/lib/web3/interact/rpc_interact")
   , DbInteract = require(rootPrefix + "/lib/storage/interact")
   , logger = require(rootPrefix + "/helpers/custom_console_logger")
   , core_config = require(rootPrefix + "/config")
   , BlockFetcher = require(rootPrefix + "/lib/block_utils/block_fetcher")
   , version = require(rootPrefix + '/package.json').version
-  , maxRunTime = (2 * 60 * 60 * 1000) // 2 hrs in milliseconds
-  , startRunTime = (new Date).getTime() // milliseconds since epoch
-  ;
+;
 
 // Variables to hold different objects
 var dbInteract
@@ -66,7 +67,7 @@ process.on('SIGTERM', handle);
  */
 var setFetchBlockCron = function (blockNumber) {
   setTimeout(function () {
-    if (continueExecution && ((startRunTime + maxRunTime) > (new Date).getTime()) && (!state.lastBlock || (blockNumber < state.lastBlock))) {
+    if (continueExecution && (!state.lastBlock || (blockNumber < state.lastBlock))) {
       state.blockNumber = blockNumber;
       logger.log("Start fetchBlock for blockNumber", blockNumber);
       block_fetcher.fetchAndUpdateBlock(blockNumber, setFetchBlockCron);
@@ -110,65 +111,39 @@ if (cliHandler.firstBlock && cliHandler.lastBlock) {
   state.lastBlock = cliHandler.lastBlock;
 }
 
-// console.log("First block : ", state.blockNumber, "Second Block :",state.lastBlock);
-// Handle process locking
-const lockProcess = {
-  command: 'node',
-  script: 'block_fetcher_cron.js',
-  arguments: ['-c', state.chainID, '-n', state.blockNumber]
-};
+ProcessLocker.canStartProcess({process_title: 'view_cron_block_fetcher_c_' + cliHandler.chainID + '_n_' + cliHandler.blockNumber + '_f_' + cliHandler.firstBlock + '_l_' + cliHandler.lastBlock });
+ProcessLocker.endAfterTime({time_in_minutes: 120});
 
-//Check if process with same arguments already running or not
-ps.lookup({
-  command: lockProcess.command,
-  arguments: lockProcess.script + "," + lockProcess.arguments.join(",")
-}, function (err, resultList) {
-  if (err) {
-    throw new Error(err);
-  }
+state.config = core_config.getChainConfig(state.chainID);
+if (!state.config) {
+  logger.error('\n\tInvalid chain ID \n');
+  process.exit(1);
+}
 
-  resultList.forEach(function (r) {
-    if (r) {
-      logger.error('\n Process already exists with same arguments \n');
+// Create required connections and objects
+dbInteract = DbInteract.getInstance(state.config.db_config);
+web3Interact = Web3Interact.getInstance(state.config.chainId);
+block_fetcher = BlockFetcher.newInstance(web3Interact, dbInteract, state.config.chainId, false);
+block_fetcher.state.lastBlock = state.lastBlock;
+logger.log('State Configuration', state);
+
+// Start processing blocks
+if (!state.blockNumber) {
+  dbInteract.getHighestInsertedBlock()
+    .then(function (blockNumber) {
+      logger.log("Highest Block Number ", blockNumber);
+      if (blockNumber) {
+        state.blockNumber = blockNumber + 1;
+      } else {
+        state.blockNumber = 0;
+      }
+      setFetchBlockCron(state.blockNumber);
+    })
+    .catch(function (err) {
+      logger.error('\nNot able to fetch block number)\n', err);
       process.exit(1);
-    }
-  });
-
-  // Set process title for locking
-  process.title = lockProcess.command + " " + lockProcess.script + " " + lockProcess.arguments.join(" ");
-  logger.info(process.title);
-
-  state.config = core_config.getChainConfig(state.chainID);
-  if (!state.config) {
-    logger.error('\n\tInvalid chain ID \n');
-    process.exit(1);
-  }
-
-  // Create required connections and objects
-  dbInteract = DbInteract.getInstance(state.config.db_config);
-  web3Interact = Web3Interact.getInstance(state.config.chainId);
-  block_fetcher = BlockFetcher.newInstance(web3Interact, dbInteract, state.config.chainId, false);
-  block_fetcher.state.lastBlock = state.lastBlock;
-  logger.log('State Configuration', state);
-
-  // Start processing blocks
-  if (!state.blockNumber) {
-    dbInteract.getHighestInsertedBlock()
-      .then(function (blockNumber) {
-        logger.log("Highest Block Number ", blockNumber);
-        if (blockNumber) {
-          state.blockNumber = blockNumber + 1;
-        }else{
-          state.blockNumber = 0;
-        }
-        setFetchBlockCron(state.blockNumber);
-      })
-      .catch(function (err) {
-        logger.error('\nNot able to fetch block number)\n', err);
-        process.exit(1);
-      });
-  }
-  else {
-    setFetchBlockCron(state.blockNumber);
-  }
-});
+    });
+}
+else {
+  setFetchBlockCron(state.blockNumber);
+}
