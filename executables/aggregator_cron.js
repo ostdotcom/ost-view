@@ -112,7 +112,7 @@ if (!cliHandler.chainID) {
 // Set chain id and block number
 state.chainID = cliHandler.chainID;
 
-ProcessLocker.canStartProcess({process_title: 'view_cron_block_aggregator_c_' + cliHandler.chainID });
+ProcessLocker.canStartProcess({process_title: 'v_cron_block_aggregator_c_' + cliHandler.chainID });
 ProcessLocker.endAfterTime({time_in_minutes: 120});
 
 state.config = core_config.getChainConfig(state.chainID);

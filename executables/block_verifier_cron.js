@@ -136,7 +136,7 @@ if (!cliHandler.chainID) {
   process.exit(1);
 }
 
-ProcessLocker.canStartProcess({process_title: 'view_cron_block_verifier_c_' + cliHandler.chainID});
+ProcessLocker.canStartProcess({process_title: 'v_cron_block_verifier_c_' + cliHandler.chainID});
 ProcessLocker.endAfterTime({time_in_minutes: 120});
 
 // Set chain id and block number
