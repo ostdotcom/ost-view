@@ -73,7 +73,7 @@ var checkUnverifiedBlock = function () {
           if (unverifiedBlockNumber != null) {
             return +unverifiedBlockNumber;
           } else {
-            logger.error('\nNot able to fetch block number)\n', err);
+            logger.error('\nNot able to fetch block number)\n');
             process.exit(1);
           }
         })
