@@ -44,14 +44,14 @@ if (!cliHandler.chainID) {
  }, null, false, 'Asia/Kolkata');
 
 
-startBlockFetcher();
-startBlockVerifier();
-startAggregator();
-
-job1.start();
-job2.start();
-job3.start();
-
+// startBlockFetcher();
+// startBlockVerifier();
+// startAggregator();
+//
+// job1.start();
+// job2.start();
+// job3.start();
+//
 
 // var jobID = String( cliHandler.jobID ).toLowerCase()
 //     , job
