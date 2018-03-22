@@ -3,8 +3,21 @@
 const rootPrefix = '../..'
   , coreConstants = require(rootPrefix + '/config/core_constants')
   , ModelBaseKlass = require(rootPrefix + '/app/models/base')
+  , blockConst = require(rootPrefix + '/lib/global_constant/block')
   , dbName = "ost_explorer_" + coreConstants.CHAIN_ID
 ;
+
+const verified = {
+    '0': blockConst.unverified,
+    '1': blockConst.verified,
+    '2': blockConst.failed
+  }
+  , invertedVerified = {}
+;
+
+invertedVerified[blockConst.unverified] = '0';
+invertedVerified[blockConst.verified] = '1';
+invertedVerified[blockConst.failed] = '2';
 
 const BlockKlass = function () {
   const oThis = this
@@ -20,7 +33,16 @@ BlockKlass.prototype = Object.create(ModelBaseKlass.prototype);
  */
 const BlockSpecificPrototype = {
 
-  tableName: 'blocks'
+  tableName: 'blocks',
+  verified: verified,
+  invertedVerified: invertedVerified,
+
+  enums: {
+    'verified': {
+      val: verified,
+      inverted: invertedVerified
+    }
+  }
 
 };
 

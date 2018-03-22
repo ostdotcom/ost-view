@@ -40,7 +40,7 @@ var dbInteract
  */
 var state = {
   chainID: null,
-  blockNumber: 0,
+  blockNumber: -1,
   config: null,
   lastBlock: null
 };
@@ -72,7 +72,7 @@ var setFetchBlockCron = function (blockNumber) {
       logger.log("Start fetchBlock for blockNumber", blockNumber);
       block_fetcher.fetchAndUpdateBlock(blockNumber, setFetchBlockCron);
     } else {
-      logger.log("Completion of block fetching done for blockNumber ", blockNumber);
+      logger.log("cannot start block fetching for blockNumber ", blockNumber);
       process.exit(1);
     }
   }, blockNumber === state.blockNumber ? 5000 : state.config.poll_interval);
@@ -98,16 +98,18 @@ if (!cliHandler.chainID) {
   process.exit(1);
 }
 
+var blockNumberToStartWith = -1;
+
 // Set chain id and block number
 state.chainID = cliHandler.chainID;
 if (isNaN(cliHandler.blockNumber)) {
-  state.blockNumber = 0;
+  blockNumberToStartWith = 0;
 } else {
-  state.blockNumber = cliHandler.blockNumber;
+  blockNumberToStartWith = cliHandler.blockNumber;
 }
 
 if (cliHandler.firstBlock && cliHandler.lastBlock) {
-  state.blockNumber = cliHandler.firstBlock;
+  blockNumberToStartWith = cliHandler.firstBlock;
   state.lastBlock = cliHandler.lastBlock;
 }
 
@@ -142,16 +144,16 @@ block_fetcher.state.lastBlock = state.lastBlock;
 // logger.log('State Configuration', state);
 
 // Start processing blocks
-if (!state.blockNumber) {
+if (!blockNumberToStartWith) {
   dbInteract.getHighestInsertedBlock()
     .then(function (blockNumber) {
       logger.log("Highest Block Number ", blockNumber);
       if (blockNumber) {
-        state.blockNumber = blockNumber + 1;
+        blockNumberToStartWith = blockNumber + 1;
       } else {
-        state.blockNumber = 0;
+        blockNumberToStartWith = 0;
       }
-      setFetchBlockCron(state.blockNumber);
+      setFetchBlockCron(blockNumberToStartWith);
     })
     .catch(function (err) {
       logger.error('\nNot able to fetch block number)\n', err);
@@ -159,5 +161,5 @@ if (!state.blockNumber) {
     });
 }
 else {
-  setFetchBlockCron(state.blockNumber);
+  setFetchBlockCron(blockNumberToStartWith);
 }
