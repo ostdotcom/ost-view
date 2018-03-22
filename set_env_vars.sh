@@ -62,6 +62,19 @@ export OST_VIEW_2_DB_HOST="localhost"
 
 export OST_VIEW_2_DB_CONNECTION_LIMIT=10
 
+# chain env 1409
+export OST_VIEW_3_CHAIN_ID="1409"
+export OST_VIEW_3_WEB_RPC="http://127.0.0.1:8545"
+
+#DB env
+export OST_VIEW_3_DB_USER="root"
+export OST_VIEW_3_DB_PWD="root"
+
+export OST_VIEW_3_DB_NAME="ost_explorer_1409"
+
+export OST_VIEW_3_DB_HOST="localhost"
+
+export OST_VIEW_3_DB_CONNECTION_LIMIT=10
 
 
 #DB env
@@ -97,11 +110,11 @@ export OST_VIEW_PATH='.'
 
 #Web env variables
 
-export CHAIN_ID='199';
+export CHAIN_ID='1409';
 
 export BASE_CONTRACT_ADDRESS='0';
 
-export OST_VIEW_199_UNAME="root";
-export OST_VIEW_199_PWD="root";
+export OST_VIEW_1409_UNAME="root";
+export OST_VIEW_1409_PWD="root";
 
 export OST_VIEW_ENVIRONMENT='development'
