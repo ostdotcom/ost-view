@@ -59,7 +59,7 @@ const ModelBaseKlassPrototype = {
 
         var pre_query = Date.now();
         var qry = oThis.onWriteConnection().query(queryGenerator.data.query, queryGenerator.data.queryData, function (err, result, fields) {
-          logger.info("("+(Date.now() - pre_query)+" ms)", qry.sql);
+          //logger.info("("+(Date.now() - pre_query)+" ms)", qry.sql);
           if (err) {
             onReject(err);
           } else {
