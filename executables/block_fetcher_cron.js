@@ -72,7 +72,7 @@ var setFetchBlockCron = function (blockNumber) {
       logger.log("Start fetchBlock for blockNumber", blockNumber);
       block_fetcher.fetchAndUpdateBlock(blockNumber, setFetchBlockCron);
     } else {
-      logger.log("Completion of block fetching done for blockNumber ", blockNumber);
+      logger.log("cannot start block fetching for blockNumber ", blockNumber);
       process.exit(1);
     }
   }, blockNumber === state.blockNumber ? 5000 : state.config.poll_interval);
