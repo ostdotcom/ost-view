@@ -115,17 +115,7 @@ if (cliHandler.firstBlock && cliHandler.lastBlock) {
 
 var processTitle = 'v_cron_block_fetcher_c_' + cliHandler.chainID;
 
-if (cliHandler.blockNumber){
-  processTitle += '_n_' + cliHandler.blockNumber;
-}
-
-if (cliHandler.firstBlock){
-  processTitle += '_f_' + cliHandler.firstBlock;
-}
-
-if (cliHandler.lastBlock){
-  processTitle += '_l_' + cliHandler.lastBlock;
-}
+processTitle += '_n_' + (cliHandler.blockNumber || '') + '_f_' + (cliHandler.firstBlock || '') + '_l_' + (cliHandler.lastBlock || '');
 
 ProcessLocker.canStartProcess({process_title: processTitle});
 ProcessLocker.endAfterTime({time_in_minutes: 120});
