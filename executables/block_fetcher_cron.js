@@ -18,6 +18,7 @@ const rootPrefix = "..";
 const ProcessLockerKlass = require(rootPrefix + '/lib/process_locker')
   , ProcessLocker = new ProcessLockerKlass()
   , cliHandler = require('commander')
+  , MAX_PROCESS_TIME_IN_MINUTES = 21 //Ek Shagun hai.
 ;
 
 // Load internal files
@@ -67,6 +68,11 @@ process.on('SIGTERM', handle);
  */
 var setFetchBlockCron = function (blockNumber) {
   setTimeout(function () {
+    if( blockNumber === state.blockNumber){
+        console.log("Killing self...");
+        process.exit(0);
+    }
+
     if (continueExecution && (!state.lastBlock || (blockNumber < state.lastBlock))) {
       state.blockNumber = blockNumber;
       logger.log("Start fetchBlock for blockNumber", blockNumber);
@@ -118,7 +124,9 @@ var processTitle = 'v_cron_block_fetcher_c_' + cliHandler.chainID;
 processTitle += '_n_' + (cliHandler.blockNumber || '') + '_f_' + (cliHandler.firstBlock || '') + '_l_' + (cliHandler.lastBlock || '');
 
 ProcessLocker.canStartProcess({process_title: processTitle});
-ProcessLocker.endAfterTime({time_in_minutes: 120});
+ProcessLocker.endAfterTime({
+  time_in_minutes: MAX_PROCESS_TIME_IN_MINUTES
+});
 
 state.config = core_config.getChainConfig(state.chainID);
 if (!state.config) {
