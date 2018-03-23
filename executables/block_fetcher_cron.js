@@ -70,7 +70,7 @@ var setFetchBlockCron = function (blockNumber) {
   setTimeout(function () {
     if( blockNumber === state.blockNumber){
         console.log("Killing self...");
-        process.exit(0);
+        process.exit(1);
     }
 
     if (continueExecution && (!state.lastBlock || (blockNumber < state.lastBlock))) {
