@@ -11,7 +11,7 @@ const rootPrefix = ".."
   , dbInteract = require(rootPrefix + '/lib/storage/interact')
   , coreConfig = require(rootPrefix + '/config')
   , rpcInteract = require(rootPrefix + '/lib/web3/interact/rpc_interact')
-
+  , brandedTokenModelKlass = require(rootPrefix + '/app/models/branded_token')
 ;
 
 // Class related constants
@@ -52,15 +52,18 @@ search.prototype = {
         return;
       }
       if (argument.length === constants.ACCOUNT_HASH_LENGTH) {
-        oThis._utilityInteractInstance.isContract(argument)
-          .then(function(response){
 
-            resolve("/tokendetails/"+argument);
+        isContractAddress(argument)
+          .then(function(isContract){
+            if (isContract) {
+              resolve("/tokendetails/"+argument);
+            }else{
+              resolve("/address/"+argument);
+            }
           })
-          .catch(function(reason){
-
+          .catch(function(){
             resolve("/address/"+argument);
-          });
+          })
 
       }else if(argument.length === constants.TRANSACTION_HASH_LENGTH){
 
@@ -81,5 +84,19 @@ search.prototype = {
       }
     });
   }
-     
+
+}
+
+
+function isContractAddress(address){
+  return new brandedTokenModelKlass().select(['contract_address']).where(['contract_address=?',address]).fire()
+    .then(function(queryResponse){
+      if (queryResponse && queryResponse.length > 0){
+        return true;
+      }
+        return false;
+    })
+    .catch(function(reason){
+      return false;
+    })
 }
