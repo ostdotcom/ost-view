@@ -68,9 +68,9 @@ process.on('SIGTERM', handle);
  */
 var setFetchBlockCron = function (blockNumber) {
   setTimeout(function () {
-    if( blockNumber === state.blockNumber){
-        console.log("Killing self...");
-        process.exit(1);
+    if (blockNumber === state.blockNumber) {
+      console.log("Killing self...");
+      process.exit(1);
     }
 
     if (continueExecution && (!state.lastBlock || (blockNumber < state.lastBlock))) {
@@ -142,22 +142,23 @@ block_fetcher.state.lastBlock = state.lastBlock;
 // logger.log('State Configuration', state);
 
 // Start processing blocks
-if (!blockNumberToStartWith) {
-  dbInteract.getHighestInsertedBlock()
-    .then(function (blockNumber) {
-      logger.log("Highest Block Number ", blockNumber);
-      if (blockNumber) {
-        blockNumberToStartWith = blockNumber + 1;
-      } else {
-        blockNumberToStartWith = 0;
-      }
-      setFetchBlockCron(blockNumberToStartWith);
-    })
-    .catch(function (err) {
-      logger.error('\nNot able to fetch block number)\n', err);
+
+dbInteract.getHighestInsertedBlock(blockNumberToStartWith, state.lastBlock)
+  .then(function (blockNumber) {
+    logger.log("Highest Block Number ", blockNumber);
+    if (blockNumber) {
+      blockNumberToStartWith = blockNumber + 1;
+    } else {
+      blockNumberToStartWith = blockNumberToStartWith;
+    }
+
+    if(state.lastBlock && (blockNumberToStartWith >= state.lastBlock)){
       process.exit(1);
-    });
-}
-else {
-  setFetchBlockCron(blockNumberToStartWith);
-}
+    }
+
+    setFetchBlockCron(blockNumberToStartWith);
+  })
+  .catch(function (err) {
+    logger.error('\nNot able to fetch block number)\n', err);
+    process.exit(1);
+  });
