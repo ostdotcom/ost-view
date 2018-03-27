@@ -69,7 +69,7 @@ ConfigHelper.prototype.getIdOfContractByPromise = function (dbInteract, contract
   var oThis = this;
   var contractId = oThis.getIdOfContract(contractAddress);
   return new Promise(function (resolve, reject) {
-    if (!contractId) {
+    if (contractId === undefined) {
       oThis.syncUpContractMap(dbInteract)
         .then(function () {
           return resolve(oThis.getIdOfContract(contractAddress))

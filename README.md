@@ -66,17 +66,20 @@ OPENST-EXPLORER
        ```
 
 ## In terminal 2
-* Start cron services
-   > It will run block fetcher, block verifier and block aggregator cron.
-    ```
-     > cd openst-explorer
-     > source set_env_vars.sh
-     > ./executables/cron.js -c <chain_id>
-    ```
-## In terminal 3
 * Start node
-   > It will run block fetcher, block verifier and block aggregator cron.
+  
     ```
      > cd openst-explorer
      > source set_env_vars.sh
      > npm start
+     
+     
+## Start Cronjobs
+```base
+# Every five minute
+node executables/graph_cron.js >> log/graph_cron.log
+node executables/aggregator_cron.js >> log/aggregator_cron.log
+# Every minute
+node executables/block_fetcher_cron.js >> log/block_fetcher_cron.log
+node executables/block_verifier_cron.js >> log/block_verifier_cron.log
+```     

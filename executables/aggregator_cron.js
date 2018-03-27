@@ -68,11 +68,12 @@ var aggregateByTimeId = function (timeId) {
       dbInteract.getLastVerifiedBlockTimestamp()
         .then(function (timestamp) {
           logger.log("Last Verified Block Timestamp ", timestamp);
+
           if (timestamp != null && +timestamp - timeId >= constants.AGGREGATE_CONSTANT) {
-            configHelper.syncUpContractMap(dbInteract)
-              .then(function () {
-                dataAggregator.aggregateData(timeId, aggregateByTimeId);
-              });
+              configHelper.syncUpContractMap(dbInteract)
+                .then(function () {
+                  dataAggregator.aggregateData(timeId, aggregateByTimeId);
+                });
           } else {
             //Need to set up the cron again.
             logger.log("Done aggregation of all the blocks, Need to run the job again after new block verification.");
