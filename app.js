@@ -54,7 +54,7 @@ const basicAuthKey = 'OST_VIEW_'+process.env.CHAIN_ID
 
 var basicAuthentication = function (req, res, next) {
 
-   if (coreConstant.ENVIRONMENT === 'production'){
+   if (coreConstant.PUT_BASIC_AUTHENTICATION === 'false'){
      return next();
    }
 
