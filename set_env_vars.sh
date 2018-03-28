@@ -77,6 +77,21 @@ export OST_VIEW_3_DB_HOST="localhost"
 export OST_VIEW_3_DB_CONNECTION_LIMIT=10
 
 
+# chain env 101 For testing
+export OST_VIEW_4_CHAIN_ID="101"
+export OST_VIEW_4_WEB_RPC="http://127.0.0.1:8545"
+
+#DB env
+export OST_VIEW_4_DB_USER="root"
+export OST_VIEW_4_DB_PWD="root"
+
+export OST_VIEW_4_DB_NAME="ost_explorer_101"
+
+export OST_VIEW_4_DB_HOST="localhost"
+
+export OST_VIEW_4_DB_CONNECTION_LIMIT=10
+
+
 #DB env
 
 export OV_DEFAULT_MYSQL_HOST="localhost"

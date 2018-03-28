@@ -71,7 +71,7 @@ if (!state.config) {
 }
 
 // Create required connections and objects
-dbInteract = DbInteract.getInstance(state.config.db_config);
+dbInteract = DbInteract.getInstance(state.config.chainId);
 web3Interact = Web3Interact.getInstance(state.config.chainId);
 dataAggregator = DataAggregator.newInstance(web3Interact, dbInteract, state.config.chainId);
 

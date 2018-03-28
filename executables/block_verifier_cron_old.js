@@ -143,7 +143,7 @@ ps.lookup({
     }
 
     // Create required connections and objects
-    dbInteract = DbInteract.getInstance(state.config.db_config);
+    dbInteract = DbInteract.getInstance(state.config.chainId);
     web3Interact = Web3Interact.getInstance(state.config.chainId);
     block_verifier = BlockVerifier.newInstance(web3Interact, dbInteract, state.config.chainId);
     // logger.log('State Configuration', state);
