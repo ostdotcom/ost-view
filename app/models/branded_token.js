@@ -20,7 +20,7 @@ BrandedTokenKlass.prototype = Object.create(ModelBaseKlass.prototype);
  */
 const BrandedTokenSpecificPrototype = {
 
-  tableName: 'branded_token',
+  tableName: coreConstants.BRANDED_TOKEN_TABLE_NAME,
 };
 
 Object.assign(BrandedTokenKlass.prototype, BrandedTokenSpecificPrototype);
