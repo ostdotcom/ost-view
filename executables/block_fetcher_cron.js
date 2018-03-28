@@ -147,8 +147,6 @@ dbInteract.getHighestInsertedBlock(blockNumberToStartWith, state.lastBlock)
     logger.log("Highest Block Number ", blockNumber);
     if (blockNumber) {
       blockNumberToStartWith = blockNumber + 1;
-    } else {
-      blockNumberToStartWith = blockNumberToStartWith;
     }
 
     if(state.lastBlock && (blockNumberToStartWith >= state.lastBlock)){

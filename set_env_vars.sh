@@ -125,7 +125,7 @@ export OST_VIEW_PATH='.'
 
 #Web env variables
 
-export CHAIN_ID='1409';
+export CHAIN_ID='101';
 
 export BASE_CONTRACT_ADDRESS='0';
 

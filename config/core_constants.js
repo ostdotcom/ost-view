@@ -54,6 +54,7 @@ define('DEFAULT_PAGE_NUMBER',1);
 define('AGGREGATE_CONSTANT', 5 * 60);
 define('TOP_TOKENS_LIMIT_COUNT',500);
 define('FETCHER_BATCH_SIZE', 2);
+define('DB_NAME_PREFIX','ost_explorer_');
 
 //template map
 define('contract_internal_transactions', 'transactionList');

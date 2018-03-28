@@ -4,7 +4,6 @@ const rootPrefix = '../..'
   , coreConstants = require(rootPrefix + '/config/core_constants')
   , ModelBaseKlass = require(rootPrefix + '/app/models/base')
   , blockConst = require(rootPrefix + '/lib/global_constant/block')
-  , dbName = "ost_explorer_" + coreConstants.CHAIN_ID
 ;
 
 const verified = {
@@ -19,11 +18,12 @@ invertedVerified[blockConst.unverified] = '0';
 invertedVerified[blockConst.verified] = '1';
 invertedVerified[blockConst.failed] = '2';
 
-const BlocksKlass = function () {
+const BlockKlass = function (chainId) {
   const oThis = this
   ;
 
-  ModelBaseKlass.call(oThis, {dbName: dbName});
+  oThis.dbName = coreConstants.DB_NAME_PREFIX + chainId;
+  ModelBaseKlass.call(oThis, {dbName: oThis.dbName});
 };
 
 BlocksKlass.prototype = Object.create(ModelBaseKlass.prototype);
