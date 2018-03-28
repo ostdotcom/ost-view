@@ -4,7 +4,8 @@ var dbm;
 var type;
 var seed;
 
-const constants = require('../config/core_constants.js');
+const rootPrefix = '..'
+  , constants = require(rootPrefix + '/config/core_constants.js');
 /**
   * We receive the dbmigrate dependency from dbmigrate initially.
   * This enables us to not have to rely on NODE_PATH.
@@ -15,45 +16,62 @@ exports.setup = function(options, seedLink) {
   seed = seedLink;
 };
 
-exports.up = function(db) {
-	return createBlockTable(db)
-  	.then(function (result) { return createTransactionTable(db);})
-  	.then(function (result) { return createHashIndexOnTransactionTable(db);})
-  	.then(function (result) { return createTransactionLedgerTable(db);})
-  	.then(function (result) { return createGroupIndexOnTxnLedgerTable(db);})
-  	.then(function (result) { return createIntTransactionTable(db);})
-  	.then(function (result) { return createIndexOnIntTransactionTable(db);})
-  	.then(function (result) { return createIntTransactionLedgerTable(db);})
-  	.then(function (result) { return createIndexOnIntTxnLedgerTable(db);}
-  	,
-    function(err) {
+// addresses
+// id, address (UK), type
+// transactions
+// id, transaction_hash_id (UK), block_number, transaction_index, contract_address_id, from_address_id, to_address_id, tokens, gas_used, gas_price, nonce, block_timestamp, status
+// transaction_extra_details *
+// id, transaction_hash_id (UK), input_data, logs, logs_bloom, r, s, v
+// token_transactions
+// id, transaction_hash_id, block_number, contract_address_id, from_address_id, to_address_id, tokens, block_timestamp
+// branded_tokens
+// id, contract_address_id, name, symbol, symbol_icon, uuid, conversion_rate, creation_timestamp, (token_holders, market_cap, circulation, total_supply, transactions_data, transactions_volume_data, token_transfer_data, token_volume_data, transaction_type_data, token_transfers, token_ost_volume)
+// branded_token_transaction_types
+// id, contract_address_id, transaction_type
+// branded_token_transaction_type_maps
+// id, transaction_hash_id, branded_token_transaction_type_id
 
-    }
-  );
+exports.up = function (db) {
+  return createBlockTable(db)
+    .then(function () {
+      return createNumberIndexOnBlockTable(db);
+    })
+  // .then(function (result) { return createHashIndexOnTransactionTable(db);})
+  // .then(function (result) { return createTransactionLedgerTable(db);})
+  // .then(function (result) { return createGroupIndexOnTxnLedgerTable(db);})
+  // .then(function (result) { return createIntTransactionTable(db);})
+  // .then(function (result) { return createIndexOnIntTransactionTable(db);})
+  // .then(function (result) { return createIntTransactionLedgerTable(db);})
+  // .then(function (result) { return createIndexOnIntTxnLedgerTable(db);}
+  // ,
+  // function(err) {
+  //
+  // }
+  // );
 };
 
 exports.down = function(db) {
-  return db.dropTable(constants.BLOCK_TABLE_NAME)
-  .then(
-    function(result) {
-      	db.dropTable(constants.TRANSACTION_TABLE_NAME);
-    })
-  .then(
-  	function(result) {
-  		db.dropTable(constants.ADDRESS_TRANSACTION_TABLE_NAME);
-  	})
-  .then(
-  	function(result) {
-  		db.dropTable(constants.TOKEN_TRANSACTION_TABLE_NAME);
-  	})
-  .then(
-  	function(result) {
-  		db.dropTable(constants.ADDRESS_TOKEN_TRANSACTION_TABLE_NAME);
-  	},
-    function(err) {
-      return;
-    }
-  );
+  return db.dropTable(constants.BLOCK_TABLE_NAME);
+  // .then(
+  //   function(result) {
+  //     	db.dropTable(constants.TRANSACTION_TABLE_NAME);
+  //   })
+  // .then(
+  // 	function(result) {
+  // 		db.dropTable(constants.ADDRESS_TRANSACTION_TABLE_NAME);
+  // 	})
+  // .then(
+  // 	function(result) {
+  // 		db.dropTable(constants.TOKEN_TRANSACTION_TABLE_NAME);
+  // 	})
+  // .then(
+  // 	function(result) {
+  // 		db.dropTable(constants.ADDRESS_TOKEN_TRANSACTION_TABLE_NAME);
+  // 	},
+  //   function(err) {
+  //     return;
+  //   }
+  // );
 };
 
 exports._meta = {
@@ -61,37 +79,27 @@ exports._meta = {
 };
 
 /**************************** Helper methods *****************************/
-var createBlockTable = function(db) {
+// id, block_number (UK), block_hash, parent_hash, difficulty, total_difficulty, gas_limit, gas_used, total_transactions, block_timestamp, status
+const createBlockTable = function(db) {
 	return db.createTable(constants.BLOCK_TABLE_NAME, {
-	    block_number: { type: 'bigint', primaryKey: true },
-	    block_hash: { type: 'string', notNull: true , length: 66},
+      id: {type: 'int', notNull: true, primaryKey: true, autoIncrement: true},
+	    block_number: { type: 'bigint', unique: true },
+      block_hash: { type: 'string', notNull: true , length: 66},
 	    parent_hash: { type: 'string', notNull: true , length: 66},
-	    miner: { type: 'string', notNull: true , length: 42},
 	    difficulty: { type: 'string', notNull: true },
 	    total_difficulty: { type: 'string', notNull: true },
 	    gas_limit: { type: 'int', notNull: true },
 	    gas_used: { type: 'int', notNull: true },
 	    total_transactions: { type: 'int', notNull: true },
-	    timestamp: { type: 'int', notNull: true },
-        verified: { type: 'boolean', notNull: true, default: 0},
-
-        /* Optionals */
-        nonce: { type: 'string', notNull: false , length: 16, default: null },
-        sha3_uncles: { type: 'string', notNull: false , length: 66, default: null },
-        uncles:  { type: 'blob', notNull: false, default: null },
-        logs_bloom: { type: 'string', notNull: false , default: null },
-        transactions_root: { type: 'string', notNull: false , length: 66, default: null },
-        transactions: { type: 'blob', notNull: false, default: null },
-        state_root: { type: 'string', notNull: false , length: 66, default: null },
-        receipt_root : { type: 'string', notNull: false , length: 66, default: null },
-        size: { type: 'int', notNull: false, default: 0 },
-        extra_data: { type: 'string', notNull: false , default: null },
-        mix_hash: { type: 'string', notNull: false , default: null }
+	    block_timestamp: { type: 'int', notNull: true },
+      status: { type: 'boolean', notNull: true, default: 0}
   	});
 };
 
-var createNumberIndexOnBlockTable = function(db) {
- 	db.addIndex(constants.BLOCK_TABLE_NAME, 'n_index', 'block_number', true);
+// transaction_hashs
+// id, transaction_hash (UK), (block_number, block_timestamp)
+const createTransactionHashesTable = function(db) {
+
 };
 
 var createTransactionTable = function(db) {
