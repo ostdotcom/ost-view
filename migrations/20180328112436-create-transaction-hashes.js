@@ -32,7 +32,7 @@ const createTransactionHashesTable = function (db) {
   return db.createTable(constants.TRANSACTIONS_HASHES_TABLE_NAME, {
     id: {type: 'bigint', notNull: true, primaryKey: true, autoIncrement: true},
     transaction_hash: {type: 'string',notNull: true, length: 66, unique: true},
-    transaction_type_id:{type: 'int', notNull:false},
+    branded_token_transaction_type_id:{type: 'int', notNull:false},
     created_at:{type: 'datetime', notNull: true},
     updated_at:{type: 'datetime', notNull: true}
   })
