@@ -7,13 +7,11 @@
  */
 
 //Chain config
-const chain_config = {
-
-};
+const chain_config = {};
 
 (function setUpChainFromEnv() {
   var i = 0;
-  while(true) {
+  while (true) {
 
     var ostView = "OST_VIEW_" + i;
     var chainId = process.env[ostView + "_CHAIN_ID"];
@@ -48,9 +46,7 @@ const chain_config = {
             }
           }
         },
-        "databases": {
-
-        }
+        "databases": {}
       }
     };
     chainIdValue.mysqlConfig.databases[process.env[ostView + "_DB_NAME"]] = ["cluster1"];
@@ -62,23 +58,23 @@ const chain_config = {
 
 module.exports = {
 
-  getChainConfig: function(chainId) {
+  getChainConfig: function (chainId) {
     return chain_config[chainId];
   },
 
-  getChainDbConfig: function(chainId) {
+  getChainDbConfig: function (chainId) {
     if (this.getChainConfig(chainId)) {
       return this.getChainConfig(chainId).db_config;
     }
   },
 
-  getMysqlDbConfig: function(chainId) {
+  getMysqlDbConfig: function (chainId) {
     if (this.getChainConfig(chainId)) {
       return this.getChainConfig(chainId).mysqlConfig;
     }
   },
 
-  getCommonNodeConfig : function() {
+  getCommonNodeConfig: function () {
     return {
       "connectionLimit": process.env['OST_VIEW_0_DB_CONNECTION_LIMIT'],
       "charset": "UTF8_UNICODE_CI",
@@ -89,7 +85,7 @@ module.exports = {
     };
   },
 
-  getCommonClusterConfig : function () {
+  getCommonClusterConfig: function () {
     return {
       "canRetry": true,
       "removeNodeErrorCount": 5,
@@ -98,13 +94,26 @@ module.exports = {
     }
   },
 
-  getWebRpcUrl: function(chainId) {
+  getWebRpcUrl: function (chainId) {
     if (this.getChainConfig(chainId)) {
       return this.getChainConfig(chainId).web_rpc;
     }
   },
 
-  getAllChainIDs: function() {
+  getAllChainIDs: function () {
     return Object.keys(chain_config);
+  },
+
+  getPollInterval: function (chainId) {
+    if (this.getChainConfig(chainId)) {
+      return this.getChainConfig(chainId).poll_interval;
+    } else {
+      throw "Invaid chainId";
+    }
+  },
+
+  isValidChainId: function (chainId) {
+    this.getAllChainIDs.indexOf(chainId) > -1
   }
+
 };
