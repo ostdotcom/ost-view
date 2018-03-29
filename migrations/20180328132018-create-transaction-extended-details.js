@@ -39,6 +39,8 @@ const createTransactionExtendedDetailsTable = function (db) {
     r:{type: 'string', notNull: false},
     s:{type: 'string', notNull: false},
     v:{type: 'string', notNull: false},
+    created_at:{type: 'datetime', notNull: true},
+    updated_at:{type: 'datetime', notNull: true}
 
   })
 }
