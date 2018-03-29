@@ -32,7 +32,7 @@ exports.down = function(db) {
 //address_token_transfer
 //id, contract_address_id, transaction_type
 const createBrandedTokenTransactionTypeTable = function (db) {
-  return db.createTable(constants.TRANSACTION_TYPE_ID_TABLE_NAME, {
+  return db.createTable(constants.BRANDED_TOKEN_TRANSACTION_TYPES_TABLE_NAME, {
     id: {type: 'bigint', notNull: true, primaryKey: true, autoIncrement: true},
     contract_address_id: {type: 'bigint', notNull: true},
     transaction_type: {type: 'string', notNull: true},
@@ -42,6 +42,6 @@ const createBrandedTokenTransactionTypeTable = function (db) {
 }
 
 const createIndexOnBrandedTokenTransactionTypeTable = function (db) {
-  db.addIndex(constants.TRANSACTION_TYPE_ID_TABLE_NAME, 'tti_ca_tt_index', ['contract_address_id', 'transaction_type'], false);
+  db.addIndex(constants.BRANDED_TOKEN_TRANSACTION_TYPES_TABLE_NAME, 'tti_ca_tt_index', ['contract_address_id', 'transaction_type'], false);
 };
 

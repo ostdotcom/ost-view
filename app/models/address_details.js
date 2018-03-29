@@ -6,28 +6,28 @@ const rootPrefix = '../..'
   , dbName = "ost_explorer_" + coreConstants.CHAIN_ID
 ;
 
-const AddressTransactionKlass = function () {
+const AddressDetailsKlass = function () {
   const oThis = this
   ;
 
   ModelBaseKlass.call(oThis, {dbName: dbName});
 };
 
-AddressTransactionKlass.prototype = Object.create(ModelBaseKlass.prototype);
+AddressDetailsKlass.prototype = Object.create(ModelBaseKlass.prototype);
 
 /*
  * Public methods
  */
-const AddressTransactionSpecificPrototype = {
+const AddressDetailsSpecificPrototype = {
 
-  tableName: 'address_transactions'
+  tableName: coreConstants.ADDRESS_DETAILS_TABLE_NAME
 
 };
 
-Object.assign(AddressTransactionKlass.prototype, AddressTransactionSpecificPrototype);
+Object.assign(AddressDetailsKlass.prototype, AddressDetailsSpecificPrototype);
 
-module.exports = AddressTransactionKlass;
+module.exports = AddressDetailsKlass;
 
 
-// ttk = require('./app/models/address_transaction')
+// ttk = require('./app/models/address_details')
 // new ttk().select('*').where('id>1').limit('10').fire().then(console.log);

@@ -10,21 +10,21 @@ function define(key, value) {
 }
 
 // Available table names
-define('BLOCK_TABLE_NAME', 'blocks');
-define('TRANSACTION_TABLE_NAME', 'transactions');
+define('BLOCKS_TABLE_NAME', 'blocks');
+define('TRANSACTIONS_TABLE_NAME', 'transactions');
 define('TRANSACTION_EXTENDED_DETAILS_TABLE_NAME','transaction_extended_details');
-define('TOKEN_TRANSACTION_TABLE_NAME', 'token_transfers');
-define('ADDRESS_TABLE_NAME', 'address_details');
-define('ADDRESS_TRANSACTION_TABLE_NAME', 'address_transactions');
-define('ADDRESS_TOKEN_TRANSACTION_TABLE_NAME', 'address_token_transfers');
+define('TOKEN_TRANSFERS_TABLE_NAME', 'token_transfers');
+define('ADDRESS_DETAILS_TABLE_NAME', 'address_details');
+define('ADDRESS_TRANSACTIONS_TABLE_NAME', 'address_transactions');
+define('ADDRESS_TOKEN_TRANSFERS_TABLE_NAME', 'address_token_transfers');
 
 define('ADDRESSES_TABLE_NAME','addresses');
 define('TRANSACTIONS_HASHES_TABLE_NAME','transaction_hashes')
 
-define('BRANDED_TOKEN_TABLE_NAME', 'branded_tokens');
-define('AGGREGATE_TABLE_NAME', 'aggregates');
+define('BRANDED_TOKENS_TABLE_NAME', 'branded_tokens');
+define('AGGREGATES_TABLE_NAME', 'aggregates');
 define('TRANSACTION_TYPE_TABLE_NAME', 'transaction_type');
-define('TRANSACTION_TYPE_ID_TABLE_NAME', 'branded_token_transaction_types');
+define('BRANDED_TOKEN_TRANSACTION_TYPES_TABLE_NAME', 'branded_token_transaction_types');
 define('BLOCK_STATUS_TABLE_NAME', 'block_status');
 define('AGGREGATE_STATUS_TABLE_NAME', 'aggregate_status');
 

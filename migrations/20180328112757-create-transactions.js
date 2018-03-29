@@ -33,7 +33,7 @@ exports.down = function(db) {
 // id, transaction_hash_id (UK), block_number, transaction_index, contract_address_id, from_address_id, to_address_id, tokens,gas_used,
 // gas_price, nonce, block_timestamp, status
 const createTransactionTable = function (db) {
-  return db.createTable(constants.TRANSACTION_TABLE_NAME, {
+  return db.createTable(constants.TRANSACTIONS_TABLE_NAME, {
     id: {type: 'bigint', notNull: true, primaryKey: true, autoIncrement: true},
     transaction_hash_id: {type: 'bigint',notNull: true, unique: true},
     block_number: {type: 'bigint', notNull: true},
@@ -53,5 +53,5 @@ const createTransactionTable = function (db) {
 };
 
 const createIndexOnTransactionTable = function (db) {
-  db.addIndex(constants.TRANSACTION_TABLE_NAME, 't_bn_index', 'block_number', false);
+  db.addIndex(constants.TRANSACTIONS_TABLE_NAME, 't_bn_index', 'block_number', false);
 };

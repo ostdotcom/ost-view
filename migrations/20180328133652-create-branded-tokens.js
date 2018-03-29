@@ -30,13 +30,13 @@ exports.down = function(db) {
 //id, company_name, contract_address_id, company_symbol, uuid, price, token_holders, market_cap, circulation, total_supply, transactions_data
 //transactions_volume_data, tokens_volume_data, transaction_type_data, token_transfers, token_ost_volume, creation_time, symbol_icon
 const createBrandedTokenTable = function (db) {
-  return db.createTable(constants.BRANDED_TOKEN_TABLE_NAME, {
+  return db.createTable(constants.BRANDED_TOKENS_TABLE_NAME, {
     id: {type: 'bigint', notNull: true, primaryKey: true, autoIncrement: true},
     name: {type: 'string', notNull: true, unique:true},
     contract_address_id: {type: 'bigint', notNull: true, unique:true},
     symbol:{type: 'string', notNull: false},
     uuid: {type: 'string', notNull: false},
-    price: {type: 'decimal', length:'15,5',notNull: true, default:0},
+    conversion_rate: {type: 'decimal', length:'15,5',notNull: true, default:0},
     symbol_icon: {type:'string', notNull:true, default:0},
     creation_timestamp: {type:'int', notNull: true},
     created_at:{type: 'datetime', notNull: true},

@@ -32,7 +32,7 @@ exports.down = function(db) {
 //address_token_transfer
 //id, address_id, corresponding_address_id, transaction_hash_id, contract_address_id, tokens, inflow, tx_timestamp
 const createAddressTokenTransferTable = function (db) {
-  return db.createTable(constants.ADDRESS_TOKEN_TRANSACTION_TABLE_NAME, {
+  return db.createTable(constants.ADDRESS_TOKEN_TRANSFERS_TABLE_NAME, {
     id: {type: 'bigint', notNull: true, primaryKey: true, autoIncrement: true},
     address_id: {type: 'bigint', notNull: true},
     corresponding_address_id: {type: 'bigint', notNull: true},
@@ -47,7 +47,7 @@ const createAddressTokenTransferTable = function (db) {
 };
 
 const createIndexOnAddressTokenTransferTable = function (db) {
-  db.addIndex(constants.ADDRESS_TOKEN_TRANSACTION_TABLE_NAME, 'att_a_tt_index', ['address_id', 'tx_timestamp'], false);
+  db.addIndex(constants.ADDRESS_TOKEN_TRANSFERS_TABLE_NAME, 'att_a_tt_index', ['address_id', 'tx_timestamp'], false);
 };
 
 

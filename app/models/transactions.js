@@ -6,24 +6,24 @@ const rootPrefix = '../..'
   , dbName = "ost_explorer_" + coreConstants.CHAIN_ID
 ;
 
-const TransactionTypeKlass = function () {
+const TransactionsKlass = function () {
   const oThis = this
   ;
 
   ModelBaseKlass.call(oThis, {dbName: dbName});
 };
 
-TransactionTypeKlass.prototype = Object.create(ModelBaseKlass.prototype);
+TransactionsKlass.prototype = Object.create(ModelBaseKlass.prototype);
 
 /*
  * Public methods
  */
-const TransactionTypeSpecificPrototype = {
+const TransactionsSpecificPrototype = {
 
-  tableName: 'transaction_type',
+  tableName: coreConstants.TRANSACTIONS_TABLE_NAME,
 
 };
 
-Object.assign(TransactionTypeKlass.prototype, TransactionTypeSpecificPrototype);
+Object.assign(TransactionsKlass.prototype, TransactionsSpecificPrototype);
 
-module.exports = TransactionTypeKlass;
+module.exports = TransactionsKlass;

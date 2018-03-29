@@ -32,7 +32,7 @@ exports.down = function(db) {
 //address_transactions
 //id, address_id, corresponding_address_id, tokens, transaction_hash_id, transaction_fees, inflow, tx_timestamp
 const createAddressTransactionsTable = function (db) {
-  return db.createTable(constants.ADDRESS_TRANSACTION_TABLE_NAME, {
+  return db.createTable(constants.ADDRESS_TRANSACTIONS_TABLE_NAME, {
     id: {type: 'bigint', notNull: true, primaryKey: true, autoIncrement: true},
     address_id: {type: 'bigint', notNull: true },
     corresponding_address_id: {type: 'bigint', notNull: false },
@@ -47,5 +47,5 @@ const createAddressTransactionsTable = function (db) {
 };
 
 const createIndexOnAddressTransactionTable = function (db) {
-  db.addIndex(constants.ADDRESS_TRANSACTION_TABLE_NAME, 'at_a_tt_index', ['address_id', 'tx_timestamp'], false);
+  db.addIndex(constants.ADDRESS_TRANSACTIONS_TABLE_NAME, 'at_a_tt_index', ['address_id', 'tx_timestamp'], false);
 };

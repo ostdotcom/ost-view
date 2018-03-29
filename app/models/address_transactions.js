@@ -6,27 +6,28 @@ const rootPrefix = '../..'
   , dbName = "ost_explorer_" + coreConstants.CHAIN_ID
 ;
 
-const BrandedTokenKlass = function () {
+const AddressTransactionsKlass = function () {
   const oThis = this
   ;
 
   ModelBaseKlass.call(oThis, {dbName: dbName});
 };
 
-BrandedTokenKlass.prototype = Object.create(ModelBaseKlass.prototype);
+AddressTransactionsKlass.prototype = Object.create(ModelBaseKlass.prototype);
 
 /*
  * Public methods
  */
-const BrandedTokenSpecificPrototype = {
+const AddressTransactionsSpecificPrototype = {
 
-  tableName: coreConstants.BRANDED_TOKEN_TABLE_NAME,
+  tableName: coreConstants.ADDRESS_TRANSACTIONS_TABLE_NAME
+
 };
 
-Object.assign(BrandedTokenKlass.prototype, BrandedTokenSpecificPrototype);
+Object.assign(AddressTransactionsKlass.prototype, AddressTransactionsSpecificPrototype);
 
-module.exports = BrandedTokenKlass;
+module.exports = AddressTransactionsKlass;
 
 
-// ttk = require('./app/models/branded_token')
+// ttk = require('./app/models/address_transaction')
 // new ttk().select('*').where('id>1').limit('10').fire().then(console.log);

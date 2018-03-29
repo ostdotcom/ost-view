@@ -19,21 +19,21 @@ invertedVerified[blockConst.unverified] = '0';
 invertedVerified[blockConst.verified] = '1';
 invertedVerified[blockConst.failed] = '2';
 
-const BlockKlass = function () {
+const BlocksKlass = function () {
   const oThis = this
   ;
 
   ModelBaseKlass.call(oThis, {dbName: dbName});
 };
 
-BlockKlass.prototype = Object.create(ModelBaseKlass.prototype);
+BlocksKlass.prototype = Object.create(ModelBaseKlass.prototype);
 
 /*
  * Public methods
  */
-const BlockSpecificPrototype = {
+const BlocksSpecificPrototype = {
 
-  tableName: 'blocks',
+  tableName: coreConstants.BLOCKS_TABLE_NAME,
   verified: verified,
   invertedVerified: invertedVerified,
 
@@ -46,9 +46,9 @@ const BlockSpecificPrototype = {
 
 };
 
-Object.assign(BlockKlass.prototype, BlockSpecificPrototype);
+Object.assign(BlocksKlass.prototype, BlocksSpecificPrototype);
 
-module.exports = BlockKlass;
+module.exports = BlocksKlass;
 
 
 // ttk = require('./app/models/block')

@@ -32,7 +32,7 @@ exports.down = function(db) {
 // tokenTransfer
 // id, transaction_hash_id, block_number, contract_address_id, from_address_id, to_address_id, tokens, block_timestamp
 const createTokenTransferTable = function (db) {
-  return db.createTable(constants.TOKEN_TRANSACTION_TABLE_NAME, {
+  return db.createTable(constants.TOKEN_TRANSFERS_TABLE_NAME, {
     id: {type: 'bigint', notNull: true, primaryKey: true, autoIncrement: true},
     transaction_hash_id: {type: 'bigint', notNull: true},
     block_number: {type: 'bigint', notNull: true},
@@ -47,8 +47,8 @@ const createTokenTransferTable = function (db) {
 };
 
 const createIndexOnTokenTransferTable = function (db) {
-  db.addIndex(constants.TOKEN_TRANSACTION_TABLE_NAME, 'tt__ca_bt_index', ['contract_address_id', 'block_timestamp'], false);
-  db.addIndex(constants.TOKEN_TRANSACTION_TABLE_NAME, 'tt__bn_index', ['block_number'], false);
-  db.addIndex(constants.TOKEN_TRANSACTION_TABLE_NAME, 'tt__tx_index', ['transaction_hash_id'], false);
+  db.addIndex(constants.TOKEN_TRANSFERS_TABLE_NAME, 'tt__ca_bt_index', ['contract_address_id', 'block_timestamp'], false);
+  db.addIndex(constants.TOKEN_TRANSFERS_TABLE_NAME, 'tt__bn_index', ['block_number'], false);
+  db.addIndex(constants.TOKEN_TRANSFERS_TABLE_NAME, 'tt__tx_index', ['transaction_hash_id'], false);
 
 };

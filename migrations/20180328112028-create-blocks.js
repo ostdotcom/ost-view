@@ -29,7 +29,7 @@ exports.down = function(db) {
 // blocks
 // id, block_number (UK), block_hash, parent_hash, difficulty, total_difficulty, gas_limit, gas_used, total_transactions, block_timestamp, status
 const createBlocksTable = function (db) {
-  return db.createTable(constants.BLOCK_TABLE_NAME, {
+  return db.createTable(constants.BLOCKS_TABLE_NAME, {
     id: {type: 'bigint', notNull: true, primaryKey: true, autoIncrement: true},
     block_number: {type: 'bigint', unique: true, notNull: true},
     block_hash: {type: 'string', notNull: true, length: 66},

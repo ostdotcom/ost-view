@@ -32,7 +32,7 @@ exports.down = function(db) {
 //address
 //id, address_id, branded_token_id, tokens, tokens_earned, tokens_spent, total_transactions
 const createAddressDetailsTable = function (db) {
-  return db.createTable(constants.ADDRESS_TABLE_NAME, {
+  return db.createTable(constants.ADDRESS_DETAILS_TABLE_NAME, {
     id: {type: 'bigint', notNull: true, primaryKey: true, autoIncrement: true},
     address_id: {type: 'bigint',notNull: true},
     branded_token_id: {type: 'int', notNull: true},
@@ -47,7 +47,7 @@ const createAddressDetailsTable = function (db) {
 };
 
 const createIndexOnAddressDetailsTable = function (db) {
-  db.addIndex(constants.ADDRESS_TABLE_NAME, 'ad_a_index', 'address_id', false);
-  db.addIndex(constants.ADDRESS_TABLE_NAME, 'ad_bt_index', 'branded_token_id', false);
+  db.addIndex(constants.ADDRESS_DETAILS_TABLE_NAME, 'ad_a_index', 'address_id', false);
+  db.addIndex(constants.ADDRESS_DETAILS_TABLE_NAME, 'ad_bt_index', 'branded_token_id', false);
 
 };
