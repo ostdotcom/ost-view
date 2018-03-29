@@ -206,7 +206,6 @@ if (cluster.isMaster) {
   app.use('/', basicAuthentication, indexRoutes);
 
   app.use('/chain-id/:chainId/block', basicAuthentication, blockRoutes);
-  // app.use('/chain-id/:chainId/blocks', blocksRoutes);
   app.use('/chain-id/:chainId/transactions', basicAuthentication, transactionsRoutes);
   app.use('/chain-id/:chainId/transaction', basicAuthentication, transactionRoutes);
   app.use('/chain-id/:chainId/address', basicAuthentication, addressRoutes);
