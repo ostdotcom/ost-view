@@ -40,7 +40,8 @@ const createBlocksTable = function (db) {
     gas_used: {type: 'int', notNull: true},
     total_transactions: {type: 'int', notNull: true},
     block_timestamp: {type: 'int', notNull: true},
-    status: {type: 'boolean', notNull: true, default: 0},
+    verified: {type: 'tinyint', notNull: true, length:1},
+    status: {type: 'tinyint', notNull: true, length:1},
     created_at:{type: 'datetime', notNull: true},
     updated_at:{type: 'datetime', notNull: true}
   });
