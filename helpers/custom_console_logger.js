@@ -207,7 +207,19 @@ CustomConsoleLoggerKlass.prototype = {
    */
   log: function () {
     console.log.apply(console, arguments);
-  }
+  },
+
+  //Method to Log Request Started.
+  requestStartLog: function (requestUrl, requestType) {
+    const oThis = this
+      , d = new Date()
+      , dateTime = d.getFullYear() + "-" + (d.getMonth() + 1) + "-" + d.getDate() + " " + d.getHours() + ":" +
+      d.getMinutes() + ":" + d.getSeconds() + "." + d.getMilliseconds()
+      , message = 'Started \'' + requestType + '\'  \'' + requestUrl + '\' at ' + dateTime
+    ;
+
+    oThis.info(message);
+  },
 
 };
 

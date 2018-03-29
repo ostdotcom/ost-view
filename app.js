@@ -52,6 +52,18 @@ const basicAuthKey = 'OST_VIEW_'+process.env.DEFAULT_CHAIN_ID
   , userPwd = process.env[ pKey ]
 ;
 
+const assignParams = function (req, res, next) {
+  logger.requestStartLog(customUrlParser.parse(req.originalUrl).pathname, req.method);
+  if (req.method == 'POST') {
+    req.decodedParams = req.body || {};
+  } else if (req.method == 'GET') {
+    req.decodedParams = req.query || {};
+  }
+  Object.assign(req.decodedParams, req.params);
+  return next();
+};
+
+
 var basicAuthentication = function (req, res, next) {
 
    if (coreConstant.ENVIRONMENT === 'production'){
@@ -205,15 +217,15 @@ if (cluster.isMaster) {
   // load route files
   app.use('/', basicAuthentication, indexRoutes);
 
-  app.use('/chain-id/:chainId/block', basicAuthentication, blockRoutes);
-  app.use('/chain-id/:chainId/transactions', basicAuthentication, transactionsRoutes);
-  app.use('/chain-id/:chainId/transaction', basicAuthentication, transactionRoutes);
-  app.use('/chain-id/:chainId/address', basicAuthentication, addressRoutes);
-  app.use('/chain-id/:chainId/contract', basicAuthentication, contractRoutes);
-  app.use('/chain-id/:chainId/tokendetails', tokenDetailsRoutes);
-  app.use('/chain-id/:chainId/tokens', basicAuthentication, tokenTransactionsRoutes);
-  app.use('/chain-id/:chainId/chainDetails', basicAuthentication, chainDetailsRoutes);
-  app.use('/search-results', basicAuthentication, searchResultRoutes);
+  app.use('/chain-id/:chainId/block', assignParams, blockRoutes);
+  app.use('/chain-id/:chainId/transactions', assignParams, transactionsRoutes);
+  app.use('/chain-id/:chainId/transaction', assignParams, transactionRoutes);
+  app.use('/chain-id/:chainId/address', assignParams, addressRoutes);
+  app.use('/chain-id/:chainId/contract', assignParams, contractRoutes);
+  app.use('/chain-id/:chainId/tokendetails', assignParams, tokenDetailsRoutes);
+  app.use('/chain-id/:chainId/tokens', assignParams, tokenTransactionsRoutes);
+  app.use('/chain-id/:chainId/chainDetails', assignParams, chainDetailsRoutes);
+  app.use('/search-results', assignParams, searchResultRoutes);
 
   // catch 404 and forward to error handler
   app.use(function (req, res, next) {

@@ -2,7 +2,7 @@
 
 const rootPrefix = '..'
   , responseHelper = require(rootPrefix + '/lib/formatter/response')
-  , logger = require(rootPrefix + '/lib/logger/custom_console_logger')
+  , logger = require(rootPrefix + '/helpers/custom_console_logger')
 ;
 
 const routeMethods = {
@@ -11,19 +11,15 @@ const routeMethods = {
 
     try{
 
-      var handleResponse = function (response) {
-        response.renderResponse(res);
-      };
-
-      const decodedParams = req.decodedParams;
+      const decodedParams = req.params;
 
       const callerObject = new CallerKlass(decodedParams);
 
-      return callerObject.perform().then(handleResponse);
+      return callerObject.perform();
 
     } catch(err) {
       logger.notify(errorCode, 'Something went wrong', err);
-      responseHelper.error(errorCode, 'Something went wrong').renderResponse(res)
+      Promise.resolve(responseHelper.error(errorCode, 'Something went wrong'));
     }
 
   }
