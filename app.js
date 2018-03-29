@@ -45,7 +45,7 @@ const rootPrefix = "."
   ;
 
 ////For authentication
-const basicAuthKey = 'OST_VIEW_'+process.env.CHAIN_ID
+const basicAuthKey = 'OST_VIEW_'+process.env.DEFAULT_CHAIN_ID
   , uKey = basicAuthKey + "_UNAME"
   , pKey = basicAuthKey + "_PWD"
   , userName = process.env[ uKey ]

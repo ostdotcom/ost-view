@@ -29,8 +29,8 @@ define('BLOCK_STATUS_TABLE_NAME', 'block_status');
 define('AGGREGATE_STATUS_TABLE_NAME', 'aggregate_status');
 
 // Available columns in tables
-define('BLOCKS_DATA_SEQUENCE', '(block_number, block_hash, parent_hash, miner, difficulty, total_difficulty, gas_limit, gas_used, total_transactions, timestamp, verified, nonce, sha3_uncles, uncles, logs_bloom, transactions_root, transactions, state_root, receipt_root, size, extra_data, mix_hash)');
-define('BLOCKS_DATA_SEQUENCE_ARRAY', ['block_number', 'block_hash', 'parent_hash', 'miner', 'difficulty', 'total_difficulty', 'gas_limit', 'gas_used', 'total_transactions', 'timestamp', 'verified', 'nonce', 'sha3_uncles', 'uncles', 'logs_bloom', 'transactions_root', 'transactions', 'state_root', 'receipt_root', 'size', 'extra_data', 'mix_hash']);
+define('BLOCKS_DATA_SEQUENCE', '(block_number, block_hash, parent_hash, difficulty, total_difficulty, gas_limit, gas_used, total_transactions, block_timestamp, status)');
+define('BLOCKS_DATA_SEQUENCE_ARRAY', ['block_number', 'block_hash', 'parent_hash', 'difficulty', 'total_difficulty', 'gas_limit', 'gas_used', 'total_transactions', 'block_timestamp', 'status']);
 define('TRANSACTION_DATA_SEQUENCE', '(transaction_hash, block_number, transaction_index, contract_address, t_from, t_to, tokens, gas_used, gas_price, nounce, input_data, logs, timestamp, status, logs_bloom, r, s, v)');
 define('ADDRESS_TRANSACTION_DATA_SEQUENCE', '(address, corresponding_address, tokens, transaction_hash, transaction_fees, inflow, timestamp)');
 define('TOKEN_TRANSACTION_DATA_SEQUENCE', '(transaction_hash, contract_address, t_from, t_to, tokens, timestamp, block_number)');
@@ -69,8 +69,7 @@ define('search_results','searchResult');
 
 
 define('BASE_URL',process.env.BASE_URL);
-//TODO::Should be removed and used from config object
-define('CHAIN_ID',process.env.CHAIN_ID);
+define('DEFAULT_CHAIN_ID',process.env.DEFAULT_CHAIN_ID);
 define('BASE_CONTRACT_ADDRESS',process.env.BASE_CONTRACT_ADDRESS);
 define('DEFAULT_DATA_NOT_AVAILABLE_TEXT','Data not available. Please check the input parameters.');
 

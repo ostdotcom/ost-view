@@ -1,9 +1,9 @@
 "use strict";
 
 const rootPrefix = '../..'
-  , coreConstants = require(rootPrefix + '/config/core_constants')
   , ModelBaseKlass = require(rootPrefix + '/app/models/base')
   , blockConst = require(rootPrefix + '/lib/global_constant/block')
+  , coreConstants = require(rootPrefix + '/config/core_constants')
 ;
 
 const verified = {
@@ -22,16 +22,16 @@ const BlockKlass = function (chainId) {
   const oThis = this
   ;
 
-  oThis.dbName = coreConstants.DB_NAME_PREFIX + chainId;
-  ModelBaseKlass.call(oThis, {dbName: oThis.dbName});
+  oThis.chainId = chainId;
+  ModelBaseKlass.call(oThis, {chainId: chainId});
 };
 
-BlocksKlass.prototype = Object.create(ModelBaseKlass.prototype);
+BlockKlass.prototype = Object.create(ModelBaseKlass.prototype);
 
 /*
  * Public methods
  */
-const BlocksSpecificPrototype = {
+const BlockSpecificPrototype = {
 
   tableName: coreConstants.BLOCKS_TABLE_NAME,
   verified: verified,
@@ -46,9 +46,9 @@ const BlocksSpecificPrototype = {
 
 };
 
-Object.assign(BlocksKlass.prototype, BlocksSpecificPrototype);
+Object.assign(BlockKlass.prototype, BlockSpecificPrototype);
 
-module.exports = BlocksKlass;
+module.exports = BlockKlass;
 
 
 // ttk = require('./app/models/block')

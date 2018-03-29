@@ -30,7 +30,7 @@ const homeMiddleware = function (req, res, next) {
   var chainId = req.params.chainId
     ;
   if(undefined === chainId){
-    chainId = coreConstant['CHAIN_ID'];
+    chainId = coreConstant['DEFAULT_CHAIN_ID'];
   }
   // Get instance of contract class
   req.homeInstance = new home(chainId);
@@ -114,13 +114,13 @@ const searchMiddleware = function (req, res, next) {
     ;
 
   if(undefined === chainId){
-    chainId = coreConstant['CHAIN_ID'];
+    chainId = coreConstant['DEFAULT_CHAIN_ID'];
   }
   // create instance of search class
   req.searchInstance = new search(chainId);
 
   req.q = q;
-  req.chainId = chainId
+  req.chainId = chainId;
 
   next();
 };

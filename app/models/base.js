@@ -5,12 +5,20 @@ const rootPrefix = '../..'
   , MysqlQueryKlass = require(rootPrefix + '/lib/query_builders/mysql')
   , mysqlWrapper = require(rootPrefix + "/lib/mysql_wrapper")
   , logger = require(rootPrefix + '/helpers/custom_console_logger')
+  , config = require(rootPrefix + '/config')
 ;
 
 const ModelBaseKlass = function (params) {
   var oThis = this;
 
-  oThis.dbName = params.dbName;
+  oThis.chainId = params.chainId;
+  oThis.dbConfig = config.getMysqlDbConfig(params.chainId);
+
+  if (!oThis.dbConfig) {
+    logger.error("app/models/base :: ModelBaseKlass :: dbConfig cannot be ", oThis.dbConfig);
+    process.exit(1);
+  }
+
   MysqlQueryKlass.call(this);
 };
 
@@ -20,12 +28,12 @@ const ModelBaseKlassPrototype = {
 
   // get read connection
   onReadConnection: function() {
-    return mysqlWrapper.getPoolFor(this.dbName, 'master');
+    return mysqlWrapper.getPoolFor(this.dbConfig, 'master');
   },
 
   // get read connection
   onWriteConnection: function() {
-    return mysqlWrapper.getPoolFor(this.dbName, 'master');
+    return mysqlWrapper.getPoolFor(this.dbConfig, 'master');
   },
 
   convertEnumForDB: function (params, readable) {

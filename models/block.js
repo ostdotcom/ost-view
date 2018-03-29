@@ -25,7 +25,7 @@ const und = require('underscore');
 var block = module.exports = function (chainId) {
   this._utilityInteractInstance = rpcInteract.getInstance(chainId);
   this._dbInstance = dbInteract.getInstance(coreConfig.getChainDbConfig(chainId));
-}
+};
 
 block.prototype = {
 

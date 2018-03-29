@@ -36,9 +36,24 @@ const chain_config = {
         connectionLimit: process.env[ostView + "_DB_CONNECTION_LIMIT"],
         blockAttributes: ['miner', 'difficulty', 'totalDifficulty', 'gasLimit', 'gasUsed'],
         txnAttributes: ['gas', 'gasPrice', 'input', 'nonce', 'contractAddress']
+      },
+      mysqlConfig: {
+        dbName: process.env[ostView + "_DB_NAME"],
+        "clusters": {
+          "cluster1": {
+            "master": {
+              "host": process.env[ostView + "_DB_HOST"],
+              "user": process.env[ostView + "_DB_USER"],
+              "password": process.env[ostView + "_DB_PWD"]
+            }
+          }
+        },
+        "databases": {
+
+        }
       }
     };
-
+    chainIdValue.mysqlConfig.databases[process.env[ostView + "_DB_NAME"]] = ["cluster1"];
     chain_config[chainId] = chainIdValue;
     i++;
   }
@@ -54,6 +69,32 @@ module.exports = {
   getChainDbConfig: function(chainId) {
     if (this.getChainConfig(chainId)) {
       return this.getChainConfig(chainId).db_config;
+    }
+  },
+
+  getMysqlDbConfig: function(chainId) {
+    if (this.getChainConfig(chainId)) {
+      return this.getChainConfig(chainId).mysqlConfig;
+    }
+  },
+
+  getCommonNodeConfig : function() {
+    return {
+      "connectionLimit": process.env['OST_VIEW_0_DB_CONNECTION_LIMIT'],
+      "charset": "UTF8_UNICODE_CI",
+      "bigNumberStrings": true,
+      "supportBigNumbers": true,
+      "dateStrings": true,
+      "debug": false
+    };
+  },
+
+  getCommonClusterConfig : function () {
+    return {
+      "canRetry": true,
+      "removeNodeErrorCount": 5,
+      "restoreNodeTimeout": 10000,
+      "defaultSelector": "RR"
     }
   },
 

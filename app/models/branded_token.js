@@ -3,29 +3,30 @@
 const rootPrefix = '../..'
   , coreConstants = require(rootPrefix + '/config/core_constants')
   , ModelBaseKlass = require(rootPrefix + '/app/models/base')
-  , dbName = "ost_explorer_" + coreConstants.CHAIN_ID
 ;
 
-const BrandedTokensKlass = function () {
+
+const BrandedTokenKlass = function (chainId) {
   const oThis = this
   ;
 
-  ModelBaseKlass.call(oThis, {dbName: dbName});
+  oThis.chainId = chainId;
+  ModelBaseKlass.call(oThis, {chainId: chainId});
 };
 
-BrandedTokensKlass.prototype = Object.create(ModelBaseKlass.prototype);
+BrandedTokenKlass.prototype = Object.create(ModelBaseKlass.prototype);
 
 /*
  * Public methods
  */
-const BrandedTokensSpecificPrototype = {
+const BrandedTokenSpecificPrototype = {
 
   tableName: coreConstants.BRANDED_TOKENS_TABLE_NAME,
 };
 
-Object.assign(BrandedTokensKlass.prototype, BrandedTokensSpecificPrototype);
+Object.assign(BrandedTokenKlass.prototype, BrandedTokenSpecificPrototype);
 
-module.exports = BrandedTokensKlass;
+module.exports = BrandedTokenKlass;
 
 
 // ttk = require('./app/models/branded_token')

@@ -94,9 +94,9 @@ export OST_VIEW_4_DB_CONNECTION_LIMIT=10
 
 #DB env
 
-export OV_DEFAULT_MYSQL_HOST="localhost"
-export OV_DEFAULT_MYSQL_USER="root"
-export OV_DEFAULT_MYSQL_PASSWORD="root"
+#export OV_DEFAULT_MYSQL_HOST="localhost"
+#export OV_DEFAULT_MYSQL_USER="root"
+#export OV_DEFAULT_MYSQL_PASSWORD="root"
 
 
 
@@ -125,7 +125,7 @@ export OST_VIEW_PATH='.'
 
 #Web env variables
 
-export CHAIN_ID='101';
+export DEFAULT_CHAIN_ID='101';
 
 export BASE_CONTRACT_ADDRESS='0';
 
