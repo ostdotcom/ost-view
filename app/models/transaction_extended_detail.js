@@ -3,30 +3,30 @@
 const rootPrefix = '../..'
   , coreConstants = require(rootPrefix + '/config/core_constants')
   , ModelBaseKlass = require(rootPrefix + '/app/models/base')
-  , dbName = "ost_explorer_" + coreConstants.CHAIN_ID
 ;
 
-const TransactionExtendedDetailsKlass = function () {
+const TransactionExtendedDetailKlass = function (chainId) {
   const oThis = this
   ;
 
-  ModelBaseKlass.call(oThis, {dbName: dbName});
+  oThis.chainId = chainId;
+  ModelBaseKlass.call(oThis, {chainId: chainId});
 };
 
-TransactionExtendedDetailsKlass.prototype = Object.create(ModelBaseKlass.prototype);
+TransactionExtendedDetailKlass.prototype = Object.create(ModelBaseKlass.prototype);
 
 /*
  * Public methods
  */
-const TransactionExtendedDetailsPrototype = {
+const TransactionExtendedDetailPrototype = {
 
   tableName: coreConstants.TRANSACTION_EXTENDED_DETAILS_TABLE_NAME
 
 };
 
-Object.assign(TransactionExtendedDetailsKlass.prototype, TransactionExtendedDetailsPrototype);
+Object.assign(TransactionExtendedDetailKlass.prototype, TransactionExtendedDetailPrototype);
 
-module.exports = TransactionExtendedDetailsKlass;
+module.exports = TransactionExtendedDetailKlass;
 
 
 // ttk = require('./app/models/address_details')

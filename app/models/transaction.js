@@ -5,7 +5,7 @@ const rootPrefix = '../..'
   , ModelBaseKlass = require(rootPrefix + '/app/models/base')
 ;
 
-const TransactionsKlass = function () {
+const TransactionKlass = function () {
   const oThis = this
   ;
 
@@ -13,17 +13,17 @@ const TransactionsKlass = function () {
   ModelBaseKlass.call(oThis, {chainId: chainId});
 };
 
-TransactionsKlass.prototype = Object.create(ModelBaseKlass.prototype);
+TransactionKlass.prototype = Object.create(ModelBaseKlass.prototype);
 
 /*
  * Public methods
  */
-const TransactionsSpecificPrototype = {
+const TransactionSpecificPrototype = {
 
   tableName: coreConstants.TRANSACTIONS_TABLE_NAME,
 
 };
 
-Object.assign(TransactionsKlass.prototype, TransactionsSpecificPrototype);
+Object.assign(TransactionKlass.prototype, TransactionSpecificPrototype);
 
-module.exports = TransactionsKlass;
+module.exports = TransactionKlass;

@@ -6,27 +6,28 @@ const rootPrefix = '../..'
   , dbName = "ost_explorer_" + coreConstants.CHAIN_ID
 ;
 
-const TransactionHashesKlass = function () {
+const TransactionHashKlass = function (chainId) {
   const oThis = this
   ;
 
-  ModelBaseKlass.call(oThis, {dbName: dbName});
+  oThis.chainId = chainId;
+  ModelBaseKlass.call(oThis, {chainId: chainId});
 };
 
-TransactionHashesKlass.prototype = Object.create(ModelBaseKlass.prototype);
+TransactionHashKlass.prototype = Object.create(ModelBaseKlass.prototype);
 
 /*
  * Public methods
  */
-const TransactionHashesPrototype = {
+const TransactionHashPrototype = {
 
   tableName: coreConstants.TRANSACTIONS_HASHES_TABLE_NAME
 
 };
 
-Object.assign(TransactionHashesKlass.prototype, TransactionHashesPrototype);
+Object.assign(TransactionHashKlass.prototype, TransactionHashPrototype);
 
-module.exports = TransactionHashesKlass;
+module.exports = TransactionHashKlass;
 
 
 // ttk = require('./app/models/address_details')

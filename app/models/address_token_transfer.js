@@ -3,30 +3,30 @@
 const rootPrefix = '../..'
   , coreConstants = require(rootPrefix + '/config/core_constants')
   , ModelBaseKlass = require(rootPrefix + '/app/models/base')
-  , dbName = "ost_explorer_" + coreConstants.CHAIN_ID
 ;
 
-const AddressTokenTransfersKlass = function () {
+const AddressTokenTransferKlass = function (chainId) {
   const oThis = this
   ;
 
-  ModelBaseKlass.call(oThis, {dbName: dbName});
+  oThis.chainId = chainId;
+  ModelBaseKlass.call(oThis, {chainId: chainId});
 };
 
-AddressTokenTransfersKlass.prototype = Object.create(ModelBaseKlass.prototype);
+AddressTokenTransferKlass.prototype = Object.create(ModelBaseKlass.prototype);
 
 /*
  * Public methods
  */
-const AddressTokenTransfersSpecificPrototype = {
+const AddressTokenTransferSpecificPrototype = {
 
   tableName: coreConstants.ADDRESS_TOKEN_TRANSFERS_TABLE_NAME
 
 };
 
-Object.assign(AddressTokenTransfersKlass.prototype, AddressTokenTransfersSpecificPrototype);
+Object.assign(AddressTokenTransferKlass.prototype, AddressTokenTransferSpecificPrototype);
 
-module.exports = AddressTokenTransfersKlass;
+module.exports = AddressTokenTransferKlass;
 
 
 // ttk = require('./app/models/address_details')

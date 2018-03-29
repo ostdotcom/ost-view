@@ -138,8 +138,6 @@ describe('Create BlockFetcher object', function () {
 
     expect(blockFetcher.web3Interact.constructor.name).to.be.equal('Object');
 
-    expect(blockFetcher.dbInteract.constructor.name).to.be.equal('Object');
-
     expect(blockFetcher.chainId).to.be.equal(testChainId);
 
     expect(blockFetcher.singleFetchForVerifier).to.be.equal(false);
@@ -176,8 +174,6 @@ describe('Check block insertion for dataArray in db', function () {
 
     const blockArray = [blockData1, blockData2];
 
-    console.log(blockData1.transactions, blockData2.transactions);
-
     const result = await blockFetcher.writeBlocksToDB(blockArray)
       .then(function(resArray){
         assert.typeOf(resArray, 'array');
@@ -193,6 +189,30 @@ describe('Check block insertion for dataArray in db', function () {
       });
 
     expect(result).to.be.equal('2');
+  });
+});
+
+
+describe('Check is block inserted method', function () {
+  it('isBlockInserted', async function () {
+
+    const blockFetcher = BlockFetcher.newInstance(testChainId)
+    ;
+
+    // DB clean up
+    await new BlockKlass(testChainId).delete().where('1=1').fire();
+
+    // // Test starts
+    let isInserted = await blockFetcher.isBlockInserted(1);
+    expect(isInserted, "Not inserted").to.be.equal(false);
+
+    const blockArray = [blockData1];
+    const result = await blockFetcher.writeBlocksToDB(blockArray);
+
+    let isInserted2 = await blockFetcher.isBlockInserted(1);
+    expect(isInserted2, "Inserted").to.be.equal(true);
+    // Test ends
+
   });
 });
 
