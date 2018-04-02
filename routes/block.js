@@ -111,46 +111,73 @@ function processBlockError(errorCode, req, res){
  */
 router.get("/:blockNumber/token-transfers", function (req, res, next) {
 
-  var pageSize = coreConstant.DEFAULT_PAGE_SIZE+1;
+  const getBlockTransfersKlass = require(rootPrefix + '/app/services/block/get_token_transfers');
 
-  req.blockInstance.getBlockTokenTransactions(req.blockNumber, pageSize, req.pagePayload)
-    .then(function (queryResponse) {
+  routeHelper.performer(req, res, next, getBlockTransfersKlass, 'r_b_1')
+    .then(function (requestResponse) {
+      if(requestResponse.isSuccess()){
+        const response = responseHelper.successWithData({
+          block_transactions: requestResponse.data.token_transfers,
+          contract_addresses:requestResponse.data.contract_addresses,
+          result_type: "block_transactions",
+          layout:'empty',
+          meta:{
+            next_page_payload :{},
+            prev_page_payload :{},
 
-      var tokenTransactions = queryResponse.tokenTransactions
-        , contractAddresses = queryResponse.contractAddresses
-      ;
+            block_number:req.params.blockNumber,
 
-      const nextPagePayload = getNextPagePaylaodForBlockTokenTransactions(tokenTransactions, pageSize),
-        prevPagePayload = getPrevPagePaylaodForBlockTokenTransactions(tokenTransactions, req.pagePayload, pageSize)
-        ;
-
-      // For all the pages remove last row if its equal to page size.
-      if(tokenTransactions.length == pageSize){
-        tokenTransactions.pop();
+            transaction_placeholder_url:"/chain-id/"+req.params.chainId+"/transaction/{{tr_hash}}",
+            address_placeholder_url:"/chain-id/"+req.params.chainId+"/address/{{addr}}",
+            token_details_redirect_url: "/chain-id/"+req.params.chainId+"/tokendetails/{{contract_addr}}"
+          }
+        });
+        return renderResult(response, res,'application/json');
+      } else {
+        processBlockError(requestResponse.err.code, req, res);
       }
-
-      const response = responseHelper.successWithData({
-        block_transactions: tokenTransactions,
-        contract_addresses:contractAddresses,
-        result_type: "block_transactions",
-        layout:'empty',
-        meta:{
-          next_page_payload :nextPagePayload,
-          prev_page_payload :prevPagePayload,
-
-          block_number:req.blockNumber,
-
-          transaction_placeholder_url:"/chain-id/"+req.chainId+"/transaction/{{tr_hash}}",
-          address_placeholder_url:"/chain-id/"+req.chainId+"/address/{{addr}}",
-          token_details_redirect_url: "/chain-id/"+req.chainId+"/tokendetails/{{contract_addr}}"
-        }
-      });
-      return renderResult(response, res,'application/json');
-    })
-    .catch(function (reason) {
-      logger.log(req.originalUrl + " : " + reason);
-      return renderResult(responseHelper.error('', coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, 'application/json');
     });
+
+  // var pageSize = coreConstant.DEFAULT_PAGE_SIZE+1;
+  //
+  // req.blockInstance.getBlockTokenTransactions(req.blockNumber, pageSize, req.pagePayload)
+  //   .then(function (queryResponse) {
+  //
+  //     var tokenTransactions = queryResponse.tokenTransactions
+  //       , contractAddresses = queryResponse.contractAddresses
+  //     ;
+  //
+  //     const nextPagePayload = getNextPagePaylaodForBlockTokenTransactions(tokenTransactions, pageSize),
+  //       prevPagePayload = getPrevPagePaylaodForBlockTokenTransactions(tokenTransactions, req.pagePayload, pageSize)
+  //       ;
+  //
+  //     // For all the pages remove last row if its equal to page size.
+  //     if(tokenTransactions.length == pageSize){
+  //       tokenTransactions.pop();
+  //     }
+  //
+  //     // const response = responseHelper.successWithData({
+  //     //   block_transactions: tokenTransactions,
+  //     //   contract_addresses:contractAddresses,
+  //     //   result_type: "block_transactions",
+  //     //   layout:'empty',
+  //     //   meta:{
+  //     //     next_page_payload :nextPagePayload,
+  //     //     prev_page_payload :prevPagePayload,
+  //     //
+  //     //     block_number:req.blockNumber,
+  //     //
+  //     //     transaction_placeholder_url:"/chain-id/"+req.chainId+"/transaction/{{tr_hash}}",
+  //     //     address_placeholder_url:"/chain-id/"+req.chainId+"/address/{{addr}}",
+  //     //     token_details_redirect_url: "/chain-id/"+req.chainId+"/tokendetails/{{contract_addr}}"
+  //     //   }
+  //     // });
+  //     // return renderResult(response, res,'application/json');
+  //   })
+  //   .catch(function (reason) {
+  //     logger.log(req.originalUrl + " : " + reason);
+  //     return renderResult(responseHelper.error('', coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, 'application/json');
+  //   });
 });
 
 
