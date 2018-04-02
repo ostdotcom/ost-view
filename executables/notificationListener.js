@@ -76,8 +76,9 @@ var processNotification = function (msgContent) {
   });
 };
 
-process.on('SIGINT', function () {
-  console.log('Received SIGINT, checking unAckCount.');
+// Using a single function to handle multiple signals
+function handle() {
+  console.log('Received Signal, checking unAckCount.');
   var f = function () {
     if (unAckCount <= 0) {
       process.exit(1);
@@ -88,4 +89,9 @@ process.on('SIGINT', function () {
   };
 
   setTimeout(f, 1000);
-});
+}
+
+// handling gracefull process exit on getting SIGINT, SIGTERM.
+// Once signal found programme will stop consuming new messages. But need to clear running messages.
+process.on('SIGINT', handle);
+process.on('SIGTERM', handle);

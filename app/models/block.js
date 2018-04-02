@@ -8,14 +8,14 @@ const rootPrefix = '../..'
 ;
 
 const verified = {
-    '0': blockConst.unverified,
-    '1': blockConst.verified
+    '1': blockConst.unverified,
+    '2': blockConst.verified
   }
 
   , statuses = {
-    '0': blockConst.pendingStatus,
-    '1': blockConst.completeStatus,
-    '2': blockConst.failedStatus
+    '1': blockConst.pendingStatus,
+    '2': blockConst.completeStatus,
+    '3': blockConst.failedStatus
   }
   , invertedStatuses = util.invert(statuses)
   , invertedVerified = util.invert(verified)

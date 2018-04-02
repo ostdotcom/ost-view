@@ -20,13 +20,13 @@ const ProcessLockerKlass = require(rootPrefix + '/lib/process_locker')
 ;
 
 // Load internal files
-const Web3Interact = require(rootPrefix + "/lib/web3/interact/rpc_interact")
-  , DbInteract = require(rootPrefix + "/lib/storage/interact")
-  , logger = require(rootPrefix + "/helpers/custom_console_logger")
+const logger = require(rootPrefix + "/helpers/custom_console_logger")
   , constants = require(rootPrefix + "/config/core_constants")
-  , core_config = require(rootPrefix + "/config")
+  , config = require(rootPrefix + "/config")
   , BlockVerifier = require(rootPrefix + "/lib/block_utils/block_verifier")
   , version = require(rootPrefix + '/package.json').version
+  , BlockKlass = require(rootPrefix + "/app/models/block")
+  , blockConst = require(rootPrefix + "/lib/global_constant/block")
 ;
 
 // Variables to hold different objects
@@ -36,13 +36,10 @@ var dbInteract
 
 const MIN_BLOCK_DIFF = Math.max(10, constants.FETCHER_BATCH_SIZE);
 /**
- * Maintain the state run state
- * @type {hash}
+ * Maintain the state chain Id
+ * @type {Integer}
  */
-var state = {
-  chainID: null,
-  config: null
-};
+var stateChainID = null;
 
 var continueExecution = true;
 
@@ -58,7 +55,7 @@ process.on('SIGTERM', handle);
 var highestFetchedBlockNumber = null;
 
 /**
- * Methods to set timeout for the verifyBlock api
+ * Methods to set timeout for the repopulateBlock api
  *
  * @return {null}
  */
@@ -67,8 +64,12 @@ var checkUnverifiedBlock = function () {
 
     if (continueExecution) {
 
-      var blockNumber = await dbInteract.getLowestUnVerifiedBlockNumber()
-        .then(function (unverifiedBlockNumber) {
+      const blockObj = new BlockKlass(stateChainID);
+
+      var blockNumber = await blockObj.select('MIN(block_number) as minBlock').where({verified: blockObj.invertedVerified[blockConst.unverified]}).fire()
+        .then(function (queryResponse) {
+          const unverifiedBlockNumber = queryResponse.minBlock;
+
           logger.log("Lowest Unverified Block Number ", unverifiedBlockNumber);
           if (unverifiedBlockNumber != null) {
             return +unverifiedBlockNumber;
@@ -88,26 +89,31 @@ var checkUnverifiedBlock = function () {
       process.exit(1);
     }
 
-  }, state.config.poll_interval);
+  }, config.getPollInterval(stateChainID));
 };
 /**
- * Methods to set timeout for the verifyBlock api
+ * Methods to set timeout for the repopulateBlock api
  *
  * @return {null}
  */
 var setBlockVerifier = function (blockNumber) {
 
   if (highestFetchedBlockNumber != null && (+highestFetchedBlockNumber - MIN_BLOCK_DIFF > blockNumber)) {
-    block_verifier.verifyBlock(blockNumber, checkUnverifiedBlock);
+    block_verifier.repopulateBlock(blockNumber, checkUnverifiedBlock);
   }
   else {
-    dbInteract.getHighestInsertedBlock()
-      .then(function (resBlockNumber) {
+
+    const blockObj = new BlockKlass(stateChainID);
+
+    blockObj.select('MAX(block_number) as maxBlock').fire()
+      .then(function (queryResponse) {
+        const resBlockNumber = queryResponse.maxBlock;
         logger.log("Higest Block Number ", resBlockNumber);
+
 
         if (resBlockNumber != null && (+resBlockNumber - MIN_BLOCK_DIFF > blockNumber)) {
           highestFetchedBlockNumber = resBlockNumber;
-          block_verifier.verifyBlock(blockNumber, checkUnverifiedBlock);
+          block_verifier.repopulateBlock(blockNumber, checkUnverifiedBlock);
         } else {
           //Need to set up the cron again.
           logger.log("Done verification of all the blocks, Need to run the job again after new block mining.");
@@ -139,18 +145,14 @@ if (!cliHandler.chainID) {
 ProcessLocker.canStartProcess({process_title: 'v_cron_block_verifier_c_' + cliHandler.chainID});
 ProcessLocker.endAfterTime({time_in_minutes: 120});
 
-// Set chain id and block number
-state.chainID = cliHandler.chainID;
+// Set chain id
+stateChainID = cliHandler.chainID;
 
-state.config = core_config.getChainConfig(state.chainID);
-if (!state.config) {
-  logger.error('\n\tInvalid chain ID \n');
+if (!config.isValidChainId(stateChainID)) {
+  logger.error('\nInvalid chain ID\n');
   process.exit(1);
 }
 
-// Create required connections and objects
-dbInteract = DbInteract.getInstance(state.config.chainId);
-web3Interact = Web3Interact.getInstance(state.config.chainId);
-block_verifier = BlockVerifier.newInstance(web3Interact, dbInteract, state.config.chainId);
+block_verifier = BlockVerifier.newInstance(stateChainID);
 
 checkUnverifiedBlock();
