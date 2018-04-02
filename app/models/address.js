@@ -8,8 +8,8 @@ const rootPrefix = '../..'
 ;
 
 const addressTypes = {
-    '1': addressConst.userAddressType,
-    '2': addressConst.contractAddressType,
+    '1': addressConst.userAddress,
+    '2': addressConst.contractAddress,
     '3': addressConst.erc20Address
   }
   , invertedAddressTypes = util.invert(addressTypes)
