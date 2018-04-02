@@ -24,29 +24,6 @@ const renderResult = function (requestResponse, responseObject, contentType) {
 };
 
 
-// define parameters from url, generate web rpc instance and database connect
-const blockMiddleware = function (req, res, next) {
-  const blockNumber = req.params.blockNumber
-    , chainId = req.params.chainId
-    , nextPagePayload = req.query.next_page_payload
-    , prevPagePayload = req.query.prev_page_payload
-    ;
-
-  var pagePayload = null;
-  if (nextPagePayload){
-    pagePayload = nextPagePayload;
-  }else if (prevPagePayload){
-    pagePayload = prevPagePayload;
-  }
-
-  req.blockNumber = blockNumber;
-  req.chainId = chainId;
-  req.pagePayload = pagePayload;
-
-
-  next();
-};
-
 /**
  * Get block details for a given block number
  *
@@ -122,8 +99,8 @@ router.get("/:blockNumber/token-transfers", function (req, res, next) {
           result_type: "block_transactions",
           layout:'empty',
           meta:{
-            next_page_payload :{},
-            prev_page_payload :{},
+            next_page_payload :requestResponse.data.next_page_payload,
+            prev_page_payload :requestResponse.data.prev_page_payload,
 
             block_number:req.params.blockNumber,
 
@@ -137,85 +114,6 @@ router.get("/:blockNumber/token-transfers", function (req, res, next) {
         processBlockError(requestResponse.err.code, req, res);
       }
     });
-
-  // var pageSize = coreConstant.DEFAULT_PAGE_SIZE+1;
-  //
-  // req.blockInstance.getBlockTokenTransactions(req.blockNumber, pageSize, req.pagePayload)
-  //   .then(function (queryResponse) {
-  //
-  //     var tokenTransactions = queryResponse.tokenTransactions
-  //       , contractAddresses = queryResponse.contractAddresses
-  //     ;
-  //
-  //     const nextPagePayload = getNextPagePaylaodForBlockTokenTransactions(tokenTransactions, pageSize),
-  //       prevPagePayload = getPrevPagePaylaodForBlockTokenTransactions(tokenTransactions, req.pagePayload, pageSize)
-  //       ;
-  //
-  //     // For all the pages remove last row if its equal to page size.
-  //     if(tokenTransactions.length == pageSize){
-  //       tokenTransactions.pop();
-  //     }
-  //
-  //     // const response = responseHelper.successWithData({
-  //     //   block_transactions: tokenTransactions,
-  //     //   contract_addresses:contractAddresses,
-  //     //   result_type: "block_transactions",
-  //     //   layout:'empty',
-  //     //   meta:{
-  //     //     next_page_payload :nextPagePayload,
-  //     //     prev_page_payload :prevPagePayload,
-  //     //
-  //     //     block_number:req.blockNumber,
-  //     //
-  //     //     transaction_placeholder_url:"/chain-id/"+req.chainId+"/transaction/{{tr_hash}}",
-  //     //     address_placeholder_url:"/chain-id/"+req.chainId+"/address/{{addr}}",
-  //     //     token_details_redirect_url: "/chain-id/"+req.chainId+"/tokendetails/{{contract_addr}}"
-  //     //   }
-  //     // });
-  //     // return renderResult(response, res,'application/json');
-  //   })
-  //   .catch(function (reason) {
-  //     logger.log(req.originalUrl + " : " + reason);
-  //     return renderResult(responseHelper.error('', coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, 'application/json');
-  //   });
 });
-
-
-function getNextPagePaylaodForBlockTokenTransactions (requestResponse, pageSize){
-
-  const response = requestResponse,
-    count = response.length;
-
-  if(count <= pageSize -1){
-    return {};
-  }
-
-  return {
-    id: response[count-1].id,
-    timestamp: response[count-1].timestamp,
-    direction: "next"
-  };
-
-}
-
-function getPrevPagePaylaodForBlockTokenTransactions (requestResponse, pagePayload, pageSize){
-
-  const response = requestResponse,
-    count = response.length;
-
-  // If page payload is null means its a request for 1st page
-  // OR direction is previous and count if less than page size means there is no previous page
-  if(!pagePayload || (pagePayload.direction === 'prev' && count < pageSize)){
-    return {};
-  }
-
-  return {
-    id: response[0].id,
-    timestamp: response[0].timestamp,
-    direction: "prev"
-  };
-}
-
-
 
 module.exports = router;
