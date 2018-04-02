@@ -113,7 +113,7 @@ module.exports = {
   },
 
   isValidChainId: function (chainId) {
-    this.getAllChainIDs.indexOf(chainId) > -1
+    return !!(this.getChainConfig(chainId));
   }
 
 };

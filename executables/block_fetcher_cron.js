@@ -39,7 +39,6 @@ var block_fetcher;
 var state = {
   chainID: null,
   blockNumber: -1,
-  config: null,
   lastBlock: null
 };
 
@@ -83,7 +82,7 @@ const setFetchBlockCron = function (blockNumber) {
       logger.log("cannot start block fetching for blockNumber ", blockNumber);
       process.exit(1);
     }
-  }, blockNumber === state.blockNumber ? 5000 : state.config.poll_interval);
+  }, blockNumber === state.blockNumber ? 5000 : core_config.getPollInterval(state.chainID));
 };
 
 
@@ -130,29 +129,30 @@ ProcessLocker.endAfterTime({
   time_in_minutes: MAX_PROCESS_TIME_IN_MINUTES
 });
 
-state.config = core_config.getChainConfig(state.chainID);
-if (!state.config) {
+if (!core_config.isValidChainId(state.chainID)) {
   logger.error('\n\tInvalid chain ID \n');
   process.exit(1);
 }
 
-state.lastBlock  = state.lastBlock || 10000000000000;
-
 // Create required connections and objects
-block_fetcher = BlockFetcher.newInstance(state.config.chainId);
+block_fetcher = BlockFetcher.newInstance(state.chainID);
 block_fetcher.state.lastBlock = state.lastBlock;
 // logger.log('State Configuration', state);
 
 // Start processing blocks
 
-new BlockKlass(state.config.chainId).select('MAX(block_number)').where(['block_number>=? and block_number<?',blockNumberToStartWith, state.lastBlock]).fire()
+let whereClause;
+if (state.lastBlock) {
+  whereClause = ['block_number>=? and block_number<?',blockNumberToStartWith, state.lastBlock];
+} else {
+  whereClause = ['1=1'];
+}
+new BlockKlass(state.chainID).select('MAX(block_number) as max_block_number').where(whereClause).fire()
   .then(function ( reponse) {
-    const blockNumber = reponse[0]['MAX(block_number)'];
+    const blockNumber = reponse[0]['max_block_number'];
     logger.log("Highest Block Number ", blockNumber, );
     if (blockNumber) {
       blockNumberToStartWith = Number(blockNumber) + 1;
-    } else {
-      blockNumberToStartWith = 0;
     }
     if(state.lastBlock && (blockNumberToStartWith >= state.lastBlock)){
       process.exit(1);
