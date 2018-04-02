@@ -11,7 +11,12 @@ const rootPrefix = '..'
   , BlockFetcher = require(rootPrefix + '/lib/block_utils/block_fetcher')
   , Web3Interact = require(rootPrefix + "/lib/web3/interact/rpc_interact")
   , BlockKlass = require(rootPrefix + "/app/models/block")
-  ;
+  , responseHelper = require(rootPrefix + '/lib/formatter/response')
+  , TransactionKlass = require(rootPrefix + "/app/models/transaction")
+  , TransactionHashKlass = require(rootPrefix + "/app/models/transaction_hash")
+  , AddressKlass = require(rootPrefix + "/app/models/address")
+  , TransactionProcessor = require(rootPrefix + "/lib/block_utils/transaction_processor")
+;
 
 const testChainId = 101
 
@@ -60,6 +65,23 @@ const testChainId = 101
     transactionsRoot: "0xb04a0079c7c5b21fda55211b5d5b8733b262e8c90f5e1c3bffc925473c1504d7",
     uncles: []
   }
+
+  ,transactionData1 = {
+    blockHash: "0x2c4978b579c0e583c19709be5d6f4169a3deb577731d38020529a7a6194f13a0",
+    blockNumber: 91000,
+    from: "0xe4ec5a29c98c57b692c6b3b81397b5e2944336b1",
+    gas: 150000,
+    gasPrice: 1000000000,
+    hash: "0x80074c69a9c44d56ffc059e4698349c5cd686b1cb326705d998400ae79977780",
+    input: "0xae20a9ae000000000000000000000000230708876f3b76a9fabac2e59ad7499b9cf9e9590000000000000000000000000000000000000000000000004563918244f40000000000000000000000000000c42134e9b7ca409ef542ab29bd45fa3e85a0b261000000000000000000000000000000000000000000000000000000000000000055534400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000284a115cc8f70000000000000000000000000000a52181b8f8f09981826de27c7d6f73001bfacfc0000000000000000000000000000000000000000000000000000000000000000",
+    nonce: 27984,
+    r: "0x7eb8d25b5c928c407fcc0203c0126309ce65153a9e2e5b5d1d7419b0ffa91a11",
+    s: "0x64dc6528bed108856a18a4616f8621703de81f09f4a2a42813ee06f8ab0b31d0",
+    to: "0x68ac52983ae362deab036817e369b9a60a073ecb",
+    transactionIndex: 0,
+    v: "0x1c",
+    value: 0
+  }
   , webRpcObject = {
     getReceipt: function(txn){
       return Promise.resolve({
@@ -107,7 +129,7 @@ const testChainId = 101
         transactionIndex: 0
       });
     },
-    getTransaction: function(txn) {
+     getTransaction: function(txn) {
       return Promise.resolve({
         blockHash: "0x2c4978b579c0e583c19709be5d6f4169a3deb577731d38020529a7a6194f13a0",
         blockNumber: 91000,
@@ -124,6 +146,17 @@ const testChainId = 101
         v: "0x1c",
         value: 0
       });
+    },
+    isNodeConnected: function() {
+      return Promise.resolve();
+    },
+
+    highestBlock: function() {
+      return Promise.resolve(responseHelper.successWithData({'block_number': 1000000}));
+    },
+
+    getBlock: function() {
+      return Promise.resolve(responseHelper.successWithData(blockData1));
     }
   }
   ;
@@ -216,35 +249,46 @@ describe('Check is block inserted method', function () {
   });
 });
 
-// describe('Check transaction insertion for dataArray in db', function () {
-//   it('dataArray should get inserted into db', async function () {
-//
-//     const blockFetcher = BlockFetcher.newInstance(testChainId)
-//     ;
-//
-//     Web3Interact.setInstance(testChainId, webRpcObject);
-//     console.log(Object.keys(webRpcObject));
-//     // DB clean up
-//     await new BlockKlass(testChainId).delete().where('1=1').fire();
-//
-//     const blockArray = [blockData1, blockData2];
-//
-//     console.log(blockData1.transactions, blockData2.transactions);
-//
-//     const result = await blockFetcher.writeBlocksToDB(blockArray)
-//       .then(function(resArray){
-//         assert.typeOf(resArray, 'array');
-//         assert.lengthOf(resArray, 2);
-//
-//         return new BlockKlass(testChainId).select('COUNT(id)').fire();
-//       })
-//       .then(function(res){
-//         return res[0]['COUNT(id)'];
-//       })
-//       .catch(function(err){
-//         assert.fail(0, 1, err);
-//       });
-//
-//     expect(result).to.be.equal('2');
-//   });
-// });
+describe('Check is end to end block insertion', function () {
+  it('fetchAndUpdateBlock', async function () {
+
+    Web3Interact.setInstance(testChainId, webRpcObject);
+    TransactionProcessor.setInstance({process: function(){ return Promise.resolve(true);}});
+    const blockFetcher = BlockFetcher.newInstance(testChainId)
+    ;
+
+    // DB clean up
+    await new BlockKlass(testChainId).delete().where('1=1').fire();
+
+    // // Test starts
+    const blockNumber = await blockFetcher.fetchAndUpdateBlock(1);
+
+    expect(blockNumber, "Block not inserted").to.be.equal(2);
+    // Test ends
+
+  });
+});
+
+describe('Check is negative end to end block insertion', function () {
+  it('fetchAndUpdateBlock', async function () {
+
+    Object.assign(webRpcObject, {highestBlock: function() {
+        return Promise.resolve(responseHelper.successWithData({'block_number': 0}));
+      }});
+    Web3Interact.setInstance(testChainId, webRpcObject);
+
+    TransactionProcessor.setInstance({process: function(){ return Promise.resolve(true);}});
+    const blockFetcher = BlockFetcher.newInstance(testChainId)
+    ;
+
+    // DB clean up
+    await new BlockKlass(testChainId).delete().where('1=1').fire();
+
+    // // Test starts
+    const blockNumber = await blockFetcher.fetchAndUpdateBlock(1);
+
+    expect(blockNumber, "Block not inserted").to.be.equal(1);
+    // Test ends
+
+  });
+});

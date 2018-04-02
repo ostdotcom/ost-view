@@ -27,6 +27,8 @@ const AddressTransactionSpecificPrototype = {
 
 Object.assign(AddressTransactionKlass.prototype, AddressTransactionSpecificPrototype);
 
+AddressTransactionKlass.DATA_SEQUENCE_ARRAY = ['address_id', 'corresponding_address_id', 'transaction_hash_id', 'tokens', 'transaction_fees', 'inflow', 'tx_timestamp'];
+
 module.exports = AddressTransactionKlass;
 
 

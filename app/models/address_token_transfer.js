@@ -26,6 +26,8 @@ const AddressTokenTransferSpecificPrototype = {
 
 Object.assign(AddressTokenTransferKlass.prototype, AddressTokenTransferSpecificPrototype);
 
+AddressTokenTransferKlass.DATA_SEQUENCE_ARRAY = ['address_id', 'corresponding_address_id', 'transaction_hash_id', 'contract_address_id', 'tokens', 'inflow', 'tx_timestamp'];
+
 module.exports = AddressTokenTransferKlass;
 
 

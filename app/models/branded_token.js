@@ -26,6 +26,8 @@ const BrandedTokenSpecificPrototype = {
 
 Object.assign(BrandedTokenKlass.prototype, BrandedTokenSpecificPrototype);
 
+BrandedTokenKlass.DATA_SEQUENCE_ARRAY = ['name', 'contract_address_id', 'symbol', 'uuid', 'conversion_rate', 'symbol_icon', 'creation_timestamp'];
+
 module.exports = BrandedTokenKlass;
 
 

@@ -29,8 +29,9 @@ define('BLOCK_STATUS_TABLE_NAME', 'block_status');
 define('AGGREGATE_STATUS_TABLE_NAME', 'aggregate_status');
 
 // Available columns in tables
-define('BLOCKS_DATA_SEQUENCE', '(block_number, block_hash, parent_hash, difficulty, total_difficulty, gas_limit, gas_used, total_transactions, block_timestamp, status)');
-define('BLOCKS_DATA_SEQUENCE_ARRAY', ['block_number', 'block_hash', 'parent_hash', 'difficulty', 'total_difficulty', 'gas_limit', 'gas_used', 'total_transactions', 'block_timestamp', 'status']);
+define('BLOCKS_DATA_SEQUENCE', '(block_number, block_hash, parent_hash, difficulty, total_difficulty, gas_limit, gas_used, total_transactions, block_timestamp, verified ,status)');
+define('BLOCKS_DATA_SEQUENCE_ARRAY', ['block_number', 'block_hash', 'parent_hash', 'difficulty', 'total_difficulty', 'gas_limit', 'gas_used', 'total_transactions', 'block_timestamp', 'verified' ,'status']);
+define('TRANSACTION_DATA_SEQUENCE_ARRAY', ['transaction_hash_id', 'block_number', 'transaction_index', 'contract_address_id', 'from_address_id', 'to_address_id', 'tokens', 'gas_used', 'gas_price', 'nounce','block_timestamp', 'status']);
 define('TRANSACTION_DATA_SEQUENCE', '(transaction_hash, block_number, transaction_index, contract_address, t_from, t_to, tokens, gas_used, gas_price, nounce, input_data, logs, timestamp, status, logs_bloom, r, s, v)');
 define('ADDRESS_TRANSACTION_DATA_SEQUENCE', '(address, corresponding_address, tokens, transaction_hash, transaction_fees, inflow, timestamp)');
 define('TOKEN_TRANSACTION_DATA_SEQUENCE', '(transaction_hash, contract_address, t_from, t_to, tokens, timestamp, block_number)');

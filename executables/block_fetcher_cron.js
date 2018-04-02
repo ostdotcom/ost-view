@@ -66,7 +66,9 @@ process.on('SIGTERM', handle);
  * @return {null}
  * @method setFetchBlockCron
  */
-var setFetchBlockCron = function (blockNumber) {
+const setFetchBlockCron = function (blockNumber) {
+  const oThis = this;
+
   setTimeout(function () {
     if (blockNumber === state.blockNumber) {
       console.log("Killing self...");
@@ -76,7 +78,10 @@ var setFetchBlockCron = function (blockNumber) {
     if (continueExecution && (!state.lastBlock || (blockNumber < state.lastBlock))) {
       state.blockNumber = blockNumber;
       logger.log("Start fetchBlock for blockNumber", blockNumber);
-      block_fetcher.fetchAndUpdateBlock(blockNumber, setFetchBlockCron);
+      block_fetcher.fetchAndUpdateBlock(blockNumber)
+        .then(function (nextBlockNumber) {
+          setFetchBlockCron(nextBlockNumber);
+        });
     } else {
       logger.log("cannot start block fetching for blockNumber ", blockNumber);
       process.exit(1);

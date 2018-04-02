@@ -61,6 +61,8 @@ const BlockSpecificPrototype = {
 
 Object.assign(BlockKlass.prototype, BlockSpecificPrototype);
 
+BlockKlass.DATA_SEQUENCE_ARRAY = ['block_number', 'block_hash', 'parent_hash', 'difficulty', 'total_difficulty', 'gas_limit', 'gas_used', 'total_transactions', 'block_timestamp', 'verified' ,'status'];
+
 module.exports = BlockKlass;
 
 

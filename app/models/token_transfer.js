@@ -27,6 +27,7 @@ const TokenTransferSpecificPrototype = {
 
 Object.assign(TokenTransferKlass.prototype, TokenTransferSpecificPrototype);
 
+TokenTransferKlass.DATA_SEQUENCE_ARRAY = ['transaction_hash_id', 'block_number', 'contract_address_id', 'from_address_id', 'to_address_id', 'tokens', 'block_timestamp'];
 module.exports = TokenTransferKlass;
 
 

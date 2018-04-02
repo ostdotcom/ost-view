@@ -26,6 +26,8 @@ const TransactionExtendedDetailPrototype = {
 
 Object.assign(TransactionExtendedDetailKlass.prototype, TransactionExtendedDetailPrototype);
 
+TransactionExtendedDetailKlass.DATA_SEQUENCE_ARRAY = ['transaction_hash_id', 'input_data', 'logs', 'logs_bloom', 'r', 's', 'v'];
+
 module.exports = TransactionExtendedDetailKlass;
 
 

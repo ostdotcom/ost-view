@@ -5,7 +5,7 @@ const rootPrefix = '../..'
   , ModelBaseKlass = require(rootPrefix + '/app/models/base')
 ;
 
-const TransactionKlass = function () {
+const TransactionKlass = function (chainId) {
   const oThis = this
   ;
 
@@ -25,5 +25,7 @@ const TransactionSpecificPrototype = {
 };
 
 Object.assign(TransactionKlass.prototype, TransactionSpecificPrototype);
+
+TransactionKlass.DATA_SEQUENCE_ARRAY = ['transaction_hash_id', 'block_number', 'transaction_index', 'contract_address_id', 'from_address_id', 'to_address_id', 'tokens', 'gas_used', 'gas_price', 'nounce','block_timestamp', 'status'];
 
 module.exports = TransactionKlass;
