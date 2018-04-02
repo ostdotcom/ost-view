@@ -164,7 +164,7 @@ CustomConsoleLoggerKlass.prototype = {
     args.push(this.CONSOLE_RESET);
     console.log.apply(console, args);
 
-    if (coreConstants.OST_UTILITY_CHAIN_ID > 1400) {
+    if ('development' !== process.env.OST_VIEW_ENVIRONMENT) {
       openSTNotification.publishEvent.perform(
         {
           topics:["email_error."+packageName],
