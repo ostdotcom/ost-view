@@ -8,12 +8,13 @@ const expect = require('chai').expect
 
 
 const rootPrefix = '..'
-  , Web3Interact = require(rootPrefix + "/lib/web3/interact/rpc_interact")
-  , TransactionKlass = require(rootPrefix + "/app/models/transaction")
   , TransactionHashKlass = require(rootPrefix + "/app/models/transaction_hash")
   , AddressKlass = require(rootPrefix + "/app/models/address")
   , AddressTransactionKlass = require(rootPrefix + "/app/models/address_transaction")
+  , TokenTransferKlass = require(rootPrefix + "/app/models/token_transfer")
+  , AddressTokenTransferKlass = require(rootPrefix + "/app/models/address_token_transfer")
   , TransactionLogProcessor = require(rootPrefix + "/lib/block_utils/transaction_log_processor")
+  , BrandedTokenKlass = require(rootPrefix + "/app/models/branded_token")
 ;
 
 const testChainId = 101
@@ -86,6 +87,30 @@ const testChainId = 101
       return Promise.resolve();
     }
   }
+  , ReceiptForRegisteration = {
+    blockHash: "0x4ded379c4e3f988d4fe67d9f6df0a2dc3f19b580cce80b755ff505c7a63bde7c",
+    blockNumber: 9224,
+    contractAddress: null,
+    cumulativeGasUsed: 140215,
+    from: "0xbff42cb67dd74779a9a04c43f671cf8c233f24f9",
+    gasUsed: 140215,
+    logs: [{
+      address: "0x01db94fdca0ffedc40a6965de97790085d71b412",
+      blockHash: "0x4ded379c4e3f988d4fe67d9f6df0a2dc3f19b580cce80b755ff505c7a63bde7c",
+      blockNumber: 9224,
+      data: "0x0cc7b409328a1e932c3e5992437ce8e20b3b2a6d466d2745ca7d55e15d8f17a500000000000000000000000000000000000000000000000000000000000000c0000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000001a86460000000000000000000000000000000000000000000000000000000000000005000000000000000000000000c3e16142a0d26c6ae0b1ceb8d9a726e74e1da6df0000000000000000000000000000000000000000000000000000000000000003534b5400000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008534b20546f6b656e000000000000000000000000000000000000000000000000",
+      logIndex: 0,
+      removed: false,
+      topics: ["0xc574c1a072c0be7629faa73718f0775d084a6e2bf29f1e60fc4ac61666afbd84", "0x000000000000000000000000e0960efec96583a91d34c5f8ef4947b7b67ffb9b", "0x0000000000000000000000002d6eb046e7290970d34746ffe52b5edd517ecd0c"],
+      transactionHash: "0xf1fbd2e03f4464dd14686d7071cf8068bd243a74dbb55869d02ffba2b6c7d515",
+      transactionIndex: 0
+    }],
+    logsBloom: "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000080000000010000000000000000000000000000000000000000000000000000000000000000000000000020000000100000004400040020000000010000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000008800000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    status: "0x1",
+    to: "0xe0960efec96583a91d34c5f8ef4947b7b67ffb9b",
+    transactionHash: "0xf1fbd2e03f4464dd14686d7071cf8068bd243a74dbb55869d02ffba2b6c7d515",
+    transactionIndex: 0
+  }
 ;
 
 
@@ -104,12 +129,11 @@ describe('Create TransactionLogProcessor Object', function () {
 describe('Process Transfers with ids', function () {
   it('processTransfersWithIds', async function () {
 
-    Web3Interact.setInstance(testChainId, webRpcObject);
-
     // DB clean up
     await new AddressKlass(testChainId).delete().where('1=1').fire();
     await new TransactionHashKlass(testChainId).delete().where('1=1').fire();
-    await new TransactionKlass(testChainId).delete().where('1=1').fire();
+    await new TokenTransferKlass(testChainId).delete().where('1=1').fire();
+    await new AddressTokenTransferKlass(testChainId).delete().where('1=1').fire();
 
     TransactionLogProcessor.setInstance(null);
     const transactionLogProcessor = TransactionLogProcessor.newInstance(testChainId)
@@ -124,34 +148,59 @@ describe('Process Transfers with ids', function () {
     expect(decodeTransactionArray[0].logs,"Does not have transfer key").to.have.any.key('Transfer');
 
     const result = await transactionLogProcessor.processTransfersWithIds(decodeTransactionArray);
-    //
     // console.log(result);
-    // expect(result, "Not an Object of data").to.be.an('Object');
-    // expect(result.formattedTxnArray, "Not have an array of data formattedTxnArray").to.be.an('array');
-    // expect(result.formattedExtendedTxnArray, "Not have an array of data formattedExtendedTxnArray").to.be.an('array');
-    // expect(result.formattedAddrTxnArray, "Not have an array of data formattedAddrTxnArray").to.be.an('array');
+    expect(result, "Not an Object of data").to.be.an('Object');
+    expect(result.formattedTransferArray, "Not have an array of data formattedTransferArray").to.be.an('array');
+    expect(result.formattedAddrTransferArray, "Not have an array of data formattedAddrTransferArray").to.be.an('array');
   });
 });
 
-// describe('Test complete transaction process', function () {
-//   it('process', async function () {
-//
-//     Web3Interact.setInstance(testChainId, webRpcObject);
-//
-//     // DB clean up
-//     await new AddressKlass(testChainId).delete().where('1=1').fire();
-//     await new TransactionHashKlass(testChainId).delete().where('1=1').fire();
-//     await new TransactionKlass(testChainId).delete().where('1=1').fire();
-//     await new AddressTransactionKlass(testChainId).delete().where('1=1').fire();
-//
-//     TransactionProcessor.setInstance(null);
-//     TransactionLogProcessor.setInstance({process: function(){ return Promise.resolve(true);}});
-//     const transactionProcessor = TransactionProcessor.newInstance(testChainId)
-//     ;
-//
-//     const result = await transactionProcessor.process([{hash:'0x80074c69a9c44d56ffc059e4698349c5cd686b1cb326705d998400ae79977780', timestamp:1521220161}]);
-//
-//     expect(result, "Object is not true").to.be.equal(true);
-//   });
-// });
-//
+describe('Test insertion Of branded token insertion', function () {
+  it('insertRegisteredBrandedTokens', async function () {
+
+    // DB clean up
+    await new AddressKlass(testChainId).delete().where('1=1').fire();
+    await new TransactionHashKlass(testChainId).delete().where('1=1').fire();
+    await new BrandedTokenKlass(testChainId).delete().where('1=1').fire();
+
+    TransactionLogProcessor.setInstance(null);
+    const transactionLogProcessor = TransactionLogProcessor.newInstance(testChainId)
+      , transaction = await webRpcObject.getReceipt('0x80074c69a9c44d56ffc059e4698349c5cd686b1cb326705d998400ae79977780')
+      , receipt = ReceiptForRegisteration
+      , transactionArray = Object.assign({timestamp: 1521220161},transaction, receipt)
+    ;
+
+    const decodeTransactionArray = transactionLogProcessor.getLogsDecodedArray([transactionArray]);
+
+    expect(decodeTransactionArray[0],"Does not have logs key").to.have.any.key('logs');
+    expect(decodeTransactionArray[0].logs,"Does not have transfer key").to.have.any.key('RegisteredBrandedToken');
+
+    const result = await transactionLogProcessor.insertRegisteredBrandedTokens(decodeTransactionArray);
+    // console.log(result);
+    expect(result, "Not an Object of data").to.be.equal(true);
+  });
+});
+
+describe('Test complete transaction log processor', function () {
+  it('process', async function () {
+
+    // DB clean up
+    await new AddressKlass(testChainId).delete().where('1=1').fire();
+    await new TransactionHashKlass(testChainId).delete().where('1=1').fire();
+    await new TokenTransferKlass(testChainId).delete().where('1=1').fire();
+    await new AddressTokenTransferKlass(testChainId).delete().where('1=1').fire();
+
+    TransactionLogProcessor.setInstance(null);
+    const transactionLogProcessor = TransactionLogProcessor.newInstance(testChainId)
+      , transaction = await webRpcObject.getReceipt('0x80074c69a9c44d56ffc059e4698349c5cd686b1cb326705d998400ae79977780')
+      , receipt = await webRpcObject.getTransaction('0x80074c69a9c44d56ffc059e4698349c5cd686b1cb326705d998400ae79977780')
+      , transactionArray = Object.assign({timestamp: 1521220161},transaction, receipt)
+    ;
+    // console.log(transactionArray)
+    const result = await transactionLogProcessor.process([transactionArray]);
+    // console.log(result);
+    expect(result, "Not an Object of data").to.be.equal(true);
+
+  });
+});
+

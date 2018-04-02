@@ -22,18 +22,15 @@ const ProcessLockerKlass = require(rootPrefix + '/lib/process_locker')
 ;
 
 // Load internal files
-const Web3Interact = require(rootPrefix + "/lib/web3/interact/rpc_interact")
-  , DbInteract = require(rootPrefix + "/lib/storage/interact")
-  , logger = require(rootPrefix + "/helpers/custom_console_logger")
+const logger = require(rootPrefix + "/helpers/custom_console_logger")
   , core_config = require(rootPrefix + "/config")
   , BlockFetcher = require(rootPrefix + "/lib/block_utils/block_fetcher")
+  , BlockKlass = require(rootPrefix + "/app/models/block")
   , version = require(rootPrefix + '/package.json').version
 ;
 
 // Variables to hold different objects
-var dbInteract
-  , web3Interact
-  , block_fetcher;
+var block_fetcher;
 
 /**
  * Maintain the state run state
@@ -139,21 +136,24 @@ if (!state.config) {
   process.exit(1);
 }
 
+state.lastBlock  = state.lastBlock || 10000000000000;
+
 // Create required connections and objects
-dbInteract = DbInteract.getInstance(state.config.chainId);
 block_fetcher = BlockFetcher.newInstance(state.config.chainId);
 block_fetcher.state.lastBlock = state.lastBlock;
 // logger.log('State Configuration', state);
 
 // Start processing blocks
 
-dbInteract.getHighestInsertedBlock(blockNumberToStartWith, state.lastBlock)
-  .then(function (blockNumber) {
-    logger.log("Highest Block Number ", blockNumber);
+new BlockKlass(state.config.chainId).select('MAX(block_number)').where(['block_number>=? and block_number<?',blockNumberToStartWith, state.lastBlock]).fire()
+  .then(function ( reponse) {
+    const blockNumber = reponse[0]['MAX(block_number)'];
+    logger.log("Highest Block Number ", blockNumber, );
     if (blockNumber) {
-      blockNumberToStartWith = blockNumber + 1;
+      blockNumberToStartWith = Number(blockNumber) + 1;
+    } else {
+      blockNumberToStartWith = 0;
     }
-
     if(state.lastBlock && (blockNumberToStartWith >= state.lastBlock)){
       process.exit(1);
     }

@@ -15,6 +15,7 @@ const rootPrefix = '..'
   , TransactionProcessor = require(rootPrefix + "/lib/block_utils/transaction_processor")
   , AddressTransactionKlass = require(rootPrefix + "/app/models/address_transaction")
   , TransactionLogProcessor = require(rootPrefix + "/lib/block_utils/transaction_log_processor")
+  , TransactionExtendedDetailKlass = require(rootPrefix + "/app/models/transaction_extended_detail")
 ;
 
 const testChainId = 101
@@ -140,6 +141,8 @@ describe('Process transaction with from web3 interact', function () {
     await new AddressKlass(testChainId).delete().where('1=1').fire();
     await new TransactionHashKlass(testChainId).delete().where('1=1').fire();
     await new TransactionKlass(testChainId).delete().where('1=1').fire();
+    await new TransactionExtendedDetailKlass(testChainId).delete().where('1=1').fire();
+
 
     TransactionProcessor.setInstance(null);
     const transactionProcessor = TransactionProcessor.newInstance(testChainId)
@@ -148,10 +151,8 @@ describe('Process transaction with from web3 interact', function () {
       , transactionArray = Object.assign({timestamp: 1521220161},transaction, receipt)
     ;
 
-    console.log(transactionArray);
     const result = await transactionProcessor.processTransactionsWithIds([transactionArray]);
 
-    console.log(result);
     expect(result, "Not an Object of data").to.be.an('Object');
     expect(result.formattedTxnArray, "Not have an array of data formattedTxnArray").to.be.an('array');
     expect(result.formattedExtendedTxnArray, "Not have an array of data formattedExtendedTxnArray").to.be.an('array');
@@ -169,6 +170,8 @@ describe('Test complete transaction process', function () {
     await new TransactionHashKlass(testChainId).delete().where('1=1').fire();
     await new TransactionKlass(testChainId).delete().where('1=1').fire();
     await new AddressTransactionKlass(testChainId).delete().where('1=1').fire();
+    await new TransactionExtendedDetailKlass(testChainId).delete().where('1=1').fire();
+
 
     TransactionProcessor.setInstance(null);
     TransactionLogProcessor.setInstance({process: function(){ return Promise.resolve(true);}});
