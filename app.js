@@ -55,11 +55,10 @@ const basicAuthKey = 'OST_VIEW_'+process.env.DEFAULT_CHAIN_ID
 const assignParams = function (req, res, next) {
   logger.requestStartLog(customUrlParser.parse(req.originalUrl).pathname, req.method);
   if (req.method == 'POST') {
-    req.decodedParams = req.body || {};
+    req.params = req.body || {};
   } else if (req.method == 'GET') {
-    req.decodedParams = req.query || {};
+    req.params = req.query || {};
   }
-  Object.assign(req.decodedParams, req.params);
   return next();
 };
 

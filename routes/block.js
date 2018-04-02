@@ -77,14 +77,14 @@ function processBlockResponse (blockHash, req, res){
     result_type: 'block',
     mCss: ['mBlockDetails.css'],
     mJs: ['mBlockDetails.js'],
-    title:'Block Details - ' +req.blockNumber,
+    title:'Block Details - ' +req.params.blockNumber,
     meta:{
-      transaction_url: "/chain-id/"+req.decodedParams.chainId+"/block/"+req.decodedParams.blockNumber+"/token-transfers",
-      chain_id:req.decodedParams.chainId,
-      q:req.decodedParams.blockNumber
+      transaction_url: "/chain-id/"+req.params.chainId+"/block/"+req.params.blockNumber+"/token-transfers",
+      chain_id:req.params.chainId,
+      q:req.params.blockNumber
     },
     page_meta: {
-      title: 'OST VIEW | Block Details - '+req.decodedParams.blockNumber,
+      title: 'OST VIEW | Block Details - '+req.params.blockNumber,
       description: 'OST VIEW is the home grown block explorer from OST for OpenST Utility Blockchains.',
       keywords: 'OST, Simple Token, Utility Chain, Blockchain',
       robots: 'noindex, nofollow',
