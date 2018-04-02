@@ -153,6 +153,8 @@ describe('Process transaction with from web3 interact', function () {
 
     const result = await transactionProcessor.processTransactionsWithIds([transactionArray]);
 
+    // console.log("HashId..", result.transactionHashId, result.addressHashId);
+
     expect(result, "Not an Object of data").to.be.an('Object');
     expect(result.formattedTxnArray, "Not have an array of data formattedTxnArray").to.be.an('array');
     expect(result.formattedExtendedTxnArray, "Not have an array of data formattedExtendedTxnArray").to.be.an('array');
@@ -180,7 +182,7 @@ describe('Test complete transaction process', function () {
 
     const result = await transactionProcessor.process([{hash:'0x80074c69a9c44d56ffc059e4698349c5cd686b1cb326705d998400ae79977780', timestamp:1521220161}]);
 
-    expect(result, "Object is not true").to.be.equal(true);
+    expect(result, "Object is not true").to.have.keys(['isInsertSucceeded','errInFetchingTxReceipt']);
   });
 });
 

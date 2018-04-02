@@ -62,7 +62,25 @@ const testChainId = 101
         status: "0x1",
         to: "0x68ac52983ae362deab036817e369b9a60a073ecb",
         transactionHash: txn,
-        transactionIndex: 0
+        transactionIndex: 0,
+        decodedLogs : { Transfer:
+            [ { address: '0x0ca74d9f4bb9d17257af5b5e26bdfc931715262d',
+              _from: '0x0a52181b8f8f09981826de27c7d6f73001bfacfc',
+              _to: '0x230708876f3b76a9fabac2e59ad7499b9cf9e959',
+              _value: '444975711765090291240' },
+              { address: '0x0ca74d9f4bb9d17257af5b5e26bdfc931715262d',
+                _from: '0x0a52181b8f8f09981826de27c7d6f73001bfacfc',
+                _to: '0xc42134e9b7ca409ef542ab29bd45fa3e85a0b261',
+                _value: '0' } ],
+          AirdropPayment: [ { address: '0x68ac52983ae362deab036817e369b9a60a073ecb',
+            _beneficiary: '0x230708876f3b76a9fabac2e59ad7499b9cf9e959',
+            _tokenAmount: '444975711765090291240',
+            _commissionBeneficiary: '0xc42134e9b7ca409ef542ab29bd45fa3e85a0b261',
+            _commissionTokenAmount: '0',
+            _currency: '0x555344',
+            _actualPricePoint: '183628000000000000',
+            _spender: '0x0a52181b8f8f09981826de27c7d6f73001bfacfc',
+            _airdropUsed: '0' } ] }
       });
     },
     getTransaction: function (txn) {
@@ -111,6 +129,13 @@ const testChainId = 101
     transactionHash: "0xf1fbd2e03f4464dd14686d7071cf8068bd243a74dbb55869d02ffba2b6c7d515",
     transactionIndex: 0
   }
+  , transactionHashId = { '0x80074c69a9c44d56ffc059e4698349c5cd686b1cb326705d998400ae79977780': 115 }
+  , addressHashId = { '0xe4ec5a29c98c57b692c6b3b81397b5e2944336b1': 243,
+  '0x68ac52983ae362deab036817e369b9a60a073ecb': 244,
+  '0x0ca74d9f4bb9d17257af5b5e26bdfc931715262d': 245,
+  '0x230708876f3b76a9fabac2e59ad7499b9cf9e959': 246,
+  '0x0a52181b8f8f09981826de27c7d6f73001bfacfc': 247,
+  '0xc42134e9b7ca409ef542ab29bd45fa3e85a0b261': 248 }
 ;
 
 
@@ -118,7 +143,7 @@ describe('Create TransactionLogProcessor Object', function () {
   it('TransactionLogProcessor.newInstance', function () {
 
     TransactionLogProcessor.setInstance(null);
-    const transactionLogProcessor = TransactionLogProcessor.newInstance(testChainId);
+    const transactionLogProcessor = TransactionLogProcessor.newInstance(testChainId, transactionHashId, addressHashId);
 
     expect(transactionLogProcessor.constructor.name).to.be.equal('TransactionLogProcessor');
 
@@ -136,7 +161,7 @@ describe('Process Transfers with ids', function () {
     await new AddressTokenTransferKlass(testChainId).delete().where('1=1').fire();
 
     TransactionLogProcessor.setInstance(null);
-    const transactionLogProcessor = TransactionLogProcessor.newInstance(testChainId)
+    const transactionLogProcessor = TransactionLogProcessor.newInstance(testChainId, transactionHashId, addressHashId)
       , transaction = await webRpcObject.getReceipt('0x80074c69a9c44d56ffc059e4698349c5cd686b1cb326705d998400ae79977780')
       , receipt = await webRpcObject.getTransaction('0x80074c69a9c44d56ffc059e4698349c5cd686b1cb326705d998400ae79977780')
       , transactionArray = Object.assign({timestamp: 1521220161},transaction, receipt)
@@ -164,7 +189,7 @@ describe('Test insertion Of branded token insertion', function () {
     await new BrandedTokenKlass(testChainId).delete().where('1=1').fire();
 
     TransactionLogProcessor.setInstance(null);
-    const transactionLogProcessor = TransactionLogProcessor.newInstance(testChainId)
+    const transactionLogProcessor = TransactionLogProcessor.newInstance(testChainId, transactionHashId, addressHashId)
       , transaction = await webRpcObject.getReceipt('0x80074c69a9c44d56ffc059e4698349c5cd686b1cb326705d998400ae79977780')
       , receipt = ReceiptForRegisteration
       , transactionArray = Object.assign({timestamp: 1521220161},transaction, receipt)
@@ -191,7 +216,7 @@ describe('Test complete transaction log processor', function () {
     await new AddressTokenTransferKlass(testChainId).delete().where('1=1').fire();
 
     TransactionLogProcessor.setInstance(null);
-    const transactionLogProcessor = TransactionLogProcessor.newInstance(testChainId)
+    const transactionLogProcessor = TransactionLogProcessor.newInstance(testChainId, transactionHashId, addressHashId)
       , transaction = await webRpcObject.getReceipt('0x80074c69a9c44d56ffc059e4698349c5cd686b1cb326705d998400ae79977780')
       , receipt = await webRpcObject.getTransaction('0x80074c69a9c44d56ffc059e4698349c5cd686b1cb326705d998400ae79977780')
       , transactionArray = Object.assign({timestamp: 1521220161},transaction, receipt)
