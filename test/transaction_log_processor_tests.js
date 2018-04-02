@@ -12,7 +12,6 @@ const rootPrefix = '..'
   , TransactionKlass = require(rootPrefix + "/app/models/transaction")
   , TransactionHashKlass = require(rootPrefix + "/app/models/transaction_hash")
   , AddressKlass = require(rootPrefix + "/app/models/address")
-  , TransactionProcessor = require(rootPrefix + "/lib/block_utils/transaction_processor")
   , AddressTransactionKlass = require(rootPrefix + "/app/models/address_transaction")
   , TransactionLogProcessor = require(rootPrefix + "/lib/block_utils/transaction_log_processor")
 ;
@@ -90,49 +89,20 @@ const testChainId = 101
 ;
 
 
-describe('Create TransactionProcessor Object', function () {
-  it('TransactionProcessor.newInstance', function () {
+describe('Create TransactionLogProcessor Object', function () {
+  it('TransactionLogProcessor.newInstance', function () {
 
-    TransactionProcessor.setInstance(null);
-    const transactionProcessor = TransactionProcessor.newInstance(testChainId);
+    TransactionLogProcessor.setInstance(null);
+    const transactionLogProcessor = TransactionLogProcessor.newInstance(testChainId);
 
-    expect(transactionProcessor.constructor.name).to.be.equal('TransactionProcessor');
+    expect(transactionLogProcessor.constructor.name).to.be.equal('TransactionLogProcessor');
 
-    expect(transactionProcessor.chainId).to.be.equal(testChainId);
+    expect(transactionLogProcessor.chainId).to.be.equal(testChainId);
   });
 });
 
-describe('Check transaction insertion for empty Array', function () {
-  it('Transaction should not get inserted into db', async function () {
-
-    TransactionProcessor.setInstance(null);
-    const transactionProcessor = TransactionProcessor.newInstance(testChainId);
-
-    const transactionArray = [];
-
-    let isProcessed = await transactionProcessor.writeTransactionsToDB(transactionArray);
-
-    expect(isProcessed, "Is Not processed successfully for empty txn array").to.be.equal(true);
-
-  });
-});
-
-describe('Combine transaction and receipt from web3 interact', function () {
-  it('createTransactionWithReceiptPromise', async function () {
-
-    Web3Interact.setInstance(testChainId, webRpcObject);
-
-    TransactionProcessor.setInstance(null);
-    const transactionProcessor = TransactionProcessor.newInstance(testChainId);
-
-    const result = await transactionProcessor.createTransactionWithReceiptPromise({hash:'0x80074c69a9c44d56ffc059e4698349c5cd686b1cb326705d998400ae79977780', timestamp:1521038152});
-
-    expect(result.constructor.name).to.be.equal('Object');
-  });
-});
-
-describe('Process transaction with from web3 interact', function () {
-  it('processTransactionsWithIds', async function () {
+describe('Process Transfers with ids', function () {
+  it('processTransfersWithIds', async function () {
 
     Web3Interact.setInstance(testChainId, webRpcObject);
 
@@ -141,43 +111,47 @@ describe('Process transaction with from web3 interact', function () {
     await new TransactionHashKlass(testChainId).delete().where('1=1').fire();
     await new TransactionKlass(testChainId).delete().where('1=1').fire();
 
-    TransactionProcessor.setInstance(null);
-    const transactionProcessor = TransactionProcessor.newInstance(testChainId)
+    TransactionLogProcessor.setInstance(null);
+    const transactionLogProcessor = TransactionLogProcessor.newInstance(testChainId)
       , transaction = await webRpcObject.getReceipt('0x80074c69a9c44d56ffc059e4698349c5cd686b1cb326705d998400ae79977780')
       , receipt = await webRpcObject.getTransaction('0x80074c69a9c44d56ffc059e4698349c5cd686b1cb326705d998400ae79977780')
       , transactionArray = Object.assign({timestamp: 1521220161},transaction, receipt)
     ;
 
-    console.log(transactionArray);
-    const result = await transactionProcessor.processTransactionsWithIds([transactionArray]);
+    const decodeTransactionArray = transactionLogProcessor.getLogsDecodedArray([transactionArray]);
 
-    console.log(result);
-    expect(result, "Not an Object of data").to.be.an('Object');
-    expect(result.formattedTxnArray, "Not have an array of data formattedTxnArray").to.be.an('array');
-    expect(result.formattedExtendedTxnArray, "Not have an array of data formattedExtendedTxnArray").to.be.an('array');
-    expect(result.formattedAddrTxnArray, "Not have an array of data formattedAddrTxnArray").to.be.an('array');
+    expect(decodeTransactionArray[0],"Does not have logs key").to.have.any.key('logs');
+    expect(decodeTransactionArray[0].logs,"Does not have transfer key").to.have.any.key('Transfer');
+
+    const result = await transactionLogProcessor.processTransfersWithIds(decodeTransactionArray);
+    //
+    // console.log(result);
+    // expect(result, "Not an Object of data").to.be.an('Object');
+    // expect(result.formattedTxnArray, "Not have an array of data formattedTxnArray").to.be.an('array');
+    // expect(result.formattedExtendedTxnArray, "Not have an array of data formattedExtendedTxnArray").to.be.an('array');
+    // expect(result.formattedAddrTxnArray, "Not have an array of data formattedAddrTxnArray").to.be.an('array');
   });
 });
 
-describe('Test complete transaction process', function () {
-  it('process', async function () {
-
-    Web3Interact.setInstance(testChainId, webRpcObject);
-
-    // DB clean up
-    await new AddressKlass(testChainId).delete().where('1=1').fire();
-    await new TransactionHashKlass(testChainId).delete().where('1=1').fire();
-    await new TransactionKlass(testChainId).delete().where('1=1').fire();
-    await new AddressTransactionKlass(testChainId).delete().where('1=1').fire();
-
-    TransactionProcessor.setInstance(null);
-    TransactionLogProcessor.setInstance({process: function(){ return Promise.resolve(true);}});
-    const transactionProcessor = TransactionProcessor.newInstance(testChainId)
-    ;
-
-    const result = await transactionProcessor.process([{hash:'0x80074c69a9c44d56ffc059e4698349c5cd686b1cb326705d998400ae79977780', timestamp:1521220161}]);
-
-    expect(result, "Object is not true").to.be.equal(true);
-  });
-});
-
+// describe('Test complete transaction process', function () {
+//   it('process', async function () {
+//
+//     Web3Interact.setInstance(testChainId, webRpcObject);
+//
+//     // DB clean up
+//     await new AddressKlass(testChainId).delete().where('1=1').fire();
+//     await new TransactionHashKlass(testChainId).delete().where('1=1').fire();
+//     await new TransactionKlass(testChainId).delete().where('1=1').fire();
+//     await new AddressTransactionKlass(testChainId).delete().where('1=1').fire();
+//
+//     TransactionProcessor.setInstance(null);
+//     TransactionLogProcessor.setInstance({process: function(){ return Promise.resolve(true);}});
+//     const transactionProcessor = TransactionProcessor.newInstance(testChainId)
+//     ;
+//
+//     const result = await transactionProcessor.process([{hash:'0x80074c69a9c44d56ffc059e4698349c5cd686b1cb326705d998400ae79977780', timestamp:1521220161}]);
+//
+//     expect(result, "Object is not true").to.be.equal(true);
+//   });
+// });
+//

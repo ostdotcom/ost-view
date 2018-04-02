@@ -9,10 +9,11 @@ const rootPrefix = '../..'
 
 const addressTypes = {
     '1': addressConst.userAddressType,
-    '2': addressConst.contractAddressType
+    '2': addressConst.contractAddressType,
+    '3': addressConst.erc20Address
   }
   , invertedAddressTypes = util.invert(addressTypes)
-;
+
 
 const AddressKlass = function (chainId) {
   const oThis = this
@@ -41,10 +42,11 @@ const AddressSpecificPrototype = {
       inverted: invertedAddressTypes
     }
   }
-
 };
 
 Object.assign(AddressKlass.prototype, AddressSpecificPrototype);
+
+AddressKlass.DATA_SEQUENCE_ARRAY = ['address_hash', 'address_type'];
 
 module.exports = AddressKlass;
 

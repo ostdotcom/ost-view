@@ -27,6 +27,8 @@ const TransactionHashPrototype = {
 
 Object.assign(TransactionHashKlass.prototype, TransactionHashPrototype);
 
+TransactionHashKlass.DATA_SEQUENCE_ARRAY = ['transaction_hash'];
+
 module.exports = TransactionHashKlass;
 
 
