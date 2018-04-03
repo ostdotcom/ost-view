@@ -24,7 +24,7 @@ const ProcessLockerKlass = require(rootPrefix + '/lib/process_locker')
 const Web3Interact = require(rootPrefix + '/lib/web3/interact/rpc_interact')
   , DbInteract = require(rootPrefix + '/lib/storage/interact')
   , logger = require(rootPrefix + '/helpers/custom_console_logger')
-  , core_config = require(rootPrefix + '/config')
+  , config = require(rootPrefix + '/config')
   , constants = require(rootPrefix + '/config/core_constants')
   , DataAggregator = require(rootPrefix + '/lib/block_utils/data_aggregator')
   , version = require(rootPrefix + '/package.json').version
@@ -64,7 +64,7 @@ state.chainID = cliHandler.chainID;
 
 ProcessLocker.canStartProcess({process_title: 'v_cron_graph_c_' + cliHandler.chainID});
 
-state.config = core_config.getChainConfig(state.chainID);
+state.config = config.getChainConfig(state.chainID);
 if (!state.config) {
   logger.error('\n\tInvalid chain ID \n');
   process.exit(1);

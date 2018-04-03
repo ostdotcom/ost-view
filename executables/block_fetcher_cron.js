@@ -23,7 +23,7 @@ const ProcessLockerKlass = require(rootPrefix + '/lib/process_locker')
 
 // Load internal files
 const logger = require(rootPrefix + "/helpers/custom_console_logger")
-  , core_config = require(rootPrefix + "/config")
+  , config = require(rootPrefix + "/config")
   , BlockFetcher = require(rootPrefix + "/lib/block_utils/block_fetcher")
   , BlockKlass = require(rootPrefix + "/app/models/block")
   , version = require(rootPrefix + '/package.json').version
@@ -82,7 +82,7 @@ const setFetchBlockCron = function (blockNumber) {
       logger.log("cannot start block fetching for blockNumber ", blockNumber);
       process.exit(1);
     }
-  }, blockNumber === state.blockNumber ? 5000 : core_config.getPollInterval(state.chainID));
+  }, blockNumber === state.blockNumber ? 5000 : config.getPollInterval(state.chainID));
 };
 
 
@@ -129,7 +129,7 @@ ProcessLocker.endAfterTime({
   time_in_minutes: MAX_PROCESS_TIME_IN_MINUTES
 });
 
-if (!core_config.isValidChainId(state.chainID)) {
+if (!config.isValidChainId(state.chainID)) {
   logger.error('\n\tInvalid chain ID \n');
   process.exit(1);
 }

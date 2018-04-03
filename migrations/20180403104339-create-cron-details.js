@@ -5,6 +5,7 @@ var type;
 var seed;
 
 const   rootPrefix = ".."
+  , CronDetailKlass = require(rootPrefix + "/app/models/cron_detail")
 ;
 /**
  * We receive the dbmigrate dependency from dbmigrate initially.
@@ -48,6 +49,7 @@ const createIndexOnCronDetailsTable = function (db) {
 
 const createInitialRowsForCronDetail = function (db) {
   var currentDate = new Date();
-  var sqlStatement = "INSERT INTO CRON_DETAILS(cron_name, data, created_at, updated_at) VALUES('address_detail_populate_cron', '{}', NOW(), NOW() ) ";
+  var cronData = JSON.stringify({block_number: 0, start_from_index: 0});
+  var sqlStatement = "INSERT INTO CRON_DETAILS(cron_name, data, created_at, updated_at) VALUES('" + CronDetailKlass.address_detail_populate_cron + "', '"+ cronData + "', NOW(), NOW() ) ";
   db.runSql(sqlStatement);
 };

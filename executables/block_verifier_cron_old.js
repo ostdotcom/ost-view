@@ -22,7 +22,7 @@ const rootPrefix = ".."
     , DbInteract = require(rootPrefix + "/lib/storage/interact")
     , logger = require(rootPrefix + "/helpers/custom_console_logger")
     , constants = require(rootPrefix + "/config/core_constants")
-    , core_config = require(rootPrefix + "/config")
+    , config = require(rootPrefix + "/config")
     , BlockVerifier = require(rootPrefix + "/lib/block_utils/block_verifier")
     , version = require(rootPrefix + '/package.json').version
     , maxRunTime = (2 * 60 * 60 * 1000) // 2 hrs in milliseconds
@@ -136,7 +136,7 @@ ps.lookup({
     process.title = lockProcess.command + " " + lockProcess.script + " " + lockProcess.arguments.join(" ");
     logger.info(process.title);
 
-    state.config = core_config.getChainConfig(state.chainID);
+    state.config = config.getChainConfig(state.chainID);
     if (!state.config) {
         logger.error('\n\tInvalid chain ID \n');
         process.exit(1);

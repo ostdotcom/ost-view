@@ -25,7 +25,7 @@ const cliHandler = require('commander')
 
 // Load internal files
 const rootPrefix = '..'
-  , core_config = require(rootPrefix + '/config')
+  , config = require(rootPrefix + '/config')
   , logger = require(rootPrefix + '/helpers/custom_console_logger')
   , version = require(rootPrefix + '/package.json').version
 ;
@@ -46,7 +46,7 @@ const getChainList = function (obj) {
   if (obj.chainID) {
     chainIDs.push(obj.chainID);
   } else {
-    chainIDs = core_config.getAllChainIDs();
+    chainIDs = config.getAllChainIDs();
   }
 
   return chainIDs;
@@ -62,7 +62,7 @@ const getChainList = function (obj) {
  */
 const initDBConfigFile = function (chainID) {
 
-  var db_config = core_config.getChainDbConfig(chainID);
+  var db_config = config.getChainDbConfig(chainID);
   console.log(db_config.database);
 
   var json = {};
@@ -179,12 +179,12 @@ const up = function (version) {
 const createMigration = function (name) {
 
   //Getting chain ID of first config. It is irrelevent in case of mirgration creation.
-  if (!core_config.getAllChainIDs()[0]) {
+  if (!config.getAllChainIDs()[0]) {
     logger.error('Config of chain not defined');
     process.exit(0);
   }
 
-  initDBConfigFile(core_config.getAllChainIDs()[0]);
+  initDBConfigFile(config.getAllChainIDs()[0]);
   logger.log("Migration name:", name);
 
   // The next step is to get a new instance of DBMigrate

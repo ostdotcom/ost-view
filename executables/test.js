@@ -9,7 +9,7 @@ const mysql = require('mysql');
 const reqPrefix = ".."
     , constants = require(reqPrefix + '/config/core_constants')
     , logger = require(reqPrefix + '/helpers/custom_console_logger')
-    , core_config = require(reqPrefix + "/config")
+    , config = require(reqPrefix + "/config")
     , MAIN_MySQL = require(reqPrefix + "/lib/storage/mysql")
     , NUMBER_OF_REC = 5000
     ;
@@ -134,7 +134,7 @@ const execute = function ( records, sql ) {
     }
 
 };
-const db_config = core_config.getChainDbConfig(2000);
+const db_config = config.getChainDbConfig(2000);
 const mysqlObj = new MySQL(db_config);
 
 //execute(NUMBER_OF_REC, mysqlObj);
@@ -165,4 +165,4 @@ var executeMysql = function ( mysqlObj ) {
         });
 };
 executeMysql(new MAIN_MySQL(db_config));
-//console.log(JSON.stringify(core_config.getContractIdMap(142)));
+//console.log(JSON.stringify(config.getContractIdMap(142)));

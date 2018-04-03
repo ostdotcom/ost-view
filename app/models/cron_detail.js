@@ -4,7 +4,7 @@ const rootPrefix = '../..'
   , ModelBaseKlass = require(rootPrefix + '/app/models/base')
 ;
 
-const CronDetailsKlass = function (chainId) {
+const CronDetailKlass = function (chainId) {
   const oThis = this
   ;
 
@@ -12,7 +12,7 @@ const CronDetailsKlass = function (chainId) {
   ModelBaseKlass.call(oThis, {chainId: chainId});
 };
 
-CronDetailsKlass.prototype = Object.create(ModelBaseKlass.prototype);
+CronDetailKlass.prototype = Object.create(ModelBaseKlass.prototype);
 
 /*
  * Public methods
@@ -23,9 +23,11 @@ const CronDetailsSpecificPrototype = {
 
 };
 
-Object.assign(CronDetailsKlass.prototype, CronDetailsSpecificPrototype);
+Object.assign(CronDetailKlass.prototype, CronDetailsSpecificPrototype);
 
-module.exports = CronDetailsKlass;
+CronDetailKlass.address_detail_populate_cron = 'address_detail_populate_cron';
+
+module.exports = CronDetailKlass;
 
 
 // ttk = require('./app/models/cron_details')
