@@ -53,6 +53,7 @@ function handle() {
 process.on('SIGINT', handle);
 process.on('SIGTERM', handle);
 
+let startTime = (new Date()).getTime();
 /**
  * setFetchBlockCron
  *
@@ -64,10 +65,10 @@ process.on('SIGTERM', handle);
  */
 const setFetchBlockCron = function (blockNumber) {
   const oThis = this;
-
   setTimeout(function () {
     if (blockNumber === state.blockNumber) {
       console.log("Killing self...");
+      logger.log("Time Diff", (Date.now() - startTime) );
       process.exit(1);
     }
 
@@ -80,6 +81,7 @@ const setFetchBlockCron = function (blockNumber) {
         });
     } else {
       logger.log("cannot start block fetching for blockNumber ", blockNumber);
+      logger.log("Time Diff", (Date.now() - startTime) );
       process.exit(1);
     }
   }, blockNumber === state.blockNumber ? 5000 : config.getPollInterval(state.chainID));
@@ -109,9 +111,7 @@ var blockNumberToStartWith = -1;
 
 // Set chain id and block number
 state.chainID = cliHandler.chainID;
-if (isNaN(cliHandler.blockNumber)) {
-  blockNumberToStartWith = 0;
-} else {
+if (!isNaN(cliHandler.blockNumber)) {
   blockNumberToStartWith = cliHandler.blockNumber;
 }
 
@@ -140,27 +140,27 @@ block_fetcher.state.lastBlock = state.lastBlock;
 // logger.log('State Configuration', state);
 
 // Start processing blocks
-
-let whereClause;
-if (state.lastBlock) {
-  whereClause = ['block_number>=? and block_number<?',blockNumberToStartWith, state.lastBlock];
-} else {
-  whereClause = ['1=1'];
-}
-new BlockKlass(state.chainID).select('MAX(block_number) as max_block_number').where(whereClause).fire()
-  .then(function ( reponse) {
-    const blockNumber = reponse[0]['max_block_number'];
-    logger.log("Highest Block Number ", blockNumber, );
-    if (blockNumber) {
-      blockNumberToStartWith = Number(blockNumber) + 1;
-    }
-    if(state.lastBlock && (blockNumberToStartWith >= state.lastBlock)){
-      process.exit(1);
-    }
-
-    setFetchBlockCron(blockNumberToStartWith);
-  })
-  .catch(function (err) {
-    logger.error('\nNot able to fetch block number)\n', err);
+// If First and last block condition is used, then you need to start verifier and aggregator again.
+if (state.lastBlock || blockNumberToStartWith !== -1) {
+  if (state.lastBlock && (blockNumberToStartWith >= state.lastBlock)) {
+    logger.error('last block is greater than equal to first block');
     process.exit(1);
-  });
+  }
+  setFetchBlockCron(blockNumberToStartWith);
+} else {
+  new BlockKlass(state.chainID).select('MAX(block_number) as max_block_number').fire()
+    .then(function (reponse) {
+      const blockNumber = reponse[0]['max_block_number'];
+      logger.log("Highest Block Number ", blockNumber,);
+      if (blockNumber) {
+        blockNumberToStartWith = Number(blockNumber) + 1;
+      } else {
+        blockNumberToStartWith = 0;
+      }
+      setFetchBlockCron(blockNumberToStartWith);
+    })
+    .catch(function (err) {
+      logger.error('\nNot able to fetch block number)\n', err);
+      process.exit(1);
+    });
+}
