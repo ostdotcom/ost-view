@@ -4,6 +4,8 @@ var dbm;
 var type;
 var seed;
 
+const   rootPrefix = ".."
+;
 /**
  * We receive the dbmigrate dependency from dbmigrate initially.
  * This enables us to not have to rely on NODE_PATH.
@@ -17,10 +19,11 @@ exports.setup = function(options, seedLink) {
 exports.up = function(db) {
   return createCronDetailsTable(db)
     .then(function () {
-      return createIndexOnCronDetailsTable(db);
+      createIndexOnCronDetailsTable(db);
+    })
+    .then(function () {
+      return createInitialRowsForCronDetail(db);
     });
-
-  // add initial row for addressProcess Cron
 };
 
 exports.down = function(db) {
@@ -41,5 +44,10 @@ const createCronDetailsTable = function (db) {
 
 const createIndexOnCronDetailsTable = function (db) {
   db.addIndex('cron_details', 'cd_cn_index', 'cron_name', true);
+};
 
+const createInitialRowsForCronDetail = function (db) {
+  var currentDate = new Date();
+  var sqlStatement = "INSERT INTO CRON_DETAILS(cron_name, data, created_at, updated_at) VALUES('address_detail_populate_cron', '{}', NOW(), NOW() ) ";
+  db.runSql(sqlStatement);
 };
