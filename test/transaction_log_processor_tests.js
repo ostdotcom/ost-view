@@ -143,7 +143,7 @@ describe('Create TransactionLogProcessor Object', function () {
   it('TransactionLogProcessor.newInstance', function () {
 
     TransactionLogProcessor.setInstance(null);
-    const transactionLogProcessor = TransactionLogProcessor.newInstance(testChainId, transactionHashId, addressHashId);
+    const transactionLogProcessor = TransactionLogProcessor.newInstance(testChainId);
 
     expect(transactionLogProcessor.constructor.name).to.be.equal('TransactionLogProcessor');
 
@@ -161,7 +161,7 @@ describe('Process Transfers with ids', function () {
     await new AddressTokenTransferKlass(testChainId).delete().where('1=1').fire();
 
     TransactionLogProcessor.setInstance(null);
-    const transactionLogProcessor = TransactionLogProcessor.newInstance(testChainId, transactionHashId, addressHashId)
+    const transactionLogProcessor = TransactionLogProcessor.newInstance(testChainId)
       , transaction = await webRpcObject.getReceipt('0x80074c69a9c44d56ffc059e4698349c5cd686b1cb326705d998400ae79977780')
       , receipt = await webRpcObject.getTransaction('0x80074c69a9c44d56ffc059e4698349c5cd686b1cb326705d998400ae79977780')
       , transactionArray = Object.assign({timestamp: 1521220161},transaction, receipt)
@@ -171,6 +171,9 @@ describe('Process Transfers with ids', function () {
 
     expect(decodeTransactionArray[0],"Does not have logs key").to.have.any.key('logs');
     expect(decodeTransactionArray[0].logs,"Does not have transfer key").to.have.any.key('Transfer');
+
+    transactionLogProcessor.transactionHashId = transactionHashId;
+    transactionLogProcessor.addressHashId = addressHashId;
 
     const result = await transactionLogProcessor.processTransfersWithIds(decodeTransactionArray);
     // console.log(result);
@@ -189,7 +192,7 @@ describe('Test insertion Of branded token insertion', function () {
     await new BrandedTokenKlass(testChainId).delete().where('1=1').fire();
 
     TransactionLogProcessor.setInstance(null);
-    const transactionLogProcessor = TransactionLogProcessor.newInstance(testChainId, transactionHashId, addressHashId)
+    const transactionLogProcessor = TransactionLogProcessor.newInstance(testChainId)
       , transaction = await webRpcObject.getReceipt('0x80074c69a9c44d56ffc059e4698349c5cd686b1cb326705d998400ae79977780')
       , receipt = ReceiptForRegisteration
       , transactionArray = Object.assign({timestamp: 1521220161},transaction, receipt)
@@ -216,13 +219,13 @@ describe('Test complete transaction log processor', function () {
     await new AddressTokenTransferKlass(testChainId).delete().where('1=1').fire();
 
     TransactionLogProcessor.setInstance(null);
-    const transactionLogProcessor = TransactionLogProcessor.newInstance(testChainId, transactionHashId, addressHashId)
+    const transactionLogProcessor = TransactionLogProcessor.newInstance(testChainId)
       , transaction = await webRpcObject.getReceipt('0x80074c69a9c44d56ffc059e4698349c5cd686b1cb326705d998400ae79977780')
       , receipt = await webRpcObject.getTransaction('0x80074c69a9c44d56ffc059e4698349c5cd686b1cb326705d998400ae79977780')
       , transactionArray = Object.assign({timestamp: 1521220161},transaction, receipt)
     ;
     // console.log(transactionArray)
-    const result = await transactionLogProcessor.process([transactionArray]);
+    const result = await transactionLogProcessor.process([transactionArray], transactionHashId, addressHashId);
     // console.log(result);
     expect(result, "Not an Object of data").to.be.equal(true);
 

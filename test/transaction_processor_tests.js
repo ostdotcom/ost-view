@@ -113,8 +113,7 @@ describe('Check transaction insertion for empty Array', function () {
 
     let isProcessed = await transactionProcessor.writeTransactionsToDB(transactionArray);
 
-    expect(isProcessed, "Is Not processed successfully for empty txn array").to.be.equal(true);
-
+    expect(isProcessed.isInsertSucceeded, "Is Not processed successfully for empty txn array").to.be.equal(true);
   });
 });
 
