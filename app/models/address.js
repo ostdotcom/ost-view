@@ -12,7 +12,7 @@ const addressTypes = {
     '2': addressConst.contractAddress,
     '3': addressConst.erc20Address
   }
-  , invertedAddressTypes = util.invert(addressTypes)
+  , invertedAddressTypes = util.invert(addressTypes);
 
 
 const AddressKlass = function (chainId) {
