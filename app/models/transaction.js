@@ -3,7 +3,17 @@
 const rootPrefix = '../..'
   , coreConstants = require(rootPrefix + '/config/core_constants')
   , ModelBaseKlass = require(rootPrefix + '/app/models/base')
+  , transactionConst = require(rootPrefix + '/lib/global_constant/transaction')
+  , util = require(rootPrefix + '/lib/util')
 ;
+
+const transactionStatus = {
+  '1': transactionConst.failed,
+  '2': transactionConst.succeeded,
+
+}
+  , invertedTransactionStatus = util.invert(transactionStatus);
+
 
 const TransactionKlass = function (chainId) {
   const oThis = this
@@ -11,6 +21,8 @@ const TransactionKlass = function (chainId) {
 
   oThis.chainId = chainId;
   ModelBaseKlass.call(oThis, {chainId: chainId});
+
+
 };
 
 TransactionKlass.prototype = Object.create(ModelBaseKlass.prototype);
@@ -21,6 +33,17 @@ TransactionKlass.prototype = Object.create(ModelBaseKlass.prototype);
 const TransactionSpecificPrototype = {
 
   tableName: coreConstants.TRANSACTIONS_TABLE_NAME,
+
+  transactionStatus: transactionStatus,
+
+  invertedTransactionStatus: invertedTransactionStatus,
+
+  enums: {
+    'transaction_status': {
+      val: transactionStatus,
+      inverted: invertedTransactionStatus
+    }
+  }
 
 };
 
