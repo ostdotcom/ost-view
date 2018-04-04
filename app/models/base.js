@@ -9,14 +9,14 @@ const rootPrefix = '../..'
 ;
 
 const ModelBaseKlass = function (params) {
-  var oThis = this;
+  const oThis = this;
 
   oThis.chainId = params.chainId;
   oThis.dbConfig = config.getMysqlDbConfig(params.chainId);
 
   if (!oThis.dbConfig) {
     logger.error("app/models/base :: ModelBaseKlass :: dbConfig cannot be ", oThis.dbConfig);
-    process.exit(1);
+    throw 'dbConfig cannot be ' + oThis.dbConfig;
   }
 
   MysqlQueryKlass.call(this);
