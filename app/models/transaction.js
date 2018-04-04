@@ -39,7 +39,7 @@ const TransactionSpecificPrototype = {
   invertedTransactionStatus: invertedTransactionStatus,
 
   enums: {
-    'transaction_status': {
+    'status': {
       val: transactionStatus,
       inverted: invertedTransactionStatus
     }
