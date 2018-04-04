@@ -22,7 +22,7 @@ define('ADDRESSES_TABLE_NAME','addresses');
 define('TRANSACTIONS_HASHES_TABLE_NAME','transaction_hashes')
 
 define('BRANDED_TOKENS_TABLE_NAME', 'branded_tokens');
-define('AGGREGATES_TABLE_NAME', 'aggregates');
+define('AGGREGATED_TABLE_NAME', 'aggregated_data');
 define('TRANSACTION_TYPE_TABLE_NAME', 'transaction_type');
 define('BRANDED_TOKEN_TRANSACTION_TYPES_TABLE_NAME', 'branded_token_transaction_types');
 define('BLOCK_STATUS_TABLE_NAME', 'block_status');
