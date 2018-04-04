@@ -100,6 +100,7 @@ var startAddressDetailProcess = function (blockNumber, startFromIndex) {
         startFromIndex: startFromIndex,
         err: err
       });
+      process.exit(1);
   })
 
 };
