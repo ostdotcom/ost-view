@@ -170,7 +170,7 @@ describe('Process Transfers with ids', function () {
     const decodeTransactionArray = transactionLogProcessor.getLogsDecodedArray([transactionArray]);
 
     expect(decodeTransactionArray[0],"Does not have logs key").to.have.any.key('logs');
-    expect(decodeTransactionArray[0].logs,"Does not have transfer key").to.have.any.key('Transfer');
+    expect(decodeTransactionArray[0].decodedLogs,"Does not have transfer key").to.have.any.key('Transfer');
 
     transactionLogProcessor.transactionHashId = transactionHashId;
     transactionLogProcessor.addressHashId = addressHashId;
@@ -201,7 +201,7 @@ describe('Test insertion Of branded token insertion', function () {
     const decodeTransactionArray = transactionLogProcessor.getLogsDecodedArray([transactionArray]);
 
     expect(decodeTransactionArray[0],"Does not have logs key").to.have.any.key('logs');
-    expect(decodeTransactionArray[0].logs,"Does not have transfer key").to.have.any.key('RegisteredBrandedToken');
+    expect(decodeTransactionArray[0].decodedLogs,"Does not have transfer key").to.have.any.key('RegisteredBrandedToken');
 
     const result = await transactionLogProcessor.insertRegisteredBrandedTokens(decodeTransactionArray);
     // console.log(result);

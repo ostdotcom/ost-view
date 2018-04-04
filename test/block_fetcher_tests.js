@@ -223,28 +223,28 @@ describe('Check block insertion for dataArray in db', function () {
 });
 
 
-describe('Check is block inserted method', function () {
-  it('isBlockInserted', async function () {
-
-    const blockFetcher = BlockFetcher.newInstance(testChainId)
-    ;
-
-    // DB clean up
-    await new BlockKlass(testChainId).delete().where('1=1').fire();
-
-    // // Test starts
-    let isInserted = await blockFetcher.isBlockInserted(1);
-    expect(isInserted, "Not inserted").to.be.equal(false);
-
-    const blockArray = [blockData1];
-    const result = await blockFetcher.writeBlocksToDB(blockArray);
-
-    let isInserted2 = await blockFetcher.isBlockInserted(1);
-    expect(isInserted2, "Inserted").to.be.equal(true);
-    // Test ends
-
-  });
-});
+// describe('Check is block inserted method', function () {
+//   it('isBlockInserted', async function () {
+//
+//     const blockFetcher = BlockFetcher.newInstance(testChainId)
+//     ;
+//
+//     // DB clean up
+//     await new BlockKlass(testChainId).delete().where('1=1').fire();
+//
+//     // // Test starts
+//     let isInserted = await blockFetcher.isBlockInserted(1);
+//     expect(isInserted, "Not inserted").to.be.equal(false);
+//
+//     const blockArray = [blockData1];
+//     const result = await blockFetcher.writeBlocksToDB(blockArray);
+//
+//     let isInserted2 = await blockFetcher.isBlockInserted(1);
+//     expect(isInserted2, "Inserted").to.be.equal(true);
+//     // Test ends
+//
+//   });
+// });
 
 describe('Check is end to end block insertion', function () {
   it('fetchAndUpdateBlock', async function () {
