@@ -7,12 +7,12 @@ const rootPrefix = '../..'
   , util = require(rootPrefix + '/lib/util')
 ;
 
-const transactionStatus = {
+const statuses = {
   '1': transactionConst.failed,
   '2': transactionConst.succeeded,
 
 }
-  , invertedTransactionStatus = util.invert(transactionStatus);
+  , invertedStatuses = util.invert(statuses);
 
 
 const TransactionKlass = function (chainId) {
@@ -34,14 +34,14 @@ const TransactionSpecificPrototype = {
 
   tableName: coreConstants.TRANSACTIONS_TABLE_NAME,
 
-  transactionStatus: transactionStatus,
+  statuses: statuses,
 
-  invertedTransactionStatus: invertedTransactionStatus,
+  invertedStatuses: invertedStatuses,
 
   enums: {
     'status': {
-      val: transactionStatus,
-      inverted: invertedTransactionStatus
+      val: statuses,
+      inverted: invertedStatuses
     }
   }
 
