@@ -69,8 +69,12 @@ GetTokenTransferDetailsKlass.prototype = {
     const brandedTokensHash = brandedTokensData.data;
 
 
-    for(var key in tokenTransfersHash){
-      const tth = tokenTransfersHash[key];
+    for(var i=0;i<oThis.transferIds.length;i++){
+      let key = oThis.transferIds[i]
+        , tth = tokenTransfersHash[key]
+        ;
+
+      if(!tth){continue;}
       tokenTransfers.push(tth);
       if(!contract_addresses[tth.contract_address]){
         contract_addresses[tth.contract_address] = brandedTokensHash[tth.contract_id];
