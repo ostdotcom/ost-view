@@ -29,6 +29,7 @@ exports.down = function(db) {
 const createAggregatedTable = function (db) {
   return db.createTable(constants.AGGREGATED_TABLE_NAME, {
     id: {type: 'bigint', notNull: true, primaryKey: true, autoIncrement: true},
+    contract_address_id: {type: 'bigint', notNull: true},
     branded_token_transaction_type_id: {type: 'bigint', notNull: true},
     timestamp: {type:'int', notNull: true},
     total_transactions: {type:'bigint', notNull: true, default: 0},
