@@ -30,9 +30,7 @@ const logger = require(rootPrefix + "/helpers/custom_console_logger")
 ;
 
 // Variables to hold different objects
-var dbInteract
-  , web3Interact
-  , block_verifier;
+var block_verifier;
 
 const MIN_BLOCK_DIFF = Math.max(10, constants.FETCHER_BATCH_SIZE);
 /**

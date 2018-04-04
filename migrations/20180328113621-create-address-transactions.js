@@ -48,4 +48,5 @@ const createAddressTransactionsTable = function (db) {
 
 const createIndexOnAddressTransactionTable = function (db) {
   db.addIndex(constants.ADDRESS_TRANSACTIONS_TABLE_NAME, 'at_a_tt_index', ['address_id', 'tx_timestamp'], false);
+  db.addIndex(constants.ADDRESS_TRANSACTIONS_TABLE_NAME, 'at_thi_index', 'transaction_hash_id', false);
 };

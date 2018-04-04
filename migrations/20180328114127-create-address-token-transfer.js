@@ -48,6 +48,7 @@ const createAddressTokenTransferTable = function (db) {
 
 const createIndexOnAddressTokenTransferTable = function (db) {
   db.addIndex(constants.ADDRESS_TOKEN_TRANSFERS_TABLE_NAME, 'att_a_tt_index', ['address_id', 'tx_timestamp'], false);
+  db.addIndex(constants.ADDRESS_TOKEN_TRANSFERS_TABLE_NAME, 'att_thi_index', 'transaction_hash_id', false);
 };
 
 
