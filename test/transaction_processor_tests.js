@@ -87,7 +87,15 @@ const testChainId = 101
     isNodeConnected: function () {
       return Promise.resolve();
     }
+
   }
+  , transactionHashId = { '0x80074c69a9c44d56ffc059e4698349c5cd686b1cb326705d998400ae79977780': 115 }
+  , addressHashId = { '0xe4ec5a29c98c57b692c6b3b81397b5e2944336b1': 243,
+  '0x68ac52983ae362deab036817e369b9a60a073ecb': 244,
+  '0x0ca74d9f4bb9d17257af5b5e26bdfc931715262d': 245,
+  '0x230708876f3b76a9fabac2e59ad7499b9cf9e959': 246,
+  '0x0a52181b8f8f09981826de27c7d6f73001bfacfc': 247,
+  '0xc42134e9b7ca409ef542ab29bd45fa3e85a0b261': 248 }
 ;
 
 
@@ -111,9 +119,10 @@ describe('Check transaction insertion for empty Array', function () {
 
     const transactionArray = [];
 
-    let isProcessed = await transactionProcessor.writeTransactionsToDB(transactionArray);
+    let response = await transactionProcessor.writeTransactionsToDB(transactionArray);
 
-    expect(isProcessed.isInsertSucceeded, "Is Not processed successfully for empty txn array").to.be.equal(true);
+    expect(response.isSuccess(), "Should not be false").to.be.equal(true);
+    expect(response.data.isInsertSucceeded, "Is Not processed successfully for empty txn array").to.be.equal(true);
   });
 });
 
@@ -150,7 +159,7 @@ describe('Process transaction with from web3 interact', function () {
       , transactionArray = Object.assign({timestamp: 1521220161},transaction, receipt)
     ;
 
-    const result = await transactionProcessor.processTransactionsWithIds([transactionArray]);
+    const result = await transactionProcessor.processTransactionsWithIds([transactionArray], transactionHashId, addressHashId);
 
     // console.log("HashId..", result.transactionHashId, result.addressHashId);
 
@@ -179,9 +188,10 @@ describe('Test complete transaction process', function () {
     const transactionProcessor = TransactionProcessor.newInstance(testChainId)
     ;
 
-    const result = await transactionProcessor.process([{hash:'0x80074c69a9c44d56ffc059e4698349c5cd686b1cb326705d998400ae79977780', timestamp:1521220161}]);
+    const response = await transactionProcessor.process([{hash:'0x80074c69a9c44d56ffc059e4698349c5cd686b1cb326705d998400ae79977780', timestamp:1521220161}]);
 
-    expect(result, "Object is not true").to.have.keys(['isInsertSucceeded','errInFetchingTxReceipt']);
+    expect(response.isSuccess(), "Should not be false").to.be.equal(true);
+    expect(response.data.isInsertSucceeded, "Is Not processed successfully for empty txn array").to.be.equal(true);
   });
 });
 

@@ -250,7 +250,8 @@ describe('Check is end to end block insertion', function () {
   it('fetchAndUpdateBlock', async function () {
 
     Web3Interact.setInstance(testChainId, webRpcObject);
-    TransactionProcessor.setInstance({process: function(){ return Promise.resolve(true);}});
+    TransactionProcessor.setInstance({process: function(){ return Promise.resolve(responseHelper.successWithData({isInsertSucceeded :true
+        ,errInFetchingTxReceipt: false }));}});
     const blockFetcher = BlockFetcher.newInstance(testChainId, true)
     ;
 
@@ -274,7 +275,8 @@ describe('Check is negative end to end block insertion', function () {
       }});
     Web3Interact.setInstance(testChainId, webRpcObject);
 
-    TransactionProcessor.setInstance({process: function(){ return Promise.resolve(true);}});
+    TransactionProcessor.setInstance({process: function(){ return Promise.resolve(responseHelper.successWithData({isInsertSucceeded :true
+        ,errInFetchingTxReceipt: false }));}});
     const blockFetcher = BlockFetcher.newInstance(testChainId, true)
     ;
 

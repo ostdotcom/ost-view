@@ -193,12 +193,11 @@ describe('Test insertion Of branded token insertion', function () {
 
     TransactionLogProcessor.setInstance(null);
     const transactionLogProcessor = TransactionLogProcessor.newInstance(testChainId)
-      , transaction = await webRpcObject.getReceipt('0x80074c69a9c44d56ffc059e4698349c5cd686b1cb326705d998400ae79977780')
       , receipt = ReceiptForRegisteration
-      , transactionArray = Object.assign({timestamp: 1521220161},transaction, receipt)
+      , transactionHash = Object.assign({timestamp: 1521220161}, receipt)
     ;
 
-    const decodeTransactionArray = transactionLogProcessor.getLogsDecodedArray([transactionArray]);
+    const decodeTransactionArray = transactionLogProcessor.getLogsDecodedArray([transactionHash]);
 
     expect(decodeTransactionArray[0],"Does not have logs key").to.have.any.key('logs');
     expect(decodeTransactionArray[0].decodedLogs,"Does not have transfer key").to.have.any.key('RegisteredBrandedToken');
