@@ -39,6 +39,7 @@ const createAddressDetailsTable = function (db) {
     tokens: {type: 'decimal', notNull: true, default:0, length: '40,0'},
     tokens_earned:{type: 'decimal', notNull: true, default:0 ,length: '40,0'},
     tokens_spent: {type: 'decimal', notNull: true,  default:0, length: '40,0'},
+    gas_spent: {type: 'decimal', notNull: true,  default:0, length: '40,0'},
     total_transactions: {type: 'bigint', notNull: false},
     total_token_transfers: {type: 'bigint', notNull: false},
     created_at:{type: 'datetime', notNull: true},

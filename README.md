@@ -80,6 +80,7 @@ OPENST-EXPLORER
 node executables/graph_cron.js >> log/graph_cron.log
 node executables/aggregator_cron.js >> log/aggregator_cron.log
 # Every minute
-node executables/block_fetcher_cron.js >> log/block_fetcher_cron.log
-node executables/block_verifier_cron.js >> log/block_verifier_cron.log
+node executables/block_fetcher_cron.js  -c <chain_id> >> log/block_fetcher_cron.log
+node executables/block_verifier_cron.js  -c <chain_id> >> log/block_verifier_cron.log
+node executables/populate_address_detail_cron.js -c <chain_id> >> log/block_verifier_cron.log
 ```     
