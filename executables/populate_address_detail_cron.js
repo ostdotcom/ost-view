@@ -81,6 +81,9 @@ var initAddressDetailProcess = function (blockNumber, startFromIndex) {
           process.exit(1);
         });
     }
+  } else {
+    logger.log("cannot start initAddressDetailProcess for  blockNumber/startFromIndex", blockNumber, startFromIndex);
+    process.exit(1);
   }
 };
 
