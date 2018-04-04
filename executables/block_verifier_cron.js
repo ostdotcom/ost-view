@@ -66,7 +66,7 @@ var checkUnverifiedBlock = function () {
 
       var blockNumber = await blockObj.select('MIN(block_number) as minBlock').where({verified: blockObj.invertedVerified[blockConst.unverified]}).fire()
         .then(function (queryResponse) {
-          const unverifiedBlockNumber = queryResponse.minBlock;
+          const unverifiedBlockNumber = queryResponse[0].minBlock;
 
           logger.log("Lowest Unverified Block Number ", unverifiedBlockNumber);
           if (unverifiedBlockNumber != null) {
@@ -105,7 +105,7 @@ var setBlockVerifier = function (blockNumber) {
 
     blockObj.select('MAX(block_number) as maxBlock').fire()
       .then(function (queryResponse) {
-        const resBlockNumber = queryResponse.maxBlock;
+        const resBlockNumber = queryResponse[0].maxBlock;
         logger.log("Higest Block Number ", resBlockNumber);
 
 
