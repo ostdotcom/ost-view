@@ -25,7 +25,6 @@ const logger = require(rootPrefix + "/helpers/custom_console_logger")
   , version = require(rootPrefix + '/package.json').version
   , BlockKlass = require(rootPrefix + "/app/models/block")
   , CronDetailKlass = require(rootPrefix + "/app/models/cron_detail")
-  , blockConst = require(rootPrefix + "/lib/global_constant/block")
 ;
 
 // Variables to hold different objects
@@ -58,11 +57,13 @@ var highestFetchedBlockNumber = null;
  */
 var initAddressDetailProcess = function (blockNumber, startFromIndex) {
 
+  if (continueExecution) {
+
     if (highestFetchedBlockNumber != null && (+highestFetchedBlockNumber >= blockNumber)) {
       startAddressDetailProcess(blockNumber, startFromIndex);
     }
     else {
-      BlockKlass.getLastVerifiedBlockNumber(stateChainID)
+      new BlockKlass(stateChainID).getLastVerifiedBlockNumber()
         .then(function (resBlockNumber) {
           logger.log("higest verified Block Number ", resBlockNumber);
 
@@ -80,6 +81,7 @@ var initAddressDetailProcess = function (blockNumber, startFromIndex) {
           process.exit(1);
         });
     }
+  }
 };
 
 var startAddressDetailProcess = function (blockNumber, startFromIndex) {

@@ -55,6 +55,40 @@ const BlockSpecificPrototype = {
       val: statuses,
       inverted: invertedStatuses
     }
+  },
+
+  getLastVerifiedBlockNumber: function() {
+    const oThis = this
+    ;
+
+    return new Promise(function (resolve, reject) {
+
+      oThis.select('verified, max(block_number) as max_block_number, min(block_number) as min_block_number')
+        .group_by('verified').fire().then(function (rows) {
+
+        var unverifiedMinBlockNumber = null
+          , verifiedMaxBlockNumber = null
+        ;
+
+        for (var i = 0; i < rows.length; i++) {
+          const row = rows[i];
+          if (row.verified === blockConst.unverified) {
+            unverifiedMinBlockNumber = row.min_block_number - 1;
+          } else {
+            verifiedMaxBlockNumber = row.max_block_number;
+          }
+        }
+
+        if (unverifiedMinBlockNumber) {
+          return resolve(unverifiedMinBlockNumber);
+        } else {
+          return resolve(verifiedMaxBlockNumber);
+        }
+      })
+        .catch(function (err) {
+          return reject("Exception in getLastVerifiedBlockblockNumber:: " + err);
+        });
+    });
   }
 
 };
@@ -63,42 +97,7 @@ Object.assign(BlockKlass.prototype, BlockSpecificPrototype);
 
 BlockKlass.DATA_SEQUENCE_ARRAY = ['block_number', 'block_hash', 'parent_hash', 'difficulty', 'total_difficulty', 'gas_limit', 'gas_used', 'total_transactions', 'block_timestamp', 'verified', 'status'];
 
-const getLastVerifiedBlockNumber = function (chainId) {
-  const oThis = this;
-  const blockObj = new BlockKlass(chainId);
-
-  return new Promise(function (resolve, reject) {
-
-    blockObj.select('verified, max(block_number) as max_block_number, min(block_number) as min_block_number').group_by('verified').fire().then(function (rows) {
-
-      var unverifiedMinBlockNumber = null
-        , verifiedMaxBlockNumber = null
-      ;
-
-      for (var i = 0; i < rows.length; i++) {
-        const row = rows[i];
-        if (row.verified === blockConst.unverified) {
-          unverifiedMinBlockNumber = row.min_block_number - 1;
-        } else {
-          verifiedMaxBlockNumber = row.max_block_number;
-        }
-      }
-
-      if (unverifiedMinBlockNumber) {
-        return resolve(unverifiedMinBlockNumber);
-      } else {
-        return resolve(verifiedMaxBlockNumber);
-      }
-    })
-      .catch(function (err) {
-        return reject("Exception in getLastVerifiedBlockblockNumber:: " + err);
-      });
-  });
-
-};
-
 module.exports = BlockKlass;
-
 
 // ttk = require('./app/models/block')
 // new ttk().select('*').where('id>1').limit('10').fire().then(console.log);
