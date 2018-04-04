@@ -55,7 +55,7 @@ var processNotification = function (msgContent) {
         unAckCount--;
         onResolve();
       }).catch(function (err) {
-        logger.error("NotificationProcessor#processTransaction :: Transaction type insertion error", err);
+        logger.notify("nl_pn_1", "NotificationProcessor#processTransaction :: Transaction type insertion error", err);
         unAckCount--;
         onResolve();
       });
@@ -65,7 +65,7 @@ var processNotification = function (msgContent) {
         onResolve();
         logger.log("NotificationProcessor#processBrandedTokenEvent :: Branded token event updated successfully");
       }).catch(function (err) {
-        logger.error("NotificationProcessor#processBrandedTokenEvent :: Branded token event updating error", err);
+        logger.notify("nl_pn_2", "NotificationProcessor#processBrandedTokenEvent :: Branded token event updating error", err);
         unAckCount--;
         onResolve();
       });
