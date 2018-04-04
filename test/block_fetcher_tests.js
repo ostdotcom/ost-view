@@ -12,9 +12,6 @@ const rootPrefix = '..'
   , Web3Interact = require(rootPrefix + "/lib/web3/interact/rpc_interact")
   , BlockKlass = require(rootPrefix + "/app/models/block")
   , responseHelper = require(rootPrefix + '/lib/formatter/response')
-  , TransactionKlass = require(rootPrefix + "/app/models/transaction")
-  , TransactionHashKlass = require(rootPrefix + "/app/models/transaction_hash")
-  , AddressKlass = require(rootPrefix + "/app/models/address")
   , TransactionProcessor = require(rootPrefix + "/lib/block_utils/transaction_processor")
 ;
 
@@ -254,7 +251,7 @@ describe('Check is end to end block insertion', function () {
 
     Web3Interact.setInstance(testChainId, webRpcObject);
     TransactionProcessor.setInstance({process: function(){ return Promise.resolve(true);}});
-    const blockFetcher = BlockFetcher.newInstance(testChainId)
+    const blockFetcher = BlockFetcher.newInstance(testChainId, true)
     ;
 
     // DB clean up
@@ -278,7 +275,7 @@ describe('Check is negative end to end block insertion', function () {
     Web3Interact.setInstance(testChainId, webRpcObject);
 
     TransactionProcessor.setInstance({process: function(){ return Promise.resolve(true);}});
-    const blockFetcher = BlockFetcher.newInstance(testChainId)
+    const blockFetcher = BlockFetcher.newInstance(testChainId, true)
     ;
 
     // DB clean up
