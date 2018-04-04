@@ -42,6 +42,6 @@ const createBrandedTokenTransactionTypeTable = function (db) {
 }
 
 const createIndexOnBrandedTokenTransactionTypeTable = function (db) {
-  db.addIndex(constants.BRANDED_TOKEN_TRANSACTION_TYPES_TABLE_NAME, 'tti_ca_tt_index', ['contract_address_id', 'transaction_type'], false);
+  db.addIndex(constants.BRANDED_TOKEN_TRANSACTION_TYPES_TABLE_NAME, 'tti_ca_tt_index', ['contract_address_id', 'transaction_type'], true);
 };
 
