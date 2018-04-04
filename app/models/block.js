@@ -72,7 +72,7 @@ const BlockSpecificPrototype = {
 
         for (var i = 0; i < rows.length; i++) {
           const row = rows[i];
-          if (row.verified === blockConst.unverified) {
+          if (row.verified === Number(oThis.invertedVerified[blockConst.unverified])) {
             unverifiedMinBlockNumber = row.min_block_number - 1;
           } else {
             verifiedMaxBlockNumber = row.max_block_number;
