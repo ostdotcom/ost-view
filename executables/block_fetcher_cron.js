@@ -84,7 +84,7 @@ const setFetchBlockCron = function (blockNumber) {
       logger.log("Time Diff", (Date.now() - startTime) );
       process.exit(1);
     }
-  }, blockNumber === state.blockNumber ? 5000 : config.getPollInterval(state.chainID));
+  }, config.getPollInterval(state.chainID));
 };
 
 
