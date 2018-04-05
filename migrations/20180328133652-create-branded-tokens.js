@@ -33,7 +33,7 @@ exports.down = function(db) {
 const createBrandedTokenTable = function (db) {
   return db.createTable(constants.BRANDED_TOKENS_TABLE_NAME, {
     id: {type: 'bigint', notNull: true, primaryKey: true, autoIncrement: true},
-    name: {type: 'string', notNull: true, unique:true},
+    name: {type: 'string', notNull: true},
     contract_address_id: {type: 'bigint', notNull: true, unique:true},
     symbol:{type: 'string', notNull: false},
     uuid: {type: 'string', notNull: false},
