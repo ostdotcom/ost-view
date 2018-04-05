@@ -26,7 +26,7 @@ exports.up = function(db) {
 };
 
 exports.down = function(db) {
-  return null;
+  return deleteTokenTransferTable(db);
 };
 
 // tokenTransfer
@@ -51,4 +51,8 @@ const createIndexOnTokenTransferTable = function (db) {
   db.addIndex(constants.TOKEN_TRANSFERS_TABLE_NAME, 'tt__bn_index', ['block_number'], false);
   db.addIndex(constants.TOKEN_TRANSFERS_TABLE_NAME, 'tt__tx_index', ['transaction_hash_id'], false);
 
+};
+
+const deleteTokenTransferTable = function (db) {
+  return db.dropTable(constants.TOKEN_TRANSFERS_TABLE_NAME);
 };

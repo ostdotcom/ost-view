@@ -26,7 +26,7 @@ exports.up = function(db) {
 };
 
 exports.down = function(db) {
-  return null;
+  return deleteAddressDetailsTable(db);
 };
 
 //address
@@ -50,5 +50,8 @@ const createAddressDetailsTable = function (db) {
 const createIndexOnAddressDetailsTable = function (db) {
   db.addIndex(constants.ADDRESS_DETAILS_TABLE_NAME, 'ad_ca_ai_index', ['contract_address_id', 'address_id'], true);
   db.addIndex(constants.ADDRESS_DETAILS_TABLE_NAME, 'ad_a_index', 'address_id', false);
+};
 
+const deleteAddressDetailsTable = function (db) {
+  return db.dropTable(constants.ADDRESS_DETAILS_TABLE_NAME);
 };

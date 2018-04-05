@@ -23,7 +23,7 @@ exports.up = function(db) {
 };
 
 exports.down = function(db) {
-  return null;
+  return deleteAggregatedTable(db);
 };
 
 const createAggregatedTable = function (db) {
@@ -41,3 +41,8 @@ const createAggregatedTable = function (db) {
     updated_at:{type: 'datetime', notNull: true}
   })
 };
+
+const deleteAggregatedTable = function (db) {
+  return db.dropTable(constants.AGGREGATED_TABLE_NAME);
+};
+

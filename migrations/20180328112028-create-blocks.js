@@ -23,7 +23,7 @@ exports.up = function(db) {
 };
 
 exports.down = function(db) {
-  return null;
+  return deleteBlocksTable(db);
 };
 
 // blocks
@@ -45,4 +45,8 @@ const createBlocksTable = function (db) {
     created_at:{type: 'datetime', notNull: true},
     updated_at:{type: 'datetime', notNull: true}
   });
+};
+
+const deleteBlocksTable = function (db) {
+  return db.dropTable(constants.BLOCKS_TABLE_NAME);
 };

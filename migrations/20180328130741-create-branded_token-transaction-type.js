@@ -26,7 +26,7 @@ exports.up = function(db) {
 };
 
 exports.down = function(db) {
-  return null;
+  return deleteBrandedTokenTransactionTypeTable(db);
 };
 
 //address_token_transfer
@@ -39,9 +39,12 @@ const createBrandedTokenTransactionTypeTable = function (db) {
     created_at:{type: 'datetime', notNull: true},
     updated_at:{type: 'datetime', notNull: true}
   });
-}
+};
 
 const createIndexOnBrandedTokenTransactionTypeTable = function (db) {
   db.addIndex(constants.BRANDED_TOKEN_TRANSACTION_TYPES_TABLE_NAME, 'tti_ca_tt_index', ['contract_address_id', 'transaction_type'], true);
 };
 
+const deleteBrandedTokenTransactionTypeTable = function (db) {
+  return db.dropTable(constants.BRANDED_TOKEN_TRANSACTION_TYPES_TABLE_NAME);
+};

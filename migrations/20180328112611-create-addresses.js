@@ -23,7 +23,7 @@ exports.up = function(db) {
 };
 
 exports.down = function(db) {
-  return null;
+  return deleteAddressesTable(db);
 };
 
 // addresses
@@ -36,4 +36,8 @@ const createAddressesTable = function (db) {
     created_at:{type: 'datetime', notNull: true},
     updated_at:{type: 'datetime', notNull: true}
   })
+};
+
+const deleteAddressesTable = function (db) {
+  return db.dropTable(constants.ADDRESSES_TABLE_NAME);
 };

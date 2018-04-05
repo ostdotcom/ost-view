@@ -23,7 +23,7 @@ exports.up = function(db) {
 };
 
 exports.down = function(db) {
-  return null;
+  return deleteTransactionExtendedDetailsTable(db);
 };
 
 //transaction_extra_details
@@ -43,4 +43,8 @@ const createTransactionExtendedDetailsTable = function (db) {
     updated_at:{type: 'datetime', notNull: true}
 
   })
-}
+};
+
+const deleteTransactionExtendedDetailsTable = function (db) {
+  return db.dropTable(constants.TRANSACTION_EXTENDED_DETAILS_TABLE_NAME);
+};

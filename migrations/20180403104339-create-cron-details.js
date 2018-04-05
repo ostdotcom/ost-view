@@ -28,7 +28,7 @@ exports.up = function(db) {
 };
 
 exports.down = function(db) {
-  return null;
+  return deleteCronDetailsTable(db);
 };
 
 //cron_details
@@ -52,4 +52,8 @@ const createInitialRowsForCronDetail = function (db) {
   var cronData = JSON.stringify({block_number: 0, start_from_index: 0});
   var sqlStatement = "INSERT INTO CRON_DETAILS(cron_name, data, created_at, updated_at) VALUES('" + CronDetailKlass.address_detail_populate_cron + "', '"+ cronData + "', NOW(), NOW() ) ";
   db.runSql(sqlStatement);
+};
+
+const deleteCronDetailsTable = function (db) {
+  return db.dropTable('cron_details');
 };

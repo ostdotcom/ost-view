@@ -26,7 +26,7 @@ exports.up = function(db) {
 };
 
 exports.down = function(db) {
-  return null;
+  return deleteAddressTransactionsTable(db);
 };
 
 //address_transactions
@@ -49,4 +49,8 @@ const createAddressTransactionsTable = function (db) {
 const createIndexOnAddressTransactionTable = function (db) {
   db.addIndex(constants.ADDRESS_TRANSACTIONS_TABLE_NAME, 'at_a_tt_index', ['address_id', 'tx_timestamp'], false);
   db.addIndex(constants.ADDRESS_TRANSACTIONS_TABLE_NAME, 'at_thi_index', 'transaction_hash_id', false);
+};
+
+const deleteAddressTransactionsTable = function (db) {
+  return db.dropTable(constants.ADDRESS_TRANSACTIONS_TABLE_NAME);
 };

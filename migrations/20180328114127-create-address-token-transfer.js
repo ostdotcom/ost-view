@@ -26,7 +26,7 @@ exports.up = function(db) {
 };
 
 exports.down = function(db) {
-  return null;
+  return deleteAddressTokenTransferTable(db);
 };
 
 //address_token_transfer
@@ -51,7 +51,9 @@ const createIndexOnAddressTokenTransferTable = function (db) {
   db.addIndex(constants.ADDRESS_TOKEN_TRANSFERS_TABLE_NAME, 'att_thi_index', 'transaction_hash_id', false);
 };
 
-
+const deleteAddressTokenTransferTable = function (db) {
+  return db.dropTable(constants.ADDRESS_TOKEN_TRANSFERS_TABLE_NAME);
+};
 
 // // branded_tokens
 // // id, contract_address_id, name, symbol, symbol_icon, uuid, conversion_rate, creation_timestamp, (token_holders, market_cap, circulation, total_supply, transactions_data, transactions_volume_data, token_transfer_data, token_volume_data, transaction_type_data, token_transfers, token_ost_volume)

@@ -23,7 +23,7 @@ exports.up = function(db) {
 };
 
 exports.down = function(db) {
-  return null;
+  return deleteTransactionHashesTable(db);
 };
 
 // transaction_hashes
@@ -36,4 +36,8 @@ const createTransactionHashesTable = function (db) {
     created_at:{type: 'datetime', notNull: true},
     updated_at:{type: 'datetime', notNull: true}
   })
+};
+
+const deleteTransactionHashesTable = function (db) {
+  return db.dropTable(constants.TRANSACTIONS_HASHES_TABLE_NAME);
 };

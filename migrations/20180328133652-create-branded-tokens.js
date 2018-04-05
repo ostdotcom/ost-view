@@ -19,16 +19,17 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db) {
-  return createBrandedTokenTable(db);
+  return createBrandedTokenTable(db)
+    .then(function(){
+      return createInitialRowsForBrandedTokenTable(db);
+    });
 };
 
 exports.down = function(db) {
-  return null;
+  return deleteBrandedTokenTable(db);
 };
 
 //branded-tokens
-//id, company_name, contract_address_id, company_symbol, uuid, price, token_holders, market_cap, circulation, total_supply, transactions_data
-//transactions_volume_data, tokens_volume_data, transaction_type_data, token_transfers, token_ost_volume, creation_time, symbol_icon
 const createBrandedTokenTable = function (db) {
   return db.createTable(constants.BRANDED_TOKENS_TABLE_NAME, {
     id: {type: 'bigint', notNull: true, primaryKey: true, autoIncrement: true},
@@ -41,17 +42,16 @@ const createBrandedTokenTable = function (db) {
     creation_timestamp: {type:'int', notNull: true},
     created_at:{type: 'datetime', notNull: true},
     updated_at:{type: 'datetime', notNull: true}
-
-    // token_holders: {type : 'int',notNull: false},
-    // market_cap: {type:'decimal', length:'40,0',notNull: false},
-    // circulation: {type:'decimal', length:'40,0',notNull: false},
-    // total_supply: {type:'decimal', length:'40,0',notNull: false},
-    // transactions_data: {type: 'blob', notNull: false},
-    // transactions_volume_data: {type: 'blob', notNull: false},
-    // tokens_volume_data: {type: 'blob', notNull: false},
-    // transaction_type_data: {type: 'blob', notNull: false},
-    // token_transfers: {type:'decimal', length:'40,0',notNull: false},
-    // token_ost_volume: {type:'decimal', length:'40,0',notNull: false},
-
   })
+};
+
+const deleteBrandedTokenTable = function (db) {
+  return db.dropTable(constants.BRANDED_TOKENS_TABLE_NAME);
+};
+
+const createInitialRowsForBrandedTokenTable = function (db) {
+  const currentDate = new Date();
+  const timestamp = currentDate.getTime();
+  const sqlStatement = "INSERT INTO " + constants.BRANDED_TOKENS_TABLE_NAME + " VALUES (0, 'OST', 0, 'OST', '0', 1, '',"+ timestamp +",'" + currentDate + "', '"+ currentDate +"')";
+  return db.runSql(sqlStatement);
 };

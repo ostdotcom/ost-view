@@ -43,6 +43,7 @@ process.chdir(process.env.OST_VIEW_PATH);
 const getChainList = function (obj) {
 
   var chainIDs = [];
+  logger.log("chain Id", obj.chainID);
   if (obj.chainID) {
     chainIDs.push(obj.chainID);
   } else {
@@ -150,7 +151,7 @@ const up = function (version) {
 
   chainIDs.forEach(function (chainID) {
 
-    logger.log('Running reset of chainID', chainID);
+    logger.log('Running up of chainID', chainID);
     initDBConfigFile(chainID);
     logger.log("Version migration :", version);
 

@@ -26,7 +26,7 @@ exports.up = function(db) {
 };
 
 exports.down = function(db) {
-  return null;
+  return deleteTransactionTable(db);
 };
 
 // transactions
@@ -54,4 +54,8 @@ const createTransactionTable = function (db) {
 
 const createIndexOnTransactionTable = function (db) {
   db.addIndex(constants.TRANSACTIONS_TABLE_NAME, 't_bn_index', 'block_number', false);
+};
+
+const deleteTransactionTable = function (db) {
+  return db.dropTable(constants.TRANSACTIONS_TABLE_NAME);
 };
