@@ -4,6 +4,7 @@
  */
 const expect = require('chai').expect
   , assert = require('chai').assert
+  , openStCache = require('@openstfoundation/openst-cache')
 ;
 
 
@@ -16,6 +17,8 @@ const rootPrefix = '..'
   , AddressTransactionKlass = require(rootPrefix + "/app/models/address_transaction")
   , TransactionLogProcessor = require(rootPrefix + "/lib/block_utils/transaction_log_processor")
   , TransactionExtendedDetailKlass = require(rootPrefix + "/app/models/transaction_extended_detail")
+  , addressConst = require(rootPrefix + '/lib/global_constant/address')
+  , CacheAddAddressIdKlass = require(rootPrefix + '/lib/block_utils/add_addresses')
 ;
 
 const testChainId = 101
@@ -169,6 +172,47 @@ describe('Process transaction with from web3 interact', function () {
     expect(result.formattedAddrTxnArray, "Not have an array of data formattedAddrTxnArray").to.be.an('array');
   });
 });
+
+describe('Test address type upgrade when inserted with higher types', function () {
+  it('cacheImplementer', async function () {
+
+    // DB clean up
+    const cacheImplementer = new openStCache.cache('memcached', true);
+    cacheImplementer.delAll();
+
+    const transactionProcessor = TransactionProcessor.newInstance(testChainId)
+      , ADDR_TYPE_USER = new AddressKlass(testChainId).invertedAddressTypes[addressConst.userAddress]
+      , ADDR_TYPE_CONTRACT = new AddressKlass(testChainId).invertedAddressTypes[addressConst.contractAddress]
+      , ADDR_TYPE_ERC20 = new AddressKlass(testChainId).invertedAddressTypes[addressConst.erc20Address]
+    ;
+    //Set up for test with address type user_type
+    let addressTypeHash = {'0x0ca74d9f4bb9d17257af5b5e26bdfc931715262d': {address_type: ADDR_TYPE_USER}};
+
+    await new CacheAddAddressIdKlass({chain_id: testChainId, addresses_hash: addressTypeHash}).perform();
+
+    //Test
+    addressTypeHash = {'0x0ca74d9f4bb9d17257af5b5e26bdfc931715262d': {address_type: ADDR_TYPE_CONTRACT}};
+
+    let response = await new CacheAddAddressIdKlass({chain_id: testChainId, addresses_hash: addressTypeHash}).perform();
+
+    expect(response.isSuccess(),"CacheAddAddressIdKlass failed").to.be.equal(true);
+    expect(response.data['0x0ca74d9f4bb9d17257af5b5e26bdfc931715262d'].address_type,"Address type ADDR_TYPE_CONTRACT invalid").to.be.equal(Number(ADDR_TYPE_CONTRACT));
+
+    addressTypeHash = {'0x0ca74d9f4bb9d17257af5b5e26bdfc931715262d': {address_type: ADDR_TYPE_ERC20}};
+    response = await new CacheAddAddressIdKlass({chain_id: testChainId, addresses_hash: addressTypeHash}).perform();
+
+    expect(response.isSuccess(),"CacheAddAddressIdKlass failed").to.be.equal(true);
+    expect(response.data['0x0ca74d9f4bb9d17257af5b5e26bdfc931715262d'].address_type,"Address type ADDR_TYPE_ERC20 invalid").to.be.equal(Number(ADDR_TYPE_ERC20));
+
+    addressTypeHash = {'0x0ca74d9f4bb9d17257af5b5e26bdfc931715262d': {address_type: ADDR_TYPE_USER}};
+    response = await new CacheAddAddressIdKlass({chain_id: testChainId, addresses_hash: addressTypeHash}).perform();
+
+    expect(response.isSuccess(),"CacheAddAddressIdKlass failed").to.be.equal(true);
+    expect(response.data['0x0ca74d9f4bb9d17257af5b5e26bdfc931715262d'].address_type,"Address type ADDR_TYPE_USER invalid").to.be.equal(Number(ADDR_TYPE_ERC20));
+  });
+});
+
+
 
 describe('Test complete transaction process', function () {
   it('process', async function () {
