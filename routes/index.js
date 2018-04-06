@@ -11,13 +11,10 @@ const express = require('express');
 const router = express.Router({mergeParams: true});
 
 const rootPrefix = ".."
-  , home = require(rootPrefix + '/models/home')
   , responseHelper = require(rootPrefix + '/lib/formatter/response')
-  , coreConfig = require(rootPrefix + '/config')
   , logger = require(rootPrefix + '/helpers/custom_console_logger')
   , coreConstant = require(rootPrefix + '/config/core_constants')
-  , search = require(rootPrefix + '/models/search')
-
+  , routeHelper = require(rootPrefix + '/routes/helper')
   ;
 
 // Render final response
@@ -25,22 +22,6 @@ const renderResult = function (requestResponse, responseObject, contentType) {
   return requestResponse.renderResponse(responseObject, 200, contentType);
 };
 
-// define parameters from url, generate web rpc instance and database connect
-const homeMiddleware = function (req, res, next) {
-  var chainId = req.params.chainId
-    ;
-  if(undefined === chainId){
-    chainId = coreConstant['DEFAULT_CHAIN_ID'];
-  }
-  // Get instance of contract class
-  req.homeInstance = new home(chainId);
-
-  req.chainId = chainId;
-
-  next();
-};
-
-
 /**
  * Index route
  *
@@ -49,8 +30,8 @@ const homeMiddleware = function (req, res, next) {
  * @route {GET} {base_url}
  *
  */
-router.get("/",homeMiddleware, function(req, res){
-  fetchHomeData(req, res);
+router.get("/", function(req, res, next){
+  fetchHomeData(req, res, next);
 });
 
 
@@ -62,68 +43,67 @@ router.get("/",homeMiddleware, function(req, res){
  * @route {GET} {base_url}
  *
  */
-router.get("/home",homeMiddleware, function(req, res){
-    fetchHomeData(req, res);
+router.get("/home", function(req, res, next){
+    fetchHomeData(req, res, next);
 });
 
 
-function fetchHomeData (req, res){
-  req.homeInstance.getHomeData()
+function fetchHomeData (req, res, next) {
+
+
+  const getDetailsKlass = require(rootPrefix + '/app/services/home/get_details');
+
+  return routeHelper.performer(req, res, next, getDetailsKlass, 'r_a_2')
     .then(function (requestResponse) {
-      const response = responseHelper.successWithData({
-        home: requestResponse,
-        result_type: "home",
-        title: "OST View - OST SideChains Explorer and Search",
-        mCss:['mHome.css'],
-        mJs:['mHome.js'],
-        view_data: {
-          "summary":req.homeInstance.getChainInfo(requestResponse),
-          "graph_stats": req.homeInstance.getChainStats(requestResponse)
-        },
-        meta:{
-          "chain_id" : req.chainId,
-          "contract_address" : coreConstant['BASE_CONTRACT_ADDRESS'],
-          "top_tokens_url" : "/chain-id/"+req.chainId+"/tokens/top",
-          "latest_token_transfer_url" : "/chain-id/"+req.chainId+"/tokens/transactions/recent",
-          "token_transfer_graph_url" : "/chain-id/"+req.chainId+"/tokenDetails/"+coreConstant['BASE_CONTRACT_ADDRESS']+"/graph-date/numberOfTransactions/",
-          "token_volume_graph_url" : "/chain-id/"+req.chainId+"/tokenDetails/"+coreConstant['BASE_CONTRACT_ADDRESS']+"/graph-date/numberOfTransactions/"
-        },
-        page_meta: {
-          title: 'OST VIEW - Block Explorer for OpenST Utility Blockchains',
-          description: 'OST VIEW is the home grown block explorer from OST for OpenST Utility Blockchains.',
-          keywords: 'OST, Simple Token, Utility Chain, Blockchain',
-          robots: 'index, follow',
-          image: 'https://dxwfxs8b4lg24.cloudfront.net/ost-view/images/ost-view-og-image-1.jpg.jpg'
-        }
-      });
-
-      return renderResult(response, res, req.headers['content-type']);
-    })
-    .catch(function (reason) {
-      logger.log(req.originalUrl + " : " + reason);
-      return renderResult(responseHelper.error('', coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, req.headers['content-type']);
+      if (requestResponse.isSuccess()) {
+        processHomeDetailsResponse(requestResponse.data, req, res);
+      } else {
+        logger.log(req.originalUrl + " : " + requestResponse.err.code);
+        return renderResult(responseHelper.error(requestResponse.err.code, coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, req.headers['content-type']);
+      }
     });
 }
 
+function processHomeDetailsResponse(requestResponse, req, res) {
+
+  var chainId = req.params.chainId
+    , baseContractAddress = coreConstant['BASE_CONTRACT_ADDRESS'];
+  ;
 
 
-// define parameters from url, generate web rpc instance and database connect
-const searchMiddleware = function (req, res, next) {
-  var chainId = req.query.chain_id
-    , q = req.query.q
-    ;
-
-  if(undefined === chainId){
-    chainId = coreConstant['DEFAULT_CHAIN_ID'];
+  if (!chainId || chainId === undefined){
+    chainId = coreConstant.DEFAULT_CHAIN_ID;
   }
-  // create instance of search class
-  req.searchInstance = new search(chainId);
 
-  req.q = q;
-  req.chainId = chainId;
+  const response = responseHelper.successWithData({
+    home: requestResponse.home_data,
+    result_type: "home",
+    title: "OST View - OST SideChains Explorer and Search",
+    mCss:['mHome.css'],
+    mJs:['mHome.js'],
+    view_data: {
+      "summary":requestResponse.chain_info,
+      "graph_stats": requestResponse.chain_stats
+    },
+    meta:{
+      "chain_id" : chainId,
+      "contract_address" : coreConstant['BASE_CONTRACT_ADDRESS'],
+      "top_tokens_url" : "/chain-id/"+chainId+"/tokens/top",
+      "latest_token_transfer_url" : "/chain-id/"+chainId+"/tokens/transactions/recent",
+      "token_transfer_graph_url" : "/chain-id/"+chainId+"/tokenDetails/"+baseContractAddress+"/graph-date/numberOfTransactions/",
+      "token_volume_graph_url" : "/chain-id/"+chainId+"/tokenDetails/"+baseContractAddress+"/graph-date/numberOfTransactions/"
+    },
+    page_meta: {
+      title: 'OST VIEW - Block Explorer for OpenST Utility Blockchains',
+      description: 'OST VIEW is the home grown block explorer from OST for OpenST Utility Blockchains.',
+      keywords: 'OST, Simple Token, Utility Chain, Blockchain',
+      robots: 'index, follow',
+      image: 'https://dxwfxs8b4lg24.cloudfront.net/ost-view/images/ost-view-og-image-1.jpg.jpg'
+    }
+  });
 
-  next();
-};
+  return renderResult(response, res, req.headers['content-type']);
+}
 
 /**
  * Search by address, contract address, transaction hash, block number
@@ -134,24 +114,27 @@ const searchMiddleware = function (req, res, next) {
  *
  * @routeparam {String} :params - search string
  */
-router.get('/search', searchMiddleware, function (req, res) {
+router.get('/search', function (req, res, next) {
 
-  req.searchInstance.getParamData(req.q)
+  const getDetailsKlass = require(rootPrefix + '/app/services/search/get_url');
+
+  routeHelper.performer(req, res, next, getDetailsKlass, 'r_i_s_1')
     .then(function (requestResponse) {
-      const response = responseHelper.successWithData({
-        redirect_url: "/chain-id/"+req.chainId +requestResponse,
-        result_type: "redirect_url"
-      });
+      if (requestResponse.isSuccess()) {
+        const response = responseHelper.successWithData({
+          redirect_url: "/chain-id/"+coreConstant.DEFAULT_CHAIN_ID +requestResponse.data,
+          result_type: "redirect_url"
+        });
 
-      return renderResult(response, res, 'application/json');
-    })
-    .catch(function (reason) {
-      const response = responseHelper.successWithData({
-        redirect_url: "/search-results?q="+reason,
-        result_type: "redirect_url"
-      });
+        return renderResult(response, res, 'application/json');
+      } else {
+        const response = responseHelper.successWithData({
+          redirect_url: "/search-results?q="+req.query.q,
+          result_type: "redirect_url"
+        });
 
-      return renderResult(response, res, 'application/json');
+        return renderResult(response, res, 'application/json');
+      }
     });
 });
 

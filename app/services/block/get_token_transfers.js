@@ -18,8 +18,8 @@ const rootPrefix = "../../.."
  * Get Complete Details of Token transfers for given block number
  *
  * @param {object} params - this is object with keys.
- *                 blockNumber - Block Number to fetch token transfers for.
  *                 chain_id - Chain Id.
+ *                 blockNumber - Block Number to fetch token transfers for.
  *                 page_payload - Next page or previous page payload
  * @constructor
  */

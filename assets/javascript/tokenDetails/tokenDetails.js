@@ -41,81 +41,6 @@
       var recentTransTable = new TokenTable({
         ajaxURL: oThis.config.transactions_url,
         selector: '#tokenDetailsRecentTrans',
-        //dtConfig : {
-        //  columns: [
-        //    {
-        //      data: null,
-        //      width:'16%',
-        //      render: function(data, type, full, meta){
-        //        return Handlebars.compile_fe($('#dt-col-1').text())({
-        //          symbol: data.company_symbol,
-        //          name: data.company_name,
-        //          symbol_icon: data.symbol_icon,
-        //        });
-        //      }
-        //    },
-        //    {
-        //      data: null,
-        //      width:'18%',
-        //      render: function(data, type, full, meta){
-        //        return Handlebars.compile_fe($('#dt-col-2').text())({
-        //          tokens: data.tokens,
-        //          coin_symbol: data.company_symbol,
-        //          value: data.ost_amount
-        //        });
-        //      }
-        //    },
-        //    {
-        //      data: null,
-        //      width:'11%',
-        //      render: function(data, type, full, meta){
-        //        return Handlebars.compile_fe($('#dt-col-3').text())({
-        //          timestamp: data.timestamp
-        //        });
-        //      }
-        //    },
-        //    {
-        //      data: null,
-        //      width:'11%',
-        //      render: function(data, type, full, meta){
-        //        return Handlebars.compile_fe($('#dt-col-4').text())({
-        //          tx: data.transaction_hash,
-        //          redirect_url: data.tx_redirect_url
-        //
-        //        });
-        //      }
-        //    },
-        //    {
-        //      data: null,
-        //      width:'17%',
-        //      render: function(data, type, full, meta){
-        //        return Handlebars.compile_fe($('#dt-col-5').text())({
-        //          from: data.t_from,
-        //          redirect_url: data.from_redirect_url
-        //
-        //        });
-        //      }
-        //    },
-        //    {
-        //      data: null,
-        //      width:'4%',
-        //      render: function(data, type, full, meta){
-        //        return Handlebars.compile_fe($('#dt-col-6').text());
-        //      }
-        //    },
-        //    {
-        //      data: null,
-        //      width:'17%',
-        //      render: function(data, type, full, meta){
-        //        return Handlebars.compile_fe($('#dt-col-7').text())({
-        //          to: data.t_to,
-        //          redirect_url: data.to_redirect_url
-        //
-        //        });
-        //      }
-        //    }
-        //  ]
-        //},
         dtConfig : {
           columns: [
             {
@@ -205,17 +130,17 @@
         responseReceived: function ( response ) {
           var dataToProceess = response.data[response.data.result_type];
           var meta =  response.data.meta
-          ,contractAddresses = response.data['contract_address']
+          ,contractAddresses = response.data['contract_addresses']
           ;
 
           dataToProceess.forEach(function(element) {
-            var txHash = element.transaction_hash;
-            var from = element.t_from;
-            var to = element.t_to
+            var txHash = element.transaction_hash
+              , from = element.t_from
+              , to = element.t_to
               , contract_address = element.contract_address
               , tokens = element.tokens
               , price = contractAddresses[contract_address].price
-              ,timestamp = element.timestamp
+              , timestamp = element.timestamp
               ;
 
             element['timestamp'] = toTimeAgo(timestamp);
@@ -255,7 +180,7 @@
               width:'30%',
               render: function(data, type, full, meta){
                 return Handlebars.compile_fe($('#dt-holders-col-1').text())({
-                  name: data.address,
+                  name: data.address_hash,
                   redirect_url: data.address_redirect_url
                 });
               }
@@ -283,14 +208,15 @@
         responseReceived: function ( response ) {
           var dataToProceess = response.data[response.data.result_type];
           var meta =  response.data.meta
-            ,contractAddresses = response.data['contract_address']
+            ,contractAddresses = response.data['contract_addresses']
             , contract_address = meta.q
             ;
 
           dataToProceess.forEach(function(element) {
-            var name = element.address
+            console.log("element : ",element);
+            var name = element.address_hash
               ,tokens = element.tokens
-              ,price = contractAddresses[contract_address].price
+              ,conversion_rate = contractAddresses[contract_address].price
             ;
 
             var addressURL = meta.address_placeholder_url;
@@ -300,7 +226,7 @@
             });
 
             element['tokens'] = PriceOracle.getDisplayBt(tokens);
-            element['ost_amount'] = PriceOracle.getDisplayBtToOst(tokens, price);
+            element['ost_amount'] = PriceOracle.getDisplayBtToOst(tokens, conversion_rate);
 
             element['company_name'] = contractAddresses[contract_address].company_name;
             element['company_symbol'] = contractAddresses[contract_address].company_symbol;

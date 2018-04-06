@@ -6,6 +6,13 @@ const rootPrefix = '../..'
   , dbName = "ost_explorer_" + coreConstants.CHAIN_ID
 ;
 
+/**
+ * constructor
+ *
+ * @param {Object} chainId - chain id
+ *
+ * @constructor
+ */
 const TransactionHashKlass = function (chainId) {
   const oThis = this
   ;

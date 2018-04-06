@@ -21,6 +21,13 @@ const verified = {
   , invertedVerified = util.invert(verified)
 ;
 
+/**
+ * constructor
+ *
+ * @param {Object} chainId - chain id
+ *
+ * @constructor
+ */
 const BlockKlass = function (chainId) {
   const oThis = this
   ;

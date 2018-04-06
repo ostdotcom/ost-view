@@ -7,7 +7,7 @@
             <div class="mt-4 mb-4 info-card card">
                 <div class="text-truncate card-body">
                     <span class="key-color"> TX# </span>
-                    <span class="value-color font-weight-light"> {{transaction.transaction_hash}} </span>
+                    <span class="value-color font-weight-light"> {{meta.q}} </span>
                 </div>
             </div>
 
@@ -23,13 +23,13 @@
                 <div class="card-body">
                     <span class="key-color mr-1"> Time</span>
                     <span class="time icon"></span>
-                    <span class="value-color font-weight-light"> {{ toDate transaction.timestamp }} </span>
+                    <span class="value-color font-weight-light"> {{ toDate transaction.block_timestamp }} </span>
                 </div>
 
                 <div class="card-body">
                     <table class="table table-hover table-responsive-sm token-table">
                         <tbody>
-                        {{#each token_transaction_details}}
+                        {{#each token_transfer_details}}
                             <tr scope="row">
                                 <td style="width: 6%">
                                     <div class="cell d-flex align-items-center">
@@ -43,7 +43,7 @@
                                 <td style="width: 14%">
                                     <div class="cell d-flex align-items-center">
                                         <span class="staked-coin icon"></span>
-                                        <span class="badge badge-primary">{{bigNumber_toFromat tokens}} {{dictionary_dataValue contract_address ../contract_addresses 'company_symbol'}}</span>
+                                        <span class="badge badge-primary">{{getBtBalance tokens}} {{dictionary_dataValue contract_address ../contract_addresses 'company_symbol'}}</span>
                                     </div>
                                 </td>
                                 <td style="width: 14%">

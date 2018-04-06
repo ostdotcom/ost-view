@@ -37,7 +37,12 @@ module.exports = {
     return formattedDate;
   },
 
-  math: function (lvalue, operator, rvalue){
+  math: function (lvalue, operator, rvalue) {
+
+    if (!rvalue || !lvalue) {
+      return '';
+    }
+
     lvalue = new bigNumber(lvalue.toString());
     rvalue = new bigNumber(rvalue.toString());
 
@@ -87,22 +92,46 @@ module.exports = {
   dictionary_dataValue : function(hashKey, hash, requiredValueKey){
     if (hash){
       const hashData = hash[hashKey];
-      return hashData[requiredValueKey];
-    }else{
-      return '';
+      if(hashData){
+        return hashData[requiredValueKey];
+      }
     }
 
+    return '';
   },
 
   getOstBalance : function(tokens, addresssContract, contractArray){
-    if (contractArray) {
-      var price = contractArray[addresssContract].price;
-      var ostValue = new bigNumber(tokens).div(new bigNumber(price));
 
-      var bigNumberValue = ostValue.toFormat(5);
+    var precision = Number( precision );
+    if ( isNaN( precision ) || !precision ) {
+      precision = 5;
+    }
+
+    if (contractArray[addresssContract]) {
+      var price = contractArray[addresssContract].price
+        , ostValue = new bigNumber(tokens).div(new bigNumber(price))
+        , bigNumberDivisor = new bigNumber(10).toPower(18)
+        , ostValueToEth = ostValue.dividedBy(bigNumberDivisor)
+        , bigNumberValue = ostValueToEth.toFormat(precision)
+      ;
       return bigNumberValue;
     }else{
       return '';
+    }
+  },
+
+  getBtBalance: function(amount, precision) {
+    precision = Number( precision );
+    if ( isNaN( precision ) || !precision ) {
+      precision = 5;
+    }
+    if (amount){
+      var bigNumberAmount = new bigNumber(amount)
+        , bigNumberDivisor = new bigNumber(10).toPower(18)
+      ;
+      return bigNumberAmount.div(bigNumberDivisor).toFormat(precision).toString(10);
+    }else{
+      return  new bigNumber(0).toFormat(precision).toString(10);
     }
   },
 
@@ -113,7 +142,8 @@ module.exports = {
     }
     if (amount){
       var bigNumberAmount = new bigNumber(amount)
-      var bigNumberDivisor = new bigNumber(10).toPower(18);
+        , bigNumberDivisor = new bigNumber(10).toPower(18)
+      ;
       return bigNumberAmount.div(bigNumberDivisor).toFormat(precision).toString(10);
     }else{
       return  new bigNumber(0).toFormat(precision).toString(10);

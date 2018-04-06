@@ -12,9 +12,7 @@ const router = express.Router({mergeParams: true});
 
 // load all internal dependencies
 const rootPrefix = ".."
-  , search = require(rootPrefix + '/models/search')
   , responseHelper = require(rootPrefix + '/lib/formatter/response')
-  , coreConfig = require(rootPrefix + '/config')
 ;
 
 // Render final response

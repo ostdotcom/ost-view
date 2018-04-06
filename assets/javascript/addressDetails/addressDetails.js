@@ -191,14 +191,15 @@
               , txURL = meta.transaction_placeholder_url
               , addressURL = meta.address_placeholder_url
               , tokenDetailsPlaceholderUrl = meta.token_details_redirect_url
+              , contract_address_id = element.contract_address_id
               , contract_address = element.contract_address
-              ,tokens = element.tokens
-              , price = contractAddresses[contract_address].price
-              ,timestamp = element.timestamp
-              ,inflow = element.inflow
-              ,to = inflow ? element.address : element.corresponding_address
-              ,from = inflow ? element.corresponding_address : element.address
-              ;
+              , tokens = element.tokens
+              , conversion_rate = contractAddresses[contract_address_id]? contractAddresses[contract_address_id].price : 1
+              , timestamp = element.timestamp
+              , inflow = element.inflow
+              , to = inflow ? element.address : element.corresponding_address
+              , from = inflow ? element.corresponding_address : element.address
+            ;
 
             element['timestamp'] = toTimeAgo(timestamp);
 
@@ -220,11 +221,17 @@
             element.address = from;
 
             element['tokens'] = PriceOracle.getDisplayBt(tokens);
-            element['ost_amount'] = PriceOracle.getDisplayBtToOst(tokens, price);
+            element['ost_amount'] = PriceOracle.getDisplayBtToOst(tokens, conversion_rate);
 
-            element['company_name'] = contractAddresses[contract_address].company_name;
-            element['company_symbol'] = contractAddresses[contract_address].company_symbol;
-            element['symbol_icon'] = contractAddresses[contract_address].symbol_icon;
+            if (contractAddresses[contract_address_id]){
+              element['company_name'] = contractAddresses[contract_address_id].company_name;
+              element['company_symbol'] = contractAddresses[contract_address_id].company_symbol;
+              element['symbol_icon'] = contractAddresses[contract_address_id].symbol_icon;
+            }else {
+              element['company_name'] = '';
+              element['company_symbol'] = '';
+              element['symbol_icon'] = '';
+            }
 
           });
         }

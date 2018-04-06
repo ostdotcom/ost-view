@@ -4,7 +4,13 @@ const rootPrefix = '../..'
   , coreConstants = require(rootPrefix + '/config/core_constants')
   , ModelBaseKlass = require(rootPrefix + '/app/models/base')
 ;
-
+/**
+ * constructor
+ *
+ * @param {Object} chainId - chain id
+ *
+ * @constructor
+ */
 const BrandedTokenTransactionTypesKlass = function (chainId) {
   const oThis = this
   ;

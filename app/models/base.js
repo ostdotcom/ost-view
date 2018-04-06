@@ -8,6 +8,15 @@ const rootPrefix = '../..'
   , config = require(rootPrefix + '/config')
 ;
 
+/**
+ * constructor
+ *
+ * @param {Object} params
+ *                 chainId - chain id
+ *
+ *
+ * @constructor
+ */
 const ModelBaseKlass = function (params) {
   const oThis = this;
 

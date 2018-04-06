@@ -11,11 +11,8 @@ const routeMethods = {
 
     try{
 
-      if (req.query.next_page_payload){
-        req.params.page_payload = req.query.next_page_payload;
-      }else if (req.query.prev_page_payload){
-        req.params.page_payload = req.query.prev_page_payload;
-      }
+      Object.assign(req.params, req.query);
+
       const decodedParams = req.params;
 
       const callerObject = new CallerKlass(decodedParams);

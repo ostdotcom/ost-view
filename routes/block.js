@@ -13,7 +13,6 @@ const router = express.Router({mergeParams: true});
 // load all internal dependencies
 const rootPrefix = ".."
   , responseHelper = require(rootPrefix + '/lib/formatter/response')
-  , logger = require(rootPrefix + '/helpers/custom_console_logger')
   , coreConstant = require(rootPrefix + '/config/core_constants')
   , routeHelper = require(rootPrefix + '/routes/helper')
   ;
@@ -111,7 +110,7 @@ router.get("/:blockNumber/token-transfers", function (req, res, next) {
         });
         return renderResult(response, res,'application/json');
       } else {
-        processBlockError(requestResponse.err.code, req, res);
+        return renderResult(responseHelper.error(requestResponse.err.code, coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, 'application/json');
       }
     });
 });

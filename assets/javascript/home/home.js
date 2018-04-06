@@ -339,10 +339,10 @@
             element['token_details_redirect_url'] =  Handlebars.compile(tokenDetailsURL)({
               contract_addr: contractAddress
             });
-            var tokenOstVolume = convertToBigNumber(element.token_ost_volume).dividedBy(convertToBigNumber(element.price))
-            element['token_ost_volume'] = PriceOracle.getDisplayFiat(tokenOstVolume);
-            element['price'] =PriceOracle.getDisplayBtToOst(1, element.price);
-            element['market_cap'] = PriceOracle.getDisplayFiat(element.market_cap);
+            var tokenOstVolume = 0;//convertToBigNumber(element.token_ost_volume).dividedBy(convertToBigNumber(element.price))
+            element['token_ost_volume'] = 0;//PriceOracle.getDisplayFiat(tokenOstVolume);
+            element['price'] = PriceOracle.getDisplayBtToOstPrice(element.price);
+            element['market_cap'] = 0;//PriceOracle.getDisplayFiat(element.market_cap);
 
           });
         }

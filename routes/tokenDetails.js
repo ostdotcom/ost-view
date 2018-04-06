@@ -12,22 +12,19 @@ const router = express.Router({mergeParams: true});
 
 // load all internal dependencies
 const rootPrefix = ".."
-  , contract = require(rootPrefix + '/models/contract')
   , responseHelper = require(rootPrefix + '/lib/formatter/response')
   , coreConfig = require(rootPrefix + '/config')
   , logger = require(rootPrefix + '/helpers/custom_console_logger')
   , jwtAuth = require(rootPrefix + '/lib/jwt/jwt_auth')
   , customUrlParser = require('url')
   , coreConstant = require(rootPrefix + '/config/core_constants')
-  ;
+  , routeHelper = require(rootPrefix + '/routes/helper')
+;
 
 // Render final response
 const renderResult = function (requestResponse, responseObject, contentType) {
   return requestResponse.renderResponse(responseObject, 200, contentType);
 };
-
-
-const defaultTopUsersCount = 15;
 
 // define parameters from url, generate web rpc instance and database connect
 const contractMiddleware = function (req, res, next) {
@@ -121,46 +118,53 @@ const decodeJwt = function(req, res, next) {
  * @routeparam {String} :contractAddress - Contract address whose internal transactions need to be fetched (42 chars length)
  * @routeparam {Integer} :page - Page number for getting data in batch.
  */
-router.get("/:contractAddress", contractMiddleware, function (req, res) {
+router.get("/:contractAddress", function (req, res, next) {
 
-  req.contractInstance.getTokenDetails( req.contractAddress )
-    .then(function(response){
 
-      const responseData = responseHelper.successWithData({
-        token_details : response,
-        result_type: "token_details",
-        mCss: ['mTokenDetails.css'],
-        mJs: ['mTokenDetails.js'],
-        meta:{
-          transactions_url: '/chain-id/'+req.chainId+'/contract/'+req.contractAddress+'/internal-transactions',
-          token_holders_url:'/chain-id/'+req.chainId+'/tokendetails/'+req.contractAddress+'/holders',
-          token_transfer_graph_url: "/chain-id/"+req.chainId+"/tokenDetails/"+req.contractAddress+"/graph-date/numberOfTransactions/",
-          token_volume_graph_url: "/chain-id/"+req.chainId+"/tokenDetails/"+req.contractAddress+"/graph-date/numberOfTransactions/",
-          contract_address:req.contractAddress,
-          chain_id:req.chainId
-        },
-        page_meta: {
-          title: 'OST VIEW | '+ response.company_name +' ('+response.company_symbol+') token',
-          description: 'OST VIEW is the home grown block explorer from OST for OpenST Utility Blockchains.',
-          keywords: 'OST, Simple Token, Utility Chain, Blockchain',
-          robots: 'noindex, nofollow',
-          image: 'https://dxwfxs8b4lg24.cloudfront.net/ost-view/images/ost-view-og-image-1.jpg.jpg'
-        },
-        view_data:{
-          summary: req.contractInstance.getTokenDetailsInfo(response),
-          graph_stats: req.contractInstance.getTokenStats(response)
-        }
-      });
-      logger.log("Request of content-type:", req.headers['content-type']);
-      renderResult(responseData, res, req.headers['content-type']);
-    })
-    .catch(function(reason){
-      logger.log(req.originalUrl + " : " + reason);
-      return renderResult(responseHelper.error('', coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, req.headers['content-type']);
-    })
+  const getDetailsKlass = require(rootPrefix + '/app/services/token_details/get_details');
 
+  routeHelper.performer(req, res, next, getDetailsKlass, 'r_td_1')
+    .then(function (requestResponse) {
+      if (requestResponse.isSuccess()) {
+        processTokenDetailsResponse(requestResponse.data, req, res);
+      } else {
+        logger.log(req.originalUrl + " : " + requestResponse.err.code);
+        return renderResult(responseHelper.error(requestResponse.err.code, coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, req.headers['content-type']);
+      }
+    });
 
 });
+
+function processTokenDetailsResponse(response, req, res) {
+  console.log("token_details : ",response.token_details);
+  const responseData = responseHelper.successWithData({
+    token_details : response.token_details,
+    result_type: "token_details",
+    mCss: ['mTokenDetails.css'],
+    mJs: ['mTokenDetails.js'],
+    meta:{
+      transactions_url: '/chain-id/'+req.params.chainId+'/contract/'+req.params.contractAddress+'/internal-transactions',
+      token_holders_url:'/chain-id/'+req.params.chainId+'/tokendetails/'+req.params.contractAddress+'/holders',
+      token_transfer_graph_url: "/chain-id/"+req.params.chainId+"/tokenDetails/"+req.params.contractAddress+"/graph-date/numberOfTransactions/",
+      token_volume_graph_url: "/chain-id/"+req.params.chainId+"/tokenDetails/"+req.params.contractAddress+"/graph-date/numberOfTransactions/",
+      contract_address:req.params.contractAddress,
+      chain_id:req.params.chainId
+    },
+    page_meta: {
+      title: 'OST VIEW | '+response.token_details.company_name +' ('+response.token_details.company_symbol+') token',
+      description: 'OST VIEW is the home grown block explorer from OST for OpenST Utility Blockchains.',
+      keywords: 'OST, Simple Token, Utility Chain, Blockchain',
+      robots: 'noindex, nofollow',
+      image: 'https://dxwfxs8b4lg24.cloudfront.net/ost-view/images/ost-view-og-image-1.jpg.jpg'
+    },
+    view_data:{
+      summary: response.token_info,
+      graph_stats: response.token_stats
+    }
+  });
+
+  renderResult(responseData, res, req.headers['content-type']);
+}
 
 
 /**
@@ -174,31 +178,61 @@ router.get("/:contractAddress", contractMiddleware, function (req, res) {
  * @routeparam {Integer} :duration - previous duration from now.
  */
 
-router.get("/:contractAddress/graph/numberOfTransactions/:duration",decodeJwt, contractMiddleware, function (req, res) {
+router.get("/:contractAddress/graph/numberOfTransactions/:duration",decodeJwt, function (req, res, next) {
 
-  req.contractInstance.getValuesAndVolumesOfBrandedTokenTransactions(req.contractAddress, req.duration)
-    .then(function (response) {
-      if (response !== undefined){
-      const responseData = responseHelper.successWithData({
-        result_type: "number_of_transactions",
-        number_of_transactions: response,
-        meta: {
-          duaration: req.duration
-        }
-      });
+  const getDetailsKlass = require(rootPrefix + '/app/services/token_details/get_token_tansfer_garph_data');
 
-      logger.log("Request of content-type:", req.headers['content-type']);
-      renderResult(responseData, res, 'application/json');
-    }else{
-      return renderResult(responseHelper.error('', 'Data not available. Please check the input parameters.'), res, req.headers['content-type']);
-    }
+  routeHelper.performer(req, res, next, getDetailsKlass, 'r_td_g_nt_1')
+    .then(function (requestResponse) {
+      if (requestResponse.isSuccess()) {
+        const responseData = responseHelper.successWithData({
+          result_type: "transaction_type",
+          transaction_type: requestResponse.data,
+          meta: {
+            duaration: req.params.duration
+          }
+        });
 
-  })
-    .catch(function(reason){
-      logger.log(req.originalUrl + " : " + reason);
-      return renderResult(responseHelper.error('', coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, 'application/json');
+        renderResult(responseData, res, 'application/json');
+      } else {
+        logger.log(req.originalUrl + " : " + requestResponse.err.code);
+        return renderResult(responseHelper.error(requestResponse.err.code, coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, 'application/json');
+      }
     });
+});
 
+
+/**
+ * Get transactions type count of branded token
+ *
+ * @name Contract Internal Transactions
+ *
+ * @route {GET} {base_url}/:contractAddress/graph/transactionsByType/:duration
+ *
+ * @routeparam {String} :contractAddress - Contract address
+ * @routeparam {Integer} :duration - previous duration from now.
+ */
+router.get("/:contractAddress/graph/transactionsByType/:duration",decodeJwt, function (req, res, next) {
+
+  const getDetailsKlass = require(rootPrefix + '/app/services/token_details/get_top_users');
+
+  routeHelper.performer(req, res, next, getDetailsKlass, 'r_td_g_tbt_1')
+    .then(function (requestResponse) {
+      if (requestResponse.isSuccess()) {
+        const responseData = responseHelper.successWithData({
+          result_type: "transaction_type",
+          transaction_type: requestResponse.data,
+          meta: {
+            duaration: req.duration
+          }
+        });
+
+        renderResult(responseData, res, 'application/json');
+      } else {
+        logger.log(req.originalUrl + " : " + requestResponse.err.code);
+        return renderResult(responseHelper.error(requestResponse.err.code, coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, 'application/json');
+      }
+    });
 });
 
 
@@ -213,34 +247,29 @@ router.get("/:contractAddress/graph/numberOfTransactions/:duration",decodeJwt, c
  * @routeparam {Integer} :duration - previous duration from now.
  */
 
-router.get("/:contractAddress/graph-date/numberOfTransactions/:duration", contractMiddleware, function (req, res) {
+router.get("/:contractAddress/graph-date/numberOfTransactions/:duration", function (req, res, next) {
 
-  req.contractInstance.getTransfersAndVolumesOfBrandedTokenTransactions(req.contractAddress, req.duration)
-    .then(function (response) {
-      if (response !== undefined){
+  const getDetailsKlass = require(rootPrefix + '/app/services/token_details/get_token_tansfer_garph_data');
+
+  routeHelper.performer(req, res, next, getDetailsKlass, 'r_td_g_nt_2')
+    .then(function (requestResponse) {
+      if (requestResponse.isSuccess()) {
         const responseData = responseHelper.successWithData({
-          result_type: "number_of_transactions",
-          number_of_transactions: response,
+          result_type: "transaction_type",
+          transaction_type: requestResponse.data,
           meta: {
-            duaration: req.duration
+            duaration: req.params.duration
           }
         });
 
-        logger.log("Request of content-type:", req.headers['content-type']);
         renderResult(responseData, res, 'application/json');
-      }else{
-        return renderResult(responseHelper.error('', 'Data not available. Please check the input parameters.'), res, req.headers['content-type']);
+      } else {
+        logger.log(req.originalUrl + " : " + requestResponse.err.code);
+        return renderResult(responseHelper.error(requestResponse.err.code, coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, 'application/json');
       }
-
-    })
-    .catch(function(reason){
-      logger.log(req.originalUrl + " : " + reason);
-      return renderResult(responseHelper.error('', coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, 'application/json');
     });
 
 });
-
-
 
 /**
  * Get token holders
@@ -251,110 +280,47 @@ router.get("/:contractAddress/graph-date/numberOfTransactions/:duration", contra
  *
  * @routeparam {String} :contractAddress - Contract address
  */
-router.get("/:contractAddress/holders", contractMiddleware, function (req, res) {
+router.get("/:contractAddress/holders", function (req, res, next) {
 
-  var pageSize = coreConstant.DEFAULT_PAGE_SIZE+1;
+  const getDetailsKlass = require(rootPrefix + '/app/services/token_details/get_token_holders');
 
-  req.contractInstance.getTokenHolders( req.contractAddress, pageSize, req.pagePayload)
-    .then(function(queryResponse){
-
-      var tokenHolders = queryResponse.tokenHolders;
-      var contractAddress = queryResponse.contractAddress;
-      const nextPagePayload = getNextPagePaylaodForHolders(tokenHolders, pageSize);
-      const prevPagePayload = getPrevPagePaylaodForHolders(tokenHolders, req.pagePayload, pageSize);
-
-      // For all the pages remove last row if its equal to page size.
-      if(tokenHolders.length == pageSize){
-        tokenHolders.pop();
+  routeHelper.performer(req, res, next, getDetailsKlass, 'r_td_1')
+    .then(function (requestResponse) {
+      if (requestResponse.isSuccess()) {
+        processTokenHoldersResponse(requestResponse.data, req, res);
+      } else {
+        logger.log(req.originalUrl + " : " + requestResponse.err.code);
+        return renderResult(responseHelper.error(requestResponse.err.code, coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, req.headers['content-type']);
       }
-
-      const responseData = responseHelper.successWithData({
-        token_holders : tokenHolders,
-        contract_address : contractAddress,
-        result_type: "token_holders",
-        draw : req.query.draw,
-        recordsTotal : 120,
-        meta:{
-          next_page_payload :nextPagePayload,
-          prev_page_payload :prevPagePayload,
-
-          q:req.contractAddress,
-          chain_id:req.chainId,
-          address_placeholder_url : "/chain-id/"+req.chainId+"/address/{{address}}"
-        }
-      });
-      renderResult(responseData, res,'application/json');
-    })
-    .catch(function(reason){
-      logger.log(req.originalUrl + " : " + reason);
-      return renderResult(responseHelper.error('', coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, 'application/json');
-    })
+    });
 });
 
 
-function getNextPagePaylaodForHolders (requestResponse, pageSize){
+function processTokenHoldersResponse(queryResponse, req, res) {
 
-  const response = requestResponse,
-    count = response.length;
+  var tokenHolders = queryResponse.holders
+    , contractAddresses = queryResponse.contract_addresses
+    , nextPagePayload = queryResponse.next_page_payload
+    , prevPagePayload = queryResponse.prev_page_payload
+  ;
 
-  if(count <= pageSize -1){
-    return {};
-  }
+  const responseData = responseHelper.successWithData({
+    token_holders : tokenHolders,
+    contract_addresses : contractAddresses,
+    result_type: "token_holders",
 
-  return {
-    id: response[count-1].id,
-    direction: "next"
-  };
+    meta:{
+      next_page_payload :nextPagePayload,
+      prev_page_payload :prevPagePayload,
 
+      q:req.params.contractAddress,
+      chain_id:req.params.chainId,
+      address_placeholder_url : "/chain-id/"+req.params.chainId+"/address/{{address}}"
+    }
+  });
+
+  return renderResult(responseData, res,'application/json');
 }
-
-function getPrevPagePaylaodForHolders (requestResponse, pagePayload, pageSize){
-
-  const response = requestResponse,
-    count = response.length;
-
-  // If page payload is null means its a request for 1st page
-  // OR direction is previous and count if less than page size means there is no previous page
-  if(!pagePayload || (pagePayload.direction === 'prev' && count < pageSize)){
-    return {};
-  }
-
-  return {
-    id: response[0].id,
-    direction: "prev"
-  };
-}
-
-/**
- * Get transactions type count of branded token
- *
- * @name Contract Internal Transactions
- *
- * @route {GET} {base_url}/:contractAddress/graph/transactionsByType/:duration
- *
- * @routeparam {String} :contractAddress - Contract address
- * @routeparam {Integer} :duration - previous duration from now.
- */
-router.get("/:contractAddress/graph/transactionsByType/:duration",decodeJwt, contractMiddleware, function (req, res) {
-
-  req.contractInstance.getGraphDataForBrandedTokenTransactionsByType(req.contractAddress,req.duration)
-    .then (function(response){
-    const responseData = responseHelper.successWithData({
-      result_type: "transaction_type",
-      transaction_type: response,
-      meta: {
-        duaration: req.duration
-      }
-    });
-
-      logger.log("Request of content-type:", req.headers['content-type']);
-      renderResult(responseData, res, 'application/json');
-    })
-    .catch(function (reason) {
-      return renderResult(responseHelper.error('', coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, 'application/json');
-    });
-
-});
 
 /**
  * Get top users of branded token
@@ -365,48 +331,32 @@ router.get("/:contractAddress/graph/transactionsByType/:duration",decodeJwt, con
  *
  * @routeparam {String} :contractAddress - Contract address
  */
-router.get("/:contractAddress/topUsers", decodeJwt ,contractMiddleware, function (req, res) {
+router.get("/:contractAddress/topUsers",decodeJwt, function (req, res, next) {
 
-  var topUserCount = req.query.topUserCount;
+  const getDetailsKlass = require(rootPrefix + '/app/services/token_details/get_top_users');
 
-  if (topUserCount === undefined){
-    topUserCount = defaultTopUsersCount;
-  }
-
-  req.contractInstance.getBrandedTokenTopUsers(req.contractAddress, topUserCount)
-    .then(function (response) {
-      const responseData = responseHelper.successWithData({
-        top_users: response,
-        result_type: "top_users",
-        meta: {
-          user_placeholer_url: "/chain-id/" + req.chainId + "/address/{{address}}"
-        }
-      });
-      logger.log("Request of content-type:", req.headers['content-type']);
-      renderResult(responseData, res, 'application/json');
-    })
-    .catch(function (reason) {
-      return renderResult(responseHelper.error('', coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, 'application/json');
+  routeHelper.performer(req, res, next, getDetailsKlass, 'r_td_tu_1')
+    .then(function (requestResponse) {
+      if (requestResponse.isSuccess()) {
+        processTopUsersResponse(requestResponse.data, req, res);
+      } else {
+        logger.log(req.originalUrl + " : " + requestResponse.err.code);
+        return renderResult(responseHelper.error(requestResponse.err.code, coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, 'application/json');
+      }
     });
-
 });
 
-router.get("/:contractAddress/ostSupply", contractMiddleware, function (req, res) {
+function processTopUsersResponse(response, req, res) {
+  const responseData = responseHelper.successWithData({
+    top_users: response.top_users,
+    result_type: "top_users",
+    meta: {
+      user_placeholer_url: "/chain-id/" + req.params.chainId + "/address/{{address}}"
+    }
+  });
 
-  req.contractInstance.getOstSupply(req.contractAddress)
-    .then(function (response) {
-      const responseData = responseHelper.successWithData({
-        ostSupply: response,
-        result_type: "ostSupply"
-      });
-      logger.log("Request of content-type:", req.headers['content-type']);
-      renderResult(responseData, res, 'application/json');
-    })
-    .catch(function (reason) {
-      logger.log(req.originalUrl + " : " + reason);
-      return renderResult(responseHelper.error('', coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, 'application/json');
-    });
-
-});
+  console.log("processTopUsersResponse : ",responseData);
+  renderResult(responseData, res, 'application/json');
+}
 
 module.exports = router;

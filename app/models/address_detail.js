@@ -5,6 +5,13 @@ const rootPrefix = '../..'
   , ModelBaseKlass = require(rootPrefix + '/app/models/base')
 ;
 
+/**
+ * constructor
+ *
+ * @param {Object} chainId - chain id
+ *
+ * @constructor
+ */
 const AddressDetailsKlass = function (chainId) {
   const oThis = this
   ;

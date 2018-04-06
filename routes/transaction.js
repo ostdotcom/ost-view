@@ -12,11 +12,11 @@ const router = express.Router({mergeParams: true});
 
 // load all internal dependencies
 const rootPrefix = ".."
-  , transaction = require(rootPrefix + '/models/transaction')
   , responseHelper = require(rootPrefix + '/lib/formatter/response')
   , coreConfig = require(rootPrefix + '/config')
   , logger = require(rootPrefix + '/helpers/custom_console_logger')
   , coreConstant = require(rootPrefix + '/config/core_constants')
+  , routeHelper = require(rootPrefix + '/routes/helper')
 ;
 
 // Render final response
@@ -51,44 +51,54 @@ const transactionMiddleware = function (req, res, next) {
  *
  * @routeparam {String} :hash - Transaction hash (66 chars length)
  */
-router.get("/:hash", transactionMiddleware, function (req, res) {
+router.get("/:transactionHash", function (req, res, next) {
 
-  req.transactionInstance.getTransaction(req.hash)
+
+  const getDetailsKlass = require(rootPrefix + '/app/services/transaction/get_details');
+
+  routeHelper.performer(req, res, next, getDetailsKlass, 'r_t_1')
     .then(function (requestResponse) {
+      if(requestResponse.isSuccess()){
+        processTransactionResponse(requestResponse.data, req, res);
+      } else {
+        logger.log(req.originalUrl + " : " + requestResponse.err.code);
+        return renderResult(responseHelper.error(requestResponse.err.code, coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, req.headers['content-type']);
 
-      const response = responseHelper.successWithData({
-        transaction: requestResponse['transactionDetails'],
-        token_transaction_details:requestResponse['tokenTransactionDetails'],
-        contract_addresses: requestResponse['contractAddresses'],
-        result_type: "transaction",
-        meta:{
-          q:req.hash,
-          chain_id:req.chainId,
-          redirect_url:{
-            address_placeholder_url: '/chain-id/'+req.chainId+'/address/',
-            block_placeholder_url: '/chain-id/'+req.chainId+'/block/',
-            token_details_redirect_url: '/chain-id/'+req.chainId+'/tokendetails/',
-          }
-        },
-        page_meta: {
-          title: 'OST VIEW | Tx Details - '+req.hash,
-          description: 'OST VIEW is the home grown block explorer from OST for OpenST Utility Blockchains.',
-          keywords: 'OST, Simple Token, Utility Chain, Blockchain',
-          robots: 'noindex, nofollow',
-          image: 'https://dxwfxs8b4lg24.cloudfront.net/ost-view/images/ost-view-og-image-1.jpg.jpg'
-        },
-        mCss: ['mTransactionDetails.css'],
-        mJs: [],
-        title:'Transaction Details - '+ req.hash,
-      });
-
-      return renderResult(response, res, req.headers['content-type']);
-    })
-    .catch(function (reason) {
-      logger.log(req.originalUrl + " : " + reason);
-      return renderResult(responseHelper.error('', coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, req.headers['content-type']);
+      }
     });
 });
+
+
+function processTransactionResponse(requestResponse, req, res){
+
+  const response = responseHelper.successWithData({
+    transaction: requestResponse['transaction_details'],
+    token_transfer_details:requestResponse['token_transfer_details'],
+    contract_addresses: requestResponse['contract_addresses'],
+    result_type: "transaction",
+    meta:{
+      q:req.params.transactionHash,
+      chain_id:req.params.chainId,
+      redirect_url:{
+        address_placeholder_url: '/chain-id/'+req.params.chainId+'/address/',
+        block_placeholder_url: '/chain-id/'+req.params.chainId+'/block/',
+        token_details_redirect_url: '/chain-id/'+req.params.chainId+'/tokendetails/',
+      }
+    },
+    page_meta: {
+      title: 'OST VIEW | Tx Details - '+req.params.transactionHash,
+      description: 'OST VIEW is the home grown block explorer from OST for OpenST Utility Blockchains.',
+      keywords: 'OST, Simple Token, Utility Chain, Blockchain',
+      robots: 'noindex, nofollow',
+      image: 'https://dxwfxs8b4lg24.cloudfront.net/ost-view/images/ost-view-og-image-1.jpg.jpg'
+    },
+    mCss: ['mTransactionDetails.css'],
+    mJs: [],
+    title:'Transaction Details - '+ req.hash,
+  });
+
+  return renderResult(response, res, req.headers['content-type']);
+}
 
 /**
  * Get internal transaction of a given transaction hash

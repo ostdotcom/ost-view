@@ -71,6 +71,7 @@
       if ( oThis.isNaN( bt ) ) {
         return NaN;
       }
+      bt = oThis.toEtherFromWei(bt);
       bt = BigNumber( bt );
       return BigNumber( bt.toFixed(P_BT, P_BT_ROUND_ROUNDING_MODE) );
     },
@@ -166,8 +167,36 @@
 
       var ostToBtRate = oThis.inverseBtToOst( btToOstRate );
       return oThis.getDisplayBtToOst( bt, ostToBtRate );
+    },
+
+    toEtherFromWei: function (weiValue) {
+      var oThis = this
+        , bigNumberValue = weiValue
+        , conversionRatio = new BigNumber(10).pow(18)
+      ;
+
+      if (typeof weiValue !== 'BigNumber'){
+        bigNumberValue = BigNumber( weiValue );
+      }
+
+      var ethValue = bigNumberValue.dividedBy(conversionRatio);
+
+      return ethValue;
     }
 
+    , getDisplayBtToOstPrice : function (ostToBtPrice) {
+      var oThis = this
+        , displayPrice = 0
+        , btQuantity = BigNumber(1)
+        , bigNumberValue = ostToBtPrice
+      ;
+      if (typeof ostToBtPrice !== 'BigNumber'){
+        bigNumberValue = BigNumber( ostToBtPrice );
+      }
+
+      displayPrice = btQuantity.dividedBy(bigNumberValue);
+      return oThis.getDisplayOst( displayPrice );
+    }
 
   }
 

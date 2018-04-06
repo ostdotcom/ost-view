@@ -14,7 +14,13 @@ const statuses = {
 }
   , invertedStatuses = util.invert(statuses);
 
-
+/**
+ * constructor
+ *
+ * @param {Object} chainId - chain id
+ *
+ * @constructor
+ */
 const TransactionKlass = function (chainId) {
   const oThis = this
   ;

@@ -55,7 +55,7 @@
         if (meta !== undefined) {
 
           if (currentStart > previousStartIndex) {
-            payload = {next_page_payload: meta.next_page_payload};
+            payload = {page_payload: meta.next_page_payload};
 
             if(Object.keys(meta.next_page_payload).length <= 1) {
               $(settings.nTableWrapper).find('.dataTables_processing').hide();
@@ -63,7 +63,7 @@
             }
 
           } else {
-            payload = {prev_page_payload: meta.prev_page_payload};
+            payload = {page_payload: meta.prev_page_payload};
           }
 
         }
@@ -74,26 +74,35 @@
           contentType: "application/json",
           success: function (response) {
 
-            meta = response.data.meta;
-            oThis.responseReceived.apply( oThis, arguments );
-            previousStartIndex = settings.oAjaxData.start;
+            if(response.data){
+              meta = response.data.meta;
+              oThis.responseReceived.apply( oThis, arguments );
+              previousStartIndex = settings.oAjaxData.start;
 
-            var recordsFilteredCount = 0;
+              var recordsFilteredCount = 0;
 
-            if(Object.keys(meta.next_page_payload).length > 1){
-              recordsFilteredCount = settings.oAjaxData.start + settings.oAjaxData.length + 1;
-            }else{
-              recordsFilteredCount = settings.oAjaxData.start + settings.oAjaxData.length
+              if(Object.keys(meta.next_page_payload).length > 1){
+                recordsFilteredCount = settings.oAjaxData.start + settings.oAjaxData.length + 1;
+              }else{
+                recordsFilteredCount = settings.oAjaxData.start + settings.oAjaxData.length
+              }
+
+              callback({
+                data: response.data[response.data.result_type],
+                meta: response.data.meta,
+                recordsFiltered: recordsFilteredCount,
+              });
+
+              // Enabling pagination after ajax completion
+              $(settings.nTableWrapper).find('.dataTables_paginate').css({pointerEvents: 'inherit'});
+            }else {
+              callback({
+                data: '',
+                meta: '',
+                recordsFiltered: '',
+              });
             }
 
-            callback({
-              data: response.data[response.data.result_type],
-              meta: response.data.meta,
-              recordsFiltered: recordsFilteredCount,
-            });
-
-            // Enabling pagination after ajax completion
-            $(settings.nTableWrapper).find('.dataTables_paginate').css({pointerEvents: 'inherit'});
           }
         })
       };

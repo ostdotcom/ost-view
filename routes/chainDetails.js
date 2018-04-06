@@ -12,12 +12,9 @@ const router = express.Router({mergeParams: true});
 
 // load all internal dependencies
 const rootPrefix = ".."
-    , contract = require(rootPrefix + '/models/contract')
     , responseHelper = require(rootPrefix + '/lib/formatter/response')
-    , coreConfig = require(rootPrefix + '/config')
     , logger = require(rootPrefix + '/helpers/custom_console_logger')
-    , Company = require(rootPrefix + '/models/company')
-    ;
+;
 
 // Render final response
 const renderResult = function (requestResponse, responseObject, contentType) {

@@ -14,7 +14,13 @@ const addressTypes = {
   }
   , invertedAddressTypes = util.invert(addressTypes);
 
-
+/**
+ * constructor
+ *
+ * @param {Object} chainId - chain id
+ *
+ * @constructor
+ */
 const AddressKlass = function (chainId) {
   const oThis = this
   ;
