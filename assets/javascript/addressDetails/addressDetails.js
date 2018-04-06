@@ -187,6 +187,7 @@
             ;
 
           dataToProceess.forEach(function (element) {
+
             var txHash = element.transaction_hash
               , txURL = meta.transaction_placeholder_url
               , addressURL = meta.address_placeholder_url
@@ -194,12 +195,13 @@
               , contract_address_id = element.contract_address_id
               , contract_address = element.contract_address
               , tokens = element.tokens
-              , conversion_rate = contractAddresses[contract_address_id]? contractAddresses[contract_address_id].price : 1
+              , conversion_rate = contractAddresses[contract_address_id].conversion_rate
               , timestamp = element.timestamp
               , inflow = element.inflow
               , to = inflow ? element.address : element.corresponding_address
               , from = inflow ? element.corresponding_address : element.address
             ;
+
 
             element['timestamp'] = toTimeAgo(timestamp);
 

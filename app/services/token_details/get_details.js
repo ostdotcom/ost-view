@@ -3,7 +3,7 @@
 const rootPrefix = "../../.."
   , responseHelper = require(rootPrefix + '/lib/formatter/response')
   , BrandedTokenCacheKlass = require(rootPrefix + '/lib/cache_multi_management/branded_tokens')
-  , AddressesCacheKlass = require(rootPrefix+'/lib/cache_multi_management/addressIdMap')
+  , AddressIdMapCacheKlass = require(rootPrefix+'/lib/cache_multi_management/addressIdMap')
   , coreConstants = require(rootPrefix + '/config/core_constants')
 ;
 
@@ -39,26 +39,29 @@ GetBrandedTokenDetailsKlass.prototype = {
       , finalFormattedHomeData = {}
     ;
 
-    const addressDetails = await new AddressesCacheKlass({chain_id: oThis.chainId, addresses: [oThis.contractAddress]}).fetch()
-      , addressDetailsData = addressDetails.data
+    const addressIdMap = await new AddressIdMapCacheKlass({chain_id: oThis.chainId, addresses: [oThis.contractAddress]}).fetch()
+      , addressIdMapData = addressIdMap.data
     ;
 
-    if(addressDetails.isSuccess() && addressDetailsData[oThis.contractAddress]){
-      const addressInfo = addressDetailsData[oThis.contractAddress]
-      ;
-
-      const contaractAddressId = addressInfo.id
-        , brandedTokenDetails = await new BrandedTokenCacheKlass({chain_id: oThis.chainId, contract_address_ids: [contaractAddressId]}).fetch()
-        , brandedTokenDetailsData = brandedTokenDetails.data
-      ;
-
-      if (brandedTokenDetails.isSuccess() || brandedTokenDetailsData[contaractAddressId]){
-        const tokenDetails = brandedTokenDetailsData[contaractAddressId];
-
-        finalFormattedHomeData['token_details'] = tokenDetails;
-      }
+    if(addressIdMap.isFailure() && !addressIdMapData[oThis.contractAddress]){
+      return Promise.resolve(responseHelper.error('s_td_gd_1', 'address id map data not found for :'+oThis.contractAddress));
     }
 
+    const addressInfo = addressIdMapData[oThis.contractAddress]
+    ;
+
+    const contaractAddressId = addressInfo.id
+      , brandedTokenDetails = await new BrandedTokenCacheKlass({chain_id: oThis.chainId, contract_address_ids: [contaractAddressId]}).fetch()
+      , brandedTokenDetailsData = brandedTokenDetails.data
+    ;
+
+    if (brandedTokenDetails.isFailure() || !brandedTokenDetailsData[contaractAddressId]){
+      return Promise.resolve(responseHelper.error('s_td_gd_2', 'branded token data not found for :'+contaractAddressId));
+    }
+
+    const tokenDetails = brandedTokenDetailsData[contaractAddressId];
+
+    finalFormattedHomeData['token_details'] = tokenDetails;
     finalFormattedHomeData['token_info'] = oThis.getTokenDetails();
     finalFormattedHomeData['token_stats'] = oThis.getTokenStats();
 

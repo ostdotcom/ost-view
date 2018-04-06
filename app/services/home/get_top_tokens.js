@@ -5,6 +5,7 @@ const rootPrefix = "../../.."
   , coreConstant = require(rootPrefix + '/config/core_constants')
   , TopTokensCacheKlass = require(rootPrefix + '/lib/cache_management/top_tokens')
   , BrandedTokensCacheKlass = require(rootPrefix + '/lib/cache_multi_management/branded_tokens')
+  , BrandedTokenStatsCacheKlass = require(rootPrefix + '/lib/cache_multi_management/branded_token_stats')
 ;
 
 /**
@@ -41,11 +42,11 @@ GetTopTokensKlass.prototype = {
       , topTokensData = topTokensDetails.data
     ;
 
-    if (topTokensDetails.isFailure() || !topTokensData['topTokens']){
+    if (topTokensDetails.isFailure() || !topTokensData['top_tokens']){
       return Promise.resolve(responseHelper.error("s_h_gtt_1", "getting issue in fetching top tokens"));
     }
 
-   const topTokens = topTokensData.topTokens
+   const topTokens = topTokensData.top_tokens
      , offset =  (oThis.pagePayload.page_no-1)*(oThis.pageSize-1)
      , lastIndex = offset+oThis.pageSize
    ;
@@ -60,19 +61,33 @@ GetTopTokensKlass.prototype = {
 
    const brandedTokenDetails = await new BrandedTokensCacheKlass({chain_id:oThis.chainId, contract_address_ids:contractAddresssIds}).fetch()
      , brandedTokenData = brandedTokenDetails.data
+     , brandedTokenStatsDetails = await new BrandedTokenStatsCacheKlass({chain_id:oThis.chainId, contract_address_ids:contractAddresssIds}).fetch()
+     , brandedTokenStatsData = brandedTokenStatsDetails.data
    ;
 
     var rank = offset+1;
     const brandedTokenSequence = [];
     for(var i=0; i<contractAddresssIds.length; i++){
+
       const contractAddressId = contractAddresssIds[i]
-        , brandedToken = brandedTokenData[contractAddressId];
+        , btStats = brandedTokenStatsData[contractAddressId]
+        , btDetails = brandedTokenData[contractAddressId]
+        , topTokenData = btStats
       ;
 
-      brandedToken['rank'] = rank+i;
-      brandedTokenSequence.push(brandedToken);
+      topTokenData['rank'] = rank+i;
+      topTokenData['company_name'] = btDetails['company_name'];
+      topTokenData['company_symbol'] = btDetails['company_symbol'];
+      topTokenData['conversion_rate'] = btDetails['conversion_rate'];
+      topTokenData['symbol_icon'] = btDetails['symbol_icon'];
+
+
+      brandedTokenSequence.push(topTokenData);
     }
+
     finalFormattedData['top_tokens'] = brandedTokenSequence;
+    finalFormattedData['contract_addresses'] = brandedTokenData
+    console.log("finalFormattedData : ",finalFormattedData);
 
     return Promise.resolve(responseHelper.successWithData(finalFormattedData));
 

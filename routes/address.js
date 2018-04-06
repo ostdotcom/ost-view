@@ -107,8 +107,8 @@ router.get('/:address/token-transfers', function (req, res, next) {
 });
 
 function processTokenTransferResponse(queryResponse, req, res) {
-  const tokenTransactions =  queryResponse.tokenTransfers,
-    contractAddress = queryResponse.contractAddresses,
+  const tokenTransactions =  queryResponse.token_transfers,
+    contractAddress = queryResponse.contract_addresses,
     nextPagePayload = queryResponse.next_page_payload,
     prevPagePayload = queryResponse.prev_page_payload
   ;

@@ -36,7 +36,7 @@ GetTransactionDetailsKlass.prototype = {
     ;
 
     if(transactionData.isFailure()){
-      return Promise.resolve(responseHelper.successWithData());
+      return Promise.resolve(responseHelper.error('s_t_gd_1','transaction data not found'));
     }
 
     const txDetails = transactionData.data

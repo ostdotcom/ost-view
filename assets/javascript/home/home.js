@@ -48,83 +48,7 @@
       oThis.recentTokenTransactions = new TokenTable({
         ajaxURL: oThis.config.latest_token_transfer_url,
         selector: '#homeRecentTokenTransactions',
-        //dtConfig : {
-        //  columns: [
-        //    {
-        //      data: null,
-        //      width:'16%',
-        //      render: function(data, type, full, meta){
-        //        return Handlebars.compile_fe($('#dt-col-1').text())({
-        //          symbol: data.company_symbol,
-        //          name: data.company_name,
-        //          symbol_icon: data.symbol_icon,
-        //          redirect_url:data.token_details_redirect_url
-        //        });
-        //      }
-        //    },
-        //    {
-        //      data: null,
-        //      width:'18%',
-        //      render: function(data, type, full, meta){
-        //        return Handlebars.compile_fe($('#dt-col-2').text())({
-        //          tokens: data.tokens,
-        //          coin_symbol: data.company_symbol,
-        //          value: data.ost_amount
-        //        });
-        //      }
-        //    },
-        //    {
-        //      data: null,
-        //      width:'11%',
-        //      render: function(data, type, full, meta){
-        //        return Handlebars.compile_fe($('#dt-col-3').text())({
-        //          timestamp: data.timestamp
-        //        });
-        //      }
-        //    },
-        //    {
-        //      data: null,
-        //      width:'11%',
-        //      render: function(data, type, full, meta){
-        //        return Handlebars.compile_fe($('#dt-col-4').text())({
-        //          tx: data.transaction_hash,
-        //          redirect_url: data.tx_redirect_url
-        //
-        //        });
-        //      }
-        //    },
-        //    {
-        //      data: null,
-        //      width:'17%',
-        //      render: function(data, type, full, meta){
-        //        return Handlebars.compile_fe($('#dt-col-5').text())({
-        //          from: data.t_from,
-        //          redirect_url: data.from_redirect_url
-        //
-        //        });
-        //      }
-        //    },
-        //    {
-        //      data: null,
-        //      width:'4%',
-        //      className: 'arrow',
-        //      render: function(data, type, full, meta){
-        //        return Handlebars.compile_fe($('#dt-col-6').text());
-        //      }
-        //    },
-        //    {
-        //      data: null,
-        //      width:'17%',
-        //      render: function(data, type, full, meta){
-        //        return Handlebars.compile_fe($('#dt-col-7').text())({
-        //          to: data.t_to,
-        //          redirect_url: data.to_redirect_url
-        //
-        //        });
-        //      }
-        //    }
-        //  ]
-        //},
+
         dtConfig : {
           columns: [
             {
@@ -327,22 +251,25 @@
 
         responseReceived: function ( response ) {
 
-          var dataToProceess = response.data[response.data.result_type];
-          var meta =  response.data.meta;
+          var dataToProceess = response.data[response.data.result_type]
+          , meta =  response.data.meta
+          , contractAddresses = response.data.contract_addresses
+          ;
 
           dataToProceess.forEach(function(element) {
 
-            var contractAddress = element.contract_address;
-
-            var tokenDetailsURL = meta.token_details_redirect_url;
+            var contractAddressId = element.contract_address_id
+              , contractAddress = contractAddresses[contractAddressId].contract_address
+              , tokenDetailsURL = meta.token_details_redirect_url
+            ;
 
             element['token_details_redirect_url'] =  Handlebars.compile(tokenDetailsURL)({
               contract_addr: contractAddress
             });
-            var tokenOstVolume = 0;//convertToBigNumber(element.token_ost_volume).dividedBy(convertToBigNumber(element.price))
-            element['token_ost_volume'] = 0;//PriceOracle.getDisplayFiat(tokenOstVolume);
-            element['price'] = PriceOracle.getDisplayBtToOstPrice(element.price);
-            element['market_cap'] = 0;//PriceOracle.getDisplayFiat(element.market_cap);
+            var tokenOstVolume = convertToBigNumber(element.token_ost_volume);
+            element['token_ost_volume'] = PriceOracle.getDisplayFiat(tokenOstVolume);
+            element['price'] = PriceOracle.getDisplayBtToOstPrice(element.conversion_rate);
+            element['market_cap'] = PriceOracle.getDisplayFiat(element.market_cap);
 
           });
         }

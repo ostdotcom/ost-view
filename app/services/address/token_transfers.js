@@ -79,8 +79,6 @@ GetAddressTokenTransfersKlass.prototype = {
       tokenTransfersData.pop()
     }
 
-    console.log("tokenTransfersData :",tokenTransfersData );
-
     const contractAddressArray = []
       , addressIds = []
       , transactionIds = []
@@ -113,14 +111,12 @@ GetAddressTokenTransfersKlass.prototype = {
     const transactionHashes = transactionHashData.data;
 
     //format and set token transfer
-    finalTokenTransferData['tokenTransfers'] = oThis.formatAddressTokenTransferData(tokenTransfersData, addresses, transactionHashes);
+    finalTokenTransferData['token_transfers'] = oThis.formatAddressTokenTransferData(tokenTransfersData, addresses, transactionHashes);
 
     //set contract address
     if (brandedTokenDetails.isSuccess()){
-      finalTokenTransferData['contractAddresses'] = brandedTokens;
+      finalTokenTransferData['contract_addresses'] = brandedTokens;
     }
-
-    console.log("finalTokenTransferData :",finalTokenTransferData );
 
     return Promise.resolve(responseHelper.successWithData(finalTokenTransferData));
   }

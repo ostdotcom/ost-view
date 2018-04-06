@@ -103,6 +103,7 @@ function processTopTokensResponse(queryResponse, req, res) {
 
   const response = responseHelper.successWithData({
     top_tokens:queryResponse.top_tokens,
+    contract_addresses : queryResponse.contract_addresses,
     result_type: "top_tokens",
     meta:{
 

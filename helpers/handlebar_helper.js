@@ -108,7 +108,7 @@ module.exports = {
     }
 
     if (contractArray[addresssContract]) {
-      var price = contractArray[addresssContract].price
+      var price = contractArray[addresssContract].conversion_rate
         , ostValue = new bigNumber(tokens).div(new bigNumber(price))
         , bigNumberDivisor = new bigNumber(10).toPower(18)
         , ostValueToEth = ostValue.dividedBy(bigNumberDivisor)
