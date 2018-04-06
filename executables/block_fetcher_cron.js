@@ -18,7 +18,7 @@ const rootPrefix = "..";
 const ProcessLockerKlass = require(rootPrefix + '/lib/process_locker')
   , ProcessLocker = new ProcessLockerKlass()
   , cliHandler = require('commander')
-  , MAX_PROCESS_TIME_IN_MINUTES = 21 //Ek Shagun hai.
+  , MAX_PROCESS_TIME_IN_MINUTES = 21
 ;
 
 // Load internal files
@@ -30,19 +30,19 @@ const logger = require(rootPrefix + "/helpers/custom_console_logger")
 ;
 
 // Variables to hold different objects
-var block_fetcher;
+let block_fetcher;
 
 /**
  * Maintain the state run state
  * @type {hash}
  */
-var state = {
+let state = {
   chainID: null,
   blockNumber: -1,
   lastBlock: null
 };
 
-var continueExecution = true;
+let continueExecution = true;
 
 // Using a single function to handle multiple signals
 function handle() {
@@ -107,7 +107,7 @@ if (!cliHandler.chainID) {
   process.exit(1);
 }
 
-var blockNumberToStartWith = -1;
+let blockNumberToStartWith = -1;
 
 // Set chain id and block number
 state.chainID = cliHandler.chainID;
@@ -120,7 +120,7 @@ if (cliHandler.firstBlock && cliHandler.lastBlock) {
   state.lastBlock = cliHandler.lastBlock;
 }
 
-var processTitle = 'v_cron_block_fetcher_c_' + cliHandler.chainID;
+let processTitle = 'v_cron_block_fetcher_c_' + cliHandler.chainID;
 
 processTitle += '_n_' + (cliHandler.blockNumber || '') + '_f_' + (cliHandler.firstBlock || '') + '_l_' + (cliHandler.lastBlock || '');
 
