@@ -20,9 +20,6 @@ exports.setup = function(options, seedLink) {
 exports.up = function(db) {
   return createCronDetailsTable(db)
     .then(function () {
-      createIndexOnCronDetailsTable(db);
-    })
-    .then(function () {
       return createInitialRowsForCronDetail(db);
     });
 };
@@ -38,13 +35,10 @@ const createCronDetailsTable = function (db) {
     id: {type: 'bigint', notNull: true, primaryKey: true, autoIncrement: true},
     cron_name: {type: 'string', notNull: true},
     data: {type: 'string'},
+    status: {type: 'tinyInt'},
     created_at:{type: 'datetime', notNull: true},
     updated_at:{type: 'datetime', notNull: true}
   });
-};
-
-const createIndexOnCronDetailsTable = function (db) {
-  db.addIndex('cron_details', 'cd_cn_index', 'cron_name', true);
 };
 
 const createInitialRowsForCronDetail = function (db) {

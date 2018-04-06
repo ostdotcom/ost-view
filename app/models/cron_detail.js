@@ -2,6 +2,8 @@
 
 const rootPrefix = '../..'
   , ModelBaseKlass = require(rootPrefix + '/app/models/base')
+  , cronDetailConst = require(rootPrefix + '/lib/global_constant/cron_details')
+  , util = require(rootPrefix + '/lib/util')
 ;
 
 /**
@@ -19,6 +21,13 @@ const CronDetailKlass = function (chainId) {
   ModelBaseKlass.call(oThis, {chainId: chainId});
 };
 
+const statuses = {
+  '1': cronDetailConst.pendingStatus,
+  '2': cronDetailConst.completeStatus,
+  '3': cronDetailConst.failedStatus
+}
+  , invertedStatuses = util.invert(statuses);
+
 CronDetailKlass.prototype = Object.create(ModelBaseKlass.prototype);
 
 /*
@@ -26,13 +35,18 @@ CronDetailKlass.prototype = Object.create(ModelBaseKlass.prototype);
  */
 const CronDetailsSpecificPrototype = {
 
-  tableName: 'cron_details'
+  tableName: 'cron_details',
+
+  statuses: statuses,
+
+  invertedStatuses: invertedStatuses
 
 };
 
 Object.assign(CronDetailKlass.prototype, CronDetailsSpecificPrototype);
 
 CronDetailKlass.address_detail_populate_cron = 'address_detail_populate_cron';
+CronDetailKlass.aggregator_cron = 'aggregator_cron';
 
 module.exports = CronDetailKlass;
 

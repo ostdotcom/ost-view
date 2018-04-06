@@ -27,7 +27,22 @@ AddressDetailsKlass.prototype = Object.create(ModelBaseKlass.prototype);
  */
 const AddressDetailsSpecificPrototype = {
 
-  tableName: coreConstants.ADDRESS_DETAILS_TABLE_NAME
+  tableName: coreConstants.ADDRESS_DETAILS_TABLE_NAME,
+
+  selectTotalTokenDetails: async function(contractAddressIds){
+    const oThis = this;
+
+    var data = await oThis.select('count(*) AS total_users, SUM(tokens) AS total_tokens, contract_address_id').
+        where(["contract_address_id IN (?)", contractAddressIds]).group_by(["contract_address_id"]).fire();
+
+    let tokenDetails = {};
+
+    for(var i=0;i<data.length;i++){
+      var row = data[i];
+      tokenDetails[row.contract_address_id] = {total_users: row.total_users, total_tokens: row.total_tokens};
+    }
+    return Promise.resolve(tokenDetails);
+  }
 
 };
 

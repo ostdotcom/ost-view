@@ -21,20 +21,16 @@ const ProcessLockerKlass = require(rootPrefix + '/lib/process_locker')
 ;
 
 // Load internal files
-const Web3Interact = require(rootPrefix + '/lib/web3/interact/rpc_interact')
-  , DbInteract = require(rootPrefix + '/lib/storage/interact')
-  , logger = require(rootPrefix + '/helpers/custom_console_logger')
+const logger = require(rootPrefix + '/helpers/custom_console_logger')
   , config = require(rootPrefix + '/config')
   , constants = require(rootPrefix + '/config/core_constants')
-  , DataAggregator = require(rootPrefix + '/lib/block_utils/data_aggregator')
   , version = require(rootPrefix + '/package.json').version
-  , configHelper = require(rootPrefix + '/helpers/configHelper')
+  , BlockModelKlass = require(rootPrefix + '/app/models/block')
+  , AggregateDataKlass = require(rootPrefix + '/lib/block_utils/aggregate_data')
+  , CronDetailsModelKlass = require(rootPrefix + '/app/models/cron_detail')
+  , cronDetailConst = require(rootPrefix + '/lib/global_constant/cron_details')
+  , AggregatedModelKlass = require(rootPrefix + '/app/models/aggregated')
 ;
-
-// Variables to hold different objects
-var dbInteract
-  , web3Interact
-  , dataAggregator;
 
 /**
  * Maintain the state run state
@@ -42,7 +38,7 @@ var dbInteract
  */
 var state = {
   chainID: null,
-  config: null
+  cronDetailId: null
 };
 
 var continueExecution = true;
@@ -63,31 +59,45 @@ process.on('SIGTERM', handle);
  * @return {null}
  */
 var aggregateByTimeId = function (timeId) {
-  setTimeout(function () {
-    if (continueExecution) {
-      dbInteract.getLastVerifiedBlockTimestamp()
-        .then(function (timestamp) {
-          logger.log("Last Verified Block Timestamp ", timestamp);
+  if (continueExecution) {
+    new BlockModelKlass(state.chainID).getLastVerifiedBlockTimestamp()
+      .then(function (timestamp) {
+        logger.log("Last Verified Block Timestamp ", timestamp);
+        logger.log("Input timestamp ", timeId);
+        if (timestamp != null && (timestamp - timeId >= constants.AGGREGATE_CONSTANT)) {
+          let cdmObj = new CronDetailsModelKlass(state.chainID);
 
-          if (timestamp != null && +timestamp - timeId >= constants.AGGREGATE_CONSTANT) {
-              configHelper.syncUpContractMap(dbInteract)
-                .then(function () {
-                  dataAggregator.aggregateData(timeId, aggregateByTimeId);
-                });
-          } else {
-            //Need to set up the cron again.
-            logger.log("Done aggregation of all the blocks, Need to run the job again after new block verification.");
-            process.exit(1);
-          }
-        })
-        .catch(function (err) {
-          logger.error('\nNot able to fetch block timestamp\n', err);
+          cdmObj.insert({data: JSON.stringify({block_timestamp: timeId}),
+            status:  cdmObj.invertedStatuses[cronDetailConst.pendingStatus],
+            cron_name: CronDetailsModelKlass.aggregator_cron}).fire().then(function(cdRow){
+              state.cronDetailId = cdRow.insertId;
+          });
+
+          AggregateDataKlass.newInstance(state.chainID, timeId).perform()
+            .then(function(response){
+              // Update Cron details once cron is completed.
+              let obj = new CronDetailsModelKlass(state.chainID)
+                , cronstatus = obj.invertedStatuses[cronDetailConst.failedStatus];
+              if(response.isSuccess()){
+                cronstatus = obj.invertedStatuses[cronDetailConst.completeStatus];
+              }
+              obj.update({status: cronstatus}).where({id: state.cronDetailId}).fire().then(function(resp){
+                process.exit(1);
+              });
+            });
+        } else {
+          //Need to set up the cron again.
+          logger.log("Done aggregation of all the blocks, Need to run the job again after new block verification.");
           process.exit(1);
-        });
-    } else {
-      process.exit(1);
-    }
-  }, state.config.poll_interval);
+        }
+      })
+      .catch(function (err) {
+        logger.error('\nNot able to fetch block timestamp\n', err);
+        process.exit(1);
+      });
+  } else {
+    process.exit(1);
+  }
 };
 
 /**
@@ -111,35 +121,34 @@ state.chainID = cliHandler.chainID;
 ProcessLocker.canStartProcess({process_title: 'v_cron_block_aggregator_c_' + cliHandler.chainID });
 ProcessLocker.endAfterTime({time_in_minutes: 120});
 
-state.config = config.getChainConfig(state.chainID);
-if (!state.config) {
-  logger.error('\n\tInvalid chain ID \n');
-  process.exit(1);
-}
-
-// Create required connections and objects
-dbInteract = DbInteract.getInstance(state.config.chainId);
-web3Interact = Web3Interact.getInstance(state.config.chainId);
-dataAggregator = DataAggregator.newInstance(web3Interact, dbInteract, state.config.chainId);
-// logger.log('State Configuration', state);
 
 // GET LAST PROCESSED time id from a status table
-dbInteract.getAggregateLastInsertedTimeId()
-  .then(function (timeId) {
-    logger.log("Last Aggregated time_id ", timeId);
-    if (!timeId) {
-      return dbInteract.getBlockFromBlockNumber(1)
-        .then(function (block) {
+new CronDetailsModelKlass(state.chainID).select('*').where(["cron_name = ?", CronDetailsModelKlass.aggregator_cron]).order_by('id DESC').limit(1).fire()
+  .then(function (cronDetailRows) {
+    let cronRow = cronDetailRows[0];
+    if (!cronRow) {
+      return new BlockModelKlass(state.chainID).select('*').where(["block_number=?", 1]).fire()
+        .then(function (blockArr) {
+          let block = blockArr[0];
           if (!block) {
             logger.log("#getBlockFromBlockNumber(1) returned is undefined");
             process.exit(1);
           }
-          timeId = block.timestamp - (block.timestamp % constants.AGGREGATE_CONSTANT);
+          let timeId = block.block_timestamp - (block.block_timestamp % constants.AGGREGATE_CONSTANT);
+          logger.log("First Block timestamp ", block.block_timestamp);
           logger.log("First timeId ", timeId);
           aggregateByTimeId(timeId);
         });
+    } else if(cronRow.status == new CronDetailsModelKlass(state.chainID).invertedStatuses[cronDetailConst.completeStatus]){
+      let blockData = JSON.parse(cronRow.data);
+      aggregateByTimeId(blockData.block_timestamp + constants.AGGREGATE_CONSTANT);
     } else {
-      aggregateByTimeId(timeId + constants.AGGREGATE_CONSTANT);
+      // If last cron is not completed or failed then delete last aggregated data of that time & run it again.
+      let blockData = JSON.parse(cronRow.data);
+      new AggregatedModelKlass(state.chainID).delete().where(["timestamp=?", blockData.block_timestamp]).fire()
+        .then(function(deleteResponse){
+          aggregateByTimeId(blockData.block_timestamp);
+        })
     }
   })
   .catch(function (err) {

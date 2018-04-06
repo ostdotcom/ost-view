@@ -96,6 +96,41 @@ const BlockSpecificPrototype = {
           return reject("Exception in getLastVerifiedBlockblockNumber:: " + err);
         });
     });
+  },
+
+  getLastVerifiedBlockTimestamp: function () {
+    const oThis = this;
+
+    return new Promise(function(resolve, reject){
+      oThis.select('verified, max(block_timestamp) as max_timestamp, min(block_timestamp) as min_timestamp').group_by('verified').fire().then(function (rows) {
+
+        var unverifiedMinTime = null
+          , verifiedMaxTime = null
+        ;
+
+        for (var i = 0; i < rows.length; i++) {
+          const row = rows[i];
+          if (!row.verified) {
+            unverifiedMinTime = row.min_timestamp;
+          } else {
+            if (verifiedMaxTime){
+              verifiedMaxTime = Math.max(row.max_timestamp, verifiedMaxTime);
+            }else{
+              verifiedMaxTime = row.max_timestamp;
+            }
+          }
+        }
+
+        if (unverifiedMinTime) {
+          return resolve(unverifiedMinTime);
+        } else {
+          return resolve(verifiedMaxTime);
+        }
+      })
+        .catch(function(err){
+          return reject("interact#getLastVerifiedBlockTimestamp error ::" + err);
+        });
+    });
   }
 
 };
