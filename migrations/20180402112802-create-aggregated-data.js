@@ -19,7 +19,10 @@ exports.setup = function(options, seedLink) {
 };
 
 exports.up = function(db) {
-  return createAggregatedTable(db);
+  return createAggregatedTable(db)
+    .then(function () {
+      createAggregateTableIndex(db);
+    })
 };
 
 exports.down = function(db) {
@@ -40,6 +43,10 @@ const createAggregatedTable = function (db) {
     created_at:{type: 'datetime', notNull: true},
     updated_at:{type: 'datetime', notNull: true}
   })
+};
+
+const createAggregateTableIndex = function(db) {
+  return db.addIndex(constants.AGGREGATED_TABLE_NAME, 'at_cai_ts_tti_index', ['contract_address_id', 'timestamp', 'branded_token_transaction_type_id'], true);
 };
 
 const deleteAggregatedTable = function (db) {
