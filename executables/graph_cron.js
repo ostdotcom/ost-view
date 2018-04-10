@@ -21,27 +21,21 @@ const ProcessLockerKlass = require(rootPrefix + '/lib/process_locker')
   ;
 
 // Load internal files
-const Web3Interact = require(rootPrefix + '/lib/web3/interact/rpc_interact')
-  , DbInteract = require(rootPrefix + '/lib/storage/interact')
-  , logger = require(rootPrefix + '/helpers/custom_console_logger')
+const logger = require(rootPrefix + '/helpers/custom_console_logger')
   , config = require(rootPrefix + '/config')
-  , constants = require(rootPrefix + '/config/core_constants')
-  , DataAggregator = require(rootPrefix + '/lib/block_utils/data_aggregator')
+  , GraphDataBuilder = require(rootPrefix + '/lib/block_utils/graph_data_builder')
+  , CronDetailsModelKlass = require(rootPrefix + '/app/models/cron_detail')
+  , cronDetailConst = require(rootPrefix + '/lib/global_constant/cron_details')
   , version = require(rootPrefix + '/package.json').version
   ;
 
-// Variables to hold different objects
-var dbInteract
-  , web3Interact
-  , dataAggregator;
 
 /**
  * Maintain the state run state
  * @type {hash}
  */
-var state = {
+const state = {
   chainID: null,
-  config: null
 };
 
 /**
@@ -64,20 +58,29 @@ state.chainID = cliHandler.chainID;
 
 ProcessLocker.canStartProcess({process_title: 'v_cron_graph_c_' + cliHandler.chainID});
 
-state.config = config.getChainConfig(state.chainID);
-if (!state.config) {
+if (!config.isValidChainId(state.chainID)) {
   logger.error('\n\tInvalid chain ID \n');
   process.exit(1);
 }
 
-// Create required connections and objects
-dbInteract = DbInteract.getInstance(state.config.chainId);
-web3Interact = Web3Interact.getInstance(state.config.chainId);
-dataAggregator = DataAggregator.newInstance(web3Interact, dbInteract, state.config.chainId);
-
-
-dataAggregator.setUpCacheData()
-  .then(function () {
-    logger.log("Setting Up the CompanyData Cache Done");
+// GET LAST PROCESSED time id from a status table
+new CronDetailsModelKlass(state.chainID).select('*').where(["cron_name = ?", CronDetailsModelKlass.aggregator_cron]).order_by('id DESC').limit(1).fire()
+  .then(function (cronDetailRows) {
+    let cronRow = cronDetailRows[0];
+    if (cronRow && (cronRow.status == new CronDetailsModelKlass(state.chainID).invertedStatuses[cronDetailConst.completeStatus])) {
+      let blockData = JSON.parse(cronRow.data);
+      let latestTimestamp = blockData.block_timestamp + constants.AGGREGATE_CONSTANT;
+      GraphDataBuilder.newInstance(state.chainID, latestTimestamp).perform()
+        .then(function(){
+          logger.log('\nGraph Build for latestTimestamp ', latestTimestamp);
+          process.exit(1);
+        });
+    } else {
+      logger.log('\nNo data in CronDetailsModelKlass\n');
+      process.exit(1);
+    }
+  })
+  .catch(function (err) {
+    logger.error('\nNot able to fetch data from CronDetailsModelKlass\n', err);
     process.exit(1);
   });

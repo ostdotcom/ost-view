@@ -19,7 +19,7 @@ define('ADDRESS_TRANSACTIONS_TABLE_NAME', 'address_transactions');
 define('ADDRESS_TOKEN_TRANSFERS_TABLE_NAME', 'address_token_transfers');
 
 define('ADDRESSES_TABLE_NAME','addresses');
-define('TRANSACTIONS_HASHES_TABLE_NAME','transaction_hashes')
+define('TRANSACTIONS_HASHES_TABLE_NAME','transaction_hashes');
 
 define('BRANDED_TOKENS_TABLE_NAME', 'branded_tokens');
 define('BRANDED_TOKENS_STATS_TABLE_NAME', 'branded_token_stats');
@@ -28,6 +28,7 @@ define('TRANSACTION_TYPE_TABLE_NAME', 'transaction_type');
 define('BRANDED_TOKEN_TRANSACTION_TYPES_TABLE_NAME', 'branded_token_transaction_types');
 define('BLOCK_STATUS_TABLE_NAME', 'block_status');
 define('AGGREGATE_STATUS_TABLE_NAME', 'aggregate_status');
+define('GRAPH_DATA_TABLE_NAME', 'graph_data');
 
 // Available columns in tables
 define('BLOCKS_DATA_SEQUENCE', '(block_number, block_hash, parent_hash, difficulty, total_difficulty, gas_limit, gas_used, total_transactions, block_timestamp, verified ,status)');
