@@ -82,7 +82,8 @@ var aggregateByTimeId = function (timeId) {
                 cronstatus = obj.invertedStatuses[cronDetailConst.completeStatus];
               }
               obj.update({status: cronstatus}).where({id: state.cronDetailId}).fire().then(function(resp){
-                process.exit(1);
+                logger.log("aggregateByTimeId AggregateDataKlass");
+                aggregateByTimeId(timeId + constants.AGGREGATE_CONSTANT)
               });
             });
         } else {
@@ -122,6 +123,11 @@ ProcessLocker.canStartProcess({process_title: 'v_cron_block_aggregator_c_' + cli
 ProcessLocker.endAfterTime({time_in_minutes: 120});
 
 
+// todo: use logic as in populate_address_detail
+// initial row in migration
+// only one row in table
+
+
 // GET LAST PROCESSED time id from a status table
 new CronDetailsModelKlass(state.chainID).select('*').where(["cron_name = ?", CronDetailsModelKlass.aggregator_cron]).order_by('id DESC').limit(1).fire()
   .then(function (cronDetailRows) {
@@ -155,3 +161,10 @@ new CronDetailsModelKlass(state.chainID).select('*').where(["cron_name = ?", Cro
     logger.error('\nNot able to fetch last aggregated timestamp)\n', err);
     process.exit(1);
   });
+
+function deleteAggregatedData(blockData) {
+  new AggregatedModelKlass(state.chainID).delete().where(["timestamp=?", blockData.block_timestamp]).fire()
+    .then(function(deleteResponse){
+      return Promise.resolve(blockData.block_timestamp);
+    })
+}
