@@ -143,7 +143,7 @@ router.get("/:contractAddress", contractMiddleware, function (req, res) {
           title: 'OST VIEW | '+ response.company_name +' ('+response.company_symbol+') token',
           description: 'OST VIEW is the home grown block explorer from OST for OpenST Utility Blockchains.',
           keywords: 'OST, Simple Token, Utility Chain, Blockchain',
-          robots: 'noindex, nofollow',
+          robots: 'index, follow',
           image: 'https://dxwfxs8b4lg24.cloudfront.net/ost-view/images/ost-view-og-image-1.jpg.jpg'
         },
         view_data:{
