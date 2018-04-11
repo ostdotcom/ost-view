@@ -37,22 +37,35 @@ const ProcessLocker = new ProcessLockerKlass()
   Graph cron query aggregator_cron's completed status of block timestamp, for latest timeId.
  */
 
-
+/**
+ * To start graph cron
+ * @param chainId chain Id
+ */
 function startGraphCron(chainId) {
   // GET LAST PROCESSED time id from a status table
   new CronDetailsModelKlass(chainId).select('*').where(["cron_name = ?", CronDetailsModelKlass.aggregator_cron]).order_by('id DESC').limit(1).fire()
     .then(function (cronDetailRows) {
       let cronRow = cronDetailRows[0];
-      if (cronRow && (cronRow.status == new CronDetailsModelKlass(chainId).invertedStatuses[cronDetailConst.completeStatus])) {
+      if (cronRow) {
+        let latestTimestamp;
         let blockData = JSON.parse(cronRow.data);
-        let latestTimestamp = blockData.block_timestamp + constants.AGGREGATE_CONSTANT;
-        GraphDataBuilder.newInstance(chainId, latestTimestamp).perform()
-          .then(function () {
-            logger.log('\nGraph Build for latestTimestamp ', latestTimestamp);
-            process.exit(1);
-          });
+        if(blockData.block_timestamp) {
+          if (cronRow.status == new CronDetailsModelKlass(chainId).invertedStatuses[cronDetailConst.completeStatus]) {
+            latestTimestamp = blockData.block_timestamp + constants.AGGREGATE_CONSTANT;
+          }else{
+            latestTimestamp = blockData.block_timestamp;
+          }
+          GraphDataBuilder.newInstance(chainId, latestTimestamp).perform()
+            .then(function () {
+              logger.log('\nGraph Build for latestTimestamp ', latestTimestamp);
+              process.exit(1);
+            });
+        } else {
+          logger.notify("sgc_1", '\nCronDetailsModelKlass :: block_timestamp is zero in aggregator_cron \n');
+          process.exit(1);
+        }
       } else {
-        logger.log('\nNo data in CronDetailsModelKlass\n');
+        logger.notify("sgc_2", '\nCronDetailsModelKlass :: No data in aggregator_cron \n');
         process.exit(1);
       }
     })
