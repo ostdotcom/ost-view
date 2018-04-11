@@ -41,7 +41,7 @@ const GraphDataSpecificPrototype = {
 
   timeFrames: timeFrames,
 
-  invertedTimeFrame: invertedTimeFrames,
+  invertedTimeFrames: invertedTimeFrames,
 
   enums: {
     'time_frame': {
@@ -81,7 +81,7 @@ const GraphDataSpecificPrototype = {
 
   getHourGraph : function(brandedTokenId, selectColumnsArray) {
     const oThis = this;
-    let selectColumns = '';
+    let selectColumns = 'time_id ';
     for (let ind = 0; ind < selectColumnsArray;ind++) {
       selectColumns += 'SUM(' + selectColumnsArray[ind] + ')';
     }
@@ -95,7 +95,7 @@ const GraphDataSpecificPrototype = {
 
   getDayGraph : function(brandedTokenId, selectColumnsArray) {
     const oThis = this;
-    let selectColumns = '';
+    let selectColumns = 'time_id ';
     for (let ind = 0; ind < selectColumnsArray;ind++) {
       selectColumns += 'SUM(' + selectColumnsArray[ind] + ')';
     }
@@ -109,7 +109,7 @@ const GraphDataSpecificPrototype = {
 
   getWeekGraph : function(brandedTokenId, selectColumnsArray) {
     const oThis = this;
-    let selectColumns = '';
+    let selectColumns = 'time_id ';
     for (let ind = 0; ind < selectColumnsArray;ind++) {
       selectColumns += 'SUM(' + selectColumnsArray[ind] + ')';
     }
@@ -123,7 +123,7 @@ const GraphDataSpecificPrototype = {
 
   getMonthGraph : function(brandedTokenId, selectColumnsArray) {
     const oThis = this;
-    let selectColumns = '';
+    let selectColumns = 'time_id ';
     for (let ind = 0; ind < selectColumnsArray;ind++) {
       selectColumns += 'SUM(' + selectColumnsArray[ind] + ')';
     }
@@ -138,7 +138,7 @@ const GraphDataSpecificPrototype = {
 
   getYearGraph : function(brandedTokenId, selectColumnsArray) {
     const oThis = this;
-    let selectColumns = '';
+    let selectColumns = 'time_id ';
     for (let ind = 0; ind < selectColumnsArray;ind++) {
       selectColumns += 'SUM(' + selectColumnsArray[ind] + ')';
     }

@@ -70,7 +70,7 @@ var aggregateByTimeId = function (timeId) {
           await cdmObj.update({data: JSON.stringify({block_timestamp: timeId}),
             status: cdmObj.invertedStatuses[cronDetailConst.pendingStatus]})
             .where(['cron_name = ?', CronDetailsModelKlass.aggregator_cron])
-            .fire()
+            .fire();
           AggregateDataKlass.newInstance(state.chainID, timeId).perform()
             .then(function(response){
               // Update Cron details once cron is completed.
@@ -178,7 +178,7 @@ function deleteAggregatedData(blockData) {
 }
 
 function startAggregatorFromFirstBlock() {
-  return new BlockModelKlass(state.chainID).select('*').where(["block_number=?", 0]).fire()
+  return new BlockModelKlass(state.chainID).select('*').where(["block_number=?", 1]).fire()
     .then(function (blockArr) {
       let block = blockArr[0];
       if (!block) {

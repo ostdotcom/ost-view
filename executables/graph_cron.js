@@ -23,6 +23,7 @@ const ProcessLockerKlass = require(rootPrefix + '/lib/process_locker')
 // Load internal files
 const logger = require(rootPrefix + '/helpers/custom_console_logger')
   , config = require(rootPrefix + '/config')
+  , constants = require(rootPrefix + '/config/core_constants')
   , GraphDataBuilder = require(rootPrefix + '/lib/block_utils/graph_data_builder')
   , CronDetailsModelKlass = require(rootPrefix + '/app/models/cron_detail')
   , cronDetailConst = require(rootPrefix + '/lib/global_constant/cron_details')
