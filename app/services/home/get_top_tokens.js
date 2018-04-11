@@ -75,19 +75,19 @@ GetTopTokensKlass.prototype = {
         , topTokenData = btStats
       ;
 
-      topTokenData['rank'] = rank+i;
-      topTokenData['company_name'] = btDetails['company_name'];
-      topTokenData['company_symbol'] = btDetails['company_symbol'];
-      topTokenData['conversion_rate'] = btDetails['conversion_rate'];
-      topTokenData['symbol_icon'] = btDetails['symbol_icon'];
+      if (btDetails){
+        topTokenData['rank'] = rank+i;
+        topTokenData['company_name'] = btDetails['company_name'];
+        topTokenData['company_symbol'] = btDetails['company_symbol'];
+        topTokenData['conversion_rate'] = btDetails['conversion_rate'];
+        topTokenData['symbol_icon'] = btDetails['symbol_icon'];
 
-
-      brandedTokenSequence.push(topTokenData);
+        brandedTokenSequence.push(topTokenData);
+      }
     }
 
     finalFormattedData['top_tokens'] = brandedTokenSequence;
     finalFormattedData['contract_addresses'] = brandedTokenData
-    console.log("finalFormattedData : ",finalFormattedData);
 
     return Promise.resolve(responseHelper.successWithData(finalFormattedData));
 

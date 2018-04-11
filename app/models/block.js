@@ -111,7 +111,7 @@ const BlockSpecificPrototype = {
         for (var i = 0; i < rows.length; i++) {
           const row = rows[i];
           if (!row.verified) {
-            unverifiedMinTime = row.min_timestamp;
+            unverifiedMinTime = row.min_timestamp -1;
           } else {
             if (verifiedMaxTime){
               verifiedMaxTime = Math.max(row.max_timestamp, verifiedMaxTime);

@@ -151,11 +151,11 @@ cronDetailObj.select().where({cron_name: CronDetailKlass.address_detail_populate
       initAddressDetailProcess(blockNumber, startFromIndex);
 
     } else {
-      logger.log("No row found in cron_details table for address_detail_populate_cron");
+      logger.notify("padc_1","No row found in cron_details table for address_detail_populate_cron");
       process.exit(1);
     }
   })
   .catch(function (err) {
-    logger.error('\nException while fetching cronDetailObj for address_detail_populate_cron\n', err);
+    logger.notify("padc_2",'\nException while fetching cronDetailObj for address_detail_populate_cron\n', err);
     process.exit(1);
   });

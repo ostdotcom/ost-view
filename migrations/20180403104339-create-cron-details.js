@@ -51,12 +51,12 @@ const createIndexOnCronDetailsTable = function (db) {
 const createInitialRowsForCronDetail = function (db) {
   var currentDate = new Date();
   var cronData = JSON.stringify({block_number: 0, start_from_index: 0});
-  var sqlStatement = "INSERT INTO CRON_DETAILS(cron_name, data, created_at, updated_at) VALUES('" + CronDetailKlass.address_detail_populate_cron + "', '"+ cronData + "', NOW(), NOW() ) ";
+  var sqlStatement = "INSERT INTO CRON_DETAILS(cron_name, data, status, created_at, updated_at) VALUES('" + CronDetailKlass.address_detail_populate_cron + "', '"+ cronData + "',2, NOW(), NOW() ) ";
   db.runSql(sqlStatement);
 
   //Graph Cron data
   cronData = JSON.stringify({hour: {timestamp: 0}, day: {timestamp: 0}, month: {timestamp: 0}});
-  sqlStatement = "INSERT INTO CRON_DETAILS(cron_name, data, created_at, updated_at) VALUES('" + CronDetailKlass.graph_cron + "', '"+ cronData + "', NOW(), NOW() ) ";
+  sqlStatement = "INSERT INTO CRON_DETAILS(cron_name, data, status, created_at, updated_at) VALUES('" + CronDetailKlass.graph_cron + "', '"+ cronData + "',2, NOW(), NOW() ) ";
   db.runSql(sqlStatement);
 };
 

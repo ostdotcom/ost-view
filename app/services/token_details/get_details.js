@@ -5,6 +5,8 @@ const rootPrefix = "../../.."
   , BrandedTokenCacheKlass = require(rootPrefix + '/lib/cache_multi_management/branded_tokens')
   , AddressIdMapCacheKlass = require(rootPrefix+'/lib/cache_multi_management/addressIdMap')
   , coreConstants = require(rootPrefix + '/config/core_constants')
+  , BrandedTokenStatsDetails = require (rootPrefix + '/lib/cache_multi_management/branded_token_stats')
+  , TokenUnits = require(rootPrefix + '/helpers/tokenUnits')
 ;
 
 /**
@@ -53,6 +55,9 @@ GetBrandedTokenDetailsKlass.prototype = {
     const contaractAddressId = addressInfo.id
       , brandedTokenDetails = await new BrandedTokenCacheKlass({chain_id: oThis.chainId, contract_address_ids: [contaractAddressId]}).fetch()
       , brandedTokenDetailsData = brandedTokenDetails.data
+      , brandedTokenStats = await new BrandedTokenStatsDetails({chain_id: oThis.chainId,contract_address_ids : [contaractAddressId]}).fetch()
+      , brandedTokenStatsData = brandedTokenStats.data
+      , brandedTokenStatsDetails = brandedTokenStatsData[contaractAddressId]
     ;
 
     if (brandedTokenDetails.isFailure() || !brandedTokenDetailsData[contaractAddressId]){
@@ -62,11 +67,8 @@ GetBrandedTokenDetailsKlass.prototype = {
     const tokenDetails = brandedTokenDetailsData[contaractAddressId];
 
     finalFormattedHomeData['token_details'] = tokenDetails;
-    finalFormattedHomeData['token_info'] = oThis.getTokenDetails();
-    finalFormattedHomeData['token_stats'] = oThis.getTokenStats();
-
-    console.log("finalFormattedHomeData : ",finalFormattedHomeData);
-
+    finalFormattedHomeData['token_info'] = oThis.getTokenDetails(brandedTokenStatsDetails);
+    finalFormattedHomeData['token_stats'] = oThis.getTokenStats(brandedTokenStatsDetails);
 
     return Promise.resolve(responseHelper.successWithData(finalFormattedHomeData));
   }
@@ -81,15 +83,15 @@ GetBrandedTokenDetailsKlass.prototype = {
     ;
 
     if (token_details && token_details.market_cap){
-      marketCapValue = TokenUnits.convertToNormal(token_details['market_cap']).toFormat(0);
+      marketCapValue = TokenUnits.convertToNormal(token_details['market_cap']).toFormat(0).toString(10);
     }
 
     if (token_details && token_details.token_holders){
-      tokenHoldersValue = TokenUnits.toBigNumber(token_details['token_holders']).toFormat(0);
+      tokenHoldersValue = TokenUnits.toBigNumber(token_details['token_holders']).toFormat(0).toString(10);
     }
 
     if (token_details && token_details.total_supply){
-      totalSupplyValue = TokenUnits.convertToNormal(token_details['total_supply']).toFormat(0)
+      totalSupplyValue = TokenUnits.convertToNormal(token_details['total_supply']).toFormat(0).toString(10)
     }
     var details = [
       {
@@ -126,8 +128,8 @@ GetBrandedTokenDetailsKlass.prototype = {
       tokentransfersValue = TokenUnits.toBigNumber(token_details.token_transfers).toFormat(0).toString(10);
     }
 
-    if (token_details && token_details.token_volume){
-      tokenVolumeValue = TokenUnits.convertToNormal(token_details.token_volume).toFormat(0).toString(10)
+    if (token_details && token_details.token_ost_volume){
+      tokenVolumeValue = TokenUnits.convertToNormal(token_details.token_ost_volume).toFormat(0).toString(10)
     }
 
     var details = {

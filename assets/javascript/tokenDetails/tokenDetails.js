@@ -139,7 +139,7 @@
               , to = element.t_to
               , contract_address = element.contract_address
               , tokens = element.tokens
-              , price = contractAddresses[contract_address].price
+              , conversion_rate = contractAddresses[contract_address].conversion_rate
               , timestamp = element.timestamp
               ;
 
@@ -161,7 +161,7 @@
             });
 
             element['tokens'] = PriceOracle.getDisplayBt(tokens);
-            element['ost_amount'] = PriceOracle.getDisplayBtToOst(tokens, price);
+            element['ost_amount'] = PriceOracle.getDisplayBtToOst(tokens, conversion_rate);
 
             element['company_name'] = contractAddresses[contract_address].company_name;
             element['company_symbol'] = contractAddresses[contract_address].company_symbol;

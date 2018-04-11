@@ -31,7 +31,6 @@ GetVolumeGraphKlass.prototype = {
    * @return {Promise<void>}
    */
   perform: async function () {
-
     return Promise.resolve(responseHelper.successWithData());
   }
 }

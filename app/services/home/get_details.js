@@ -3,6 +3,8 @@
 const rootPrefix = "../../.."
   , responseHelper = require(rootPrefix + '/lib/formatter/response')
   , coreConstants = require(rootPrefix + '/config/core_constants')
+  , TokenUnits = require(rootPrefix + '/helpers/tokenUnits')
+  , HomePageStatsCacheKlass = require (rootPrefix + '/lib/cache_management/home_page_stats')
 ;
 
 /**
@@ -33,11 +35,13 @@ GetHomeDetailsKlass.prototype = {
   perform: async function(){
     const oThis = this
       , finalFormattedHomeData = {}
+      , homePageStatsData = await  new HomePageStatsCacheKlass({chain_id:oThis.chainId}).fetch()
+      , homePageStats = homePageStatsData.data
     ;
 
-    finalFormattedHomeData['home_data'] = '';
-    finalFormattedHomeData['chain_info'] = oThis.getChainInfo();
-    finalFormattedHomeData['chain_stats'] = oThis.getChainStats();
+    finalFormattedHomeData['home_data'] = homePageStats;
+    finalFormattedHomeData['chain_info'] = oThis.getChainInfo(homePageStats);
+    finalFormattedHomeData['chain_stats'] = oThis.getChainStats(homePageStats);
 
     return Promise.resolve(responseHelper.successWithData(finalFormattedHomeData));
   }
@@ -51,16 +55,16 @@ GetHomeDetailsKlass.prototype = {
       , marketCapValue = 0
     ;
 
-    if (chain_data && chain_data.maxId){
-      communitiesValue = TokenUnits.toBigNumber(chain_data.maxId).toFormat(0);
+    if (chain_data && chain_data.communities_count){
+      communitiesValue = TokenUnits.toBigNumber(chain_data.communities_count).toFormat(0);
     }
 
-    if (chain_data && chain_data.tokenHolders){
-      tokenHoldersValue = TokenUnits.toBigNumber(chain_data.tokenHolders).toFormat(0)
+    if (chain_data && chain_data.holders_count){
+      tokenHoldersValue = TokenUnits.toBigNumber(chain_data.holders_count).toFormat(0)
     }
 
-    if (chain_data && chain_data.marketCap){
-      marketCapValue = TokenUnits.convertToNormal(chain_data.marketCap).toFormat(0)
+    if (chain_data && chain_data.market_cap){
+      marketCapValue = TokenUnits.convertToNormal(chain_data.market_cap).toFormat(0)
     }
     const details = [
       {
@@ -89,20 +93,20 @@ GetHomeDetailsKlass.prototype = {
   getChainStats: function (chain_data) {
     const oThis = this;
 
-    var tokentransfersValue = 0
-      , tokenVolumeValue = 0
+    var tokenTransfersValue = 0
+      , tokenOstVolumeValue = 0
     ;
 
     if (chain_data && chain_data.token_transfers){
-      tokentransfersValue = TokenUnits.toBigNumber().toFormat(0).toString(10);
+      tokenTransfersValue = TokenUnits.toBigNumber(chain_data.token_transfers).toFormat(0).toString(10);
     }
 
-    if (chain_data && chain_data.token_volume){
-      tokenVolumeValue = TokenUnits.convertToNormal(chain_data['token_volume']).toFormat(0).toString(10)
+    if (chain_data && chain_data.token_ost_volume){
+      tokenOstVolumeValue = TokenUnits.convertToNormal(chain_data.token_ost_volume).toFormat(0).toString(10)
     }
     const details = {
-      token_transfers: tokentransfersValue,
-      token_volume: tokenVolumeValue
+      token_transfers: tokenTransfersValue,
+      token_volume: tokenOstVolumeValue
     };
 
     return details;

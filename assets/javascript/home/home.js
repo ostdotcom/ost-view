@@ -154,8 +154,8 @@
             , tokenDetailsURL = meta.token_details_redirect_url
             , contractAddress = element.contract_address
             , tokens = element.tokens
-            , price = contractAddresses[contractAddress].price
-            ,timestamp = element.timestamp
+            , conversionRate = contractAddresses[contractAddress].conversion_rate
+            , timestamp = element.timestamp
             ;
 
             element['timestamp'] = toTimeAgo(timestamp);
@@ -177,7 +177,7 @@
             });
 
             element['tokens'] = PriceOracle.getDisplayBt(tokens);
-            element['ost_amount'] = PriceOracle.getDisplayBtToOst(tokens, price);
+            element['ost_amount'] = PriceOracle.getDisplayBtToOst(tokens, conversionRate);
 
             element['company_name'] = contractAddresses[contractAddress].company_name;
             element['company_symbol'] = contractAddresses[contractAddress].company_symbol;
@@ -266,10 +266,13 @@
             element['token_details_redirect_url'] =  Handlebars.compile(tokenDetailsURL)({
               contract_addr: contractAddress
             });
-            var tokenOstVolume = convertToBigNumber(element.token_ost_volume);
-            element['token_ost_volume'] = PriceOracle.getDisplayFiat(tokenOstVolume);
+            var tokenOstVolume = convertToBigNumber(element.token_ost_volume)
+              , marketCapInEth = PriceOracle.toEtherFromWei(element.market_cap)
+              , tokenOstVolumeInEth = PriceOracle.toEtherFromWei(tokenOstVolume)
+            ;
+            element['token_ost_volume'] = PriceOracle.getDisplayFiat(tokenOstVolumeInEth);
             element['price'] = PriceOracle.getDisplayBtToOstPrice(element.conversion_rate);
-            element['market_cap'] = PriceOracle.getDisplayFiat(element.market_cap);
+            element['market_cap'] = PriceOracle.getDisplayFiat(marketCapInEth);
 
           });
         }

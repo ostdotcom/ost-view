@@ -52,6 +52,6 @@ const deleteBrandedTokenTable = function (db) {
 const createInitialRowsForBrandedTokenTable = function (db) {
   const currentDate = new Date();
   const timestamp = currentDate.getTime();
-  const sqlStatement = "INSERT INTO " + constants.BRANDED_TOKENS_TABLE_NAME + " VALUES (0, 'OST', 0, 'OST', '0', 1, '',"+ timestamp +", NOW(), NOW())";
+  const sqlStatement = "INSERT INTO " + constants.BRANDED_TOKENS_TABLE_NAME + " VALUES (0, 'OST', 0, 'OST', '0', 1, '',"+ timestamp/1000 +", NOW(), NOW())";
   return db.runSql(sqlStatement);
 };

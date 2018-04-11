@@ -43,8 +43,7 @@ GetAddressDetailsKlass.prototype = {
       return Promise.resolve(responseHelper.successWithData());
     }
 
-    const addressData =  addressDetails.data
-      , addressInfo = addressData[oThis.address]
+    const addressInfo = addressDetailsData[oThis.address]
     ;
 
     finalAddressDetails['address_details'] = addressInfo;
