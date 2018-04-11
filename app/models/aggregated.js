@@ -39,5 +39,5 @@ AggregatedKlass.DATA_SEQUENCE_ARRAY = ['contract_address_id', 'branded_token_tra
 module.exports = AggregatedKlass;
 
 
-// ttk = require('./app/models/token_transaction')
+// ttk = require('./app/models/aggregated')
 // new ttk().select('*').where('id>1').limit('10').fire().then(console.log);
