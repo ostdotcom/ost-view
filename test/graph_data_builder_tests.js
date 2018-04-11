@@ -17,7 +17,7 @@ const testChainId = 101
 ;
 
 
-describe('Graph Data Builder process hourly time frame', function () {
+describe('Graph Data Builder update aggregate cron table', function () {
   it('processHourTimeFrame', function () {
 
     const blockFetcher = GraphDataBuilder.newInstance(testChainId);

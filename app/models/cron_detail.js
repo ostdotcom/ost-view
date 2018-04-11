@@ -47,6 +47,7 @@ Object.assign(CronDetailKlass.prototype, CronDetailsSpecificPrototype);
 
 CronDetailKlass.address_detail_populate_cron = 'address_detail_populate_cron';
 CronDetailKlass.aggregator_cron = 'aggregator_cron';
+CronDetailKlass.graph_cron = 'graph_cron';
 
 module.exports = CronDetailKlass;
 
