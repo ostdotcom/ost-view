@@ -54,6 +54,12 @@ const createInitialRowsForCronDetail = function (db) {
   var sqlStatement = "INSERT INTO CRON_DETAILS(cron_name, data, status, created_at, updated_at) VALUES('" + CronDetailKlass.address_detail_populate_cron + "', '"+ cronData + "',2, NOW(), NOW() ) ";
   db.runSql(sqlStatement);
 
+
+  //aggregate Cron data
+  cronData = JSON.stringify({block_timestamp: 0});
+  sqlStatement = "INSERT INTO CRON_DETAILS(cron_name, data, status, created_at, updated_at) VALUES('" + CronDetailKlass.aggregator_cron + "', '"+ cronData + "',2, NOW(), NOW() ) ";
+  db.runSql(sqlStatement);
+
   //Graph Cron data
   cronData = JSON.stringify({hour: {timestamp: 0}, day: {timestamp: 0}, month: {timestamp: 0}});
   sqlStatement = "INSERT INTO CRON_DETAILS(cron_name, data, status, created_at, updated_at) VALUES('" + CronDetailKlass.graph_cron + "', '"+ cronData + "',2, NOW(), NOW() ) ";
