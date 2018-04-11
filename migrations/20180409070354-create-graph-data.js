@@ -30,7 +30,7 @@ const createGraphDataTable = function (db) {
     id: {type: 'bigint', notNull: true, primaryKey: true, autoIncrement: true},
     contract_address_id: {type: 'bigint', notNull: true},
     time_frame: {type:'int', notNull: true},
-    time_id: {type:'int', notNull: true},
+    timestamp: {type:'int', notNull: true},
     branded_token_transaction_type_id: {type: 'bigint', notNull: true},
 
     total_transactions: {type:'bigint', notNull: true, default: 0},
@@ -45,7 +45,7 @@ const createGraphDataTable = function (db) {
 };
 
 const createGraphDataTableIndex = function(db) {
-  return db.addIndex('graph_data', 'gd_cai_tf_ti_tti_index', ['contract_address_id', 'time_frame', 'time_id', 'branded_token_transaction_type_id'], true);
+  return db.addIndex('graph_data', 'gd_cai_tf_ti_tti_index', ['contract_address_id', 'time_frame', 'timestamp', 'branded_token_transaction_type_id'], true);
 };
 
 const deleteGraphDataTable = function (db) {

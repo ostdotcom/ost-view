@@ -153,7 +153,7 @@ const GraphDataSpecificPrototype = {
 
 Object.assign(GraphDataKlass.prototype, GraphDataSpecificPrototype);
 
-GraphDataKlass.DATA_SEQUENCE_ARRAY = ['contract_address_id', 'time_frame', 'time_id', 'branded_token_transaction_type_id', 'total_transactions', 'total_transaction_value', 'total_transfers', 'total_transfer_value', 'token_ost_volume'];
+GraphDataKlass.DATA_SEQUENCE_ARRAY = ['contract_address_id', 'time_frame', 'timestamp', 'branded_token_transaction_type_id', 'total_transactions', 'total_transaction_value', 'total_transfers', 'total_transfer_value', 'token_ost_volume'];
 
 module.exports = GraphDataKlass;
 
