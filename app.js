@@ -175,8 +175,7 @@ if (cluster.isMaster) {
   var connectAssetConfig = {
     paths: [
       path.join(__dirname, 'assets/css'),
-      path.join(__dirname, 'assets/javascript'),
-      path.join(__dirname, 'node_modules')
+      path.join(__dirname, 'assets/js')
     ],
     buildDir: path.join(__dirname, 'builtAssets'),
     fingerprinting: true,
