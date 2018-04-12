@@ -303,7 +303,7 @@
           {
             type: 'number',
             opt_label: 'Transaction Count',
-            opt_id: 'transaction_count'
+            opt_id: 'token_transfers'
           }
         ],
         options: {
@@ -421,7 +421,7 @@
           {
             type: 'number',
             opt_label: 'Transaction Volume',
-            opt_id: 'ost_amount'
+            opt_id: 'token_ost_volume'
           }
         ],
         options: {
