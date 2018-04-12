@@ -82,6 +82,11 @@ tokenUnits.mul = function(num1, num2) {
     return returnValue.toString(10);
 };
 
+tokenUnits.div = function(num1, num2) {
+  var returnValue = new BigNumber(String(num1)).div(new BigNumber(String(num2)));
+  return returnValue.toString(10);
+};
+
 tokenUnits.toBigNumber = function(num) {
 
     if (typeof num === BigNumber){
