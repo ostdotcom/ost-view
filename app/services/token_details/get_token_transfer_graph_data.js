@@ -4,6 +4,9 @@ const rootPrefix = "../../.."
   , responseHelper = require(rootPrefix + '/lib/formatter/response')
   , AddressesIdMapCacheKlass = require(rootPrefix + '/lib/cache_multi_management/addressIdMap')
   , TokenTransferGraphCacheKlass = require(rootPrefix + '/lib/cache_management/token_transfer_graph_data')
+  , CronDetailsModelKlass = require(rootPrefix + '/app/models/cron_detail')
+  , cronDetailConst = require(rootPrefix + '/lib/global_constant/cron_details')
+  , constants = require(rootPrefix + '/config/core_constants')
 ;
 
 /**
@@ -45,17 +48,35 @@ GetTokenTransferGraphKlass.prototype = {
         }).fetch()
           , responseData = response.data;
         if (response.isFailure() || !responseData[oThis.contractAddress]) {
-          throw "GetTokenTransferGraphKlass :: AddressesIdMapCacheKlass :: response Failure Or contract Address not found ::" + oThis.contractAddress;
+          return Promise.resolve(responseHelper.error("a_s_ttgd_3", "GetTokenTransferGraphKlass :: AddressesIdMapCacheKlass :: response Failure Or contract Address not found ::" + oThis.contractAddress));
         }
         contractAddressId = responseData[oThis.contractAddress].id;
       } else {
         contractAddressId = 0;
       }
 
+
+      const cronDetailsRow = await (new CronDetailsModelKlass(oThis.chainId)).select('*').where(["cron_name = ?", CronDetailsModelKlass.aggregator_cron]).order_by('id DESC').limit(1).fire()
+        , cronRow = cronDetailsRow[0]
+      ;
+      let latestTimestamp = 0;
+      if (cronRow) {
+        let blockData = JSON.parse(cronRow.data);
+        if (blockData.block_timestamp) {
+          if (Number(cronRow.status) === Number(new CronDetailsModelKlass(oThis.chainId).invertedStatuses[cronDetailConst.completeStatus])) {
+            latestTimestamp = blockData.block_timestamp + constants.AGGREGATE_CONSTANT;
+          } else {
+            latestTimestamp = blockData.block_timestamp;
+          }
+        }
+      }
+
+
       const tokenTransferGraphResponse = await new TokenTransferGraphCacheKlass({
         chain_id: oThis.chainId,
         contract_address_id: contractAddressId,
-        duration: oThis.duration
+        duration: oThis.duration,
+        latestTimestamp: latestTimestamp
       }).fetch();
 
       if (tokenTransferGraphResponse.isFailure()) {
