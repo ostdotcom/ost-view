@@ -57,7 +57,7 @@ const GraphDataSpecificPrototype = {
       , noOfRows = params.noOfRows
       , selectColumns = params.selectColumns
     ;
-    let response = oThis.select(selectColumns).where({contract_address_id: brandedTokenId, time_frame: oThis.invertedTimeFrame[timeFrame]})
+    let response = oThis.select(selectColumns).where({contract_address_id: brandedTokenId, time_frame: oThis.invertedTimeFrames[timeFrame]})
       .group_by('time_id')
       .order_by('time_id')
       .limit(noOfRows)
@@ -72,7 +72,7 @@ const GraphDataSpecificPrototype = {
       , timeFrame = params.timeFrame
       , selectColumns = params.selectColumns
     ;
-    let response = oThis.select(selectColumns).where({contract_address_id: brandedTokenId, time_frame: oThis.invertedTimeFrame[timeFrame]})
+    let response = oThis.select(selectColumns).where({contract_address_id: brandedTokenId, time_frame: oThis.invertedTimeFrames[timeFrame]})
       .group_by('branded_token_transaction_type_id')
       .fire();
 

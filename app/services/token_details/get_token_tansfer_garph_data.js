@@ -4,6 +4,7 @@ const rootPrefix = "../../.."
   , responseHelper = require(rootPrefix + '/lib/formatter/response')
   , coreConstant = require(rootPrefix + '/config/core_constants')
   , AddressesIdMapCacheKlass = require(rootPrefix + '/lib/cache_multi_management/addressIdMap.js')
+  , TokenTransferGraphCacheKlass = require(rootPrefix + '/lib/cache_management/token_transfer_graph_data')
 ;
 
 /**
@@ -34,16 +35,37 @@ GetTokenTransferGraphKlass.prototype = {
   perform: async function () {
     const oThis = this;
 
-    const response  = await new AddressesIdMapCacheKlass({chain_id: oThis.chainId, addresses:[oThis.contractAddress]}).fetch()
-      , responseData = response.data;
-    if (response.isFailure() || !responseData[oThis.contractAddress]){
-      throw "GetTokenTransferGraphKlass :: AddressesIdMapCacheKlass :: response Failure Or contract Address not found ::" + oThis.contractAddress;
+    let contractAddressId = 0;
+
+    try {
+      //Check for common data
+      if (Number(oThis.contractAddress) !== 0) {
+        const response = await new AddressesIdMapCacheKlass({
+          chain_id: oThis.chainId,
+          addresses: [oThis.contractAddress]
+        }).fetch()
+          , responseData = response.data;
+        if (response.isFailure() || !responseData[oThis.contractAddress]) {
+          throw "GetTokenTransferGraphKlass :: AddressesIdMapCacheKlass :: response Failure Or contract Address not found ::" + oThis.contractAddress;
+        }
+        contractAddressId = responseData[oThis.contractAddress];
+      } else {
+        contractAddressId = 0;
+      }
+
+      const tokenTransferGraphResponse = await new TokenTransferGraphCacheKlass({
+        chain_id: oThis.chainId,
+        contract_address_id: contractAddressId,
+        duration: oThis.duration
+      }).fetch();
+
+      if (tokenTransferGraphResponse.isFailure()) {
+        return Promise.resolve(responseHelper.error("a_s_ttgd_1", "Fail to fetch graph data for token transfers"));
+      }
+      return Promise.resolve(responseHelper.successWithData(tokenTransferGraphResponse.data));
+    } catch (err) {
+      return Promise.resolve(responseHelper.error("a_s_ttgd_1", "Fail to fetch graph data for token transfers"));
     }
-
-    const contractAddressId = responseData[oThis.contractAddress];
-
-    //TODO: fetch graph data
-    return Promise.resolve(responseHelper.successWithData());
   }
 };
 

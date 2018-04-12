@@ -187,7 +187,7 @@ router.get("/:contractAddress/graph/numberOfTransactions/:duration",decodeJwt, f
       if (requestResponse.isSuccess()) {
         const responseData = responseHelper.successWithData({
           result_type: "transaction_type",
-          transaction_type: requestResponse.data,
+          transaction_type: requestResponse.data.graph_data,
           meta: {
             duaration: req.params.duration
           }
@@ -256,7 +256,7 @@ router.get("/:contractAddress/graph-date/numberOfTransactions/:duration", functi
       if (requestResponse.isSuccess()) {
         const responseData = responseHelper.successWithData({
           result_type: "transaction_type",
-          transaction_type: requestResponse.data,
+          transaction_type: requestResponse.data.graph_data,
           meta: {
             duaration: req.params.duration
           }
