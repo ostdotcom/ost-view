@@ -180,7 +180,7 @@ function processTokenDetailsResponse(response, req, res) {
 
 router.get("/:contractAddress/graph/numberOfTransactions/:duration",decodeJwt, function (req, res, next) {
 
-  const getDetailsKlass = require(rootPrefix + '/app/services/token_details/get_token_transaction_graph_data');
+  const getDetailsKlass = require(rootPrefix + '/app/services/token_details/get_token_transfer_graph_data');
 
   routeHelper.performer(req, res, next, getDetailsKlass, 'r_td_g_nt_1')
     .then(function (requestResponse) {
@@ -249,7 +249,7 @@ router.get("/:contractAddress/graph/transactionsByType/:duration",decodeJwt, fun
 
 router.get("/:contractAddress/graph-date/numberOfTransactions/:duration", function (req, res, next) {
 
-  const getDetailsKlass = require(rootPrefix + '/app/services/token_details/get_token_tansfer_garph_data');
+  const getDetailsKlass = require(rootPrefix + '/app/services/token_details/get_token_transfer_graph_data');
 
   routeHelper.performer(req, res, next, getDetailsKlass, 'r_td_g_nt_2')
     .then(function (requestResponse) {

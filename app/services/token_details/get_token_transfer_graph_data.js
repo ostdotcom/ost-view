@@ -2,13 +2,12 @@
 
 const rootPrefix = "../../.."
   , responseHelper = require(rootPrefix + '/lib/formatter/response')
-  , coreConstant = require(rootPrefix + '/config/core_constants')
   , AddressesIdMapCacheKlass = require(rootPrefix + '/lib/cache_multi_management/addressIdMap')
-  ,TokenTransactionGraphCacheKlass = require(rootPrefix + '/lib/cache_management/token_transaction_graph_data')
+  , TokenTransferGraphCacheKlass = require(rootPrefix + '/lib/cache_management/token_transfer_graph_data')
 ;
 
 /**
- * Get details of volume graph for a branded token
+ * Get details of token transfer graph for  branded token
  *
  * @param {object} params - this is object with keys.
  *                 chainId - Chain Id.
@@ -16,7 +15,7 @@ const rootPrefix = "../../.."
  *
  * @Constructor
  */
-const GetTokenTransactionGraphKlass = function(params){
+const GetTokenTransferGraphKlass = function(params){
   const oThis = this;
 
   oThis.chainId = params.chainId;
@@ -25,7 +24,7 @@ const GetTokenTransactionGraphKlass = function(params){
 };
 
 
-GetTokenTransactionGraphKlass.prototype = {
+GetTokenTransferGraphKlass.prototype = {
 
   /**
    * Perform operation of getting recent token transfers details
@@ -46,32 +45,32 @@ GetTokenTransactionGraphKlass.prototype = {
         }).fetch()
           , responseData = response.data;
         if (response.isFailure() || !responseData[oThis.contractAddress]) {
-          throw "GetTokenTransactionGraphKlass :: AddressesIdMapCacheKlass :: response Failure Or contract Address not found ::" + oThis.contractAddress;
+          throw "GetTokenTransferGraphKlass :: AddressesIdMapCacheKlass :: response Failure Or contract Address not found ::" + oThis.contractAddress;
         }
         contractAddressId = responseData[oThis.contractAddress].id;
       } else {
         contractAddressId = 0;
       }
 
-      const tokenTransactionGraphResponse = await new TokenTransactionGraphCacheKlass({
+      const tokenTransferGraphResponse = await new TokenTransferGraphCacheKlass({
         chain_id: oThis.chainId,
         contract_address_id: contractAddressId,
         duration: oThis.duration
       }).fetch();
 
-      if (tokenTransactionGraphResponse.isFailure()) {
-        return Promise.resolve(responseHelper.error("a_s_ttrgd_1", "Fail to fetch graph data for token transactions"));
+      if (tokenTransferGraphResponse.isFailure()) {
+        return Promise.resolve(responseHelper.error("a_s_ttgd_1", "Fail to fetch graph data for token transfers"));
       }
-      return Promise.resolve(responseHelper.successWithData(tokenTransactionGraphResponse.data));
+      return Promise.resolve(responseHelper.successWithData(tokenTransferGraphResponse.data));
     } catch (err) {
-      return Promise.resolve(responseHelper.error("a_s_ttrgd_2", "Fail to fetch graph data for token transactions"+ err));
+      return Promise.resolve(responseHelper.error("a_s_ttgd_2", "Fail to fetch graph data for token transfers "+ err));
     }
   }
 };
 
-module.exports = GetTokenTransactionGraphKlass;
+module.exports = GetTokenTransferGraphKlass;
 
 /*
-  TransactionServiceKlass = require('./app/services/token_details/get_token_transaction_graph_data.js');
-  new TransactionServiceKlass({chainId:1409, contractAddress: '0xae2ac19e2c8445e9e5c87e5412cf8ed419f1a5c6', duration:'hour'}).perform().then(console.log);
+  TokenServiceKlass = require('./app/services/token_details/get_token_transfer_graph_data.js');
+  new TokenServiceKlass({chainId:1409, contractAddress: '0xae2ac19e2c8445e9e5c87e5412cf8ed419f1a5c6', duration:'hour'}).perform().then(console.log);
  */

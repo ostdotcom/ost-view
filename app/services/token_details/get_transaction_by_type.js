@@ -27,6 +27,10 @@ const GeTransactionTypeGraphKlass = function (params) {
 
 GeTransactionTypeGraphKlass.prototype = {
 
+  //todo: safe limit of 200
+  // check address id is never 0
+  //use same service for get token graph data
+
   /**
    * Perform operation of getting recent token transfers details
    *
@@ -45,6 +49,7 @@ GeTransactionTypeGraphKlass.prototype = {
       }).fetch()
         , responseData = response.data;
       if (response.isFailure() || !responseData[oThis.contractAddress]) {
+        // todo: return response helper error
         throw "GeTransactionTypeGraphKlass :: AddressesIdMapCacheKlass :: response Failure Or contract Address not found ::" + oThis.contractAddress;
       }
       contractAddressId = responseData[oThis.contractAddress].id;
