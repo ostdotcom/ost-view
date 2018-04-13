@@ -7,12 +7,15 @@ const rootPrefix = '..'
   , logger = require(rootPrefix + '/helpers/custom_console_logger')
   , AddressesIdMapCacheKlass = require(rootPrefix + '/lib/cache_multi_management/addressIdMap')
   , TransactionHashesKlass = require(rootPrefix + '/app/models/transaction_hash.js')
-  , OpenSTNotification = require('@openstfoundation/openst-notification')
-
+  , config = require(rootPrefix + '/config')
 ;
 
+const cliHandler = require('commander')
+  , OpenSTNotification = require('@openstfoundation/openst-notification')
+  ;
 
-const WAIT_TIME = 5000;
+
+const WAIT_TIME = 1000;
 
 const TransactionTypeMigrationKlass = function (params) {
   const oThis = this;
@@ -310,11 +313,45 @@ TransactionTypeMigrationKlass.prototype = {
 };
 
 
-module.exports = TransactionTypeMigrationKlass;
-/*
-  let TxnTypeMigrationKlass = require('./migration_code/transaction_type_migration.js');
-  new TxnTypeMigrationKlass({src_chain_id: 201, des_chain_id: 199}).perform().then(console.log);
+(function (args) {
 
+  //To handle command line with format
+  cliHandler
+    .usage('Please Specify chain ID \n$>transaction_type_migration.js -c <chainID> ')
+    .option('-s, --srcChainID <n>', 'Id of the chain', parseInt)
+    .option('-d, --desChainID <n>', 'Id of the chain', parseInt)
+    .parse(args);
+
+  // Check if chain id exits
+  if (!cliHandler.srcChainID || !cliHandler.desChainID) {
+    logger.error('\n\tPlease Specify chain ID \n\t$>transaction_type_migration.js -c <chainID>\n');
+    process.exit(1);
+  }
+
+  // Set chain id and block number
+  const srcChainID = cliHandler.srcChainID;
+
+  const desChainID = cliHandler.desChainID;
+
+  if (!config.isValidChainId(srcChainID) || !config.isValidChainId(desChainID)) {
+    logger.error('\n\tInvalid chain ID \n');
+    process.exit(1);
+  }
+
+  new TransactionTypeMigrationKlass({src_chain_id: srcChainID, des_chain_id: desChainID})
+    .perform()
+    .then(function(){
+      logger.log("Done with migration");
+      process.exit(1);
+    })
+    .catch(function(error) {
+      logger.error("Issue with migration", error);
+      process.exit(1);
+    });
+})(process.argv);
+
+/*
+  let TransactionTypeMigrationKlass = require('./migration_code/transaction_type_migration.js');
 
   BrandedTokenTransactionTypeKlass = require('./app/models/branded_token_transaction_type.js');
   new BrandedTokenTransactionTypeKlass(1409).select(['id','contract_address_id', 'transaction_type']).where(['contract_address_id IN (?) AND transaction_type IN (?)',[[2,'Upvote'],[3,'Comment'],[1,'Sachin']]]).fire();
