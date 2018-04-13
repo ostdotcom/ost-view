@@ -21,7 +21,7 @@ var unAckCount = 0;
 
 function subscribe() {
   openSTNotification.subscribeEvent.rabbit(
-    ['transfer.#', 'entity.#'],
+    ['transfer.#', 'entity.#', "migration.transfer"],
     {
       queue: 'OpenST-Explorer-Notification-Listener',
       ackRequired: 1,

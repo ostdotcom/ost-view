@@ -32,6 +32,8 @@ const BrandedTokenTransactionTypesSpecificPrototype = {
 
 Object.assign(BrandedTokenTransactionTypesKlass.prototype, BrandedTokenTransactionTypesSpecificPrototype);
 
+BrandedTokenTransactionTypesKlass.DATA_SEQUENCE_ARRAY = ['contract_address_id', 'transaction_type'];
+
 module.exports = BrandedTokenTransactionTypesKlass;
 
 

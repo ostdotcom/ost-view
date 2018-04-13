@@ -39,5 +39,5 @@ TransactionHashKlass.DATA_SEQUENCE_ARRAY = ['transaction_hash'];
 module.exports = TransactionHashKlass;
 
 
-// ttk = require('./app/models/address_details')
+// ttk = require('./app/models/transaction_hash.js')
 // new ttk().select('*').where('id>1').limit('10').fire().then(console.log);
