@@ -24,7 +24,7 @@ const ModelBaseKlass = function (params) {
   oThis.dbConfig = config.getMysqlDbConfig(params.chainId);
 
   if (!oThis.dbConfig) {
-    logger.error("app/models/base :: ModelBaseKlass :: dbConfig cannot be ", oThis.dbConfig);
+    logger.error("app/models/base :: ModelBaseKlass :: dbConfig cannot be ", oThis.dbConfig, " for chainId Id ::", params.chainId);
     throw 'dbConfig cannot be ' + oThis.dbConfig;
   }
 
