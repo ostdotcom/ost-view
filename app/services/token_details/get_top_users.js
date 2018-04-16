@@ -41,7 +41,7 @@ GetTopUsersKlass.prototype = {
   perform: async function () {
     const oThis = this
       , topUsers = await new TopUsersCacheKlass({chain_id:oThis.chainId, contract_address:oThis.contractAddress}).fetch()
-      , topUsersData = topUsers.data;
+      , topUsersData = topUsers.data
     ;
 
     if (topUsers.isFailure()){

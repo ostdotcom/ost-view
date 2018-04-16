@@ -26,34 +26,6 @@ const renderResult = function (requestResponse, responseObject, contentType) {
   return requestResponse.renderResponse(responseObject, 200, contentType);
 };
 
-// define parameters from url, generate web rpc instance and database connect
-const contractMiddleware = function (req, res, next) {
-  const chainId = req.params.chainId
-    , contractAddress = req.params.contractAddress
-    , duration = req.params.duration
-    , nextPagePayload = req.query.next_page_payload
-    , prevPagePayload = req.query.prev_page_payload
-  ;
-
-  var pagePayload = null;
-  if (nextPagePayload){
-    pagePayload = nextPagePayload;
-  }else if (prevPagePayload){
-    pagePayload = prevPagePayload;
-  }
-
-  // Get instance of contract class
-  req.contractInstance = new contract(chainId);
-
-  req.chainId = chainId;
-  req.contractAddress = contractAddress;
-  req.duration = duration;
-  req.pagePayload = pagePayload;
-
-  next();
-};
-
-
 
 const assignParams = function (req) {
 //  logger.log(customUrlParser.parse(req.originalUrl).pathname, req.method);
