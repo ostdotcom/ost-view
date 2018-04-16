@@ -21,7 +21,7 @@ var unAckCount = 0;
 
 function subscribe() {
   openSTNotification.subscribeEvent.rabbit(
-    ['transfer.#', 'entity.#', "migration.transfer"],
+    ['transfer.payments.#', 'entity.#', "migration.transfer"],
     {
       queue: 'OpenST-Explorer-Notification-Listener',
       ackRequired: 1,
@@ -48,7 +48,7 @@ subscribe();
 var processNotification = function (msgContent) {
   console.log("processNotification", msgContent);
   return new Promise(function (onResolve, onReject) {
-    if (msgContent['kind'] == 'transaction_mined') {
+    if (msgContent['kind'] == 'transaction_initiated') {
       logger.info("New Transaction mined", msgContent['payload']);
       notificationProcessor.processTransaction(msgContent.payload).then(function () {
         logger.log("NotificationProcessor#processTransaction :: Transaction type inserted successfully");
