@@ -21,7 +21,7 @@ const permission_options = "--acl public-read --content-encoding gzip --cache-co
 
 //TODO:Get s3BaseDir for s3
 const baseDir = path.join(__dirname, rootPrefix+'/builtAssets')
-  , s3BaseDir = '/some/dir' // Like /some/dir
+  , s3BaseDir = '/ost-view/js-css' // Like /some/dir
   ;
 
 fs.readFile(baseDir+'/manifest.json', function (err, data) {

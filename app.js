@@ -179,7 +179,7 @@ if (cluster.isMaster) {
     ],
     buildDir: path.join(__dirname, 'builtAssets'),
     fingerprinting: true,
-    servePath: "assets"
+    servePath: "//dxwfxs8b4lg24.cloudfront.net/ost-view/js-css"
   };
 
   var connectAssets = require("connect-assets")(connectAssetConfig);
