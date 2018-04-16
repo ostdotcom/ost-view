@@ -158,10 +158,10 @@ router.get("/:contractAddress/graph/numberOfTransactions/:duration",decodeJwt, f
     .then(function (requestResponse) {
       if (requestResponse.isSuccess()) {
         const responseData = responseHelper.successWithData({
-          result_type: "transaction_type",
-          transaction_type: requestResponse.data.graph_data,
+          result_type: "number_transactions",
+          number_transactions: requestResponse.data.graph_data,
           meta: {
-            duaration: req.params.duration
+            duration: req.params.duration
           }
         });
 
@@ -193,7 +193,7 @@ router.get("/:contractAddress/graph/transactionsByType/:duration",decodeJwt, fun
       if (requestResponse.isSuccess()) {
         const responseData = responseHelper.successWithData({
           result_type: "transaction_type",
-          transaction_type: requestResponse.data,
+          transaction_type: requestResponse.data.graph_data,
           meta: {
             duaration: req.duration
           }
@@ -227,10 +227,10 @@ router.get("/:contractAddress/graph-date/numberOfTransactions/:duration", functi
     .then(function (requestResponse) {
       if (requestResponse.isSuccess()) {
         const responseData = responseHelper.successWithData({
-          result_type: "transaction_type",
-          transaction_type: requestResponse.data.graph_data,
+          result_type: "number_transactions",
+          number_transactions : requestResponse.data.graph_data,
           meta: {
-            duaration: req.params.duration
+            duration: req.params.duration
           }
         });
 

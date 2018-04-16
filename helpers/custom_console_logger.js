@@ -174,7 +174,7 @@ CustomConsoleLoggerKlass.prototype = {
             payload: {
               from: 'notifier@ost.com',
               to: 'backend@ost.com',
-              subject: packageName + " :: UC " + coreConstants.OST_UTILITY_CHAIN_ID + "::" + code,
+              subject: packageName + " :: OST View Env ::" + process.env.OST_VIEW_ENVIRONMENT + "::" + code,
               body: " Message: " + msg + " \n Data: " + JSON.stringify(data) + " \n backtrace: " + backtrace
             }
           }
