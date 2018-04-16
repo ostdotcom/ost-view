@@ -22,7 +22,7 @@ const GeTransactionTypeGraphKlass = function (params) {
   const oThis = this;
 
   oThis.chainId = params.chainId;
-  oThis.contractAddress = params.contractAddress;
+  oThis.contractAddress = params.contractAddress.toLowerCase();
   oThis.duration = params.duration;
 };
 

@@ -24,7 +24,7 @@ const GetTokenHoldersKlass = function(params){
   const oThis = this;
 
   oThis.chainId = params.chainId;
-  oThis.contractAddress = params.contractAddress;
+  oThis.contractAddress = params.contractAddress.toLowerCase();
   oThis.pagePayload = params.page_payload;
   oThis.pageSize = coreConstant.DEFAULT_PAGE_SIZE+1;
 

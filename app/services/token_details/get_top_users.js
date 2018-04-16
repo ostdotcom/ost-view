@@ -23,7 +23,7 @@ const GetTopUsersKlass = function(params){
   const oThis = this;
 
   oThis.chainId = params.chainId;
-  oThis.contractAddress = params.contractAddress;
+  oThis.contractAddress = params.contractAddress.toLowerCase();
   oThis.topUsersCount = params.topUserCount;
 
   if (!oThis.topUsersCount){
@@ -40,15 +40,17 @@ GetTopUsersKlass.prototype = {
    */
   perform: async function () {
     const oThis = this
-      , topUsers = await new TopUsersCacheKlass({chain_id:oThis.chainId, contract_address:oThis.contractAddress}).fetch()
-      , topUsersData = topUsers.data
+      , topUsersResponse = await new TopUsersCacheKlass({chain_id:oThis.chainId, contract_address:oThis.contractAddress}).fetch()
+      , topUsersData = topUsersResponse.data
     ;
 
-    if (topUsers.isFailure()){
+    if (topUsersResponse.isFailure()){
       return Promise.resolve(responseHelper.error('s_td_gtu_1','top users data not found for :'+oThis.contractAddress));
     }
 
-    const formattedData = topUsersData.slice(0, oThis.topUsersCount);
+    const topUsers = topUsersData.top_users;
+
+    const formattedData = topUsers.slice(0, oThis.topUsersCount);
 
     return Promise.resolve(responseHelper.successWithData({top_users:formattedData}));
   }

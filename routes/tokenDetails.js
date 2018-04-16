@@ -186,7 +186,7 @@ router.get("/:contractAddress/graph/numberOfTransactions/:duration",decodeJwt, f
  */
 router.get("/:contractAddress/graph/transactionsByType/:duration",decodeJwt, function (req, res, next) {
 
-  const getDetailsKlass = require(rootPrefix + '/app/services/token_details/get_top_users');
+  const getDetailsKlass = require(rootPrefix + '/app/services/token_details/get_transaction_by_type');
 
   routeHelper.performer(req, res, next, getDetailsKlass, 'r_td_g_tbt_1')
     .then(function (requestResponse) {

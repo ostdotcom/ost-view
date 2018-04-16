@@ -19,7 +19,7 @@ const rootPrefix = "../../.."
 const GetTransactionDetailsKlass = function(params){
   const oThis = this;
 
-  oThis.transactionHash = params.transactionHash;
+  oThis.transactionHash = params.transactionHash.toLowerCase();
   oThis.chainId = params.chainId;
 };
 

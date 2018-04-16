@@ -22,7 +22,7 @@ const GetBrandedTokenDetailsKlass = function(params){
   const oThis = this;
 
   oThis.chainId = params.chainId;
-  oThis.contractAddress = params.contractAddress
+  oThis.contractAddress = params.contractAddress.toLowerCase();
 
   if (!oThis.chainId) {
     oThis.chainId = coreConstants.DEFAULT_CHAIN_ID;
