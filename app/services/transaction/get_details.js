@@ -36,19 +36,19 @@ GetTransactionDetailsKlass.prototype = {
     ;
 
     if(transactionData.isFailure()){
-      return Promise.resolve(responseHelper.error('s_t_gd_1','transaction data not found'));
+      return Promise.resolve(responseHelper.error('s_t_gd_1','transaction data not found for txn hash '+ oThis.transactionHash));
     }
 
     const txDetails = transactionData.data
       , finalTransactionData = {}
       , tokenTransferIds = txDetails.token_transfer_ids
       , tokenTransferData = await new TokenTransferKlass({chain_id: oThis.chainId, token_transfer_ids: tokenTransferIds}).perform()
-      , tokenTransaferDetails = tokenTransferData.data
+      , tokenTransferDetails = tokenTransferData.data
     ;
 
     finalTransactionData['transaction_details'] =  txDetails.transaction_details;
-    finalTransactionData['token_transfer_details'] = tokenTransaferDetails.token_transfers;
-    finalTransactionData['contract_addresses'] = tokenTransaferDetails.contract_addresses;
+    finalTransactionData['token_transfer_details'] = tokenTransferDetails.token_transfers;
+    finalTransactionData['contract_addresses'] = tokenTransferDetails.contract_addresses;
 
     return Promise.resolve(responseHelper.successWithData(finalTransactionData));
   }
