@@ -1,3 +1,5 @@
+//node executables/total_supply_update_script.js
+
 "use strict";
 
 const rootPrefix = ".."
