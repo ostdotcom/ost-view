@@ -1,5 +1,4 @@
 //node executables/total_supply_update_script.js
-
 "use strict";
 
 const rootPrefix = ".."
@@ -11,6 +10,7 @@ const rootPrefix = ".."
   , Web3Interact = require(rootPrefix + "/lib/web3/interact/rpc_interact")
   , TokenUnits = require(rootPrefix + "/helpers/tokenUnits")
   , BrandedTokenStatsKlass = require(rootPrefix + '/app/models/branded_token_stats')
+  , BrandedTokenStatsCacheKlass = require(rootPrefix+'/lib/cache_multi_management/branded_token_stats')
 ;
 
 /**
@@ -38,6 +38,15 @@ const getTokenTotalSupply = async function (contractAddress){
     });
 
   return tokenSupply;
+};
+
+/**
+ * @param contractAddress Contract Address
+ */
+
+const clearBrandedTokenStatsCache = async function (contractAddressIds) {
+
+  const brandedTokenCacheObject = await new BrandedTokenCacheKlass({chain_id:chainId, contract_address_ids: contractAddressIds}).clear();
 };
 
 /**
@@ -76,7 +85,6 @@ const getTokenTotalSupply = async function (contractAddress){
     , brandedTokenCacheResponseData = brandedTokenCacheResponse.data
   ;
 
-
   // 4. Traverse all the contract address ids for processing
   for (let contractAddressId in contractAddressIdHash){
     const addressInfo = addressesCacheResponseData[contractAddressId]
@@ -104,4 +112,7 @@ const getTokenTotalSupply = async function (contractAddress){
       .where({contract_address_id: contractAddressId})
       .fire()
   }
+
+  await clearBrandedTokenStatsCache(Object.keys(contractAddressIdHash));
+
 })();
