@@ -63,7 +63,7 @@ const assignParams = function (req, res, next) {
 
 var basicAuthentication = function (req, res, next) {
 
-   if (coreConstant.ENVIRONMENT === 'production'){
+   if (coreConstant.PUT_BASIC_AUTHENTICATION === 'false'){
      return next();
    }
 
@@ -184,11 +184,11 @@ if (cluster.isMaster) {
   var connectAssetConfig = {
     paths: [
       path.join(__dirname, 'assets/css'),
-      path.join(__dirname, 'assets/javascript')
+      path.join(__dirname, 'assets/js')
     ],
     buildDir: path.join(__dirname, 'builtAssets'),
     fingerprinting: true,
-    servePath: "assets"
+    servePath: "//dxwfxs8b4lg24.cloudfront.net/ost-view/js-css"
   };
 
   var connectAssets = require("connect-assets")(connectAssetConfig);

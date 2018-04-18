@@ -133,5 +133,6 @@ export OST_VIEW_1409_UNAME="root";
 export OST_VIEW_1409_PWD="root";
 
 export OST_VIEW_ENVIRONMENT='development'
+export PUT_BASIC_AUTHENTICATION='false'
 
 export NOTIFY_FROM_ADDRESS='notifier@ost.com'

@@ -91,7 +91,7 @@ define('DEFAULT_MYSQL_PASSWORD', process.env.OV_DEFAULT_MYSQL_PASSWORD);
 
 
 //Basic auth
-
 define('ENVIRONMENT',process.env.NODE_ENV);
+define('PUT_BASIC_AUTHENTICATION',process.env.PUT_BASIC_AUTHENTICATION);
 
 module.exports = constants;
