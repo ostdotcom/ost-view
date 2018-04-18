@@ -1,5 +1,14 @@
-//node executables/total_supply_update_script.js
+#!/usr/bin/env node
+
 "use strict";
+/**
+ * Job to populate the tokens supply data for branded tokens whoes tokens_supply = 0
+ *
+ * @example
+ * node executables/total_supply_update_script.js
+ *
+ * @module executables/total_supply_update_script
+ */
 
 const rootPrefix = ".."
   , coreConstants = require(rootPrefix + '/config/core_constants')
