@@ -42,7 +42,7 @@ GetTopTokensKlass.prototype = {
       , topTokensData = topTokensDetails.data
     ;
 
-    if (topTokensDetails.isFailure() || !topTokensData['top_tokens']){
+    if (topTokensDetails.isFailure() || !topTokensData['top_tokens'] || topTokensData['top_tokens'].length === 0){
       return Promise.resolve(responseHelper.error("s_h_gtt_1", "getting issue in fetching top tokens"));
     }
 

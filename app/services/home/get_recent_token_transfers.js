@@ -52,7 +52,7 @@ GetRecentTokenTransfersKlass.prototype = {
       .fire();
 
     if (recentTokenTransfers.length == 0){
-      return Promise.resolve(responseHelper.error("s_h_grtt_1", "address data not found for : ", oThis.address));
+      return Promise.resolve(responseHelper.error("s_h_grtt_1", "address data not found for home page"));
     }
 
     const tokenTransfers = {}
