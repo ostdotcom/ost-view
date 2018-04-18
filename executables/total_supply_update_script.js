@@ -113,6 +113,7 @@ const clearBrandedTokenStatsCache = async function (contractAddressIds) {
       .fire()
   }
 
+  //5. clear cache for branded token
   await clearBrandedTokenStatsCache(Object.keys(contractAddressIdHash));
 
 })();
