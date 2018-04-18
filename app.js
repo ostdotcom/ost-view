@@ -63,7 +63,7 @@ const assignParams = function (req, res, next) {
 
 var basicAuthentication = function (req, res, next) {
 
-   if (coreConstant.ENVIRONMENT === 'production'){
+   if (coreConstant.PUT_BASIC_AUTHENTICATION === 'false'){
      return next();
    }
 
