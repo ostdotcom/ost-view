@@ -181,6 +181,7 @@ if (cluster.isMaster) {
   }));
   app.set('view engine', 'handlebars');
 
+  // connect-assets relies on NODE_ENV to use defaults in config
   var connectAssetConfig = {
     paths: [
       path.join(__dirname, 'assets/css'),
@@ -188,8 +189,12 @@ if (cluster.isMaster) {
     ],
     buildDir: path.join(__dirname, 'builtAssets'),
     fingerprinting: true,
-    servePath: "//dxwfxs8b4lg24.cloudfront.net/ost-view/js-css"
+    servePath:"assets"
   };
+
+  if(coreConstant.ENVIRONMENT == 'production'){
+    connectAssetConfig.servePath = "//dxwfxs8b4lg24.cloudfront.net/ost-view/js-css"
+  }
 
   var connectAssets = require("connect-assets")(connectAssetConfig);
   app.use(connectAssets);
