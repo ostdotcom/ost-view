@@ -55,7 +55,21 @@ GetTokenTransferGraphKlass.prototype = {
         contractAddressId = 0;
       }
 
-      const latestTimestamp = Date.now()/1000;
+
+      const cronDetailsRow = await (new CronDetailsModelKlass(oThis.chainId)).select('*').where(["cron_name = ?", CronDetailsModelKlass.aggregator_cron]).order_by('id DESC').limit(1).fire()
+        , cronRow = cronDetailsRow[0]
+      ;
+      let latestTimestamp = 0;
+      if (cronRow) {
+        let blockData = JSON.parse(cronRow.data);
+        if (blockData.block_timestamp) {
+          if (Number(cronRow.status) === Number(new CronDetailsModelKlass(oThis.chainId).invertedStatuses[cronDetailConst.completeStatus])) {
+            latestTimestamp = blockData.block_timestamp + constants.AGGREGATE_CONSTANT;
+          } else {
+            latestTimestamp = blockData.block_timestamp;
+          }
+        }
+      }
 
       const tokenTransferGraphResponse = await new TokenTransferGraphCacheKlass({
         chain_id: oThis.chainId,
