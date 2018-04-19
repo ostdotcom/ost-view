@@ -8,7 +8,7 @@
   },
   "dependencies": {
     "@openstfoundation/openst-cache": "1.0.1",
-    "@openstfoundation/openst-core": "0.9.0-beta.7",
+    "@openstfoundation/openst-core": "^0.9.0-beta.8",
     "@openstfoundation/openst-notification": "1.0.0",
     "abi-decoder": "1.0.9",
     "basic-auth": "2.0.0",
@@ -48,6 +48,6 @@
     "ink-docstrap": "^1.3.2",
     "jsdoc": "~3.5.5",
     "jsdoc-route-plugin": "^0.1.0",
-    "mocha": "^5.0.5"
+    "mocha": "^5.1.1"
   }
 }
