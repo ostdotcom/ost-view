@@ -8,7 +8,7 @@ BigNumber.config({  DECIMAL_PLACES: 18,
                     ROUNDING_MODE: 4,
                     FORMAT: {
                         decimalSeparator: '.',
-                        groupSeparator: ',',
+                        groupSeparator: '',
                         groupSize: 3,
                         secondaryGroupSize: 0,
                         fractionGroupSeparator: ' ',
