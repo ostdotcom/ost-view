@@ -39,7 +39,7 @@ fs.readFile(baseDir+'/manifest.json', function (err, data) {
 
     let executableString = undefined;
     if (content_types[extension]){
-        executableString = "aws s3 cp "+baseDir+"/"+file+".gz"+" s3:"+asset_bucket+s3BaseDir+"/"+file+' '+permission_options+" --content-type "+content_types[extension];
+        executableString = "aws s3 cp "+baseDir+"/"+file+".gz"+" s3://"+asset_bucket+s3BaseDir+"/"+file+' '+permission_options+" --content-type "+content_types[extension];
 
         console.log('\n\nExecuting command:'+ executableString);
 
