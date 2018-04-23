@@ -22,6 +22,9 @@ exports.up = function(db) {
   return createTransactionTable(db)
     .then(function () {
       return createIndexOnTransactionTable(db);
+    })
+    .then(function () {
+      return createIndexOfBlockTimestampOnTransactionTable(db);
     });
 };
 
@@ -54,6 +57,10 @@ const createTransactionTable = function (db) {
 
 const createIndexOnTransactionTable = function (db) {
   db.addIndex(constants.TRANSACTIONS_TABLE_NAME, 't_bn_index', 'block_number', false);
+};
+
+const createIndexOfBlockTimestampOnTransactionTable = function (db) {
+  db.addIndex(constants.TRANSACTIONS_TABLE_NAME, 't_bts_index', 'block_timestamp', false);
 };
 
 const deleteTransactionTable = function (db) {
