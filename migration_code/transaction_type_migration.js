@@ -55,7 +55,7 @@ TransactionTypeMigrationKlass.prototype = {
               topics: ["migration.transfer"],
               publisher: 'OST',
               message: {
-                kind: "transaction_mined",
+                kind: "transaction_initiated",
                 payload: {
                   chain_id: oThis.des_chain_id,
                   erc20_contract_address: txnTypeHash.contract_address,
