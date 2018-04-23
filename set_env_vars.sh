@@ -64,7 +64,7 @@ export OST_VIEW_2_DB_CONNECTION_LIMIT=10
 
 # chain env 1409
 export OST_VIEW_3_CHAIN_ID="1409"
-export OST_VIEW_3_WEB_RPC="http://127.0.0.1:8545"
+export OST_VIEW_3_WEB_RPC="ws://127.0.0.1:8546"
 
 #DB env
 export OST_VIEW_3_DB_USER="root"
