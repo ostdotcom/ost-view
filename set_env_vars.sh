@@ -136,3 +136,5 @@ export OST_VIEW_ENVIRONMENT='development'
 export PUT_BASIC_AUTHENTICATION='false'
 
 export NOTIFY_FROM_ADDRESS='notifier@ost.com'
+
+export CLOUDFRONT_BASE_DOMAIN='dxwfxs8b4lg24.cloudfront.net'
