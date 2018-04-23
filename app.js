@@ -181,15 +181,20 @@ if (cluster.isMaster) {
   }));
   app.set('view engine', 'handlebars');
 
+  // connect-assets relies on NODE_ENV to use defaults in config
   var connectAssetConfig = {
     paths: [
       path.join(__dirname, 'assets/css'),
-      path.join(__dirname, 'assets/javascript')
+      path.join(__dirname, 'assets/js')
     ],
     buildDir: path.join(__dirname, 'builtAssets'),
     fingerprinting: true,
-    servePath: "assets"
+    servePath:"assets"
   };
+
+  if(coreConstant.ENVIRONMENT == 'production'){
+    connectAssetConfig.servePath = coreConstant.CLOUDFRONT_BASE_DOMAIN +"/ost-view/js-css"
+  }
 
   var connectAssets = require("connect-assets")(connectAssetConfig);
   app.use(connectAssets);
