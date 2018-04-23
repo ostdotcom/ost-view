@@ -193,7 +193,7 @@ if (cluster.isMaster) {
   };
 
   if(coreConstant.ENVIRONMENT == 'production'){
-    connectAssetConfig.servePath = "//dxwfxs8b4lg24.cloudfront.net/ost-view/js-css"
+    connectAssetConfig.servePath = coreConstant.CLOUDFRONT_BASE_DOMAIN +"/ost-view/js-css"
   }
 
   var connectAssets = require("connect-assets")(connectAssetConfig);
