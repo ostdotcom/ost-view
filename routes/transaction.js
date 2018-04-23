@@ -95,6 +95,9 @@ function processTransactionResponse(requestResponse, req, res){
     mCss: ['mTransactionDetails.css'],
     mJs: [],
     title:'Transaction Details - '+ req.hash,
+    constants:{
+      cloud_front_base_domain: coreConstant.CLOUD_FRONT_BASE_DOMAIN
+    }
   });
 
   return renderResult(response, res, req.headers['content-type']);

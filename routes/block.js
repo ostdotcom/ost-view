@@ -65,6 +65,9 @@ function processBlockResponse (blockHash, req, res){
       keywords: 'OST, Simple Token, Utility Chain, Blockchain',
       robots: 'noindex, nofollow',
       image: 'https://dxwfxs8b4lg24.cloudfront.net/ost-view/images/ost-view-og-image-1.jpg.jpg'
+    },
+    constants:{
+      cloud_front_base_domain: coreConstant.CLOUD_FRONT_BASE_DOMAIN
     }
   });
 

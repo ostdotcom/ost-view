@@ -132,6 +132,9 @@ function processTokenDetailsResponse(response, req, res) {
     view_data:{
       summary: response.token_info,
       graph_stats: response.token_stats
+    },
+    constants:{
+      cloud_front_base_domain: coreConstant.CLOUD_FRONT_BASE_DOMAIN
     }
   });
 

@@ -75,6 +75,9 @@ function processAddressDetailsResponse( response, req, res ) {
     },
     result_type: 'address_details',
     title: 'Address Details - '+req.params.address,
+    constants:{
+      cloud_front_base_domain: coreConstant.CLOUD_FRONT_BASE_DOMAIN
+    }
   });
 
   return renderResult(responseData, res, req.headers['content-type']);

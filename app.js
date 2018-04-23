@@ -193,7 +193,7 @@ if (cluster.isMaster) {
   };
 
   if(coreConstant.ENVIRONMENT == 'production'){
-    connectAssetConfig.servePath = coreConstant.CLOUD_FRONT_BASE_DOMAIN +"/ost-view/js-css"
+    connectAssetConfig.servePath = "https://"+coreConstant.CLOUD_FRONT_BASE_DOMAIN +"/ost-view/js-css"
   }
 
   var connectAssets = require("connect-assets")(connectAssetConfig);
