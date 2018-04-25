@@ -41,9 +41,6 @@ var state = {
   cronDetailId: null
 };
 
-const PASSED = true
-  , FAILED = false;
-
 var continueExecution = true;
 
 // Using a single function to handle multiple signals
@@ -54,25 +51,6 @@ function handle() {
 
 process.on('SIGINT', handle);
 process.on('SIGTERM', handle);
-
-function updateStatus(flag, timeId) {
-  let obj = new CronDetailsModelKlass(state.chainID)
-    , cronStatus;
-  if (flag) {
-    cronStatus = obj.invertedStatuses[cronDetailConst.completeStatus];
-  } else {
-    cronStatus = obj.invertedStatuses[cronDetailConst.failedStatus];
-  }
-
-  obj.update({
-    data: JSON.stringify({block_timestamp: timeId}),
-    status: cronStatus
-  }).where(['cron_name = ?', CronDetailsModelKlass.aggregator_cron])
-    .fire()
-    .then(function (resp) {
-      process.exit(1);
-    });
-}
 
 /**
  * Methods to set timeout for the aggregate data api
@@ -87,26 +65,43 @@ var aggregateByTimeId = function (timeId) {
         logger.log("Last Verified Block Timestamp ", timestamp);
         logger.log("Input timestamp ", timeId);
         if (timestamp != null && (timestamp - timeId >= constants.AGGREGATE_CONSTANT)) {
+          let cdmObj = new CronDetailsModelKlass(state.chainID);
+
+          await cdmObj.update({data: JSON.stringify({block_timestamp: timeId}),
+            status: cdmObj.invertedStatuses[cronDetailConst.pendingStatus]})
+            .where(['cron_name = ?', CronDetailsModelKlass.aggregator_cron])
+            .fire();
           AggregateDataKlass.newInstance(state.chainID, timeId).perform()
-            .then(function (response) {
-              if (response.isSuccess()) {
-                aggregateByTimeId(timeId + constants.AGGREGATE_CONSTANT)
-              } else {
-                updateStatus(FAILED, timeId);
+            .then(function(response){
+              // Update Cron details once cron is completed.
+              let obj = new CronDetailsModelKlass(state.chainID)
+                , cronstatus = obj.invertedStatuses[cronDetailConst.failedStatus];
+              if(response.isSuccess()){
+                cronstatus = obj.invertedStatuses[cronDetailConst.completeStatus];
               }
+              obj.update({status: cronstatus}).where(['cron_name = ?', CronDetailsModelKlass.aggregator_cron])
+                .fire()
+                .then(function(resp){
+
+                  if (cronstatus == 2){
+                    aggregateByTimeId(timeId + constants.AGGREGATE_CONSTANT)
+                  }else {
+                    process.exit(1);
+                  }
+                });
             });
         } else {
           //Need to set up the cron again.
           logger.log("Done aggregation of all the blocks, Need to run the job again after new block verification.");
-          updateStatus(PASSED, timeId);
+          process.exit(1);
         }
       })
       .catch(function (err) {
         logger.error('\nNot able to fetch block timestamp\n', err);
-        updateStatus(FAILED, timeId);
+        process.exit(1);
       });
   } else {
-    updateStatus(PASSED, timeId);
+    process.exit(1);
   }
 };
 
