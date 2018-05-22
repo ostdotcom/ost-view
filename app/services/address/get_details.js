@@ -18,7 +18,7 @@ const rootPrefix = "../../.."
 const GetAddressDetailsKlass = function(params){
   const oThis = this;
 
-  oThis.address = params.address;
+  oThis.address = params.address.toLowerCase();
   oThis.chainId = params.chainId;
 
 };
@@ -32,7 +32,7 @@ GetAddressDetailsKlass.prototype = {
    */
   perform: async function(){
     const oThis = this
-      ,finalAddressDetails = {};
+      , finalAddressDetails = {}
     ;
 
     const addressDetails = await new AddressDetailsCacheKlass({chain_id: oThis.chainId, addresses: [oThis.address]}).fetch()

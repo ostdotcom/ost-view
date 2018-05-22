@@ -25,7 +25,7 @@ const GetAddressTokenTransfersKlass = function(params){
   const oThis = this;
 
   oThis.chainId = params.chainId;
-  oThis.address = params.address;
+  oThis.address = params.address.toLowerCase();
   oThis.pagePayload = params.page_payload;
   oThis.pageSize = coreConstant.DEFAULT_PAGE_SIZE+1;
 

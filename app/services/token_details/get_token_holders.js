@@ -93,10 +93,7 @@ GetTokenHoldersKlass.prototype = {
 
     const formattedData = oThis.foramatHoldersData(addressDetailsData, addressHashData.data);
 
-    const btDetails = {};
-    btDetails[oThis.contractAddress] = brandedTokenData[contractAddressId];
-
-    finalTokenHoldersData['contract_addresses'] = btDetails;
+    finalTokenHoldersData['contract_addresses'] = brandedTokenData;
     finalTokenHoldersData['holders'] = formattedData;
 
     return Promise.resolve(responseHelper.successWithData(finalTokenHoldersData));

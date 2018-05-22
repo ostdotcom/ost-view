@@ -42,21 +42,21 @@ GetSearchDetailsKlass.prototype = {
       }
 
       if (oThis.argument.length === coreConstants.ACCOUNT_HASH_LENGTH) {
-
-        const addressDetails = await new AddressIdMapCacheKlass({
-            addresses: [oThis.argument],
+       var addressHash = oThis.argument.toLowerCase();
+       const addressDetails = await new AddressIdMapCacheKlass({
+            addresses: [addressHash],
             chain_id: oThis.chainId
           }).fetch()
           , addressData = addressDetails.data
         ;
 
-        if (addressData[oThis.argument]){
-          const addressType = addressData[oThis.argument]['address_type'];
+       if (addressData[addressHash]){
+          const addressType = addressData[addressHash]['address_type'];
           if (parseInt(addressType) === 3) {
-            return Promise.resolve(responseHelper.successWithData("/tokendetails/" + oThis.argument));
+            return Promise.resolve(responseHelper.successWithData("/tokendetails/" + addressHash));
           }
         }
-        return Promise.resolve(responseHelper.successWithData("/address/" + oThis.argument));
+        return Promise.resolve(responseHelper.successWithData("/address/" + addressHash));
 
       } else if (oThis.argument.length === coreConstants.TRANSACTION_HASH_LENGTH) {
 

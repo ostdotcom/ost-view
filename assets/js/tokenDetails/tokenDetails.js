@@ -209,14 +209,14 @@
           var dataToProceess = response.data[response.data.result_type];
           var meta =  response.data.meta
             ,contractAddresses = response.data['contract_addresses']
-            , contract_address = meta.q
             ;
 
           dataToProceess.forEach(function(element) {
             console.log("element : ",element);
             var name = element.address_hash
-              ,tokens = element.tokens
-              ,conversion_rate = contractAddresses[contract_address].price
+              , tokens = element.tokens
+              , contract_address_id = element.contract_address_id
+              , conversion_rate = contractAddresses[contract_address_id].conversion_rate
             ;
 
             var addressURL = meta.address_placeholder_url;
@@ -228,8 +228,8 @@
             element['tokens'] = PriceOracle.getDisplayBt(tokens);
             element['ost_amount'] = PriceOracle.getDisplayBtToOst(tokens, conversion_rate);
 
-            element['company_name'] = contractAddresses[contract_address].company_name;
-            element['company_symbol'] = contractAddresses[contract_address].company_symbol;
+            element['company_name'] = contractAddresses[contract_address_id].company_name;
+            element['company_symbol'] = contractAddresses[contract_address_id].company_symbol;
           });
         }
 

@@ -45,7 +45,9 @@ GetBrandedTokenDetailsKlass.prototype = {
       , addressIdMapData = addressIdMap.data
     ;
 
-    if(addressIdMap.isFailure() && !addressIdMapData[oThis.contractAddress]){
+    console.log("addressIdMapData : ",addressIdMapData , "addressIdMap : ",addressIdMap);
+
+    if(addressIdMap.isFailure() || !addressIdMapData[oThis.contractAddress]){
       return Promise.resolve(responseHelper.error('s_td_gd_1', 'address id map data not found for :'+oThis.contractAddress));
     }
 
