@@ -194,7 +194,7 @@
               , tokenDetailsURL = meta.token_details_redirect_url
               ,contract_address = element.contract_address
               ,tokens = element.tokens
-              ,price = contractAddresses[contract_address].price
+              ,price = contractAddresses[contract_address].conversion_rate
               ,timestamp = element.timestamp
               ;
             element['timestamp'] = toTimeAgo(timestamp);
