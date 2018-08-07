@@ -216,7 +216,7 @@
               }
             },
             {
-              title:'Market Cap (OST<span class="text-lowercase">⍺</span>)',
+              title:'Market Cap ('+oThis.config.ostCurrencySymbol+')',
               data: null,
               width:'22%',
               render: function (data, type, full, meta) {
@@ -226,7 +226,7 @@
               }
             },
             {
-              title:'Price (OST<span class="text-lowercase">⍺</span>)',
+              title:'Price ('+oThis.config.ostCurrencySymbol+')',
               data: null,
               width:'22%',
               render: function (data, type, full, meta) {
@@ -236,7 +236,7 @@
               }
             },
             {
-              title:'Total Volume (OST<span class="text-lowercase">⍺</span>)',
+              title:'Total Volume ('+oThis.config.ostCurrencySymbol+')',
               data: null,
               width:'22%',
               render: function (data, type, full, meta) {

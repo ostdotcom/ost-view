@@ -92,6 +92,11 @@ define('DEFAULT_MYSQL_PASSWORD', process.env.OV_DEFAULT_MYSQL_PASSWORD);
 
 //Basic auth
 define('ENVIRONMENT',process.env.NODE_ENV);
+
+
+define('VIEW_ENVIRONMENT',process.env.OST_VIEW_ENVIRONMENT);
+define('VIEW_SUB_ENVIRONMENT',process.env.OST_VIEW_SUB_ENVIRONMENT);
+
 define('PUT_BASIC_AUTHENTICATION',process.env.PUT_BASIC_AUTHENTICATION);
 
 //cloudfront url for fetching assets(js/css)

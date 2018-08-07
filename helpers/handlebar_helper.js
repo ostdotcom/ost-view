@@ -1,10 +1,11 @@
 const moment = require('moment')
-  ,  bigNumber = require('bignumber.js');
-  ;
+  ,  bigNumber = require('bignumber.js')
+;
 
-const preRoot = "../",
-     erc20Tokens = require(preRoot + '/lib/contract_interact/contractDecoder');
-
+const rootPrefix = "../",
+     erc20Tokens = require(rootPrefix + '/lib/contract_interact/contractDecoder')
+  , coreConstants = require(rootPrefix + '/config/core_constants')
+;
 
 module.exports = {
   isNODE_ENV_PROD : function(options){
@@ -117,6 +118,19 @@ module.exports = {
       return bigNumberValue;
     }else{
       return '';
+    }
+  },
+
+  /**
+   * OST Currency Symbol
+   *
+   * @return {String}
+   */
+  ostCurrencySymbol: function() {
+    if(coreConstants.VIEW_SUB_ENVIRONMENT == 'main'){
+      return 'OST'
+    } else {
+      return 'OST <span class="text-lowercase">⍺</span>'
     }
   },
 
