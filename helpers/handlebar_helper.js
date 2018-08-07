@@ -126,11 +126,15 @@ module.exports = {
    *
    * @return {String}
    */
-  ostCurrencySymbol: function() {
+  ostCurrencySymbol: function(withoutFormatting) {
     if(coreConstants.VIEW_SUB_ENVIRONMENT == 'main'){
       return 'OST'
     } else {
-      return 'OST <span class="text-lowercase">⍺</span>'
+      if(withoutFormatting) {
+        return 'OST ⍺'
+      } else {
+        return 'OST <span class="text-lowercase">⍺</span>'
+      }
     }
   },
 

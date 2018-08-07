@@ -133,7 +133,7 @@ export OST_VIEW_1409_UNAME="root";
 export OST_VIEW_1409_PWD="root";
 
 export OST_VIEW_ENVIRONMENT='development'
-export OST_SUB_VIEW_ENVIRONMENT='sandbox'
+export OST_VIEW_SUB_ENVIRONMENT='sandbox'
 
 export PUT_BASIC_AUTHENTICATION='false'
 
