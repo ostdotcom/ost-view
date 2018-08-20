@@ -31,7 +31,7 @@ OPENST-EXPLORER
   ```
   > To run migrations for all the configured chains (make sure all databases are created.)
   ```
-    > $OST_VIEW_PATH/node executables/db_migrate.js up
+    > node $OST_VIEW_PATH/executables/db_migrate.js up
   ```
 
 * Define chain configurations in set_env_vars.sh file
@@ -78,7 +78,7 @@ OPENST-EXPLORER
 ```base
 # Every five minute
 node executables/graph_cron.js >> log/graph_cron.log
-node executables/aggregator_cron.js >> log/aggregator_cron.log
+node executables/aggregator_cron.js -c <chain_id> >> log/aggregator_cron.log
 # Every minute
 node executables/block_fetcher_cron.js  -c <chain_id> >> log/block_fetcher_cron.log
 node executables/block_verifier_cron.js  -c <chain_id> >> log/block_verifier_cron.log
