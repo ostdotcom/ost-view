@@ -1,4 +1,4 @@
-OPENST-EXPLORER
+OPENST-VIEW
 ============
 
 ## Prerequisite installations 
@@ -11,7 +11,7 @@ OPENST-EXPLORER
 
 * Go to OpenST Explorer repo directory and create home directory env path
 ```
-  > cd openst-explorer
+  > cd openst-view
   > export OST_VIEW_PATH=$(pwd)
 ```
 
@@ -60,7 +60,7 @@ OPENST-EXPLORER
    * (Optional) Start notification listener(rabbitmq)
        > rabbitmq is required for notificationListener
        ```
-           > cd openst-explorer
+           > cd openst-view
            > source set_env_vars.sh
            > ./executables/notificationListener.js
        ```
@@ -69,7 +69,7 @@ OPENST-EXPLORER
 * Start node
   
     ```
-     > cd openst-explorer
+     > cd openst-view
      > source set_env_vars.sh
      > npm start
      
