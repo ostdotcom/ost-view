@@ -1,3 +1,5 @@
 {{>summary}}
+{{#when meta.sub_environment '!=' 'main'}}
 {{>graphs}}
+{{/when}}
 {{>homeDataTable}}

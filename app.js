@@ -214,6 +214,8 @@ if (cluster.isMaster) {
     return options.fn(context);
   });
 
+
+
   app.use(express.static(path.join(__dirname, 'public')));
 
   // load route files

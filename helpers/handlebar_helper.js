@@ -188,13 +188,21 @@ module.exports = {
       return  new bigNumber(0).toString(10);
     }
   },
-  
-  isMainSubEnvironment: function () {
-    return coreConstants.VIEW_SUB_ENVIRONMENT == 'main';
-  },
-  
-  isProductionEnvironment: function () {
-    return coreConstants.VIEW_ENVIRONMENT == 'production';
+
+  when: function(operand_1, operator, operand_2, options) {
+    var operators = {
+        '==': function(l,r) { return l == r; },
+        '!=': function(l,r) { return l != r; },
+        '>': function(l,r) { return Number(l) > Number(r); },
+        '<': function(l,r) { return Number(l) < Number(r); },
+        '||': function(l,r) { return l || r; },
+        '&&': function(l,r) { return l && r; },
+        '%': function(l,r) { return (l % r) === 0; }
+      }
+      , result = operators[operator](operand_1,operand_2);
+
+    if (result) return options.fn(this);
+    else  return options.inverse(this);
   },
 
   mainnetBaseURL: function () {
@@ -206,7 +214,10 @@ module.exports = {
   },
 
   etherscanEndpoint: function () {
-    if (this.isMainSubEnvironment() && this.isProductionEnvironment()) {
+    var isMainEnv = coreConstants.VIEW_SUB_ENVIRONMENT == 'main',
+        isProductionEnvironment = coreConstants.VIEW_ENVIRONMENT == 'production';
+
+    if (isMainEnv && isProductionEnvironment) {
       return 'etherscan.io';
     }
     else {

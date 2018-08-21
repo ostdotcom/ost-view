@@ -90,7 +90,7 @@ GetHomeDetailsKlass.prototype = {
       images = ["communities", "token-holders", "market-cap"];
       titles = ["Communities", "Ost Staked", "Tokens Minted"];
       values = [communitiesValue, marketCapValue, totalMintedBts];
-      visibility = [false, true, false];
+      visibility = [false, false, false];
     }
 
     for (let i = 0; i < images.length; i++) {

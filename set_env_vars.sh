@@ -10,7 +10,7 @@ export OST_VIEW_0_WEB_RPC="http://127.0.0.1:9546"
 
 #DB env
 export OST_VIEW_0_DB_USER="root"
-export OST_VIEW_0_DB_PWD="root"
+export OST_VIEW_0_DB_PWD="rootroot"
 
 export OST_VIEW_0_DB_NAME="ost_explorer_2000"
 
@@ -36,7 +36,7 @@ export OST_REDIS_PASS=''
 export OST_REDIS_TLS_ENABLED='0'
 
 # Notification
-export OST_RMQ_SUPPORT='1'
+export OST_RMQ_SUPPORT='0'
 export OST_RMQ_HOST='127.0.0.1'
 export OST_RMQ_PORT='5672'
 export OST_RMQ_USERNAME='guest'
@@ -59,6 +59,7 @@ export OST_VIEW_1409_UNAME="root";
 export OST_VIEW_1409_PWD="root";
 
 export OST_VIEW_ENVIRONMENT='development'
+export OST_VIEW_SUB_ENVIRONMENT='main'
 export OST_VIEW_SUB_ENVIRONMENT='main'
 export MAINNET_BASE_URL = 'mainnetview.stagingost.com'
 export TESTNET_BASE_URL = 'testnetview.stagingost.com'

@@ -120,7 +120,8 @@ function processTokenDetailsResponse(response, req, res) {
       token_transfer_graph_url: "/chain-id/"+req.params.chainId+"/tokenDetails/"+req.params.contractAddress+"/graph-date/numberOfTransactions/",
       token_volume_graph_url: "/chain-id/"+req.params.chainId+"/tokenDetails/"+req.params.contractAddress+"/graph-date/numberOfTransactions/",
       contract_address:req.params.contractAddress,
-      chain_id:req.params.chainId
+      chain_id:req.params.chainId,
+      sub_environment: coreConstant['VIEW_SUB_ENVIRONMENT']
     },
     page_meta: {
       title: 'OST VIEW | '+response.token_details.company_name +' ('+response.token_details.company_symbol+') token',

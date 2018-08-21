@@ -111,10 +111,10 @@ GetBrandedTokenDetailsKlass.prototype = {
       values = [marketCapValue, tokenHoldersValue, totalSupplyValue];
       visibility = [true, false, false];
     } else {
-      images = ["market-cap", "tokens-minted-image", "total-supply"]; //TODO: Tokens minted image to be changed
+      images = ["market-cap", "token-holders", "total-supply"]; //TODO: Tokens minted image to be changed
       titles = ["Ost Staked", "Tokens Minted", "Price in Ost"];
       values = [marketCapValue, totalSupplyValue, conversion_rate];
-      visibility = [true, false, false];
+      visibility = [false, false, false];
     }
 
     for (let i = 0; i < images.length; i++) {
