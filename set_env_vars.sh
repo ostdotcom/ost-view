@@ -6,7 +6,7 @@
 
 # chain env 2000
 export OST_VIEW_0_CHAIN_ID="2000"
-export OST_VIEW_0_WEB_RPC="http://devUtilityChain.com:9546"
+export OST_VIEW_0_WEB_RPC="http://127.0.0.1:9546"
 
 #DB env
 export OST_VIEW_0_DB_USER="root"
@@ -17,80 +17,6 @@ export OST_VIEW_0_DB_NAME="ost_explorer_2000"
 export OST_VIEW_0_DB_HOST="localhost"
 
 export OST_VIEW_0_DB_CONNECTION_LIMIT=10
-
-
-# chain env 2001
-export OST_VIEW_1_CHAIN_ID="2001"
-export OST_VIEW_1_WEB_RPC="http://devValueChain.com:8545"
-
-#DB env
-export OST_VIEW_1_DB_USER="root"
-export OST_VIEW_1_DB_PWD="root"
-
-export OST_VIEW_1_DB_NAME="ost_explorer_2001"
-
-export OST_VIEW_1_DB_HOST="localhost"
-
-export OST_VIEW_1_DB_CONNECTION_LIMIT=10
-
-
-# chain env 142
-export OST_VIEW_2_CHAIN_ID="142"
-export OST_VIEW_2_WEB_RPC="http://devUtilityChain.com:9546"
-
-#DB env
-export OST_VIEW_2_DB_USER="root"
-export OST_VIEW_2_DB_PWD="root"
-
-export OST_VIEW_2_DB_NAME="ost_explorer_142"
-
-export OST_VIEW_2_DB_HOST="localhost"
-
-export OST_VIEW_2_DB_CONNECTION_LIMIT=10
-
-# chain env 199
-export OST_VIEW_2_CHAIN_ID="199"
-export OST_VIEW_2_WEB_RPC="http://devUtilityChain.com:9546"
-
-#DB env
-export OST_VIEW_2_DB_USER="root"
-export OST_VIEW_2_DB_PWD="root"
-
-export OST_VIEW_2_DB_NAME="ost_explorer_199"
-
-export OST_VIEW_2_DB_HOST="localhost"
-
-export OST_VIEW_2_DB_CONNECTION_LIMIT=10
-
-# chain env 1409
-export OST_VIEW_3_CHAIN_ID="1409"
-export OST_VIEW_3_WEB_RPC="ws://127.0.0.1:8546"
-
-#DB env
-export OST_VIEW_3_DB_USER="root"
-export OST_VIEW_3_DB_PWD="root"
-
-export OST_VIEW_3_DB_NAME="ost_explorer_1409"
-
-export OST_VIEW_3_DB_HOST="localhost"
-
-export OST_VIEW_3_DB_CONNECTION_LIMIT=10
-
-
-# chain env 101 For testing
-export OST_VIEW_4_CHAIN_ID="101"
-export OST_VIEW_4_WEB_RPC="http://127.0.0.1:8545"
-
-#DB env
-export OST_VIEW_4_DB_USER="root"
-export OST_VIEW_4_DB_PWD="root"
-
-export OST_VIEW_4_DB_NAME="ost_explorer_101"
-
-export OST_VIEW_4_DB_HOST="localhost"
-
-export OST_VIEW_4_DB_CONNECTION_LIMIT=10
-
 
 #DB env
 
@@ -125,7 +51,7 @@ export OST_VIEW_PATH='.'
 
 #Web env variables
 
-export DEFAULT_CHAIN_ID='1409';
+export DEFAULT_CHAIN_ID='2000';
 
 export BASE_CONTRACT_ADDRESS='0';
 
@@ -133,7 +59,9 @@ export OST_VIEW_1409_UNAME="root";
 export OST_VIEW_1409_PWD="root";
 
 export OST_VIEW_ENVIRONMENT='development'
-export OST_VIEW_SUB_ENVIRONMENT='sandbox'
+export OST_VIEW_SUB_ENVIRONMENT='main'
+export MAINNET_BASE_URL = 'mainnetview.stagingost.com'
+export TESTNET_BASE_URL = 'testnetview.stagingost.com'
 
 export PUT_BASIC_AUTHENTICATION='false'
 

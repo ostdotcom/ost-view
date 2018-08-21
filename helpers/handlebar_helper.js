@@ -197,6 +197,14 @@ module.exports = {
     return coreConstants.VIEW_ENVIRONMENT == 'production';
   },
 
+  mainnetBaseURL: function () {
+    return coreConstants.MAINNET_BASE_URL;
+  },
+
+  testnetBaseURL: function () {
+    return coreConstants.TESTNET_BASE_URL;
+  },
+
   etherscanEndpoint: function () {
     if (this.isMainSubEnvironment() && this.isProductionEnvironment()) {
       return 'etherscan.io';
