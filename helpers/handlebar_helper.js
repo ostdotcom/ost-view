@@ -170,7 +170,7 @@ module.exports = {
 
   toOstGasPrice : function(amount){
     if (amount){
-      var bigNumberAmount = new bigNumber(amount)
+      var bigNumberAmount = new bigNumber(amount);
       var bigNumberDivisor = new bigNumber(10).toPower(18);
       return bigNumberAmount.div(bigNumberDivisor).toString(10);
     }else{
@@ -190,11 +190,19 @@ module.exports = {
   },
   
   isMainSubEnvironment: function () {
-    return coreConstants.VIEW_SUB_ENVIRONMENT == 'main' ? true : false;
+    return coreConstants.VIEW_SUB_ENVIRONMENT == 'main';
   },
   
   isProductionEnvironment: function () {
-    return coreConstants.VIEW_ENVIRONMENT == 'production' ? true : false;
-  }
+    return coreConstants.VIEW_ENVIRONMENT == 'production';
+  },
 
+  etherscanEndpoint: function () {
+    if (this.isMainSubEnvironment() && this.isProductionEnvironment()) {
+      return 'etherscan.io';
+    }
+    else {
+      return 'ropsten.etherscan.io';
+    }
+  }
 };
