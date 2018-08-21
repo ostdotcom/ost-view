@@ -14,28 +14,30 @@
                 </div>
             </div>
             <div class="section col-sm">
-                <div>
-                    <div class="name">Price in {{ostCurrencySymbol}}</div>
-                    <div class="value">{{math 1 '/' token_details.conversion_rate}}</div>
-                </div>
+                <!--<div>-->
+                    <!--<div class="name">Price in {{ostCurrencySymbol}}</div>-->
+                    <!--<div class="value">{{math 1 '/' token_details.conversion_rate}}</div>-->
+                <!--</div>-->
                 <div  class="mt-3">
-                    <div class="name">Creation Date</div>
+                    <div class="name">Created on</div>
                     <div class="value">{{toDate token_details.creation_timestamp}}</div>
-                </div>
-            </div>
-            <div class="section col-sm">
-                <div>
-                    <div class="name">Contract Address</div>
-                    <div class="text-truncate value" style="max-width: 300px;">{{token_details.contract_address}}</div>
                 </div>
                 <div  class="mt-3">
                     <div class="name">Token UUID</div>
                     <div class="text-truncate value" style="max-width: 300px;">{{token_details.uuid}}</div>
                 </div>
-                <div  class="mt-3">
-                    <div class="name">simple stake contract address</div>
+            </div>
+            <div class="section col-sm">
+                <div  >
+                    <div class="name">simple stake contract</div>
                     <a class="text-truncate value" style="max-width: 300px;" href="https://ropsten.etherscan.io/address/{{token_details.simple_stake_contract_address}}#tokentxns" target='blank'>{{token_details.simple_stake_contract_address}}</a>
                 </div>
+                <div class="mt-3">
+                    <div class="name">branded token contract</div>
+                    <div class="text-truncate value" style="max-width: 300px;">{{token_details.contract_address}}</div>
+                </div>
+
+
             </div>
         </div>
 

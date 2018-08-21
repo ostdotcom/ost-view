@@ -10,7 +10,7 @@ export OST_VIEW_0_WEB_RPC="http://devUtilityChain.com:9546"
 
 #DB env
 export OST_VIEW_0_DB_USER="root"
-export OST_VIEW_0_DB_PWD="root"
+export OST_VIEW_0_DB_PWD="rootroot"
 
 export OST_VIEW_0_DB_NAME="ost_explorer_2000"
 
@@ -110,7 +110,7 @@ export OST_REDIS_PASS=''
 export OST_REDIS_TLS_ENABLED='0'
 
 # Notification
-export OST_RMQ_SUPPORT='1'
+export OST_RMQ_SUPPORT='0'
 export OST_RMQ_HOST='127.0.0.1'
 export OST_RMQ_PORT='5672'
 export OST_RMQ_USERNAME='guest'
@@ -125,7 +125,7 @@ export OST_VIEW_PATH='.'
 
 #Web env variables
 
-export DEFAULT_CHAIN_ID='1409';
+export DEFAULT_CHAIN_ID='2000';
 
 export BASE_CONTRACT_ADDRESS='0';
 
