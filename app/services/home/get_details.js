@@ -79,7 +79,7 @@ GetHomeDetailsKlass.prototype = {
     let values = [];
     let visibility = [];
 
-    const details = [];
+    let details = [];
 
     if (!basicHelper.isMainSubEnvironment()) {
       images = ["communities", "token-holders", "market-cap"];

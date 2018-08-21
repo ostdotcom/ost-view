@@ -7,6 +7,7 @@ const rootPrefix = "../../.."
   , coreConstants = require(rootPrefix + '/config/core_constants')
   , BrandedTokenStatsDetails = require (rootPrefix + '/lib/cache_multi_management/branded_token_stats')
   , TokenUnits = require(rootPrefix + '/helpers/tokenUnits')
+  , basicHelper = require(rootPrefix + '/helpers/base')
 ;
 
 /**
@@ -69,13 +70,13 @@ GetBrandedTokenDetailsKlass.prototype = {
     const tokenDetails = brandedTokenDetailsData[contaractAddressId];
 
     finalFormattedHomeData['token_details'] = tokenDetails;
-    finalFormattedHomeData['token_info'] = oThis.getTokenDetails(brandedTokenStatsDetails);
+    finalFormattedHomeData['token_info'] = oThis.getTokenDetails(brandedTokenStatsDetails, tokenDetails.conversion_rate);
     finalFormattedHomeData['token_stats'] = oThis.getTokenStats(brandedTokenStatsDetails);
 
     return Promise.resolve(responseHelper.successWithData(finalFormattedHomeData));
   }
 
-  , getTokenDetails: function (token_details) {
+  , getTokenDetails: function (token_details, conversion_rate) {
 
     const oThis = this;
 
@@ -95,26 +96,35 @@ GetBrandedTokenDetailsKlass.prototype = {
     if (token_details && token_details.total_supply){
       totalSupplyValue = TokenUnits.convertToNormal(token_details['total_supply']).toFormat(0).toString(10)
     }
-    var details = [
-      {
-        img:"market-cap",
-        title:"Market Cap",
-        value: marketCapValue,
-        is_badge_visible:true
-      },
-      {
-        img:"token-holders",
-        title:"Token Holders",
-        value: tokenHoldersValue,
-        is_badge_visible:false
-      },
-      {
-        img:"total-supply",
-        title:"Total Supply",
-        value: totalSupplyValue,
-        is_badge_visible:false
-      }
-    ];
+
+
+    let images = [];
+    let titles = [];
+    let values = [];
+    let visibility = [];
+
+    let details = [];
+
+    if (!basicHelper.isMainSubEnvironment()) {
+      images = ["market-cap", "token-holders", "total-supply"];
+      titles = ["Market Cap", "Token Holders", "Total Supply"];
+      values = [marketCapValue, tokenHoldersValue, totalSupplyValue];
+      visibility = [true, false, false];
+    } else {
+      images = ["market-cap", "tokens-minted-image", "total-supply"]; //TODO: Tokens minted image to be changed
+      titles = ["Ost Staked", "Tokens Minted", "Price in Ost"];
+      values = [marketCapValue, totalSupplyValue, conversion_rate];
+      visibility = [true, false, false];
+    }
+
+    for (let i = 0; i < images.length; i++) {
+      details.push({
+        img: images[i],
+        title: titles[i],
+        value: values[i],
+        is_badge_visible: visibility[i]
+      });
+    }
 
     return details;
   },
