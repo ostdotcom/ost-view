@@ -5,6 +5,7 @@ const rootPrefix = "../../.."
   , coreConstants = require(rootPrefix + '/config/core_constants')
   , TokenUnits = require(rootPrefix + '/helpers/tokenUnits')
   , HomePageStatsCacheKlass = require (rootPrefix + '/lib/cache_management/home_page_stats')
+  , basicHelper = require(rootPrefix + '/helpers/base')
 ;
 
 /**
@@ -53,6 +54,7 @@ GetHomeDetailsKlass.prototype = {
     var communitiesValue = 0
       , tokenHoldersValue = 0
       , marketCapValue = 0
+      , totalMintedBts = 0
     ;
 
     if (chain_data && chain_data.communities_count){
@@ -66,26 +68,39 @@ GetHomeDetailsKlass.prototype = {
     if (chain_data && chain_data.market_cap){
       marketCapValue = TokenUnits.convertToNormal(chain_data.market_cap).toFormat(0)
     }
-    const details = [
-      {
-        img: "communities",
-        title: "Communities",
-        value: communitiesValue,
-        is_badge_visible: false
-      },
-      {
-        img: "token-holders",
-        title: "Token Holders",
-        value: tokenHoldersValue,
-        is_badge_visible: false
-      },
-      {
-        img: "market-cap",
-        title: "Market Cap",
-        value: marketCapValue,
-        is_badge_visible: true
-      }
-    ];
+
+    if (chain_data && chain_data.total_minted_bts){
+      totalMintedBts = TokenUnits.convertToNormal(chain_data.total_minted_bts).toFormat(0)
+    }
+
+
+    let images = [];
+    let titles = [];
+    let values = [];
+    let visibility = [];
+
+    const details = [];
+
+    if (!basicHelper.isMainSubEnvironment()) {
+      images = ["communities", "token-holders", "market-cap"];
+      titles = ["Communities", "Token Holders", "Market Cap"];
+      values = [communitiesValue, tokenHoldersValue, marketCapValue];
+      visibility = [false, false, true];
+    } else {
+      images = ["communities", "token-holders", "market-cap"];
+      titles = ["Communities", "Ost Staked", "Tokens Minted"];
+      values = [communitiesValue, marketCapValue, totalMintedBts];
+      visibility = [false, true, false];
+    }
+
+    for (let i = 0; i < images.length; i++) {
+      details.push({
+        img: images[i],
+        title: titles[i],
+        value: values[i],
+        is_badge_visible: visibility[i]
+      });
+    }
 
     return details;
   },

@@ -188,5 +188,13 @@ module.exports = {
       return  new bigNumber(0).toString(10);
     }
   },
+  
+  isMainSubEnvironment: function () {
+    return coreConstants.VIEW_SUB_ENVIRONMENT == 'main' ? true : false;
+  },
+  
+  isProductionEnvironment: function () {
+    return coreConstants.VIEW_ENVIRONMENT == 'production' ? true : false;
+  }
 
 };
