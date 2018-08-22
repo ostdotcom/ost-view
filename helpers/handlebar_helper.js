@@ -38,29 +38,29 @@ module.exports = {
     return formattedDate;
   },
 
-  math: function (lvalue, operator, rvalue) {
-
-    if (!rvalue || !lvalue) {
-      return '';
-    }
-
-    lvalue = new bigNumber(lvalue.toString());
-    rvalue = new bigNumber(rvalue.toString());
-
-    var value =  {
-      "+": lvalue.plus(rvalue),
-      "-": lvalue.minus(rvalue),
-      "*": lvalue.times(rvalue),
-      "/": lvalue.dividedBy(rvalue),
-      "%": lvalue.modulo(rvalue)
-    }[operator];
-
-    if (isNaN(value)){
-      return '0';
-    }else{
-      return new bigNumber(value.toString()).toFormat(5);
-    }
-  },
+  // math: function (lvalue, operator, rvalue) {
+  //
+  //   if (!rvalue || !lvalue) {
+  //     return '';
+  //   }
+  //
+  //   lvalue = new bigNumber(lvalue.toString());
+  //   rvalue = new bigNumber(rvalue.toString());
+  //
+  //   var value =  {
+  //     "+": lvalue.plus(rvalue),
+  //     "-": lvalue.minus(rvalue),
+  //     "*": lvalue.times(rvalue),
+  //     "/": lvalue.dividedBy(rvalue),
+  //     "%": lvalue.modulo(rvalue)
+  //   }[operator];
+  //
+  //   if (isNaN(value)){
+  //     return '0';
+  //   }else{
+  //     return new bigNumber(value.toString()).toFormat(5);
+  //   }
+  // },
 
   randomStr: function(){
     return Math.random().toString(36).replace(/[^a-z]+/g, '');
