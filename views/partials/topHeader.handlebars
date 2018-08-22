@@ -16,7 +16,7 @@
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle mx-2" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        {{#when meta.sub_environment '==' 'main'}} {{meta.sub_environment}}{{else}}{{meta.sub_environment}}{{/when}}NET
+                        {{#when meta.sub_environment '==' 'main'}} MAINNET{{else}}TESTNET{{/when}}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                             <a class="dropdown-item chain-data {{#when meta.sub_environment '!=' 'main'}}selected {{/when}}" href="http://{{{testnetBaseURL}}}">Testnet Auxiliary Chain</a>
