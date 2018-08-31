@@ -1,5 +1,5 @@
-$sprite-retina-location: "//dxwfxs8b4lg24.cloudfront.net/ost-view/images/sprite-2x-1.png";
-$sprite-location: "//dxwfxs8b4lg24.cloudfront.net/ost-view/images/sprite-1x-1.png";
+$sprite-retina-location: "//dxwfxs8b4lg24.cloudfront.net/ost-view/images/ost-view-sprite@2x-3.png";
+$sprite-location: "//dxwfxs8b4lg24.cloudfront.net/ost-view/images/ost-view-sprite@1x-3.png";
 
 @mixin icon-generator($width,$height,$posX,$posY,$offsetHover,$offsetActive,$scale:100) {
   background-image: url($sprite-location);
@@ -68,4 +68,8 @@ $sprite-location: "//dxwfxs8b4lg24.cloudfront.net/ost-view/images/sprite-1x-1.pn
 
 .time.icon{
   @include icon-generator(15px, 15px, -35px, -100px, -35px, -35px);
+}
+
+.etherscan.icon{
+  @include icon-generator(28px, 28px, -503px, -88px, -503px, 503px, 70);
 }

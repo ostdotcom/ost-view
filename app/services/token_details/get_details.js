@@ -7,6 +7,7 @@ const rootPrefix = "../../.."
   , coreConstants = require(rootPrefix + '/config/core_constants')
   , BrandedTokenStatsDetails = require (rootPrefix + '/lib/cache_multi_management/branded_token_stats')
   , TokenUnits = require(rootPrefix + '/helpers/tokenUnits')
+  , basicHelper = require(rootPrefix + '/helpers/base')
 ;
 
 /**
@@ -69,13 +70,13 @@ GetBrandedTokenDetailsKlass.prototype = {
     const tokenDetails = brandedTokenDetailsData[contaractAddressId];
 
     finalFormattedHomeData['token_details'] = tokenDetails;
-    finalFormattedHomeData['token_info'] = oThis.getTokenDetails(brandedTokenStatsDetails);
+    finalFormattedHomeData['token_info'] = oThis.getTokenDetails(brandedTokenStatsDetails, tokenDetails);
     finalFormattedHomeData['token_stats'] = oThis.getTokenStats(brandedTokenStatsDetails);
 
     return Promise.resolve(responseHelper.successWithData(finalFormattedHomeData));
   }
 
-  , getTokenDetails: function (token_details) {
+  , getTokenDetails: function (bt_details_stats, token_details) {
 
     const oThis = this;
 
@@ -84,54 +85,63 @@ GetBrandedTokenDetailsKlass.prototype = {
       , tokenHoldersValue = 0
     ;
 
-    if (token_details && token_details.market_cap){
-      marketCapValue = TokenUnits.convertToNormal(token_details['market_cap']).toFormat(0).toString(10);
+    if (bt_details_stats && bt_details_stats.market_cap){
+      marketCapValue = TokenUnits.convertToNormal(bt_details_stats['market_cap']).toFormat(0).toString(10);
     }
 
-    if (token_details && token_details.token_holders){
-      tokenHoldersValue = TokenUnits.toBigNumber(token_details['token_holders']).toFormat(0).toString(10);
+    if (bt_details_stats && bt_details_stats.token_holders){
+      tokenHoldersValue = TokenUnits.toBigNumber(bt_details_stats['token_holders']).toFormat(0).toString(10);
     }
 
-    if (token_details && token_details.total_supply){
-      totalSupplyValue = TokenUnits.convertToNormal(token_details['total_supply']).toFormat(0).toString(10)
+    if (bt_details_stats && bt_details_stats.total_supply){
+      totalSupplyValue = TokenUnits.convertToNormal(bt_details_stats['total_supply']).toFormat(0).toString(10)
     }
-    var details = [
-      {
-        img:"market-cap",
-        title:"Market Cap",
-        value: marketCapValue,
-        is_badge_visible:true
-      },
-      {
-        img:"token-holders",
-        title:"Token Holders",
-        value: tokenHoldersValue,
-        is_badge_visible:false
-      },
-      {
-        img:"total-supply",
-        title:"Total Supply",
-        value: totalSupplyValue,
-        is_badge_visible:false
-      }
-    ];
+
+
+    let images = [];
+    let titles = [];
+    let values = [];
+    let visibility = [];
+
+    let details = [];
+
+    if (!basicHelper.isMainSubEnvironment()) {
+      images = ["market-cap", "token-holders", "total-supply"];
+      titles = ["Market Cap", "Token Holders", "Total Supply"];
+      values = [marketCapValue, tokenHoldersValue, totalSupplyValue];
+      visibility = [true, false, false];
+    } else {
+      images = ["market-cap", "token-holders", "total-supply"]; //TODO: Tokens minted image to be changed
+      titles = ["Ost Staked", "Tokens Minted", "Price in Ost"];
+      values = [marketCapValue, totalSupplyValue, basicHelper.math(1, '/', token_details.conversion_rate)];
+      visibility = [false, false, false];
+    }
+
+    for (let i = 0; i < images.length; i++) {
+      details.push({
+        img: images[i],
+        title: titles[i],
+        value: values[i],
+        is_badge_visible: visibility[i]
+      });
+    }
 
     return details;
   },
 
-  getTokenStats: function (token_details) {
+  getTokenStats: function (bt_details_stats) {
     const oThis = this;
 
     var tokentransfersValue = 0
       , tokenVolumeValue = 0
     ;
 
-    if (token_details && token_details.token_transfers){
-      tokentransfersValue = TokenUnits.toBigNumber(token_details.token_transfers).toFormat(0).toString(10);
+    if (bt_details_stats && bt_details_stats.token_transfers){
+      tokentransfersValue = TokenUnits.toBigNumber(bt_details_stats.token_transfers).toFormat(0).toString(10);
     }
 
-    if (token_details && token_details.token_ost_volume){
-      tokenVolumeValue = TokenUnits.convertToNormal(token_details.token_ost_volume).toFormat(0).toString(10)
+    if (bt_details_stats && bt_details_stats.token_ost_volume){
+      tokenVolumeValue = TokenUnits.convertToNormal(bt_details_stats.token_ost_volume).toFormat(0).toString(10)
     }
 
     var details = {

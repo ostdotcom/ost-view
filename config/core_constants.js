@@ -92,9 +92,17 @@ define('DEFAULT_MYSQL_PASSWORD', process.env.OV_DEFAULT_MYSQL_PASSWORD);
 
 //Basic auth
 define('ENVIRONMENT',process.env.NODE_ENV);
+
+
+define('VIEW_ENVIRONMENT',process.env.OST_VIEW_ENVIRONMENT);
+define('VIEW_SUB_ENVIRONMENT',process.env.OST_VIEW_SUB_ENVIRONMENT);
+
 define('PUT_BASIC_AUTHENTICATION',process.env.PUT_BASIC_AUTHENTICATION);
 
 //cloudfront url for fetching assets(js/css)
 define("CLOUD_FRONT_BASE_DOMAIN",process.env.CLOUDFRONT_BASE_DOMAIN);
+
+define('MAINNET_BASE_URL',process.env.MAINNET_BASE_URL);
+define('TESTNET_BASE_URL',process.env.TESTNET_BASE_URL);
 
 module.exports = constants;

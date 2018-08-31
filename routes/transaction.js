@@ -83,7 +83,8 @@ function processTransactionResponse(requestResponse, req, res){
         address_placeholder_url: '/chain-id/'+req.params.chainId+'/address/',
         block_placeholder_url: '/chain-id/'+req.params.chainId+'/block/',
         token_details_redirect_url: '/chain-id/'+req.params.chainId+'/tokendetails/',
-      }
+      },
+      sub_environment: coreConstant['VIEW_SUB_ENVIRONMENT']
     },
     page_meta: {
       title: 'OST VIEW | Tx Details - '+req.params.transactionHash,

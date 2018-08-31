@@ -57,7 +57,8 @@ function processBlockResponse (blockHash, req, res){
     meta:{
       transaction_url: "/chain-id/"+req.params.chainId+"/block/"+req.params.blockNumber+"/token-transfers",
       chain_id:req.params.chainId,
-      q:req.params.blockNumber
+      q:req.params.blockNumber,
+      sub_environment: coreConstant['VIEW_SUB_ENVIRONMENT']
     },
     page_meta: {
       title: 'OST VIEW | Block Details - '+req.params.blockNumber,

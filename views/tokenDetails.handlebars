@@ -1,5 +1,7 @@
 {{>pageTitle title=token_details.company_name}}
 {{>details}}
 {{>summary}}
+{{#when meta.sub_environment '!=' 'main'}}
 {{>graphs}}
+{{/when}}
 {{>tokenDetailsDataTable}}

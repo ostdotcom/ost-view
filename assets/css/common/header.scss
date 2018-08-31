@@ -9,9 +9,38 @@ header.container-fluid{
         height: 30px;
     }
 
-    .about{
-        font-size: 0.8rem;
-        color: rgba(0,0,0,.5);
+    .navbar-nav{
+        .nav-item{
+            .nav-link,
+            .dropdown-item{
+                font-size: 0.8rem;
+                color: rgba(0,0,0,.5);
+                text-transform: uppercase;
+            }
+        }
+    }
+
+    .dropdown-menu{
+        margin-top: 13px;
+        .dropdown-item{
+            font-size: 10px;
+        }
+        .selected{
+            background-color:#f6f7f7 ;
+        }
+    }
+
+
+    .dropdown-toggle:after {
+        border: 0;
+        content: "";
+        display: inline-block;
+        background: url("https://dxwfxs8b4lg24.cloudfront.net/ost-kit/images/drop-down-arrow.svg") no-repeat center;
+        background-size: 75%;
+        height: 10px;
+        width: 14px;
+        position: relative;
+        top: 4px;
     }
 
     .input-group{
