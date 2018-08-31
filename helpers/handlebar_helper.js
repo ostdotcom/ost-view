@@ -1,10 +1,11 @@
 const moment = require('moment')
-  ,  bigNumber = require('bignumber.js');
-  ;
+  ,  bigNumber = require('bignumber.js')
+;
 
-const preRoot = "../",
-     erc20Tokens = require(preRoot + '/lib/contract_interact/contractDecoder');
-
+const rootPrefix = "../",
+     erc20Tokens = require(rootPrefix + '/lib/contract_interact/contractDecoder')
+  , coreConstants = require(rootPrefix + '/config/core_constants')
+;
 
 module.exports = {
   isNODE_ENV_PROD : function(options){
@@ -37,29 +38,29 @@ module.exports = {
     return formattedDate;
   },
 
-  math: function (lvalue, operator, rvalue) {
-
-    if (!rvalue || !lvalue) {
-      return '';
-    }
-
-    lvalue = new bigNumber(lvalue.toString());
-    rvalue = new bigNumber(rvalue.toString());
-
-    var value =  {
-      "+": lvalue.plus(rvalue),
-      "-": lvalue.minus(rvalue),
-      "*": lvalue.times(rvalue),
-      "/": lvalue.dividedBy(rvalue),
-      "%": lvalue.modulo(rvalue)
-    }[operator];
-
-    if (isNaN(value)){
-      return '0';
-    }else{
-      return new bigNumber(value.toString()).toFormat(5);
-    }
-  },
+  // math: function (lvalue, operator, rvalue) {
+  //
+  //   if (!rvalue || !lvalue) {
+  //     return '';
+  //   }
+  //
+  //   lvalue = new bigNumber(lvalue.toString());
+  //   rvalue = new bigNumber(rvalue.toString());
+  //
+  //   var value =  {
+  //     "+": lvalue.plus(rvalue),
+  //     "-": lvalue.minus(rvalue),
+  //     "*": lvalue.times(rvalue),
+  //     "/": lvalue.dividedBy(rvalue),
+  //     "%": lvalue.modulo(rvalue)
+  //   }[operator];
+  //
+  //   if (isNaN(value)){
+  //     return '0';
+  //   }else{
+  //     return new bigNumber(value.toString()).toFormat(5);
+  //   }
+  // },
 
   randomStr: function(){
     return Math.random().toString(36).replace(/[^a-z]+/g, '');
@@ -120,6 +121,23 @@ module.exports = {
     }
   },
 
+  /**
+   * OST Currency Symbol
+   *
+   * @return {String}
+   */
+  ostCurrencySymbol: function(withoutFormatting) {
+    if(coreConstants.VIEW_SUB_ENVIRONMENT == 'main'){
+      return 'OST'
+    } else {
+      if(withoutFormatting) {
+        return 'OST ⍺'
+      } else {
+        return 'OST <span class="text-lowercase">⍺</span>'
+      }
+    }
+  },
+
   getBtBalance: function(amount, precision) {
     precision = Number( precision );
     if ( isNaN( precision ) || !precision ) {
@@ -152,7 +170,7 @@ module.exports = {
 
   toOstGasPrice : function(amount){
     if (amount){
-      var bigNumberAmount = new bigNumber(amount)
+      var bigNumberAmount = new bigNumber(amount);
       var bigNumberDivisor = new bigNumber(10).toPower(18);
       return bigNumberAmount.div(bigNumberDivisor).toString(10);
     }else{
@@ -171,4 +189,39 @@ module.exports = {
     }
   },
 
+  when: function(operand_1, operator, operand_2, options) {
+    var operators = {
+        '==': function(l,r) { return l == r; },
+        '!=': function(l,r) { return l != r; },
+        '>': function(l,r) { return Number(l) > Number(r); },
+        '<': function(l,r) { return Number(l) < Number(r); },
+        '||': function(l,r) { return l || r; },
+        '&&': function(l,r) { return l && r; },
+        '%': function(l,r) { return (l % r) === 0; }
+      }
+      , result = operators[operator](operand_1,operand_2);
+
+    if (result) return options.fn(this);
+    else  return options.inverse(this);
+  },
+
+  mainnetBaseURL: function () {
+    return coreConstants.MAINNET_BASE_URL;
+  },
+
+  testnetBaseURL: function () {
+    return coreConstants.TESTNET_BASE_URL;
+  },
+
+  etherscanEndpoint: function () {
+    var isMainEnv = coreConstants.VIEW_SUB_ENVIRONMENT == 'main',
+        isProductionEnvironment = coreConstants.VIEW_ENVIRONMENT == 'production';
+
+    if (isMainEnv && isProductionEnvironment) {
+      return 'etherscan.io';
+    }
+    else {
+      return 'ropsten.etherscan.io';
+    }
+  }
 };

@@ -48,7 +48,7 @@
                                 </td>
                                 <td style="width: 14%">
                                     <div class="cell d-flex align-items-center">
-                                        <span class="ml-1">{{getOstBalance tokens contract_address ../contract_addresses 'price'}} OST <span class="text-lowercase">⍺</span></span>
+                                        <span class="ml-1">{{getOstBalance tokens contract_address ../contract_addresses 'price'}} {{ostCurrencySymbol}}</span>
                                     </div>
                                 </td>
                                 <td style="width: 16%">
@@ -90,7 +90,7 @@
                         <div class="cell d-flex align-items-center ml-2">
                             <span class="staked-coin icon"></span>
                             {{#if transaction.tokens}}
-                                <span class="value-color font-weight-light ml-1">{{toOSTAlpha transaction.tokens}} OST<span class="text-lowercase">⍺</span></span>
+                                <span class="value-color font-weight-light ml-1">{{toOSTAlpha transaction.tokens}} {{ostCurrencySymbol}}</span>
                             {{/if}}
                          </div>
                     </div>
@@ -113,7 +113,7 @@
                 <div class="card-body">
                     <span class="key-color mr-1"> Gas Price </span>
                     {{#if transaction.gas_price}}
-                        <span class="value-color font-weight-light"> {{toOstGasPrice transaction.gas_price}} OST<span class="text-lowercase">⍺</span> ({{toGWai transaction.gas_price}} GWei) </span>
+                        <span class="value-color font-weight-light"> {{toOstGasPrice transaction.gas_price}} {{ostCurrencySymbol}} ({{toGWai transaction.gas_price}} GWei) </span>
                     {{/if}}
                 </div>
 

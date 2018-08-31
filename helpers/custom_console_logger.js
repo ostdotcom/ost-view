@@ -164,7 +164,7 @@ CustomConsoleLoggerKlass.prototype = {
     args.push(this.CONSOLE_RESET);
     console.log.apply(console, args);
 
-    if ('development' !== process.env.OST_VIEW_ENVIRONMENT) {
+    if ('development' !== coreConstants.VIEW_ENVIRONMENT) {
       openSTNotification.publishEvent.perform(
         {
           topics:["email_error."+packageName],
@@ -174,7 +174,7 @@ CustomConsoleLoggerKlass.prototype = {
             payload: {
               from: process.env.NOTIFY_FROM_ADDRESS,
               to: 'backend@ost.com',
-              subject: packageName + " :: OST View Env ::" + process.env.OST_VIEW_ENVIRONMENT + "::" + code,
+              subject: packageName + " :: OST View Env ::" + coreConstants.VIEW_ENVIRONMENT + "::" + code,
               body: " Message: " + msg + " \n Data: " + JSON.stringify(data) + " \n backtrace: " + backtrace
             }
           }

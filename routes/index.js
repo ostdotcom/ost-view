@@ -91,7 +91,8 @@ function processHomeDetailsResponse(requestResponse, req, res) {
       "top_tokens_url" : "/chain-id/"+chainId+"/tokens/top",
       "latest_token_transfer_url" : "/chain-id/"+chainId+"/tokens/transactions/recent",
       "token_transfer_graph_url" : "/chain-id/"+chainId+"/tokenDetails/"+baseContractAddress+"/graph-date/numberOfTransactions/",
-      "token_volume_graph_url" : "/chain-id/"+chainId+"/tokenDetails/"+baseContractAddress+"/graph-date/numberOfTransactions/"
+      "token_volume_graph_url" : "/chain-id/"+chainId+"/tokenDetails/"+baseContractAddress+"/graph-date/numberOfTransactions/",
+      "sub_environment": coreConstant['VIEW_SUB_ENVIRONMENT']
     },
     page_meta: {
       title: 'OST VIEW - Block Explorer for OpenST Utility Blockchains',

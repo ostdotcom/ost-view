@@ -64,7 +64,8 @@ function processAddressDetailsResponse( response, req, res ) {
     meta: {
       q: req.params.address,
       address:req.params.address,
-      transaction_url: '/chain-id/'+req.params.chainId+'/address/'+req.params.address+'/token-transfers'
+      transaction_url: '/chain-id/'+req.params.chainId+'/address/'+req.params.address+'/token-transfers',
+      sub_environment: coreConstant['VIEW_SUB_ENVIRONMENT']
     },
     page_meta: {
       title: 'OST VIEW | Address Details - '+req.params.address,

@@ -1,4 +1,4 @@
-OPENST-EXPLORER
+OPENST-VIEW
 ============
 
 ## Prerequisite installations 
@@ -11,7 +11,7 @@ OPENST-EXPLORER
 
 * Go to OpenST Explorer repo directory and create home directory env path
 ```
-  > cd openst-explorer
+  > cd openst-view
   > export OST_VIEW_PATH=$(pwd)
 ```
 
@@ -31,7 +31,7 @@ OPENST-EXPLORER
   ```
   > To run migrations for all the configured chains (make sure all databases are created.)
   ```
-    > $OST_VIEW_PATH/node executables/db_migrate.js up
+    > node $OST_VIEW_PATH/executables/db_migrate.js up
   ```
 
 * Define chain configurations in set_env_vars.sh file
@@ -60,7 +60,7 @@ OPENST-EXPLORER
    * (Optional) Start notification listener(rabbitmq)
        > rabbitmq is required for notificationListener
        ```
-           > cd openst-explorer
+           > cd openst-view
            > source set_env_vars.sh
            > ./executables/notificationListener.js
        ```
@@ -69,7 +69,7 @@ OPENST-EXPLORER
 * Start node
   
     ```
-     > cd openst-explorer
+     > cd openst-view
      > source set_env_vars.sh
      > npm start
      
@@ -78,7 +78,7 @@ OPENST-EXPLORER
 ```base
 # Every five minute
 node executables/graph_cron.js >> log/graph_cron.log
-node executables/aggregator_cron.js >> log/aggregator_cron.log
+node executables/aggregator_cron.js -c <chain_id> >> log/aggregator_cron.log
 # Every minute
 node executables/block_fetcher_cron.js  -c <chain_id> >> log/block_fetcher_cron.log
 node executables/block_verifier_cron.js  -c <chain_id> >> log/block_verifier_cron.log
