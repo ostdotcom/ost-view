@@ -4,7 +4,7 @@
 
 
         <nav class="navbar navbar-expand-lg navbar-light navbar-ost">
-            <a class="navbar-brand" href="/"><span class="ost-view-logo icon logo mt-2 mb-2"></span></a>
+            <a class="navbar-brand" href="{{#if isViewSubEnvMain}}/{{else}}/{{meta.baseUrlPrefix}}{{/if}}"><span class="ost-view-logo icon logo mt-2 mb-2"></span></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -12,26 +12,32 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link mx-2" href="https://docs.google.com/document/u/1/d/e/2PACX-1vT4pDdotBe4vf_CBHpT6mkHb0qqL67JYiFb-qnarzhCocLUjopbZzlYlF-AGL_cPfTavkwGT9Z8Bvuv/pub?embedded=true" target="_blank">About</a>
+                        <a class="nav-link mx-2" href="/about">About</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle mx-2" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        {{#when meta.sub_environment '==' 'main'}} MAINNET{{else}}TESTNET{{/when}}
+                        {{#isMainNetUrlPrefix meta.baseUrlPrefix }} MAINNET {{/isMainNetUrlPrefix}}
+                        {{#isTestNetUrlPrefix meta.baseUrlPrefix}} TESTNET {{/isTestNetUrlPrefix}}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item chain-data {{#when meta.sub_environment '!=' 'main'}}selected {{/when}}" href="http://{{{testnetBaseURL}}}">Testnet Auxiliary Chain</a>
-                            <a class="dropdown-item chain-data {{#when meta.sub_environment '==' 'main'}}selected {{/when}}" href="http://{{mainnetBaseURL}}">Mainnet Auxiliary Chain</a>
+                            <a class="dropdown-item chain-data {{#isMainNetUrlPrefix meta.baseUrlPrefix}} selected {{/isMainNetUrlPrefix}}" href="/">
+                                Mainnet Auxiliary Chain
+                            </a>
+                            <a class="dropdown-item chain-data {{#isTestNetUrlPrefix meta.baseUrlPrefix}} selected {{/isTestNetUrlPrefix}}" href="/{{{testnetBaseURL}}}">Testnet Auxiliary Chain</a>
                         </div>
                     </li>
                 </ul>
-                <form id="btxSearch-sm" class="form-inline my-2 my-lg-0 btxSearch" action="/search">
-                    <div class="input-group input-group-sm">
-                        <input class="form-control" id="search" type="search" name="q" placeholder="Token, Transactions, Address or Block#" aria-label="Search">
+                <form id="btxSearch-sm" class="form-inline my-2 my-lg-0 btxSearch view-search" autocomplete="off">
+                    <div class="input-group input-group-sm btxSearch-wrapper">
+                        <input class="form-control" id="search" type="search" name="q" autocomplete="off"
+                               placeholder="Token, Tx Hash, Address or Block" aria-label="Search">
                         <div class="input-group-append">
-                            <button class="btn btn-outline-secondary input-group-text" type="submit">
+                            <div class="btn btn-outline-secondary input-group-text" >
                                 <span class="search icon"></span>
-                            </button>
+                            </div>
                         </div>
+                    </div>
+                    <div id="search-result-wrapper" class="search-result">
                     </div>
                 </form>
             </div>
@@ -40,4 +46,17 @@
     </div>
 
 </header>
+
+{{>ui/searchTemplates}}
+
+{{#contentFor "pageScripts"}}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            btx.search.init({
+                url : '/{{meta.baseUrlPrefix}}/search'
+            });
+        });
+    </script>
+
+{{/contentFor}}
 

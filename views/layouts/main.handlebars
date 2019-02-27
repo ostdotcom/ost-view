@@ -23,20 +23,20 @@
     <meta name="google-site-verification" content="HXVSECDp1rMChIwEQ2pT9ti4NUHd7yAvXz8sQvvhyFw" />
     {{/if}}
 
-    <link rel="icon" type="image/png" sizes="64x64" href="https://{{constants.cloud_front_base_domain}}/ost-kit/images/fav-icons/64x64.png">
-    <link rel="apple-touch-icon" sizes="57x57" href="https://{{constants.cloud_front_base_domain}}/ost-kit/images/fav-icons/57x57.png">
-    <link rel="apple-touch-icon" sizes="60x60" href="https://{{constants.cloud_front_base_domain}}/ost-kit/images/fav-icons/60x60.png">
-    <link rel="apple-touch-icon" sizes="72x72" href="https://{{constants.cloud_front_base_domain}}/ost-kit/images/fav-icons/72x72.png">
-    <link rel="apple-touch-icon" sizes="76x76" href="https://{{constants.cloud_front_base_domain}}/ost-kit/images/fav-icons/76x76.png">
-    <link rel="apple-touch-icon" sizes="114x114" href="https://{{constants.cloud_front_base_domain}}/ost-kit/images/fav-icons/114x114.png">
-    <link rel="apple-touch-icon" sizes="120x120" href="https://{{constants.cloud_front_base_domain}}/ost-kit/images/fav-icons/120x120.png">
-    <link rel="apple-touch-icon" sizes="144x144" href="https://{{constants.cloud_front_base_domain}}/ost-kit/images/fav-icons/144x144.png">
-    <link rel="apple-touch-icon" sizes="152x152" href="https://{{constants.cloud_front_base_domain}}/ost-kit/images/fav-icons/152x152.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="https://{{constants.cloud_front_base_domain}}/ost-kit/images/fav-icons/180x180.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="https://{{constants.cloud_front_base_domain}}/ost-kit/images/fav-icons/192x192.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="https://{{constants.cloud_front_base_domain}}/ost-kit/images/fav-icons/32x32.png">
-    <link rel="icon" type="image/png" sizes="96x96" href="https://{{constants.cloud_front_base_domain}}/ost-kit/images/fav-icons/96x96.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="https://{{constants.cloud_front_base_domain}}/ost-kit/images/fav-icons/16x16.png">
+    <link rel="icon" type="image/png" sizes="64x64" href="{{constants.cloud_front_base_domain}}/ost-kit/images/fav-icons/64x64.png">
+    <link rel="apple-touch-icon" sizes="57x57" href="{{constants.cloud_front_base_domain}}/ost-kit/images/fav-icons/57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="{{constants.cloud_front_base_domain}}/ost-kit/images/fav-icons/60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="{{constants.cloud_front_base_domain}}/ost-kit/images/fav-icons/72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="{{constants.cloud_front_base_domain}}/ost-kit/images/fav-icons/76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="{{constants.cloud_front_base_domain}}/ost-kit/images/fav-icons/114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="{{constants.cloud_front_base_domain}}/ost-kit/images/fav-icons/120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="{{constants.cloud_front_base_domain}}/ost-kit/images/fav-icons/144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="{{constants.cloud_front_base_domain}}/ost-kit/images/fav-icons/152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{constants.cloud_front_base_domain}}/ost-kit/images/fav-icons/180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="{{constants.cloud_front_base_domain}}/ost-kit/images/fav-icons/192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{constants.cloud_front_base_domain}}/ost-kit/images/fav-icons/32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="{{constants.cloud_front_base_domain}}/ost-kit/images/fav-icons/96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{constants.cloud_front_base_domain}}/ost-kit/images/fav-icons/16x16.png">
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     {{{css 'mCommon.css'}}}
@@ -44,10 +44,6 @@
     {{{css this}}}
     {{/each}}
     <script>window.name = "{{randomStr}}";</script>
-
-    {{#isNODE_ENV_PROD}}
-    {{>gaConfig}}
-    {{/isNODE_ENV_PROD}}
 
 </head>
 <body contenteditable="false">

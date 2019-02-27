@@ -23,7 +23,13 @@ header.container-fluid{
     .dropdown-menu{
         margin-top: 13px;
         .dropdown-item{
-            font-size: 10px;
+            padding: .5rem 1.5rem;
+            font-size: 0.8rem;
+            color: rgba(0,0,0,.5);
+            text-transform: uppercase;
+            &:active{
+                background-color: transparent;
+            }
         }
         .selected{
             background-color:#f6f7f7 ;
@@ -56,7 +62,7 @@ header.container-fluid{
                 &:hover,
                 &:active{
                     border-color: #ced4da;
-                    background: #f1f4f7;
+                    //background: #f1f4f7;
                 }
                 &:focus{
                     border-color: #ced4da;
@@ -79,6 +85,7 @@ header.container-fluid{
             }
         }
     }
+
 }
 
 .container-page-title{
@@ -88,5 +95,47 @@ header.container-fluid{
     h1{
         color: #438bad;
         font-size: 1.5rem;
+    }
+}
+
+.view-search{
+    position: relative;
+    .search-result{
+        position: absolute;
+        z-index: 2;
+        top: 100%;
+        width: 100%;
+        border-radius: 10px;
+        background-color: #ffffff;
+        margin-top: 5px;
+        max-height: 400px;
+        overflow-y: auto;
+        box-shadow: 1.5px 1.5px 5px 0px rgba(0, 0, 0, 0.1);
+        a{
+            &:hover{
+                display: block;
+                text-decoration: none;
+                background-color: #f4f8f9;
+            }
+            &.block{
+                display: block;
+                .number{
+                    font-weight: 500;
+                    color: #34445b;
+                    display: block;
+                }
+                .chain-id{
+                    font-weight: 300;
+                    color: #9b9b9b;
+                    font-size: 13px;
+                    display: block;
+                }
+            }
+        }
+    }
+    .search-block-number-wrap{
+        &:first-child{
+            background-color: #f4f8f9;
+        }
     }
 }

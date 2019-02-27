@@ -16,35 +16,125 @@
                         </li>
                     </ul>
                     <div class="tab-content mt-2" id="myTabContent">
+
                         <div class="tab-pane show active" id="tokenTransfer" role="tabpanel" aria-labelledby="tokenTransferTab">
 
-                            <table id="tokenDetailsRecentTrans" class="table table-hover table-responsive token-table" cellspacing="0">
+                            <div id="tokenTransferTable" class="position-relative view-table mt-4"
+                                 data-url="/{{meta.baseUrlPrefix}}/token/ec-{{token.chainId}}-{{token.contractAddress}}/token-transfers">
+                              <div class="table-info-wrapper">
+                                <div class="table-header">
+                                  <div class="row">
+                                    <div class="col-3">
+                                      TX #
+                                    </div>
+                                    <div class="col-2">
+                                      TX TIME
+                                    </div>
+                                    <div class="col-2">
+                                      FROM
+                                    </div>
+                                    <div class="col-1"></div>
+                                    <div class="col-2">
+                                      TO
+                                    </div>
+                                    <div class="col-2">
+                                      Value
+                                    </div>
+                                  </div>
+                                </div>
 
-                                {{>transactionsDataColumnsOnlySymbol}}
+                                <div class="table-body" data-row-wrapper>
 
-                            </table>
+                                    <script type="text/x-handlebars-template" data-row-template>
+                                        [[#if tokenTransfers]]
+                                            [[#each tokenTransfers]]
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-3 text-truncate">
+                                                        {{>ui/transactionHash}}
+                                                    </div>
+                                                    <div class="col-2">
+                                                        {{>ui/time timestampKey="timestamp"}}
+                                                    </div>
+                                                    <div class="col-2 text-truncate">
+                                                        {{>ui/address template=meta.urlTemplates.tokenHolder fromTo="from"}}
+                                                    </div>
+                                                    <div class="col-1 text-center">→</div>
+                                                    <div class="col-2 text-truncate">
+                                                        {{>ui/address template=meta.urlTemplates.tokenHolder fromTo="to"}}
+                                                    </div>
+                                                    <div class="col-2">
+                                                        <span class="badge-primary inflow-1 tx-fee text-uppercase">
+                                                            [[toDecimalValueDisplayPrecision amount '{{token.decimals}}']] {{token.symbol}}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            [[/each]]
+                                        [[else]]
+                                          {{>ui/noResults noun="Token Transfers"}}
+                                        [[/if]]
+                                    </script>
+
+                                </div>
+                              </div>
+
+                            </div>
 
                         </div>
+
+
                         <div class="tab-pane" id="tokenHolders" role="tabpanel" aria-labelledby="tokenHoldersTab">
-                            <table id="tokenDetailsTokenHolders" class="table table-hover table-responsive-sm token-table" cellspacing="0">
 
-                                <script type="custom/ost" id="dt-holders-col-1">
-                                    <div class="cell d-flex align-items-center">
-                                        <a href="[[redirect_url]]" class="d-inline-block ml-2">[[name]]</a>
+                            <div id="tokenHoldersTable" class="position-relative view-table mt-4"
+                                 data-url="/{{meta.baseUrlPrefix}}/token/ec-{{token.chainId}}-{{token.contractAddress}}/token-holders/top">
+
+                                <div class="table-info-wrapper">
+                                  <div class="table-header">
+                                    <div class="row">
+                                      <div class="col-5">
+                                        ADDRESS
+                                      </div>
+                                      <div class="col-6">
+                                        BALANCE
+                                      </div>
                                     </div>
-                                </script>
-                                <script type="custom/ost" id="dt-holders-col-3">
-                                        <div class="cell d-flex align-items-center">
-                                            <span class="staked-coin icon ml-2"></span>
-                                            <span class="badge badge-primary ml-1">[[tokens]] [[coin_name]]</span>
-                                            <span class="ml-1 ost-value">([[value]] {{ostCurrencySymbol}})</span>
-                                        </div>
-                                </script>
+                                  </div>
 
-                            </table>
+                                  <div class="table-body" data-row-wrapper>
+
+                                    <script type="text/x-handlebars-template" data-row-template>
+                                      [[#if tokenHolders]]
+                                      [[#each tokenHolders]]
+                                      <div class="card-body">
+                                        <div class="row">
+                                          <div class="col-5 text-truncate">
+                                            <a href="{{getFEURLTemplate  meta.urlTemplates.tokenHolder}}">
+                                              [[address]]
+                                            </a>
+                                          </div>
+                                          <div class="col-6">
+                                            <span class="badge-primary inflow-1 tx-fee text-uppercase">
+                                                            [[toDecimalValue balance '{{token.decimals}}']] {{token.symbol}}
+                                                        </span>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      [[/each]]
+                                      [[else]]
+                                        {{>ui/noResults noun="Token Holders"}}
+                                      [[/if]]
+                                    </script>
+
+                                  </div>
+                                </div>
+
+                            </div>
 
                         </div>
                     </div>
+
+
                 </div>
             </div>
         </div>
@@ -52,15 +142,12 @@
     </div>
 </section>
 
+{{>ui/nextPreviousTemplate}}
+
 {{#contentFor "pageScripts"}}
     <script type="text/javascript">
         $(document).ready(function() {
-            btx.tokenDetails.init({
-                transactions_url: "{{meta.transactions_url}}",
-                token_holders_url:"{{meta.token_holders_url}}",
-                token_transfer_graph_url: "{{meta.token_transfer_graph_url}}",
-                token_volume_graph_url: "{{meta.token_volume_graph_url}}"
-            });
+            btx.tokenDetails.init({});
         });
     </script>
 {{/contentFor}}

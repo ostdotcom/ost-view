@@ -1,86 +1,52 @@
-OPENST-VIEW
-============
+# openst-explorer
+Presentation layer over openst-block-scanner. Helps in exploring utility chain data.
 
-## Prerequisite installations 
+# Setting up development environment 
 
-* Install node version >= 8.7.0
-* Install geth version >= 1.7.2
-* MySQL
+Clone the repo to the directory of your choice.
 
-## Setup OpenST utility chains 
+### Installation
+Run `npm install` in the repository root folder.
 
-* Go to OpenST Explorer repo directory and create home directory env path
-```
-  > cd openst-view
-  > export OST_VIEW_PATH=$(pwd)
-```
+Make sure you have dynamoDb is installed. Once installed, start DynamoDb with the data directory of your choice.
 
-* Install Packages
-```
-  > npm install
-```
+`java -Djava.library.path=~/dynamodb_local_latest/DynamoDBLocal_lib/ -jar ~/dynamodb_local_latest/DynamoDBLocal.jar -sharedDb -dbPath $datadir`
 
-* Start MySQL and Geth Node
+Clone `configuration.json.example` file as `configuration.json` in the current repository's root directory.
 
-* Create database in MySQL
+Change Geth, Memcached, DynamoDb keys in `configuration.json` appropriately.
 
- * Run migration
-  > To run migrations for specific chain specify chain Id
-  ```
-    > $OST_VIEW_PATH/executables/db_migrate.js up -c <chain_id>
-  ```
-  > To run migrations for all the configured chains (make sure all databases are created.)
-  ```
-    > node $OST_VIEW_PATH/executables/db_migrate.js up
-  ```
+Make sure GETH is running as per the `configuration.json` file and accessible to block scanning.
 
-* Define chain configurations in set_env_vars.sh file
-  > '0' in environment variable define configurations for one particular chain.
-  > To Define configuration for multiple chains, define another set of environment
-    variables having consecutive number.
-    For example: OST_VIEW_1_CHAIN_ID, OST_VIEW_2_CHAIN_ID...
+Once all the services are up and running, start creating Dynamo shards as follows.
 
-  ```
-     # chain env
-     export OST_VIEW_0_CHAIN_ID=<CHAIN_ID>
-     export OST_VIEW_0_WEB_RPC=<WEB_RPC_URL>
+### Create Dynamo shards
 
-     #DB env
-     export OST_VIEW_0_DB_USER=<DB_USER_NAME>
-     export OST_VIEW_0_DB_PWD=<DB_PASSWORD>
+Create shared tables with below command.
+`node node_modules/@openstfoundation/openst-block-scanner/tools/initialSetup.js --configFile $PWD'/configuration.json'`
 
-     export OST_VIEW_0_DB_NAME=<DB_NAME>
+Run `node node_modules/@openstfoundation/openst-block-scanner/tools/addChain.js --help`. Check all the required params. Below is an 
+example of ways you can run `addChain.js` to create 1 shard of each type and 2 block shards.
 
-     export OST_VIEW_0_DB_HOST=<DB_URL>
+`node node_modules/@openstfoundation/openst-block-scanner/tools/addChain.js --chainId 1000 --networkId 1 --blockShardCount 2 --economyShardCount 2 --economyAddressShardCount 2 --transactionShardCount 2 --configFile $PWD'/configuration.json'`
 
-     export OST_VIEW_0_DB_CONNECTION_LIMIT=<DB_CONNECTION_LIMT>
-  ```
+Create table for global stats of home page.
+`node lib/models/tableCreation.js --configFile $PWD'/configuration.json'`
 
-## In terminal 1
-   * (Optional) Start notification listener(rabbitmq)
-       > rabbitmq is required for notificationListener
-       ```
-           > cd openst-view
-           > source set_env_vars.sh
-           > ./executables/notificationListener.js
-       ```
+### Start block scanner
 
-## In terminal 2
-* Start node
-  
-    ```
-     > cd openst-view
-     > source set_env_vars.sh
-     > npm start
-     
-     
-## Start Cronjobs
-```base
-# Every five minute
-node executables/graph_cron.js >> log/graph_cron.log
-node executables/aggregator_cron.js -c <chain_id> >> log/aggregator_cron.log
-# Every minute
-node executables/block_fetcher_cron.js  -c <chain_id> >> log/block_fetcher_cron.log
-node executables/block_verifier_cron.js  -c <chain_id> >> log/block_verifier_cron.log
-node executables/populate_address_detail_cron.js -c <chain_id> >> log/block_verifier_cron.log
-```     
+At this point you have all the required shards to start the block scanner. Start the block scanner with below command.
+
+`node node_modules/@openstfoundation/openst-block-scanner/executables/blockScanner.js --chainId 1000 --configFile $PWD/configuration.json --startBlockNumber 0`
+
+### Start Explorer
+
+Block scanner will be dumping chain data to the dynamo shards. Now you can start explorer with below command.
+
+`npm start`
+
+Go to the browser of your choice at `http://localhost:<port mentioned in configuration.json>`.
+
+### Start Global Aggregator
+
+Run `node executables/GlobalAggregatorCron.js --configFile $(pwd)/configuration.json`

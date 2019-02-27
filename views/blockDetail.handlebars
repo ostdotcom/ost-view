@@ -4,48 +4,58 @@
     <div class="row">
         <div class="col-12">
 
-            <div class="mt-4 mb-4 info-card card">
-                <div class="text-truncate card-body">
-                    <span class="key-color mr-1"> Block Number </span>
-                    <span class="value-color font-weight-light"> {{meta.q}} </span>
-                </div>
-            </div>
-
             <div class="mt-4 mb-4 details-card card">
 
-                <div class="card-body">
-                    <span class="key-color mr-1"> Chain Id</span>
-                    <span class="value-color font-weight-light"> {{meta.chain_id}} </span>
+                <div class="text-truncate card-body">
+                  <div class="card-key mr-1"> Block Number </div>
+                  <span> {{block.blockNumber}} </span>
                 </div>
 
-                <div class="card-body">
-                    <span class="key-color mr-1"> Time </span>
-                    <span class="value-color font-weight-light"> <span class="time icon"></span> {{toDate block.block_timestamp}} </span>
+                <div class="text-truncate card-body">
+                    <div class="card-key mr-1"> Chain Id</div>
+                    <span> {{block.chainId}} </span>
                 </div>
 
-                <div class="card-body text-truncate">
-                    <span class="key-color mr-1"> Block Hash </span>
-                    <span class="value-color font-weight-light"> {{block.block_hash}} </span>
+                <div class="text-truncate card-body">
+                    <div class="card-key mr-1"> Time </div>
+                    <span> {{toDate block.blockTimestamp}} </span>
                 </div>
 
-                <div class="card-body">
-                    <span class="key-color mr-1"> Total Transactions </span>
-                    <span class="value-color font-weight-light"> {{block.total_transactions}} </span>
+                <div class="text-truncate card-body">
+                    <div class="card-key mr-1"> Block Hash </div>
+                    <span> {{block.blockHash}} </span>
                 </div>
 
-                <div class="card-body">
-                    <span class="key-color mr-1"> Total Token Transfers </span>
-                    <span class="value-color font-weight-light"> {{block.total_token_transfers}} </span>
+                <div class="text-truncate card-body">
+                    <div class="card-key mr-1"> Total Transactions </div>
+                    <span> {{block.totalTransactions}} </span>
                 </div>
 
-                <div class="card-body">
-                    <span class="key-color mr-1"> Gas Used </span>
-                    <span class="value-color font-weight-light"> {{block.gas_used}} </span>
+
+                <div class="text-truncate card-body">
+                    <div class="card-key mr-1"> Gas Used </div>
+                    <span> {{block.gasUsed}} </span>
                 </div>
 
+                <div class="text-truncate card-body">
+                    <div class="card-key mr-1">Nonce </div>
+                    <span> {{block.nonce}} </span>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-{{>blockDetailsDataTable}}
+{{#when block.totalTransactions '>' 0}}
+
+{{>blockDetailsDataTable  chainId=blockDetails.chainId blockNumber=blockNumber}}
+
+{{#contentFor "pageScripts"}}
+  <script type="text/javascript">
+    $(document).ready(function() {
+      btx.blockDetails.init();
+    });
+  </script>
+{{/contentFor}}
+
+{{/when}}

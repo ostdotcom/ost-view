@@ -2,12 +2,12 @@
     color: #5d6d6e;
 }
 
-.value-color {
-    color: #597a84;
-}
-
 .title{
     color: #438bad;
+}
+
+.tx-color{
+    color: #179eb1;
 }
 
 .container-block-details {
@@ -47,6 +47,17 @@
     .transfer_table{
         .transactions-title-color {
             color: #438bad;
+        }
+    }
+
+    .card-key {
+        color: #5d6d6e;
+        min-width: 150px;
+        display: inline-block;
+
+        @media (max-width: 576px) {
+            display: inline-block;
+            min-width: inherit;
         }
     }
 }

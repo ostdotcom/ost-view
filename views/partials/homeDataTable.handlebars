@@ -1,4 +1,4 @@
-<section class="container-datatable">
+<section class="container-datatable mt-4">
 
     <div class="container">
 
@@ -9,63 +9,101 @@
 
                     <ul class="nav nav-pills" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" id="topTokenTab" data-toggle="pill" href="#topTokens" role="tab" aria-controls="topTokenTab" aria-selected="true">Top Tokens</a>
+                            <a class="nav-link active"
+                               id="topTokenTab"
+                               data-toggle="pill" href="#topTokens"
+                               role="tab" aria-controls="topTokenTab"
+                               aria-selected="true">TOP TOKENS</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="latestTokenTransferTab" data-toggle="pill" href="#latestTokenTransfer" role="tab" aria-controls="latestTokenTransferTab" aria-selected="false">Latest Token Transfers</a>
+                            <a class="nav-link"
+                               id="latestTokenTransferTab"
+                               data-toggle="pill"
+                               href="#latestTokenTransfer"
+                               role="tab"
+                               aria-controls="latestTokenTransferTab"
+                               aria-selected="false">LATEST TRANSACTIONS</a>
                         </li>
                     </ul>
                     <div class="tab-content mt-2" style="min-height: 620px">
 
                         <div class="tab-pane show active" id="topTokens" role="tabpanel" aria-labelledby="topTokenTab">
 
-                            <table id="homeTopTokens" class="table table-hover table-responsive-sm token-table" cellspacing="0" width="100%">
-
-                                <script type="custom/ost" id="dt-tokens-col-1">
-                                    <div class="cell d-flex align-items-center">
-                                       <div class="rank">[[rank]]</div>
+                            <div id="homeTopTokensTable" class="position-relative mt-4 view-table" data-url="/{{meta.baseUrlPrefix}}/token/top">
+                                <div class="table-info-wrapper">
+                                  <div class="table-header">
+                                    <div class="row">
+                                      <div class="col-1">
+                                      </div>
+                                      <div class="col-3">
+                                        TOKEN
+                                      </div>
+                                      <div class="col-3 text-right">
+                                        MARKET CAP ({{ostCurrencySymbol}})
+                                      </div>
+                                      <div class="col-2 text-right">
+                                        PRICE ({{ostCurrencySymbol}})
+                                      </div>
+                                      <div class="col-3 text-right">
+                                        TOTAL VOLUME ({{ostCurrencySymbol}})
+                                      </div>
                                     </div>
-                                </script>
-                                <script type="custom/ost" id="dt-tokens-col-2">
-                                    <div class="cell d-flex align-items-center">
-                                        <div class="circle circle-sm [[symbol_icon]]">
-                                           <div>[[symbol]]</div>
-                                        </div>
-                                        <a href="[[redirect_url]]" class="d-inline-block text-truncate ml-2">[[name]]</a>
-                                    </div>
-                                </script>
-                                <script type="custom/ost" id="dt-tokens-col-3">
-                                        <div class="cell d-flex align-items-center">
-                                            <span>[[market_cap]]</span>
-                                        </div>
-                                </script>
-                                <script type="custom/ost" id="dt-tokens-col-4">
-                                        <div class="cell d-flex align-items-center">
-                                            <span>[[price]]</span>
-                                        </div>
-                                </script>
-                                <script type="custom/ost" id="dt-tokens-col-5">
-                                        <div class="cell d-flex align-items-center">
-                                            <span>[[circulating_supply]]</span>
-                                        </div>
-                                </script>
+                                  </div>
 
+                                  <div class="table-body" data-row-wrapper>
+                                      <script type="text/x-handlebars-template" data-row-template>
+                                          [[#if tokens]]
+                                              [[#each tokens]]
+                                              <div class="card-body">
+                                                  <div class="row d-flex align-items-center">
+                                                      <div class="col-1">
+                                                        <div class="cell d-flex align-items-center">
+                                                          <div class="rank">[[getIndex ../pageResultStartIndex @index]]</div>
+                                                        </div>
+                                                      </div>
+                                                      <div class="col-3 d-flex align-items-center">
+                                                        <!--<div class="circle circle-sm [[symbol_icon]]">-->
+                                                          <!--<div>[[symbol]]</div>-->
+                                                        <!--</div>-->
+                                                        <a href="{{getFEURLTemplate meta.urlTemplates.token}}"
+                                                           class="d-inline-block text-truncate">[[name]]</a>
+                                                      </div>
+                                                      <div class="col-3 text-truncate text-right">
+                                                        [[toNumeral marketCap]]
+                                                      </div>
+                                                      <div class="col-2 text-truncate text-right">
+                                                        [[inverseDisplayBtToOst conversionFactor]]
+                                                      </div>
+                                                      <div class="col-3 text-truncate text-right">
+                                                        [[toNumeral totalVolume]]
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                              [[/each]]
+                                          [[else]]
+                                            {{>ui/noResults}}
+                                          [[/if]]
+                                      </script>
+                                  </div>
+                                </div>
+                            </div>
 
-                            </table>
                         </div>
+
                         <div class="tab-pane" id="latestTokenTransfer" role="tabpanel" aria-labelledby="latestTokenTransferTab">
 
-                            <table id="homeRecentTokenTransactions" class="table table-hover table-responsive token-table" cellspacing="0" width="100%">
-
-                                {{>transactionsDataColumnsOnlySymbol}}
-
-                            </table>
+                            <div id="homeTokenTransactionTable" class="position-relative view-table mt-4"
+                                 data-url="/{{meta.baseUrlPrefix}}/transaction/latest">
+                                {{>ui/transactionTable}}
+                            </div>
 
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        {{>ui/nextPreviousTemplate}}
 
     </div>
 
@@ -74,13 +112,9 @@
 {{#contentFor "pageScripts"}}
 <script type="text/javascript">
     $(document).ready(function() {
-        btx.home.init({
-            top_tokens_url: "{{meta.top_tokens_url}}",
-            latest_token_transfer_url:"{{meta.latest_token_transfer_url}}",
-            token_transfer_graph_url: "{{meta.token_transfer_graph_url}}",
-            token_volume_graph_url:"{{meta.token_volume_graph_url}}",
-            ostCurrencySymbol:"{{ostCurrencySymbol 1}}"
-        });
+        btx.home.init({});
     });
 </script>
+
 {{/contentFor}}
+
