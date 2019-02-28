@@ -1,27 +1,18 @@
 {
-  "name": "@openstfoundation/openst-explorer",
-  "version": "0.0.1",
-  "description": "Presentation layer over openst-block-scanner giving functionality of graph aggregation.",
-  "keywords": [],
-  "author": "OpenST Ltd.",
+  "name": "openst-view",
+  "version": "2.0.0",
+  "author": "OST.COM Ltd.",
   "license": "LGPL-3.0",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/OpenSTFoundation/openst-explorer.git"
-  },
-  "bugs": {
-    "url": "https://github.com/OpenSTFoundation/openst-explorer/issues"
-  },
-  "homepage": "https://github.com/OpenSTFoundation/openst-explorer#readme",
   "scripts": {
     "make-docs": "node_modules/.bin/jsdoc -c .jsdoc.json",
     "pre-commit": "lint-staged",
-    "start": "nodemon app.js"
+    "start": "node app.js"
   },
   "dependencies": {
     "@openstfoundation/openst-cache": "1.0.6-beta.13",
     "@openstfoundation/openst-block-scanner": "0.0.1-beta.58",
     "@openstfoundation/openst-storage": "1.0.2-beta.29",
+    "@openstfoundation/openst-base": "0.9.3-beta.16",
     "abi-decoder": "1.0.9",
     "basic-auth": "2.0.0",
     "bignumber.js": "4.1.0",
