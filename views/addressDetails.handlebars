@@ -4,26 +4,25 @@
     <div class="row">
         <div class="col-12">
 
-            <div class="mt-4 mb-4 info-card card">
-                <div class="text-truncate card-body">
-                    <span class="key-color mr-1"> Address </span>
-                    <span class="value-color font-weight-light"> {{meta.address}} </span>
-                </div>
-            </div>
-
             <div class="mt-4 mb-4 details-card card">
                 <div class="card-body">
-                    <span class="key-color mr-3"> Amount</span>
-                    <span class="staked-coin icon"></span>
-                    {{#if address_info.tokens}}
-                         <span class="badge badge-primary"> {{getBtBalance address_info.tokens}} {{dictionary_dataValue address_info.contract_address_id contract_addresses 'company_symbol'}} </span>
-                         <span class="value-color font-weight-bold"> ({{getOstBalance address_info.tokens address_info.contract_address_id contract_addresses}} {{ostCurrencySymbol}}) </span>
-                    {{/if}}
+                  <div class="card-key"> Address </div>
+                  <span> {{address.address}} </span>
                 </div>
 
                 <div class="card-body">
-                    <span class="key-color mr-2"> Total Token Transfers </span>
-                    <span class="value-color font-weight-light"> {{address_info.total_token_transfers}} </span>
+                    <div class="card-key"> Balance </div>
+                    <span> {{fromWei address.balance}} {{ostCurrencySymbol}} </span>
+                </div>
+
+                <div class="card-body">
+                    <div class="card-key"> Total Transactions </div>
+                    <span> {{address.totalTransactions}} </span>
+                </div>
+
+                <div class="card-body">
+                    <div class="card-key"> Chain Id </div>
+                    <span> {{address.chainId}} </span>
                 </div>
             </div>
 

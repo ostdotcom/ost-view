@@ -1,0 +1,72 @@
+.key-color {
+    color: #5d6d6e;
+}
+
+.title{
+    color: #438bad;
+}
+
+.container-address-details {
+    .info-card {
+        border: none;
+        font-size: 14px;
+
+        .card-body {
+            padding: 0.8rem;
+            background-color: #f1f5f8;
+            .token-icon {
+                border-radius: 50%;
+                width: 1.3rem;
+            }
+
+        }
+    }
+
+    .details-card {
+
+        border-radius: 2px;
+        font-size: 14px;
+
+        .card-body {
+            padding: 0.8rem;
+            &:nth-of-type(odd) {
+                background-color: #f1f5f8;
+            }
+
+            .badge-primary{
+                padding: 0.4em;
+            }
+
+            .coin-amount {
+                background-color: #9cc5c1;
+                color: #ffffff;
+                border-radius: 0.3rem;
+                padding: 0.16rem;
+            }
+        }
+    }
+
+    .transfer_table{
+        .transactions-title-color {
+            color: #438bad;
+        }
+    }
+
+    .card-key {
+        color: #5d6d6e;
+        min-width: 150px;
+        display: inline-block;
+
+        @media (max-width: 576px){
+            display: inline;
+            min-width: inherit;
+        }
+    }
+}
+
+
+
+
+
+
+

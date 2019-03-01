@@ -1,0 +1,35 @@
+{{>pageTitle title="Token Holder"}}
+
+<div class="container container-address-details">
+    <div class="row">
+        <div class="col-12">
+
+            <div class="mt-4 mb-4 details-card card">
+
+                <div class="card-body">
+                  <div class="card-key"> Address </div>
+                  <span> {{tokenHolder.address}}  </span>
+                </div>
+
+                <div class="card-body">
+                    <div class="card-key"> Balance </div>
+                    <span class="badge-primary text-uppercase"> {{toDecimalValue tokenHolder.balance token.decimals}} {{token.symbol}}</span>
+                </div>
+
+                <div class="card-body">
+                    <div class="card-key"> Total Token Transfers </div>
+                    <span> {{tokenHolder.totalTransfers}} </span>
+                </div>
+
+                <div class="card-body">
+                    <div class="card-key"> Chain ID </div>
+                    <span> {{tokenHolder.chainId}} </span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{{>tokenAddressDetailsDataTable}}
+

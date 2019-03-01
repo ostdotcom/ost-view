@@ -1,0 +1,128 @@
+{
+  "environment": "development",
+  "subEnvironment": "sandbox",
+  "ddbTablePrefix": "de_m_a_",
+  "port":3000,
+  "workers":1,
+  "authentication": {
+    "jwtSecretKey": "0xhhduru232434snc5b",
+    "basicAuth": {
+      "username": "",
+      "password": "",
+      "isEnabled": "false"
+    }
+  },
+  "cdn": {
+    "domain":"http://cloudfront.com"
+  },
+  "notifier": {
+    "isRmqEnabled": "0",
+    "rabbitmq": {
+        "rmqHost":"127.0.0.1",
+        "password":"123456",
+        "username":"guest",
+        "port":"5672",
+        "rmqclusterNodes":["127.0.0.1","127.0.0.2"],
+        "rmqHeartBeats":30
+    },
+    "fromAddress": "from@example.com",
+    "toAddress": "to@example.com"
+  },
+  "cache": {
+    "engine": "memcached",
+    "servers": [
+      "127.0.0.1:11211"
+    ],
+    "defaultTtl": 36000
+  },
+  "storage": {
+    "endpoint": "http://localhost:8000",
+    "region": "localhost",
+    "apiKey": "X",
+    "apiSecret": "X",
+    "apiVersion": "2012-08-10",
+    "enableSsl": "0",
+    "enableLogging": "0",
+    "enableAutoscaling": "1",
+    "autoScaling": {
+      "endpoint": "http://localhost:8000",
+      "region": "localhost",
+      "apiKey": "X",
+      "apiSecret": "X",
+      "apiVersion": "2016-02-06",
+      "enableSsl": "0"
+    }
+  },
+  "chains": [
+    {
+      "chainId": 1000,
+      "cache": {
+        "engine": "memcached",
+        "servers": [
+          "127.0.0.1:11211"
+        ],
+        "defaultTtl": 36000
+      },
+      "storage": {
+        "endpoint": "http://localhost:8000",
+        "region": "localhost",
+        "apiKey": "X",
+        "apiSecret": "X",
+        "apiVersion": "2012-08-10",
+        "enableSsl": "0",
+        "enableLogging": "0",
+        "enableAutoscaling": "1",
+        "autoScaling": {
+          "endpoint": "http://localhost:8000",
+          "region": "localhost",
+          "apiKey": "X",
+          "apiSecret": "X",
+          "apiVersion": "2016-02-06",
+          "enableSsl": "0"
+        }
+      },
+      "nodes": [
+        {
+          "client": "geth",
+          "wsEndpoint": "ws://127.0.0.1:19547",
+          "rpcEndpoint": "http://127.0.0.1:9547"
+        }
+      ]
+    },
+    {
+      "chainId": 2001,
+      "cache": {
+        "engine": "memcached",
+        "servers": [
+          "127.0.0.1:11211"
+        ],
+        "defaultTtl": 36000
+      },
+      "storage": {
+        "endpoint": "http://localhost:8000",
+        "region": "localhost",
+        "apiKey": "X",
+        "apiSecret": "X",
+        "apiVersion": "2012-08-10",
+        "enableSsl": "0",
+        "enableLogging": "0",
+        "enableAutoscaling": "1",
+        "autoScaling": {
+          "endpoint": "http://localhost:8000",
+          "region": "localhost",
+          "apiKey": "X",
+          "apiSecret": "X",
+          "apiVersion": "2016-02-06",
+          "enableSsl": "0"
+        }
+      },
+      "nodes": [
+        {
+          "client" : "geth",
+          "wsEndpoint": "ws://127.0.0.1:8665",
+          "rpcEndpoint": "http://127.0.0.1:8664"
+        }
+      ]
+    }
+  ]
+}

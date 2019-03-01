@@ -1,0 +1,6 @@
+{{#when transactionHash '!=' '0x0000000000000000000000000000000000000000'}}
+<a href="{{getFEURLTemplate meta.urlTemplates.transaction}}"> [[transactionHash]] </a>
+{{/when}}
+{{#when transactionHash '==' '0x0000000000000000000000000000000000000000'}}
+<span class="font-weight-light txHash"> [[transactionHash]] </span>
+{{/when}}

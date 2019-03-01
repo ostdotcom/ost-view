@@ -5,13 +5,18 @@
         <div class="row">
             <div class="col-12 mb-3">
 
-                <h4 class="p-1 title">Token Transfers</h4>
+                <h4 class="p-1 title text-uppercase" style="font-weight: 500;letter-spacing: 1.1px;font-size: 1rem">Transactions</h4>
 
-                <table id="blockDetailsTransactions" class="table table-hover table-responsive token-table" cellspacing="0" width="100%">
+                <div class="row">
+                    <div id="block-transaction-table" class="col-12 position-relative view-table"
+                         data-url="/{{meta.baseUrlPrefix}}/block/bk-{{block.chainId}}-{{block.blockNumber}}/transactions">
 
-                    {{>transactionsDataColumnsOnlySymbol}}
+                        {{>ui/transactionTable}}
 
-                </table>
+                    </div>
+                </div>
+
+                {{>ui/nextPreviousTemplate}}
 
             </div>
         </div>
@@ -19,13 +24,3 @@
     </div>
 
 </section>
-
-{{#contentFor "pageScripts"}}
-    <script type="text/javascript">
-        $(document).ready(function() {
-            btx.blockDetails.init({
-                transactions_url : "{{meta.transaction_url}}"
-            });
-        });
-    </script>
-{{/contentFor}}

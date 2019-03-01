@@ -1,0 +1,55 @@
+<div class="table-info-wrapper">
+  <div class="table-header">
+    <div class="row">
+      <div class="col-3">
+          TX #
+      </div>
+      <div class="col-2">
+          TX TIME
+      </div>
+      <div class="col-2">
+          FROM
+      </div>
+      <div class="col-1"></div>
+      <div class="col-2">
+          TO
+      </div>
+      <div class="col-2">
+          TX FEE ({{ostCurrencySymbol}})
+      </div>
+    </div>
+  </div>
+
+  <div class="table-body" data-row-wrapper>
+      <script type="text/x-handlebars-template" data-row-template>
+          [[#if transactions]]
+              [[#each transactions]]
+              <div class="card-body">
+                  <div class="row">
+                      <div class="col-3 text-truncate">
+                          {{>ui/transactionHash chainId=chainId transactionHash=transactionHash}}
+                      </div>
+                      <div class="col-2">
+                          {{>ui/time timestampKey="blockTimestamp"}}
+                      </div>
+                      <div class="col-2 text-truncate">
+                          {{>ui/address template=meta.urlTemplates.address fromTo="from"}}
+                      </div>
+                      <div class="col-1 text-center">→</div>
+                      <div class="col-2 text-truncate">
+                          <a href="{{getFETransactionToAddress meta.urlTemplates.address}}">
+                              [[getDisplayTransactionToAddress contractAddress toAddress]]
+                          </a>
+                      </div>
+                      <div class="col-2">
+                          {{>ui/transactionFee symbol=symbol gasUsed=gasUsed gasPrice=gasPrice}}
+                      </div>
+                  </div>
+              </div>
+              [[/each]]
+          [[else]]
+            {{>ui/noResults}}
+          [[/if]]
+      </script>
+  </div>
+</div>
