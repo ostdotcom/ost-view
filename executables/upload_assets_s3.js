@@ -18,7 +18,7 @@ const permission_options =
   "--acl public-read --content-encoding gzip --cache-control 'public, max-age=315360000' --expires 'Thu, 25 Jun 2025 20:00:00 GMT'";
 
 const baseDir = path.join(__dirname, rootPrefix + '/builtAssets'),
-  s3BaseDir = '/openst-explorer/js-css'; // Like /some/dir
+  s3BaseDir = '/ost-view/js-css'; // Like /some/dir
 
 fs.readFile(baseDir + '/manifest.json', function(err, data) {
   if (err) {

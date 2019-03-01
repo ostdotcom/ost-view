@@ -5,7 +5,7 @@
  * @module services/economy/GlobalAggregator
  */
 
-const OSTBase = require('@openstfoundation/openst-base');
+const OSTBase = require('@ostdotcom/base');
 
 const rootPrefix = '../../..',
   basicHelper = require(rootPrefix + '/helpers/basic'),

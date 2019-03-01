@@ -31,7 +31,7 @@ const renderResult = function(requestResponse, responseObject, contentType) {
  * @routeparam {String} :params - search string
  */
 router.get('/', sanitizer.sanitizeDynamicUrlParams, function(req, res, next) {
-  require(rootPrefix + '/app/services/search/index');
+  require(rootPrefix + '/app/services/search/Index');
 
   if (routeHelper.validateXhrRequest(req, res)) {
     return;

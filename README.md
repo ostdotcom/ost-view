@@ -1,7 +1,8 @@
-# openst-explorer
-Presentation layer over openst-block-scanner. Helps in exploring utility chain data.
+# OST View
 
-# Setting up development environment 
+OST VIEW is the home grown block explorer from OST for OpenST Utility Blockchains.
+
+# Setting up development environment
 
 Clone the repo to the directory of your choice.
 
@@ -23,12 +24,12 @@ Once all the services are up and running, start creating Dynamo shards as follow
 ### Create Dynamo shards
 
 Create shared tables with below command.
-`node node_modules/@openstfoundation/openst-block-scanner/tools/initialSetup.js --configFile $PWD'/configuration.json'`
+`node node_modules/@ostdotcom/ost-block-scanner/tools/initialSetup.js --configFile $PWD'/configuration.json'`
 
-Run `node node_modules/@openstfoundation/openst-block-scanner/tools/addChain.js --help`. Check all the required params. Below is an 
+Run `node node_modules/@ostdotcom/ost-block-scanner/tools/addChain.js --help`. Check all the required params. Below is an 
 example of ways you can run `addChain.js` to create 1 shard of each type and 2 block shards.
 
-`node node_modules/@openstfoundation/openst-block-scanner/tools/addChain.js --chainId 1000 --networkId 1 --blockShardCount 2 --economyShardCount 2 --economyAddressShardCount 2 --transactionShardCount 2 --configFile $PWD'/configuration.json'`
+`node node_modules/@ostdotcom/ost-block-scanner/tools/addChain.js --chainId 1000 --networkId 1 --blockShardCount 2 --economyShardCount 2 --economyAddressShardCount 2 --transactionShardCount 2 --configFile $PWD'/configuration.json'`
 
 Create table for global stats of home page.
 `node lib/models/tableCreation.js --configFile $PWD'/configuration.json'`
@@ -37,7 +38,7 @@ Create table for global stats of home page.
 
 At this point you have all the required shards to start the block scanner. Start the block scanner with below command.
 
-`node node_modules/@openstfoundation/openst-block-scanner/executables/blockScanner.js --chainId 1000 --configFile $PWD/configuration.json --startBlockNumber 0`
+`node node_modules/@ostdotcom/ost-block-scanner/executables/blockScanner.js --chainId 1000 --configFile $PWD/configuration.json --startBlockNumber 0`
 
 ### Start Explorer
 

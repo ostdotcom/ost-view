@@ -6,7 +6,7 @@
 const rootPrefix = '../../..',
   logger = require(rootPrefix + '/lib/logger/customConsoleLogger'),
   base64Helper = require(rootPrefix + '/lib/Base64/helper'),
-  OSTBase = require('@openstfoundation/openst-base'),
+  OSTBase = require('@ostdotcom/base'),
   coreConstants = require(rootPrefix + '/config/coreConstants'),
   tokenFormatter = require(rootPrefix + '/lib/formatter/entities/token'),
   responseHelper = require(rootPrefix + '/lib/formatter/response');

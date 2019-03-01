@@ -4,7 +4,7 @@
  */
 
 const rootPrefix = '../../..',
-  OSTBase = require('@openstfoundation/openst-base'),
+  OSTBase = require('@ostdotcom/base'),
   coreConstants = require(rootPrefix + '/config/coreConstants'),
   logger = require(rootPrefix + '/lib/logger/customConsoleLogger'),
   transactionFormatter = require(rootPrefix + '/lib/formatter/entities/transaction'),

@@ -425,7 +425,7 @@ class CoreConstants {
    * @return {string}
    */
   get icNameSpace() {
-    return 'openst-explorer';
+    return 'ostView';
   }
 }
 

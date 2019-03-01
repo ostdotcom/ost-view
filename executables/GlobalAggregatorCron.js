@@ -10,7 +10,7 @@
 const rootPrefix = '..',
   program = require('commander'),
   basicHelper = require(rootPrefix + '/helpers/basic'),
-  OSTBase = require('@openstfoundation/openst-base'),
+  OSTBase = require('@ostdotcom/base'),
   coreConstants = require(rootPrefix + '/config/coreConstants'),
   logger = require(rootPrefix + '/lib/logger/customConsoleLogger'),
   responseHelper = require(rootPrefix + '/lib/formatter/response'),
@@ -22,7 +22,7 @@ require(rootPrefix + '/app/services/home/GlobalAggregator');
 
 program
   .option('--chainId <chainId>', 'Chain id')
-  .option('--configFile <configFile>', 'Openst-Explorer config strategy absolute file path')
+  .option('--configFile <configFile>', 'OST View config strategy absolute file path')
   .parse(process.argv);
 
 program.on('--help', function() {

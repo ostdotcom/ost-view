@@ -89,7 +89,7 @@ const basicAuthentication = function(req, res, next) {
 // if the process is a master.
 if (cluster.isMaster) {
   // Set worker process title
-  process.title = 'OpenST Explorer master node';
+  process.title = 'OST View master node';
 
   // Fork workers equal to number of CPUs
   const numWorkers = coreConstants.WORKERS || require('os').cpus().length;
@@ -145,7 +145,7 @@ if (cluster.isMaster) {
   // if the process is not a master
 
   // Set worker process title
-  process.title = 'OpenST Explorer worker-' + cluster.worker.id;
+  process.title = 'OST View worker-' + cluster.worker.id;
 
   const app = express();
 
@@ -198,7 +198,7 @@ if (cluster.isMaster) {
   };
 
   if (coreConstants.IS_VIEW_ENVIRONMENT_PRODUCTION || coreConstants.IS_VIEW_ENVIRONMENT_STAGING) {
-    connectAssetConfig.servePath = coreConstants.CLOUD_FRONT_BASE_DOMAIN + '/openst-explorer/js-css';
+    connectAssetConfig.servePath = coreConstants.CLOUD_FRONT_BASE_DOMAIN + '/ost-view/js-css';
     connectAssetConfig.bundle = true;
     connectAssetConfig.compress = true;
   }
