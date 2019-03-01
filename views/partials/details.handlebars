@@ -3,11 +3,11 @@
   <div class="container">
 
     <div class="row my-4 summary-1">
-      <div class="col-4 text-truncate d-flex section flex-column align-self-center">
+      <div class="col-4 text-truncate section align-self-center">
         <h4 class="mb-0 text-truncate">{{token.name}}&nbsp;({{token.symbol}})</h4>
       </div>
-      <div class="col-4 text-truncate d-flex section flex-column">
-        <div>
+      <div class="col-4 text-truncate section">
+        <div class="mb-3">
           <div class="name">base erc20 token</div>
           <div class="text-truncate value">{{ostCurrencySymbol}}</div>
         </div>
@@ -16,8 +16,8 @@
           {{>address class="text-truncate value" style="max-width: 300px;" chainId=token.chainId address=token.contractAddress}}
         </div>
       </div>
-      <div class="col-4 text-truncate d-flex section flex-column">
-        <div>
+      <div class="col-4 text-truncate section">
+        <div class="mb-3">
           <div class="name">gateway contract
             <a href="https://{{etherscanEndpoint}}/address/{{token.gatewayContractAddress}}#tokentxns" target='blank'>
               <span class="etherscan icon" style="vertical-align: bottom;"></span></a>
