@@ -27,7 +27,7 @@ OST VIEW is the home grown multi-chain block explorer from OST for OpenST Utilit
   java -Djava.library.path=$DYNAMODB_PATH/DynamoDBLocal_lib/ -jar $DYNAMODB_PATH/DynamoDBLocal.jar -sharedDb -dbPath $DYNAMODB_PATH/
 ```
 
-#### 3. Create OST View config file 
+#### 3. Create OST View configuration file 
 Refer configuration.json.example to create configuration.json file. 
 
 #### 4. Create Global DynamoDB tables: 
