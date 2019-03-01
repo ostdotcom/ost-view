@@ -25,6 +25,7 @@
   "homepage": "https://github.com/ostdotcom/ost-view#readme",
   "dependencies": {
     "@openstfoundation/brandedtoken.js": "0.10.0-alpha.1",
+    "@openstfoundation/mosaic.js": "0.10.0-beta.3",
     "@openstfoundation/openst.js": "0.10.0-alpha.4",
     "@ostdotcom/base": "1.0.0-beta.1",
     "@ostdotcom/cache": "1.0.6-beta.14",
