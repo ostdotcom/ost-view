@@ -26,8 +26,8 @@ Once all the services are up and running, start creating Dynamo shards as follow
 Create shared tables with below command.
 `node node_modules/@ostdotcom/ost-block-scanner/tools/initialSetup.js --configFile $PWD'/configuration.json'`
 
-Run `node node_modules/@ostdotcom/ost-block-scanner/tools/addChain.js --help`. Check all the required params. Below is an 
-example of ways you can run `addChain.js` to create 1 shard of each type and 2 block shards.
+Run `node node_modules/@ostdotcom/ost-block-scanner/tools/addChain.js --help`. Check all the required params. 
+Below is an example of ways you can run `addChain.js` to create 2 shards of each type.
 
 `node node_modules/@ostdotcom/ost-block-scanner/tools/addChain.js --chainId 1000 --networkId 1 --blockShardCount 2 --economyShardCount 2 --economyAddressShardCount 2 --transactionShardCount 2 --configFile $PWD'/configuration.json'`
 
