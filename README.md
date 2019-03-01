@@ -1,53 +1,77 @@
 # OST View
 
-OST VIEW is the home grown block explorer from OST for OpenST Utility Blockchains.
+OST VIEW is the home grown multi-chain block explorer from OST for OpenST Utility Blockchains.
 
-# Setting up development environment
+# Install
 
-Clone the repo to the directory of your choice.
+```bash
+  git clone https://github.com/ostdotcom/ost-view.git
+  cd ost-view/
+  npm install
+```
 
-### Installation
-Run `npm install` in the repository root folder.
+# Setup
 
-Make sure you have dynamoDb is installed. Once installed, start DynamoDb with the data directory of your choice.
+#### 1. Install Prerequisites 
+- [nodejs](https://nodejs.org/) >= 8.0.0
+- [Geth](https://github.com/ethereum/go-ethereum/) >=1.8.17
+- [Memcached](https://memcached.org/)
+- AWS DynamoDB Service OR [DynamoDBLocal.jar](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.DownloadingAndRunning.html)
+- [DB Browser for SQLite](https://sqlitebrowser.org/) optionally to browse DynamoDB
+    
+#### 2. Run DynamoDBLocal.jar, if you are not using AWS DynamoDB Service
 
-`java -Djava.library.path=~/dynamodb_local_latest/DynamoDBLocal_lib/ -jar ~/dynamodb_local_latest/DynamoDBLocal.jar -sharedDb -dbPath $datadir`
+```bash
+  # NOTE: Make sure to change DYNAMODB_PATH
+  export DYNAMODB_PATH=~/dynamodb_local_latest
+  java -Djava.library.path=$DYNAMODB_PATH/DynamoDBLocal_lib/ -jar $DYNAMODB_PATH/DynamoDBLocal.jar -sharedDb -dbPath $DYNAMODB_PATH/
+```
 
-Clone `configuration.json.example` file as `configuration.json` in the current repository's root directory.
+#### 3. Create OST View config file 
+Refer configuration.json.example to create configuration.json file. 
 
-Change Geth, Memcached, DynamoDb keys in `configuration.json` appropriately.
+#### 4. Create Global DynamoDB tables: 
 
-Make sure GETH is running as per the `configuration.json` file and accessible to block scanning.
+```bash
+  node ./node_modules/@ostdotcom/ost-block-scanner/tools/initialSetup.js --configFile $(pwd)/configuration.json
+```
 
-Once all the services are up and running, start creating Dynamo shards as follows.
+#### 5. Add a new Chain and create chain specific shared DynamoDB tables:
+  * Mandatory parameters: chainId, networkId, configFile
+  * Optional parameters (defaults to 1): blockShardCount, economyShardCount, economyAddressShardCount, transactionShardCount
+  
+```bash
+  # NOTE:
+  # Make sure chain configuration is already present in config file, before starting this step. 
+  # Optional parameters are used to create entity specific sharded tables. 
+  # By default only one shard is created for each entity. 
+  node ./node_modules/@ostdotcom/ost-block-scanner/tools/addChain.js --configFile $(pwd)/configuration.json --chainId 2000 --networkId 1 --blockShardCount 2 --economyShardCount 2 --economyAddressShardCount 2 --transactionShardCount 2
+```
 
-### Create Dynamo shards
+#### 6. Add Global Stats DynamoDB table:
 
-Create shared tables with below command.
-`node node_modules/@ostdotcom/ost-block-scanner/tools/initialSetup.js --configFile $PWD'/configuration.json'`
+```bash
+  node lib/models/tableCreation.js --configFile $PWD'/configuration.json'
+```
 
-Run `node node_modules/@ostdotcom/ost-block-scanner/tools/addChain.js --help`. Check all the required params. 
-Below is an example of ways you can run `addChain.js` to create 2 shards of each type.
+# Start Block Scanner
+  * Mandatory parameters: chainId, configFile
+  * Optional parameters: startBlockNumber, endBlockNumber
+```bash
+  node ./node_modules/@ostdotcom/ost-block-scanner/executables/blockScanner.js --configFile $(pwd)/configuration.json --chainId 2000 --startBlockNumber 0 --endBlockNumber 100
+```
 
-`node node_modules/@ostdotcom/ost-block-scanner/tools/addChain.js --chainId 1000 --networkId 1 --blockShardCount 2 --economyShardCount 2 --economyAddressShardCount 2 --transactionShardCount 2 --configFile $PWD'/configuration.json'`
 
-Create table for global stats of home page.
-`node lib/models/tableCreation.js --configFile $PWD'/configuration.json'`
+# Start Global Aggregator
 
-### Start block scanner
+```bash
+  node executables/GlobalAggregatorCron.js --configFile $(pwd)/configuration.json
+```
 
-At this point you have all the required shards to start the block scanner. Start the block scanner with below command.
+# Start OST View application server
 
-`node node_modules/@ostdotcom/ost-block-scanner/executables/blockScanner.js --chainId 1000 --configFile $PWD/configuration.json --startBlockNumber 0`
+```bash
+  npm start
+```
 
-### Start Explorer
-
-Block scanner will be dumping chain data to the dynamo shards. Now you can start explorer with below command.
-
-`npm start`
-
-Go to the browser of your choice at `http://localhost:<port mentioned in configuration.json>`.
-
-### Start Global Aggregator
-
-Run `node executables/GlobalAggregatorCron.js --configFile $(pwd)/configuration.json`
+Go to the browser of your choice at `http://<Hostname or IP>:<port mentioned in configuration.json>`.
