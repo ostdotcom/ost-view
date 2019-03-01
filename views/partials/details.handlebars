@@ -1,46 +1,49 @@
 <section class="container-details">
 
-    <div class="container">
+  <div class="container">
 
-        <div class="row my-4 d-flex align-items-center summary-1">
-            <div class="section col-sm text-truncate">
-              <h4 class="mb-0 text-truncate">{{token.name}}&nbsp;({{token.symbol}})</h4>
-            </div>
-            <div class="section col-sm">
-              <div class="name">base erc20 token</div>
-              <div class="text-truncate value">{{ostCurrencySymbol}}</div>
-              <div class="mt-3">
-                <div class="name">utility branded token contract</div>
-                {{>address class="text-truncate value" style="max-width: 300px;" chainId=token.chainId address=token.contractAddress}}
-              </div>
-            </div>
-            <div class="section col-sm text-truncate">
-              <div>
-                <div class="name">gateway contract
-                    <a href="https://{{etherscanEndpoint}}/address/{{token.gatewayContractAddress}}#tokentxns" target='blank'>
-                        <span class="etherscan icon" style="vertical-align: bottom;"></span></a>
-                </div>
-                <a class="text-truncate value" style="max-width: 300px;"
-                   href="https://{{etherscanEndpoint}}/address/{{token.gatewayContractAddress}}#tokentxns"
-                   target='_blank'>{{token.gatewayContractAddress}}</a>
-              </div>
-              <div class="mt-3">
-                <div class="name">value branded token contract
-                  <a href="https://{{etherscanEndpoint}}/address/{{token.valueBrandedToken}}#tokentxns" target='blank'>
-                    <span class="etherscan icon" style="vertical-align: bottom;"></span></a>
-                </div>
-                <!--<div class="text-truncate value">{{token.valueBrandedToken}}</div>-->
-                <a class="text-truncate value" style="max-width: 300px;"
-                   href="https://{{etherscanEndpoint}}/address/{{token.valueBrandedToken}}#tokentxns"
-                   target='_blank'>{{token.valueBrandedToken}}</a>
-              </div>
-            </div>
+    <div class="row my-4 summary-1">
+      <div class="col-4 text-truncate d-flex section flex-column align-self-center">
+        <h4 class="mb-0 text-truncate">{{token.name}}&nbsp;({{token.symbol}})</h4>
+      </div>
+      <div class="col-4 text-truncate d-flex section flex-column">
+        <div>
+          <div class="name">base erc20 token</div>
+          <div class="text-truncate value">{{ostCurrencySymbol}}</div>
         </div>
-
-        <div class="row">
-            <hr class="divider d-none d-sm-block"/>
+        <div class="mt-3">
+          <div class="name">utility branded token contract</div>
+          {{>address class="text-truncate value" style="max-width: 300px;" chainId=token.chainId address=token.contractAddress}}
         </div>
+      </div>
+      <div class="col-4 text-truncate d-flex section flex-column">
+        <div>
+          <div class="name">gateway contract
+            <a href="https://{{etherscanEndpoint}}/address/{{token.gatewayContractAddress}}#tokentxns" target='blank'>
+              <span class="etherscan icon" style="vertical-align: bottom;"></span></a>
+          </div>
+          <a class="text-truncate value" style="max-width: 300px;"
+             href="https://{{etherscanEndpoint}}/address/{{token.gatewayContractAddress}}#tokentxns"
+             target='_blank'>{{token.gatewayContractAddress}}</a>
+        </div>
+        <div class="mt-3">
+          <div class="name">value branded token contract
+            <a href="https://{{etherscanEndpoint}}/address/{{token.valueBrandedToken}}#tokentxns" target='blank'>
+              <span class="etherscan icon" style="vertical-align: bottom;"></span></a>
+          </div>
+          <a class="text-truncate value" style="max-width: 300px;"
+             href="https://{{etherscanEndpoint}}/address/{{token.valueBrandedToken}}#tokentxns"
+             target='_blank'>{{token.valueBrandedToken}}</a>
+        </div>
+      </div>
     </div>
+
+    <div class="row">
+      <hr class="divider d-none d-sm-block"/>
+    </div>
+
+  </div>
+
 </section>
 
 

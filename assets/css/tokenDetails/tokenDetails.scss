@@ -2,7 +2,7 @@
 
     .section{
         border-left: 1px solid #e3eef3;
-        &:first-of-type{
+        &:first-child{
             border-left: none;
         }
 
