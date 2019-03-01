@@ -32,7 +32,7 @@ router.get('/', sanitizer.sanitizeDynamicUrlParams, function(req, res, next) {
     },
     page_meta: {
       title: 'OST VIEW | About',
-      description: 'OST VIEW is the home grown block explorer from OST for OpenST Utility Blockchains.',
+      description: 'About OST VIEW, the home grown block explorer from OST for OpenST Utility Blockchains.',
       keywords: 'OST, Simple Token, Utility Chain, Blockchain',
       robots: 'index, follow',
       image: `${coreConstants.CLOUD_FRONT_BASE_DOMAIN}/ost-view/images/ost-view-og-image-1.jpg`

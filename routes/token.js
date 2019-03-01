@@ -65,7 +65,9 @@ function processTokenDetailsResponse(response, req, res) {
   let webViewResponse = {
     page_meta: {
       title: `OST VIEW | Economy Details - ${tokenDetails.contractAddress}`,
-      description: 'OST VIEW is the home grown block explorer from OST for OpenST Utility Blockchains.',
+      description: `OST VIEW is the home grown block explorer from OST for OpenST Utility Blockchains. Economy Details - ${
+        tokenDetails.contractAddress
+      }`,
       keywords: 'OST, Simple Token, Utility Chain, Blockchain',
       robots: 'index, nofollow',
       image: `${coreConstants.CLOUD_FRONT_BASE_DOMAIN}/ost-view/images/ost-view-og-image-1.jpg`
