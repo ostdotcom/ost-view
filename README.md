@@ -62,7 +62,7 @@ Refer configuration.json.example to create configuration.json file.
 ```
 
 
-# Start Global Aggregator
+# Start Global Stats Aggregator
 
 ```bash
   node executables/GlobalAggregatorCron.js --configFile $(pwd)/configuration.json
