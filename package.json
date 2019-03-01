@@ -25,7 +25,7 @@
   "homepage": "https://github.com/ostdotcom/ost-view#readme",
   "dependencies": {
     "@ostdotcom/cache": "1.0.6-beta.14",
-    "@ostdotcom/ost-block-scanner": "1.0.0-beta.2",
+    "@ostdotcom/ost-block-scanner": "1.0.0-beta.3",
     "@ostdotcom/storage": "1.0.3-beta.1",
     "@ostdotcom/base": "1.0.0-beta.1",
     "abi-decoder": "1.0.9",
