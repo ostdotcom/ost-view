@@ -121,35 +121,19 @@ class GetAllTransfers {
     const oThis = this,
       blockScannerProvider = oThis.ic().getInstanceFor(coreConstants.icNameSpace, 'blockScannerProvider'),
       blockScanner = blockScannerProvider.getInstance(),
-      TransferGet = blockScanner.transfer.GetAll,
-      options = { pageSize: coreConstants.DEFAULT_PAGE_SIZE };
+      TransferGet = blockScanner.transfer.GetAll;
 
-    //decrypt the pagination params
-    if (oThis.paginationIdentifier) {
-      options['nextPagePayload'] = JSON.parse(base64Helper.decode(oThis.paginationIdentifier));
-    }
+    const txGetTransfersRsp = await new TransferGet(oThis.chainId, [oThis.transactionHash]).perform();
 
-    const txGetTransfersRsp = await new TransferGet(oThis.chainId, oThis.transactionHash, options).perform();
-
-    if (!txGetTransfersRsp.isSuccess() && !txGetTransfersRsp.data[oThis.transactionHash]) {
+    if (txGetTransfersRsp.isFailure() || !txGetTransfersRsp.data[oThis.transactionHash]) {
       return responseHelper.error('a_s_t_ga_4', 'Data Not found');
     }
 
     const txHashRes = txGetTransfersRsp.data[oThis.transactionHash];
 
-    const response = {
-      tokenTransfers: txHashRes.transfers,
-      nextPagePayload: {}
+    return {
+      tokenTransfers: txHashRes
     };
-
-    if (txHashRes.nextPagePayload.LastEvaluatedKey) {
-      //Encrypt next page payload
-      response['nextPagePayload']['paginationIdentifier'] = base64Helper.encode(
-        JSON.stringify(txHashRes.nextPagePayload)
-      );
-    }
-
-    return response;
   }
 
   /**
@@ -167,10 +151,6 @@ class GetAllTransfers {
 
     for (let eventIndex in oThis.txTransfers) {
       let transferInfo = oThis.txTransfers[eventIndex];
-
-      if (!transferInfo) {
-        return responseHelper.error('a_s_t_ga_5', 'Data Not found');
-      }
 
       transferInfo['chainId'] = oThis.chainId;
 
