@@ -8,7 +8,6 @@
 // Load all external modules
 const express = require('express'),
   path = require('path'),
-  cookieParser = require('cookie-parser'),
   bodyParser = require('body-parser'),
   helmet = require('helmet'),
   http = require('http'),
@@ -160,14 +159,13 @@ if (cluster.isMaster) {
   app.use(helmet());
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({ extended: true }));
-  app.use(cookieParser());
 
   // Sanitize request body and query params
   // NOTE: dynamic variables in URL will be sanitized in routes
   app.use(sanitizer.sanitizeBodyAndQuery);
- 
+
   // Keep health checker here to skip basic auth
-  app.get('/health-checker', function (req, res, next) {
+  app.get('/health-checker', function(req, res, next) {
     res.send('');
   });
 

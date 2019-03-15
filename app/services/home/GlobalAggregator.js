@@ -108,10 +108,7 @@ class GlobalAggregator {
       queryParams['ExclusiveStartKey'] = LastEvaluatedKey;
     }
 
-    console.log('=====>queryparams', queryParams);
     let response = await economy.ddbServiceObj.scan(queryParams);
-
-    console.log('====>>DDB response', response);
 
     if (response.isFailure()) {
       return response;
