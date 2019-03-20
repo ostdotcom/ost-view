@@ -43,7 +43,6 @@ Refer to [configuration.json.example](configuration.json.example) to create a ne
   * Mandatory parameters: `chainId`, `networkId`, `configFile`
   * Optional parameters (each defaults to 1):
     * `blockShardCount`: number of block shards to be created
-    * `economyShardCount`: number of economy shards to be created
     * `economyAddressShardCount`: number of economy address shards to be created
     * `transactionShardCount`: number of transaction shards to be created
 
@@ -52,7 +51,7 @@ Refer to [configuration.json.example](configuration.json.example) to create a ne
   # Make sure chain configuration is present in configuration file before starting this step. 
   # Optional parameters are used to create entity-specific sharded tables. 
   # By default only one shard is created for each entity. 
-  node ./node_modules/@ostdotcom/ost-block-scanner/tools/addChain.js --configFile $(pwd)/configuration.json --chainId 2000 --networkId 1 --blockShardCount 2 --economyShardCount 2 --economyAddressShardCount 2 --transactionShardCount 2
+  node ./node_modules/@ostdotcom/ost-block-scanner/tools/addChain.js --configFile $(pwd)/configuration.json --chainId 2000 --networkId 1 --blockShardCount 2 --economyAddressShardCount 2 --transactionShardCount 2
 ```
 
 _For additional configuration options, please see documentation for the [OST Block Scanner](https://github.com/ostdotcom/ost-block-scanner/)._
