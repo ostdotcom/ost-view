@@ -158,11 +158,7 @@ module.exports = Helper = {
     if (coreConstants.VIEW_SUB_ENVIRONMENT == coreConstants.VIEW_SUB_ENVIRONMENT_MAIN) {
       return 'OST';
     } else {
-      if (withoutFormatting) {
-        return 'OST ⍺';
-      } else {
-        return 'OST <span class="text-lowercase">⍺</span>';
-      }
+      return 'OSTT';
     }
   },
 
