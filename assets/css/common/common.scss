@@ -111,3 +111,9 @@ a.btn-secondary{
 .txHash {
     color: #179eb1;
 }
+
+.version-link {
+    &:hover{
+        text-decoration: underline;
+    }
+}
