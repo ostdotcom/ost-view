@@ -14,6 +14,7 @@ const rootPrefix = '../../..',
 const InstanceComposer = OSTBase.InstanceComposer;
 
 require(rootPrefix + '/lib/providers/blockScanner');
+require(rootPrefix + '/app/services/contract/GetDetails');
 
 class GetTokenHolderBalance {
   /**
