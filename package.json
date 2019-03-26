@@ -26,7 +26,7 @@
   "dependencies": {
     "@openst/brandedtoken.js": "0.10.0-beta.1",
     "@openst/mosaic.js": "0.10.0-beta.5",
-    "@openst/openst.js": "0.10.0-beta.1",
+    "@openst/openst.js": "0.10.0-beta.2",
     "@ostdotcom/base": "1.0.0-beta.2",
     "@ostdotcom/cache": "1.0.6-beta.15",
     "@ostdotcom/ost-block-scanner": "1.0.0-beta.18",
