@@ -1,5 +1,5 @@
 {
-  "name": "@ostdotcom/ost-view",
+  "name": "ost-view",
   "version": "2.0.0",
   "description": "OST VIEW is the home grown block explorer from OST for OpenST Utility Blockchains.",
   "main": "app.js",
@@ -47,7 +47,7 @@
     "helmet": "3.9.0",
     "jsonwebtoken": "8.1.0",
     "moment": "2.20.1",
-    "morgan": "1.9.0",
+    "morgan": "1.9.1",
     "sanitize-html": "1.19.3",
     "underscore": "1.8.3",
     "uuid": "3.1.0",
