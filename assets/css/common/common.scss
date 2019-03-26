@@ -111,3 +111,17 @@ a.btn-secondary{
 .txHash {
     color: #179eb1;
 }
+
+.old-version-link {
+    &:hover{
+        text-decoration: underline;
+    }
+}
+
+.current-version {
+    font-size: 0.75rem;
+    position: relative;
+    top: -10px;
+    left: -4px;
+    color: rgba(0, 0, 0, 0.5);
+}

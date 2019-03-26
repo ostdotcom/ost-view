@@ -43,7 +43,11 @@
       oThis.jLoaderMarkup = $('#load-more-loader').html();
       oThis.jRowTemplate = Handlebars.compile_fe($('#transfer-table').text());
       oThis.jParent = $('.transfer-table-wrapper');
-      oThis.getTransfers();
+      var totalTransfers = data && data.transaction && data.transaction.totalTokenTransfers;
+      totalTransfers = totalTransfers && parseInt(totalTransfers);
+      if (totalTransfers > 0) {
+        oThis.getTransfers();
+      }
     },
 
     getFetchResultsUrl: function(transaction, meta) {
