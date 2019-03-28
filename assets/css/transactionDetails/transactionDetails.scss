@@ -2,8 +2,8 @@
     color: #5d6d6e;
 }
 
-.value-color {
-    color: #597a84;
+.link-color{
+    color: #179eb1;
 }
 
 .container-token-details {
@@ -25,23 +25,22 @@
 
         .card-body{
             padding: 0.8rem;
-            &:nth-of-type(even){
+            &:nth-of-type(odd){
                 background-color: #f1f5f8;
             }
 
-            .transaction-status-color{
+            .transaction-status-1{
                 color: #78a124;
+            }
+
+            .transaction-status-2{
+                color: #a13628;
             }
 
             .token-icon {
                 border-radius: 50%;
                 width: 1.5rem;
             }
-
-            //.icon {
-            //    border-radius: 50%;
-            //    width: 1.3rem;
-            //}
 
             .coin-amount {
                 background-color: #9cc5c1;
@@ -53,6 +52,40 @@
             .input-data-break-all{
                 word-break: break-all;
             }
+            .transfer-table-wrapper{
+                > div {
+                    &:nth-of-type(even){
+                        background-color: #f9fbfd;
+                    }
+                }
+                .to-arrow{
+                    color: #179eb1;
+                }
+                .show-more-link{
+                    padding-bottom: 3px;
+                    border-bottom: 1px solid #179eb1;
+                    &:hover{
+                        text-decoration: none;
+                    }
+                }
+                .tx-fee{
+                    font-weight: 300;
+                    margin-left: 8px;
+                    padding: 2px 8px;
+                    border-radius: 2px;
+                }
+            }
+        }
+    }
+
+    .card-key {
+        color: #5d6d6e;
+        min-width: 150px;
+        display: inline-block;
+
+        @media (max-width: 576px){
+            display: block;
+            min-width: inherit;
         }
     }
 }

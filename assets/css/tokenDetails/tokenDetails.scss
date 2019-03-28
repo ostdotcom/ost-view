@@ -2,19 +2,17 @@
 
     .section{
         border-left: 1px solid #e3eef3;
-        &:first-of-type{
+        &:first-child{
             border-left: none;
         }
 
         .token-name{
-            color: #597a84;
             font-size: 0.9rem;
             font-weight: 400;
             letter-spacing: 1.1px;
         }
 
         .token-price{
-            color: #597a84;
             font-size: 0.75rem;
             font-weight: 300;
             letter-spacing: 1.1px;
@@ -29,7 +27,6 @@
         }
 
         .value{
-            color: #597a84;
             font-size: 0.8rem;
             font-weight: 300;
         }
@@ -58,7 +55,8 @@
         .card-body{
             background: #f1f5f8;
             margin-top: -20px;
-            .ost-alpha-badge{
+            .ost-alpha-badge,
+            .ost-badge{
                 position: absolute;
                 right: 0;
                 top: 76px;

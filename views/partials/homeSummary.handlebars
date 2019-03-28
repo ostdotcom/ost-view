@@ -1,0 +1,39 @@
+<section class="container-summary">
+  <div class="container">
+    <div class="row mt-4 mb-4">
+      <div class="col-md">
+          <div class="card mb-3">
+              <span class="communities icon mx-auto card-img-top"></span>
+              <div class="card-body">
+                  <div class="card-text text-center mt-2">
+                      <h3 class="name">Communities</h3>
+                      <div class="value">{{bigNumber_toFromat stats.totalCommunities}}</div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="col-md">
+          <div class="card mb-3">
+              <span class="token-holders icon mx-auto card-img-top"></span>
+              <div class="card-body">
+                  <div class="card-text text-center mt-2">
+                      <h3 class="name">Token Holders</h3>
+                      <div class="value">{{bigNumber_toFromat stats.totalTokenHolders}}</div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="col-md">
+          <div class="card mb-3">
+              <span class="market-cap icon mx-auto card-img-top"></span>
+              <div class="card-body">
+                  <div class="card-text text-center mt-2">
+                      <h3 class="name">Market Cap</h3>
+                      <div class="value">{{displayToFixed stats.totalMarketCap}} {{ostCurrencySymbol}}</div>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </div>
+  </div>
+</section>

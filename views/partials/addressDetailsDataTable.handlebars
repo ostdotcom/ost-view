@@ -5,13 +5,18 @@
         <div class="row">
             <div class="col-12 mb-3">
 
-                <h4 class="p-1 title">Token Transfers</h4>
+                <h4 class="p-1 title">TRANSACTIONS</h4>
+                <div class="row">
+                    <div id="address-transaction-table" class="col-12 position-relative view-table"
+                         data-url="/{{meta.baseUrlPrefix}}/address/ad-{{address.chainId}}-{{address.address}}/transactions">
 
-                <table id="addressDetailsTransactions" class="table table-hover table-responsive token-table" cellspacing="0" width="100%">
+                        {{> ui/transactionTable}}
 
-                    {{>transactionsDataColumnsOnlySymbol}}
+                    </div>
+                </div>
 
-                </table>
+                {{>ui/nextPreviousTemplate}}
+
 
             </div>
         </div>
@@ -23,9 +28,7 @@
 {{#contentFor "pageScripts"}}
     <script type="text/javascript">
         $(document).ready(function() {
-            btx.addressDetails.init({
-                transactions_url : "{{meta.transaction_url}}",
-            });
+            btx.addressDetails.init();
         });
     </script>
 {{/contentFor}}

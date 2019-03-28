@@ -1,0 +1,174 @@
+
+.view-table{
+  .table-info-wrapper{
+    @media screen and (max-width: 767px){
+      overflow-x: scroll;
+      overflow-y: hidden;
+      .table-header,
+      .table-body{
+        width: 1000px;
+      }
+    }
+  }
+
+  .table-header{
+    padding: 0.6rem 1rem;
+    font-weight: 500;
+    color: #438bad;
+    text-transform: uppercase;
+    font-size: .9rem;
+    letter-spacing: 1px;
+
+
+    > div{
+      //letter-spacing: 1px;
+      //color: #597a84;
+      //font-size: 14px;
+    }
+  }
+  .table-body{
+    .card-body{
+      padding: 1.2rem 1rem !important;
+      background-color: #fafcfd;
+      margin-top: 5px;
+      font-size: 0.9rem;
+      font-weight: 400;
+    }
+    .tx-fee{
+      padding: 2px 8px;
+      font-weight: 500;
+      //margin-left: 8px;
+      border-radius: 2px;
+      &.badge-primary{
+       color: #ffffff;
+      }
+    }
+  }
+  .paginate-section{
+    margin-top: 15px;
+    .paginate-button{
+
+      color: #9cc5c1;
+      background: #ffffff;
+      border: 1px solid #9cc5c1;
+      border-radius: inherit;
+      margin-left: 5px;
+      display: inline-block;
+      padding: 0.4em 0.8em;
+      text-decoration: none;
+
+      &:hover{
+        color: #ffffff;
+        background: #9cc5c1;
+        border: 1px solid #9cc5c1;
+      }
+
+      &.disabled,
+      &.disabled:hover{
+        color: #acb1ae !important;
+        background: #f3f3f3;
+        cursor: default;
+        border: 1px solid #f3f3f3;
+      }
+
+    }
+  }
+}
+
+#homeTopTokensTable {
+  //.table-header{
+  //  color: #438bad;
+  //  text-transform: uppercase;
+  //  font-size: .75rem;
+  //  font-weight: 500;
+  //  letter-spacing: 1px;
+  //  border-collapse: collapse!important;
+  //  background-color: #fff!important;
+  //  border: none;
+  //}
+  .table-body{
+    .card-body{
+      //padding: 0.6rem 0 !important;
+      //font-size: 0.75rem;
+      //border-top: 1rem solid #ffffff;
+      //background-color: #fafcfd !important;
+      a,
+      a:visited,
+      a:active,
+      a:hover {
+        color: #179eb1;
+      }
+      .cell {
+        height: 40px;
+        .symbol:hover{
+          text-decoration: none;
+        }
+        .badge-primary{
+          min-width: 80px;
+          text-align: left;
+        }
+        .ost-value{
+          font-size: 0.65rem;
+        }
+        .text-truncate {
+          max-width: 170px
+        }
+        @media (max-width: 768px) {
+          min-width: 80px;
+          .text-truncate {
+            max-width: 75px
+          }
+        }
+      }
+
+      .rank{
+        height: 100%;
+        width: 45px;
+        text-align: center;
+        font-weight: 300;
+        font-size: 1rem;
+        line-height: 40px;
+        background: #9cc5c1;
+        color: #fff;
+        border-right: 5px solid #fff;
+      }
+
+      &.arrow {
+        @media (max-width: 576px) {
+          .cell{
+            min-width: 30px;
+          }
+        }
+      }
+    }
+  }
+  .paginate-section{
+    margin-top: 15px;
+    .paginate-button{
+
+      color: #9cc5c1;
+      background: #ffffff;
+      border: 1px solid #9cc5c1;
+      border-radius: inherit;
+      margin-left: 5px;
+      padding: 0.4em 0.8em;
+      text-decoration: none;
+
+      &:hover{
+        color: #ffffff;
+        background: #9cc5c1;
+        border: 1px solid #9cc5c1;
+      }
+
+      &.disabled,
+      &.disabled:hover{
+        color: #acb1ae !important;
+        background: #f3f3f3;
+        cursor: default;
+        border: 1px solid #f3f3f3;
+      }
+
+    }
+  }
+}
+

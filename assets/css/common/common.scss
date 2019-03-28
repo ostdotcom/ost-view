@@ -1,3 +1,6 @@
+body{
+    color: #597A84;
+}
 pre{
     white-space: pre;
 }
@@ -91,4 +94,34 @@ a.btn-secondary{
     width: 60px;
     margin: 0 auto;
     background-size: 60px;
+}
+
+.jTableLoader {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    display: none;
+    z-index: 1;
+    opacity: 0.5;
+    background: #ffffff;
+}
+
+.txHash {
+    color: #179eb1;
+}
+
+.old-version-link {
+    &:hover{
+        text-decoration: underline;
+    }
+}
+
+.current-version {
+    font-size: 0.7rem;
+    position: relative;
+    top: -10px;
+    left: -7px;
+    color: #02BAD4;
 }

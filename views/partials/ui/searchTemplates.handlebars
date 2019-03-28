@@ -1,0 +1,95 @@
+
+<script type="text/x-handlebars-template" id="search-loader-template" >
+    <div class="search-loader-wrap text-center p-4">
+        <img src="https://dxwfxs8b4lg24.cloudfront.net/ost-kit/images/processed-loader-1.gif" height="20" width="20"/>
+    </div>
+</script>
+
+<script type="text/x-handlebars-template" id="search-error-template" >
+    <div class="search-error-wrap text-center p-4">
+        <span> Something went wrong please try again. </span>
+    </div>
+</script>
+
+<script type="text/x-handlebars-template" id="search-no-result-template" >
+    <div class="search-no-result-wrap text-center p-4">
+        <span> No results found. </span>
+    </div>
+</script>
+
+<script type="text/x-handlebars-template" id="address-template" >
+    <div class="search-user-address-wrap">
+        <a class="item text-left block py-2 px-3" href="{{getFEURLTemplate meta.urlTemplates.address}}">
+            <span class="number text-truncate">
+                [[address]]
+            </span>
+            <span class="chain-id">
+                Chain ID : [[chainId]]
+            </span>
+        </a>
+    </div>
+</script>
+
+<script type="text/x-handlebars-template" id="tokenHolder-template" >
+    <div class="search-user-address-wrap">
+        <a class="item text-left block py-2 px-3" href="{{getFEURLTemplate meta.urlTemplates.tokenHolder}}">
+            <span class="number text-truncate">
+                [[address]]
+            </span>
+            <span class="chain-id">
+               [[name]] Token
+            </span>
+            <span class="chain-id">
+                Chain ID : [[chainId]]
+            </span>
+        </a>
+    </div>
+</script>
+
+<script type="text/x-handlebars-template" id="transaction-template" >
+    <div class="search-transaction-hash-wrap">
+            <a class="item text-left block py-2 px-3" href="{{getFEURLTemplate meta.urlTemplates.transaction}}">
+                <span class="number text-truncate">
+                    [[transactionHash]]
+                </span>
+                <span class="chain-id">
+                    Chain ID : [[chainId]]
+                </span>
+            </a>
+    </div>
+</script>
+
+<script type="text/x-handlebars-template" id="block-template" >
+    <div class="search-block-number-wrap">
+        <div class="search-transaction-hash-wrap">
+            <a class="item text-left block py-2 px-3" href="{{getFEURLTemplate meta.urlTemplates.block}}">
+                <span class="number text-truncate">
+                  [[blockNumber]]
+                </span>
+                <span class="chain-id">
+                  Chain ID : [[chainId]]
+                </span>
+            </a>
+        </div>
+    </div>
+</script>
+
+<script type="text/x-handlebars-template" id="token-template" >
+    <div class="search-token-wrap">
+        <a class="item text-left block py-2 px-3" href="{{getFEURLTemplate meta.urlTemplates.token}}">
+            <span class="number text-truncate align-items-center d-flex font-weight-normal">
+              <!--[[#logo]]-->
+                  <!--<img class="img-fluid" width="30" height="30" src="[[logo]]" />-->
+               <!--[[else]]-->
+                <!--<span class="circle circle-xs mr-2">-->
+                  <!--LOGO-->
+                <!--</span>-->
+              <!--[[/logo]]-->
+              [[name]] ([[symbol]])
+            </span>
+            <span class="chain-id text-truncate">
+               Contract : [[contractAddress]]
+            </span>
+        </a>
+    </div>
+</script>

@@ -1,0 +1,6 @@
+
+{{#if toContractAddress}}
+    <a class="{{class}}" style="{{style}}" href="/{{meta.baseUrlPrefix}}/address/ad-{{chainId}}-{{toContractAddress}}"> Contract Deployed </a>
+{{else if address}}
+    <a class="{{class}}" style="{{style}}" href="/{{meta.baseUrlPrefix}}/address/ad-{{chainId}}-{{address}}"> {{address}} </a>
+{{/if}}

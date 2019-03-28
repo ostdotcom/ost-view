@@ -1,142 +1,133 @@
-"use strict";
+'use strict';
 /**
- * Specific address related routes.<br><br>
- * Base url for all routes given below is: <b>base_url = /chain-id/:chainId/address</b>
+ * Address related routes.<br><br>
  *
- * @module Explorer Routes - Address
+ * @module routes/address
  */
 const express = require('express');
 
-// Express router to mount address related routes
-const router = express.Router({mergeParams: true});
+// Express router to mount contract related routes
+const router = express.Router({ mergeParams: true });
 
 // load all internal dependencies
-const rootPrefix = ".."
-  , responseHelper = require(rootPrefix + '/lib/formatter/response')
-  , logger = require(rootPrefix + '/helpers/custom_console_logger')
-  , coreConstant = require(rootPrefix + '/config/core_constants')
-  , routeHelper = require(rootPrefix + '/routes/helper')
-;
-
+const rootPrefix = '..',
+  responseHelper = require(rootPrefix + '/lib/formatter/response'),
+  logger = require(rootPrefix + '/lib/logger/customConsoleLogger'),
+  sanitizer = require(rootPrefix + '/helpers/sanitizer'),
+  handlebarHelper = require(rootPrefix + '/helpers/handlebarHelper'),
+  coreConstants = require(rootPrefix + '/config/coreConstants'),
+  baseRoutes = require(rootPrefix + '/lib/globalConstant/baseRoutes'),
+  routeHelper = require(rootPrefix + '/routes/helper');
 
 // Render final response
-const renderResult = function (requestResponse, responseObject, contentType) {
-  return requestResponse.renderResponse(responseObject, 200, contentType);
+const renderResult = function(requestResponse, responseObject, contentType) {
+  return requestResponse.renderResponse(responseObject, requestResponse.isSuccess() ? 200 : 500, contentType);
 };
 
-
 /**
- * Get details (balance and transactions) of a given address
+ * Get address details
  *
- * @name Address Details
+ * @name Address details
  *
- * @route {GET} {base_url}/:address
  *
- * @routeparam {String} :address - Address whose details need to be fetched (42 chars length)
+ * @routeparam chainId {Number} :chainId - ChainId on which the economy is present
+ * @routeparam address {String} :address - address for which details needed to be fetched
  */
-router.get('/:address', function (req, res, next) {
+router.get('/ad-:chainId-:address', sanitizer.sanitizeDynamicUrlParams, function(req, res, next) {
+  require(rootPrefix + '/app/services/address/GetBasicDetails');
 
-  const getDetailsKlass = require(rootPrefix + '/app/services/address/get_details');
-
-  routeHelper.performer(req, res, next, getDetailsKlass, 'r_a_1')
-    .then(function (requestResponse) {
-      if(requestResponse.isSuccess()){
-        processAddressDetailsResponse(requestResponse.data, req, res);
-      } else {
-        logger.log(req.originalUrl + " : " + requestResponse.err.code);
-        return renderResult(responseHelper.error(requestResponse.err.code, coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, req.headers['content-type']);
-      }
-    });
+  routeHelper.performer(req, res, next, 'GetAddressBasicDetails', 'r_ad_1').then(function(requestResponse) {
+    if (requestResponse.isSuccess()) {
+      processAddressBasicDetailsResponse(requestResponse.data, req, res);
+    } else {
+      logger.log(req.originalUrl + ' : ' + requestResponse.err.code);
+      return renderResult(
+        responseHelper.error(requestResponse.err.code, coreConstants.DEFAULT_DATA_NOT_AVAILABLE_TEXT),
+        res,
+        req.headers['content-type']
+      );
+    }
+  });
 });
 
-function processAddressDetailsResponse( response, req, res ) {
-  const addressDetails = (response=== undefined || response.address_details === undefined) ? '' : response.address_details
-    , contractAddresses = (response=== undefined || response.contract_addresses === undefined) ? '' : response.contract_addresses
-  ;
+function processAddressBasicDetailsResponse(response, req, res) {
+  let addressDetails = response;
 
-
-
-  const responseData = responseHelper.successWithData({
-    address_info: addressDetails,
-    contract_addresses:contractAddresses,
-    mCss: ['mAddressDetails.css'],
-    mJs: ['mAddressDetails.js'],
+  let rawResponse = {
+    address: addressDetails,
     meta: {
-      q: req.params.address,
-      address:req.params.address,
-      transaction_url: '/chain-id/'+req.params.chainId+'/address/'+req.params.address+'/token-transfers',
-      sub_environment: coreConstant['VIEW_SUB_ENVIRONMENT']
-    },
+      baseUrlPrefix: coreConstants.BASE_URL_PREFIX,
+      urlTemplates: baseRoutes.getAllUrls(),
+      currencySymbol: handlebarHelper.ostCurrencySymbol(true)
+    }
+  };
+
+  let webViewResponse = {
     page_meta: {
-      title: 'OST VIEW | Address Details - '+req.params.address,
+      title: `OST VIEW | Address Details - ${addressDetails.address}`,
       description: 'OST VIEW is the home grown block explorer from OST for OpenST Utility Blockchains.',
       keywords: 'OST, Simple Token, Utility Chain, Blockchain',
       robots: 'noindex, nofollow',
-      image: 'https://dxwfxs8b4lg24.cloudfront.net/ost-view/images/ost-view-og-image-1.jpg'
+      image: `${coreConstants.CLOUD_FRONT_BASE_DOMAIN}/ost-view/images/ost-view-og-image-1.jpg`
     },
-    result_type: 'address_details',
-    title: 'Address Details - '+req.params.address,
-    constants:{
-      cloud_front_base_domain: coreConstant.CLOUD_FRONT_BASE_DOMAIN
-    }
-  });
+    mCss: ['mAddressDetails.css'],
+    mJs: ['mAddressDetails.js'],
+    title: `Address Details - ${addressDetails.contractAddress}`,
+    constants: {
+      cloud_front_base_domain: coreConstants.CLOUD_FRONT_BASE_DOMAIN
+    },
+    template: coreConstants.addressDetails
+  };
 
-  return renderResult(responseData, res, req.headers['content-type']);
+  if (req.headers['content-type'] != 'application/json') {
+    Object.assign(rawResponse, webViewResponse);
+  }
+
+  return renderResult(responseHelper.successWithData(rawResponse), res, req.headers['content-type']);
 }
 
 /**
- * Get paginated address transactions
+ * Get address transactions
  *
- * @name Address Transactions
+ * @name Address transactions
  *
- * @route {GET} {base_url}/:address/transactions/:page
+ * @route {GET} {base_url}/ad-:chainId-:address/transactions
  *
- * @routeparam {String} :address - Address whose balance need to be fetched (42 chars length)
- * @routeparam {Integer} :page - Page number for getting data in batch.
  */
-router.get('/:address/token-transfers', function (req, res, next) {
+router.get('/ad-:chainId-:address/transactions', sanitizer.sanitizeDynamicUrlParams, function(req, res, next) {
+  require(rootPrefix + '/app/services/address/GetAddressTransactions');
 
-  const getDetailsKlass = require(rootPrefix + '/app/services/address/token_transfers');
+  if (routeHelper.validateXhrRequest(req, res)) {
+    return;
+  }
 
-  routeHelper.performer(req, res, next, getDetailsKlass, 'r_a_2')
-    .then(function (requestResponse) {
-      if(requestResponse.isSuccess()){
-        processTokenTransferResponse(requestResponse.data, req, res);
-      } else {
-        logger.log(req.originalUrl + " : " + requestResponse.err.code);
-        return renderResult(responseHelper.error(requestResponse.err.code, coreConstant.DEFAULT_DATA_NOT_AVAILABLE_TEXT), res, 'application/json');
-
-      }
-    });
+  routeHelper.performer(req, res, next, 'GetAddressTransactions', 'r_ad_2').then(function(requestResponse) {
+    if (requestResponse.isSuccess()) {
+      processAddressTransactionsResponse(requestResponse.data, req, res);
+    } else {
+      logger.log(req.originalUrl + ' : ' + requestResponse.err.code);
+      return renderResult(
+        responseHelper.error(requestResponse.err.code, coreConstants.DEFAULT_DATA_NOT_AVAILABLE_TEXT),
+        res,
+        req.headers['content-type']
+      );
+    }
+  });
 });
 
-function processTokenTransferResponse(queryResponse, req, res) {
-  const tokenTransactions =  queryResponse.token_transfers,
-    contractAddress = queryResponse.contract_addresses,
-    nextPagePayload = queryResponse.next_page_payload,
-    prevPagePayload = queryResponse.prev_page_payload
-  ;
+function processAddressTransactionsResponse(queryResponse, req, res) {
+  let transactions = queryResponse.transactions,
+    nextPagePayload = queryResponse.nextPagePayload;
 
-  // For all the pages remove last row if its equal to page size.
-
-
-  const response = responseHelper.successWithData({
-    transactions: tokenTransactions,
-    contract_addresses: contractAddress,
-    result_type: "transactions",
-    meta:{
-      next_page_payload :nextPagePayload,
-      prev_page_payload :prevPagePayload,
-
-      transaction_placeholder_url:"/chain-id/"+req.params.chainId+"/transaction/{{tr_hash}}",
-      address_placeholder_url:"/chain-id/"+req.params.chainId+"/address/{{addr}}",
-      token_details_redirect_url: "/chain-id/"+req.params.chainId+"/tokendetails/{{contract_addr}}",
-      q:req.params.address
+  const responseData = responseHelper.successWithData({
+    transactions: transactions,
+    meta: {
+      urlTemplates: baseRoutes.urlTemplates,
+      nextPagePayload: nextPagePayload
     }
   });
 
-  return renderResult(response, res, 'application/json');
+  return renderResult(responseData, res, 'application/json');
 }
-
 
 module.exports = router;

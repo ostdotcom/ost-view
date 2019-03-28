@@ -1,0 +1,87 @@
+<section class="container-datatable">
+
+    <div class="container">
+
+        <div class="row">
+            <div class="col-12 mb-3">
+
+                <h4 class="p-1 title nav-link text-uppercase" style="font-weight: 500;letter-spacing: 1.1px;font-size: 1rem">Token Transfers</h4>
+                <div class="row">
+                    <div id="token-address-transaction-table" class="col-12 position-relative view-table"
+                         data-url="/{{meta.baseUrlPrefix}}/token/th-{{token.chainId}}-{{token.contractAddress}}-{{tokenHolder.address}}/token-transfers">
+                      <div class="table-info-wrapper">
+                        <div class="table-header">
+                          <div class="row">
+                            <div class="col-3 text-truncate">
+                              TX #
+                            </div>
+                            <div class="col-2 text-truncate">
+                              TX TIME
+                            </div>
+                            <div class="col-2 text-truncate">
+                              FROM
+                            </div>
+                            <div class="col-1 p-0"></div>
+                            <div class="col-2 text-truncate">
+                              TO
+                            </div>
+                            <div class="col-2 text-truncate">
+                              Amount
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="table-body" data-row-wrapper>
+                            <script type="text/x-handlebars-template" data-row-template>
+                                [[#if tokenTransfers]]
+                                    [[#each tokenTransfers]]
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-3 text-truncate">
+                                                    {{>ui/transactionHash}}
+                                                </div>
+                                                <div class="col-2 text-truncate">
+                                                    {{>ui/time timestampKey="timestamp"}}
+                                                </div>
+                                                <div class="col-2 text-truncate">
+                                                    {{>ui/address template=meta.urlTemplates.tokenHolder fromTo="from"}}
+                                                </div>
+                                                <div class="col-1 text-center p-0">→</div>
+                                                <div class="col-2 text-truncate">
+                                                    {{>ui/address template=meta.urlTemplates.tokenHolder fromTo="to"}}
+                                                </div>
+                                                <div class="col-2">
+                                                    <span class="badge-primary inflow-1 tx-fee text-uppercase">
+                                                        [[toDecimalValue amount '{{token.decimals}}']] {{token.symbol}}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    [[/each]]
+                                [[else]]
+                                    {{>ui/noResults}}
+                                [[/if]]
+                            </script>
+                        </div>
+                      </div>
+
+                    </div>
+                </div>
+
+                {{>ui/nextPreviousTemplate}}
+
+
+            </div>
+        </div>
+
+    </div>
+
+</section>
+
+{{#contentFor "pageScripts"}}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            btx.tokenAddressDetails.init();
+        });
+    </script>
+{{/contentFor}}

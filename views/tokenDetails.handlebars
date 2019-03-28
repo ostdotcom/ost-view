@@ -1,7 +1,4 @@
-{{>pageTitle title=token_details.company_name}}
+{{>pageTitle title="Token Details"}}
 {{>details}}
-{{>summary}}
-{{#when meta.sub_environment '!=' 'main'}}
-{{>graphs}}
-{{/when}}
+{{>tokenSummary}}
 {{>tokenDetailsDataTable}}

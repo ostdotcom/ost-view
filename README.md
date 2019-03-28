@@ -1,86 +1,85 @@
-OPENST-VIEW
-============
+# OST View
 
-## Prerequisite installations 
+OST VIEW is the home grown multi-chain block explorer from OST for OpenST Utility Blockchains.
 
-* Install node version >= 8.7.0
-* Install geth version >= 1.7.2
-* MySQL
+To parse blockchains, OST VIEW uses the [OST Block Scanner](https://github.com/ostdotcom/ost-block-scanner/).
 
-## Setup OpenST utility chains 
+## Install
 
-* Go to OpenST Explorer repo directory and create home directory env path
-```
-  > cd openst-view
-  > export OST_VIEW_PATH=$(pwd)
+```bash
+  git clone https://github.com/ostdotcom/ost-view.git
+  cd ost-view/
+  npm install
 ```
 
-* Install Packages
+## Setup
+
+### 1. Install Prerequisites 
+- [nodejs](https://nodejs.org/) >= 8.0.0
+- [Geth](https://github.com/ethereum/go-ethereum/) >=1.8.17
+- [Memcached](https://memcached.org/)
+- AWS DynamoDB Service OR [DynamoDBLocal.jar](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.DownloadingAndRunning.html)
+- [Java](https://www.java.com/) >= 6.0, if using DynamoDBLocal.jar
+- [DB Browser for SQLite](https://sqlitebrowser.org/) optionally to browse DynamoDB
+    
+### 2. Run DynamoDBLocal.jar, if you are not using AWS DynamoDB Service
+
+```bash
+  # NOTE: Make sure to change DYNAMODB_PATH
+  export DYNAMODB_PATH=~/dynamodb_local_latest
+  java -Djava.library.path=$DYNAMODB_PATH/DynamoDBLocal_lib/ -jar $DYNAMODB_PATH/DynamoDBLocal.jar -sharedDb -dbPath $DYNAMODB_PATH/
 ```
-  > npm install
+
+### 3. Create OST VIEW configuration file 
+Refer to [configuration.json.example](configuration.json.example) to create a new configuration file.
+
+### 4. Create Global DynamoDB tables: 
+
+```bash
+  node ./node_modules/@ostdotcom/ost-block-scanner/tools/initialSetup.js --configFile $(pwd)/configuration.json
 ```
 
-* Start MySQL and Geth Node
+### 5. Add a new chain and create chain-specific shared DynamoDB tables:
+  * Mandatory parameters: `chainId`, `networkId`, `configFile`
+  * Optional parameters (each defaults to 1):
+    * `blockShardCount`: number of block shards to be created
+    * `economyAddressShardCount`: number of economy address shards to be created
+    * `transactionShardCount`: number of transaction shards to be created
 
-* Create database in MySQL
+```bash
+  # NOTE:
+  # Make sure chain configuration is present in configuration file before starting this step. 
+  # Optional parameters are used to create entity-specific sharded tables. 
+  # By default only one shard is created for each entity. 
+  node ./node_modules/@ostdotcom/ost-block-scanner/tools/addChain.js --configFile $(pwd)/configuration.json --chainId 2000 --networkId 1 --blockShardCount 2 --economyAddressShardCount 2 --transactionShardCount 2
+```
 
- * Run migration
-  > To run migrations for specific chain specify chain Id
-  ```
-    > $OST_VIEW_PATH/executables/db_migrate.js up -c <chain_id>
-  ```
-  > To run migrations for all the configured chains (make sure all databases are created.)
-  ```
-    > node $OST_VIEW_PATH/executables/db_migrate.js up
-  ```
+_For additional configuration options, please see documentation for the [OST Block Scanner](https://github.com/ostdotcom/ost-block-scanner/)._
 
-* Define chain configurations in set_env_vars.sh file
-  > '0' in environment variable define configurations for one particular chain.
-  > To Define configuration for multiple chains, define another set of environment
-    variables having consecutive number.
-    For example: OST_VIEW_1_CHAIN_ID, OST_VIEW_2_CHAIN_ID...
+### 6. Add Global Stats DynamoDB table:
 
-  ```
-     # chain env
-     export OST_VIEW_0_CHAIN_ID=<CHAIN_ID>
-     export OST_VIEW_0_WEB_RPC=<WEB_RPC_URL>
+```bash
+  node lib/models/tableCreation.js --configFile $(pwd)/configuration.json
+```
 
-     #DB env
-     export OST_VIEW_0_DB_USER=<DB_USER_NAME>
-     export OST_VIEW_0_DB_PWD=<DB_PASSWORD>
+## Start Block Scanner
+  * Mandatory parameters: `chainId`, `configFile`
+  * Optional parameters: startBlockNumber, endBlockNumber
+```bash
+  node ./node_modules/@ostdotcom/ost-block-scanner/executables/blockScanner.js --configFile $(pwd)/configuration.json --chainId 2000 --startBlockNumber 0 --endBlockNumber 100
+```
 
-     export OST_VIEW_0_DB_NAME=<DB_NAME>
 
-     export OST_VIEW_0_DB_HOST=<DB_URL>
+## Start Global Stats Aggregator
 
-     export OST_VIEW_0_DB_CONNECTION_LIMIT=<DB_CONNECTION_LIMT>
-  ```
+```bash
+  node executables/GlobalAggregatorCron.js --configFile $(pwd)/configuration.json
+```
 
-## In terminal 1
-   * (Optional) Start notification listener(rabbitmq)
-       > rabbitmq is required for notificationListener
-       ```
-           > cd openst-view
-           > source set_env_vars.sh
-           > ./executables/notificationListener.js
-       ```
+## Start OST VIEW application server
 
-## In terminal 2
-* Start node
-  
-    ```
-     > cd openst-view
-     > source set_env_vars.sh
-     > npm start
-     
-     
-## Start Cronjobs
-```base
-# Every five minute
-node executables/graph_cron.js >> log/graph_cron.log
-node executables/aggregator_cron.js -c <chain_id> >> log/aggregator_cron.log
-# Every minute
-node executables/block_fetcher_cron.js  -c <chain_id> >> log/block_fetcher_cron.log
-node executables/block_verifier_cron.js  -c <chain_id> >> log/block_verifier_cron.log
-node executables/populate_address_detail_cron.js -c <chain_id> >> log/block_verifier_cron.log
-```     
+```bash
+  npm start
+```
+
+With the browser of your choice, visit `http://<Hostname or IP>:<port mentioned in configuration.json>`.

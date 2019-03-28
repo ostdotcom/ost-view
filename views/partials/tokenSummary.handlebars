@@ -1,0 +1,90 @@
+<section class="container-summary">
+    <div class="container">
+        <div class="row mt-4">
+
+            <div class="col-md-4 text-truncate mb-4 d-flex">
+                <div class="card w-100">
+                    <span class="market-cap icon mx-auto card-img-top"></span>
+                    <div class="card-body">
+                        <!--<span class="ost-alpha-badge icon"></span>-->
+                        <div class="card-text text-center mt-2">
+                            <h3 class="name">Market Cap</h3>
+                            <div class="value text-truncate">{{displayToFixed token.marketCap}} {{ostCurrencySymbol}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          <div class="col-md-4 text-truncate mb-4 d-flex">
+            <div class="card w-100">
+                    <span class="token-price icon mx-auto card-img-top"></span>
+                    <div class="card-body">
+                        <div class="card-text text-center mt-2">
+                            <h3 class="name">Price</h3>
+                            <div class="value text-truncate">
+                              {{inverseDisplayBtToOst token.conversionFactor 5}} {{ostCurrencySymbol}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          <div class="col-md-4 text-truncate mb-4 d-flex">
+            <div class="card w-100">
+                    <span class="total-supply icon mx-auto card-img-top"></span>
+                    <div class="card-body">
+                        <div class="card-text text-center mt-2">
+                            <h3 class="name">Total Supply</h3>
+                            <div class="value text-truncate">
+                                {{toDecimalValueToFixed token.totalSupply token.decimals}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+          <div class="col-md-4 text-truncate mb-4 d-flex">
+            <div class="card w-100">
+              <span class="total-volume icon mx-auto card-img-top"></span>
+              <div class="card-body">
+                <div class="card-text text-center mt-2">
+                  <h3 class="name">Total Volume</h3>
+                  <div class="value text-truncate">
+                    {{bigNumber_toFromat token.totalVolume}} {{ostCurrencySymbol}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4 text-truncate mb-4 d-flex">
+            <div class="card w-100">
+              <span class="total-transfers icon mx-auto card-img-top"></span>
+              <div class="card-body">
+                <div class="card-text text-center mt-2">
+                  <h3 class="name">Total Transfers</h3>
+                  <div class="value text-truncate">
+                    {{bigNumber_toFromat token.totalTransfers}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-4 text-truncate mb-4 d-flex">
+            <div class="card w-100">
+              <span class="token-holders icon mx-auto card-img-top"></span>
+              <div class="card-body">
+                <div class="card-text text-center mt-2">
+                  <h3 class="name">Token Holders</h3>
+                  <div class="value text-truncate">
+                    {{bigNumber_toFromat token.totalTokenHolders}}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+    </div>
+
+</section>
