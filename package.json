@@ -30,7 +30,7 @@
     "@ostdotcom/base": "1.0.0",
     "@ostdotcom/cache": "1.0.6",
     "@ostdotcom/ost-block-scanner": "1.0.1-beta.5",
-    "@ostdotcom/storage": "1.0.3",
+    "@ostdotcom/storage": "1.0.4-beta.1",
     "abi-decoder": "1.0.9",
     "basic-auth": "2.0.0",
     "bignumber.js": "4.1.0",
