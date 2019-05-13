@@ -29,6 +29,9 @@ class GetTokenHolderBalance {
     oThis.chainId = params.chainId;
     oThis.address = params.address;
     oThis.contractAddress = params.contractAddress;
+  
+    oThis.tokenHolderDetails = null;
+    oThis.tokenDetails = null;
   }
 
   /**
@@ -62,7 +65,14 @@ class GetTokenHolderBalance {
 
     if (response.isFailure()) return response;
 
-    return oThis.getAddressBalance();
+    await oThis.getAddressBalance();
+  
+    let serviceResponse = {};
+    serviceResponse['tokenHolderDetails'] = oThis.tokenHolderDetails;
+    serviceResponse['tokenDetails'] = oThis.tokenDetails;
+    serviceResponse['baseCurrencies'] = oThis.tokenDetails['baseCurrencies'];
+    
+    return responseHelper.successWithData(serviceResponse);
   }
 
   /**
@@ -98,8 +108,7 @@ class GetTokenHolderBalance {
       EconomyAddressGetBalance = blockScanner.address.GetBalance;
 
     let economyAddressGetBalance = new EconomyAddressGetBalance(oThis.chainId, oThis.contractAddress, [oThis.address]),
-      economyAddressGetBalanceRsp = await economyAddressGetBalance.perform(),
-      response = {};
+      economyAddressGetBalanceRsp = await economyAddressGetBalance.perform();
 
     if (!economyAddressGetBalanceRsp.isSuccess() && !economyAddressGetBalanceRsp.data[oThis.address]) {
       return responseHelper.error('s_e_gb_5', 'Data Not found');
@@ -114,14 +123,12 @@ class GetTokenHolderBalance {
 
     economyAddressData['contractAddress'] = oThis.contractAddress;
 
-    let tokenHolderDetails = await tokenHolderFormatter.perform(economyAddressData);
+    oThis.tokenHolderDetails = await tokenHolderFormatter.perform(economyAddressData);
 
     let contractData = await oThis.getContractDetails(oThis.contractAddress);
+    oThis.tokenDetails = contractData.data;
 
-    response['tokenHolderDetails'] = tokenHolderDetails;
-    response['tokenDetails'] = contractData.data;
-
-    return responseHelper.successWithData(response);
+    return responseHelper.successWithData({});
   }
 
   async getContractDetails(contractAddress) {

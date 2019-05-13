@@ -14,6 +14,7 @@ const rootPrefix = '../../..',
 const InstanceComposer = OSTBase.InstanceComposer;
 
 require(rootPrefix + '/lib/providers/blockScanner');
+require(rootPrefix + '/lib/cacheMultiManagement/BaseCurrency');
 
 class GetTopTokens {
   /**
@@ -26,6 +27,10 @@ class GetTopTokens {
     const oThis = this;
 
     oThis.paginationIdentifier = params.paginationIdentifier;
+  
+    oThis.economies = {};
+    oThis.baseCurrencies = {};
+    oThis.baseCurrencyContractAddresses = [];
   }
 
   /**
@@ -51,9 +56,12 @@ class GetTopTokens {
 
     await oThis.getEconomies();
 
+    await oThis.getBaseCurrencies();
+    
     let result = {};
 
     result['tokens'] = oThis.economies;
+    result['baseCurrencies'] = oThis.baseCurrencies;
     result['nextPagePayload'] = oThis.nextPagePayload;
 
     return responseHelper.successWithData(result);
@@ -70,9 +78,11 @@ class GetTopTokens {
       blockScanner = blockScannerProvider.getInstance(),
       Economy = blockScanner.model.Economy,
       economy = new Economy({ consistentRead: false }),
-      shortNameForSortEconomyBy = economy.shortNameFor('sortEconomyBy');
+      shortNameForSortEconomyBy = economy.shortNameFor('sortEconomyBy'),
+      longNameForBaseCurrencyContractAddress = "baseCurrencyContractAddress";
 
-    let decryptedLastEvaluatedKey = null;
+    let decryptedLastEvaluatedKey = null,
+      allShortNames = Object.keys(economy.shortNameToDataType);
 
     if (oThis.paginationIdentifier) {
       let decryptedLastEvaluatedKeyString = base64Helper.decode(oThis.paginationIdentifier);
@@ -83,6 +93,7 @@ class GetTopTokens {
       TableName: economy.tableName(),
       IndexName: economy.thirdGlobalSecondaryIndexName(),
       KeyConditionExpression: '#sortEconomyBy = :sortEconomyBy',
+      ProjectionExpression: allShortNames.join(','),
       ExpressionAttributeNames: {
         '#sortEconomyBy': shortNameForSortEconomyBy
       },
@@ -111,6 +122,7 @@ class GetTopTokens {
     }
 
     oThis.economies = [];
+    oThis.baseCurrencyContractAddresses = [];
 
     let chainIdToContractAddressMap = {};
 
@@ -125,6 +137,10 @@ class GetTopTokens {
         result[economy.longNameFor(shortName)] = economyRow[shortName][economy.shortNameToDataType[shortName]];
       }
 
+      if(result["baseCurrencyContractAddress"]){
+        oThis.baseCurrencyContractAddresses.push(result[longNameForBaseCurrencyContractAddress]);
+      }
+      
       if (chainIdToContractAddressMap[result.chainId]) {
         chainIdToContractAddressMap[result.chainId].push(result.contractAddress);
       } else {
@@ -166,6 +182,30 @@ class GetTopTokens {
       let result = await tokenFormatter.perform(token);
 
       oThis.economies[i] = result;
+    }
+  }
+  
+  /**
+   * Get base currencies details for contract addresses
+   *
+   * @returns {Promise<void>}
+   */
+  async getBaseCurrencies() {
+    const oThis = this;
+    
+    oThis.baseCurrencyContractAddresses = [...new Set(oThis.baseCurrencyContractAddresses)];
+  
+    if(oThis.baseCurrencyContractAddresses.length === 0) {
+      return;
+    }
+    
+    const BaseCurrencyCache = oThis.ic().getShadowedClassFor(coreConstants.icNameSpace, 'BaseCurrencyCache'),
+      baseCurrencyCacheObj = new BaseCurrencyCache({baseCurrencyContractAddresses: oThis.baseCurrencyContractAddresses});
+  
+    let baseCurrencyCacheRsp = await baseCurrencyCacheObj.fetch();
+    
+    if(baseCurrencyCacheRsp.isSuccess()) {
+      oThis.baseCurrencies = baseCurrencyCacheRsp.data;
     }
   }
 }

@@ -135,6 +135,10 @@
           "gatewayContractAddress": {
               "shortName": "gwca",
               "dataType": "S"
+          },
+          "baseCurrencyContractAddress": {
+              "shortName": "bcca",
+              "dataType": "S"
           }
       },
       "transactions": {
