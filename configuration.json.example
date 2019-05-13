@@ -2,6 +2,7 @@
   "environment": "development",
   "subEnvironment": "sandbox",
   "ddbTablePrefix": "de_m_a_",
+  "subEnvDdbTablePrefix": "de_m_",
   "port":3000,
   "workers":1,
   "authentication": {
