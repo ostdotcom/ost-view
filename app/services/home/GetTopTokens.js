@@ -28,9 +28,11 @@ class GetTopTokens {
 
     oThis.paginationIdentifier = params.paginationIdentifier;
 
-    oThis.economies = {};
+    oThis.economies = [];
+    oThis.nextPagePayload = {};
     oThis.baseCurrencies = {};
     oThis.baseCurrencyContractAddresses = [];
+    oThis.chainIdToContractAddressMap = {};
   }
 
   /**
@@ -79,16 +81,12 @@ class GetTopTokens {
       Economy = blockScanner.model.Economy,
       economy = new Economy({ consistentRead: false }),
       longNameForBaseCurrencyContractAddress = 'baseCurrencyContractAddress';
-
-    let decryptedLastEvaluatedKey = null,
-      allShortNames = Object.keys(economy.shortNameToDataType);
-
+    
     let keyObjs = await oThis.getPrimaryKeysToQuery();
 
     let batchGetParams = { RequestItems: {} };
     batchGetParams.RequestItems[economy.tableName()] = {
       Keys: keyObjs,
-      ProjectionExpression: allShortNames.join(','),
       ConsistentRead: oThis.consistentRead
     };
 
@@ -99,14 +97,9 @@ class GetTopTokens {
     }
 
     let economyData = response.data.Responses[economy.tableName()];
-
-    oThis.nextPagePayload = {};
-
-    oThis.economies = [];
-    oThis.baseCurrencyContractAddresses = [];
-
-    let chainIdToContractAddressMap = {};
-
+  
+    let tokenDataMap = {}; // Needed for uniquely identifying tokens
+    
     for (let i = 0; i < economyData.length; i++) {
       let economyRow = economyData[i],
         keys = Object.keys(economyRow);
@@ -117,53 +110,28 @@ class GetTopTokens {
         let shortName = keys[j];
         result[economy.longNameFor(shortName)] = economyRow[shortName][economy.shortNameToDataType[shortName]];
       }
-
-      if (result['baseCurrencyContractAddress']) {
-        oThis.baseCurrencyContractAddresses.push(result[longNameForBaseCurrencyContractAddress]);
-      }
-
-      if (chainIdToContractAddressMap[result.chainId]) {
-        chainIdToContractAddressMap[result.chainId].push(result.contractAddress);
-      } else {
-        chainIdToContractAddressMap[result.chainId] = [result.contractAddress];
-      }
-
-      oThis.economies.push(result);
-    }
-
-    let promiseArray = [];
-
-    let tokenDataMap = {}; // Needed for uniquely identifying tokens
-
-    for (let chainId in chainIdToContractAddressMap) {
-      promiseArray.push(economy.getEconomyData(chainId, chainIdToContractAddressMap[chainId]));
-    }
-
-    let responses = await Promise.all(promiseArray);
-
-    for (let i = 0; i < responses.length; i++) {
-      let responseData = responses[i].data;
-
-      for (let contractAddress in responseData) {
-        response = responseData[contractAddress];
-        tokenDataMap[response.chainId + response.contractAddress] = response;
-      }
+      tokenDataMap[result.chainId + result.contractAddress] = result;
     }
 
     for (let i = 0; i < oThis.economies.length; i++) {
       let token = oThis.economies[i];
       Object.assign(token, tokenDataMap[token.chainId + token.contractAddress]);
-
-      token['totalVolume'] = token.totalVolume;
-
+  
       if (!token) {
         return responseHelper.error('s_h_gtt_2', 'Data Not found');
+      }
+      
+      token['totalVolume'] = token.totalVolume;
+  
+      if (token['baseCurrencyContractAddress']) {
+        oThis.baseCurrencyContractAddresses.push(token[longNameForBaseCurrencyContractAddress]);
       }
 
       let result = await tokenFormatter.perform(token);
 
       oThis.economies[i] = result;
     }
+    
   }
 
   /**
@@ -247,11 +215,18 @@ class GetTopTokens {
         let shortName = keys[j];
         result[economy.longNameFor(shortName)] = economyRow[shortName][economy.shortNameToDataType[shortName]];
       }
+      oThis.economies.push(result);
       let keyObj = economy._keyObj(result);
-
+  
+      if (oThis.chainIdToContractAddressMap[result.chainId]) {
+        oThis.chainIdToContractAddressMap[result.chainId].push(result.contractAddress);
+      } else {
+        oThis.chainIdToContractAddressMap[result.chainId] = [result.contractAddress];
+      }
+      
       queryKeys.push(keyObj);
     }
-
+    
     return queryKeys;
   }
 }
