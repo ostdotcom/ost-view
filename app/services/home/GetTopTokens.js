@@ -27,7 +27,7 @@ class GetTopTokens {
     const oThis = this;
 
     oThis.paginationIdentifier = params.paginationIdentifier;
-  
+
     oThis.economies = {};
     oThis.baseCurrencies = {};
     oThis.baseCurrencyContractAddresses = [];
@@ -57,7 +57,7 @@ class GetTopTokens {
     await oThis.getEconomies();
 
     await oThis.getBaseCurrencies();
-    
+
     let result = {};
 
     result['tokens'] = oThis.economies;
@@ -78,48 +78,33 @@ class GetTopTokens {
       blockScanner = blockScannerProvider.getInstance(),
       Economy = blockScanner.model.Economy,
       economy = new Economy({ consistentRead: false }),
-      shortNameForSortEconomyBy = economy.shortNameFor('sortEconomyBy'),
-      longNameForBaseCurrencyContractAddress = "baseCurrencyContractAddress";
+      longNameForBaseCurrencyContractAddress = 'baseCurrencyContractAddress';
 
     let decryptedLastEvaluatedKey = null,
       allShortNames = Object.keys(economy.shortNameToDataType);
 
-    if (oThis.paginationIdentifier) {
-      let decryptedLastEvaluatedKeyString = base64Helper.decode(oThis.paginationIdentifier);
-      decryptedLastEvaluatedKey = JSON.parse(decryptedLastEvaluatedKeyString);
-    }
+    let keyObjs = await oThis.getPrimaryKeysToQuery();
+    console.log('keyObjs-------------------------', keyObjs);
 
-    let queryParams = {
-      TableName: economy.tableName(),
-      IndexName: economy.thirdGlobalSecondaryIndexName(),
-      KeyConditionExpression: '#sortEconomyBy = :sortEconomyBy',
+    let batchGetParams = { RequestItems: {} };
+    batchGetParams.RequestItems[economy.tableName()] = {
+      Keys: keyObjs,
       ProjectionExpression: allShortNames.join(','),
-      ExpressionAttributeNames: {
-        '#sortEconomyBy': shortNameForSortEconomyBy
-      },
-      ExpressionAttributeValues: {
-        ':sortEconomyBy': { [economy.shortNameToDataType[shortNameForSortEconomyBy]]: '1' }
-      },
-      Limit: coreConstants.DEFAULT_PAGE_SIZE,
-      ScanIndexForward: false
+      ConsistentRead: oThis.consistentRead
     };
 
-    if (decryptedLastEvaluatedKey) {
-      queryParams['ExclusiveStartKey'] = decryptedLastEvaluatedKey;
+    let response = await economy.ddbServiceObj.batchGetItem(batchGetParams);
+
+    console.log('response-------------------------', response);
+
+    if (response.isFailure()) {
+      return Promise.reject(response);
     }
 
-    let response = await economy.ddbServiceObj.query(queryParams);
-
-    let economyData = response.data.Items;
+    let economyData = response.data.Responses[economy.tableName()];
+    console.log('economyData-----Items--------------------', economyData);
 
     oThis.nextPagePayload = {};
-
-    if (response.data.LastEvaluatedKey) {
-      let encryptedLastEvaluatedKey = base64Helper.encode(JSON.stringify(response.data.LastEvaluatedKey));
-      oThis.nextPagePayload = {
-        paginationIdentifier: encryptedLastEvaluatedKey
-      };
-    }
 
     oThis.economies = [];
     oThis.baseCurrencyContractAddresses = [];
@@ -137,10 +122,10 @@ class GetTopTokens {
         result[economy.longNameFor(shortName)] = economyRow[shortName][economy.shortNameToDataType[shortName]];
       }
 
-      if(result["baseCurrencyContractAddress"]){
+      if (result['baseCurrencyContractAddress']) {
         oThis.baseCurrencyContractAddresses.push(result[longNameForBaseCurrencyContractAddress]);
       }
-      
+
       if (chainIdToContractAddressMap[result.chainId]) {
         chainIdToContractAddressMap[result.chainId].push(result.contractAddress);
       } else {
@@ -184,7 +169,7 @@ class GetTopTokens {
       oThis.economies[i] = result;
     }
   }
-  
+
   /**
    * Get base currencies details for contract addresses
    *
@@ -192,21 +177,86 @@ class GetTopTokens {
    */
   async getBaseCurrencies() {
     const oThis = this;
-    
+
     oThis.baseCurrencyContractAddresses = [...new Set(oThis.baseCurrencyContractAddresses)];
-  
-    if(oThis.baseCurrencyContractAddresses.length === 0) {
+
+    if (oThis.baseCurrencyContractAddresses.length === 0) {
       return;
     }
-    
+
     const BaseCurrencyCache = oThis.ic().getShadowedClassFor(coreConstants.icNameSpace, 'BaseCurrencyCache'),
-      baseCurrencyCacheObj = new BaseCurrencyCache({baseCurrencyContractAddresses: oThis.baseCurrencyContractAddresses});
-  
+      baseCurrencyCacheObj = new BaseCurrencyCache({
+        baseCurrencyContractAddresses: oThis.baseCurrencyContractAddresses
+      });
+
     let baseCurrencyCacheRsp = await baseCurrencyCacheObj.fetch();
-    
-    if(baseCurrencyCacheRsp.isSuccess()) {
+
+    if (baseCurrencyCacheRsp.isSuccess()) {
       oThis.baseCurrencies = baseCurrencyCacheRsp.data;
     }
+  }
+
+  async getPrimaryKeysToQuery() {
+    const oThis = this,
+      blockScannerProvider = oThis.ic().getInstanceFor(coreConstants.icNameSpace, 'blockScannerProvider'),
+      blockScanner = blockScannerProvider.getInstance(),
+      Economy = blockScanner.model.Economy,
+      economy = new Economy({ consistentRead: false }),
+      shortNameForSortEconomyBy = economy.shortNameFor('sortEconomyBy');
+
+    let decryptedLastEvaluatedKey = null;
+
+    if (oThis.paginationIdentifier) {
+      let decryptedLastEvaluatedKeyString = base64Helper.decode(oThis.paginationIdentifier);
+      decryptedLastEvaluatedKey = JSON.parse(decryptedLastEvaluatedKeyString);
+    }
+
+    let queryParams = {
+      TableName: economy.tableName(),
+      IndexName: economy.thirdGlobalSecondaryIndexName(),
+      KeyConditionExpression: '#sortEconomyBy = :sortEconomyBy',
+      ExpressionAttributeNames: {
+        '#sortEconomyBy': shortNameForSortEconomyBy
+      },
+      ExpressionAttributeValues: {
+        ':sortEconomyBy': { [economy.shortNameToDataType[shortNameForSortEconomyBy]]: '1' }
+      },
+      Limit: coreConstants.DEFAULT_PAGE_SIZE,
+      ScanIndexForward: false
+    };
+
+    if (decryptedLastEvaluatedKey) {
+      queryParams['ExclusiveStartKey'] = decryptedLastEvaluatedKey;
+    }
+
+    let response = await economy.ddbServiceObj.query(queryParams);
+
+    if (response.data.LastEvaluatedKey) {
+      let encryptedLastEvaluatedKey = base64Helper.encode(JSON.stringify(response.data.LastEvaluatedKey));
+      oThis.nextPagePayload = {
+        paginationIdentifier: encryptedLastEvaluatedKey
+      };
+    }
+
+    let economyData = response.data.Items,
+      queryKeys = [];
+
+    for (let i = 0; i < economyData.length; i++) {
+      let economyRow = economyData[i],
+        keys = Object.keys(economyRow);
+
+      let result = {};
+
+      for (let j = 0; j < keys.length; j++) {
+        let shortName = keys[j];
+        result[economy.longNameFor(shortName)] = economyRow[shortName][economy.shortNameToDataType[shortName]];
+      }
+      let keyObj = economy._keyObj(result);
+
+      queryKeys.push(keyObj);
+    }
+
+    return queryKeys;
   }
 }
 
