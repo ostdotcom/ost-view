@@ -84,7 +84,6 @@ class GetTopTokens {
       allShortNames = Object.keys(economy.shortNameToDataType);
 
     let keyObjs = await oThis.getPrimaryKeysToQuery();
-    console.log('keyObjs-------------------------', keyObjs);
 
     let batchGetParams = { RequestItems: {} };
     batchGetParams.RequestItems[economy.tableName()] = {
@@ -95,14 +94,11 @@ class GetTopTokens {
 
     let response = await economy.ddbServiceObj.batchGetItem(batchGetParams);
 
-    console.log('response-------------------------', response);
-
     if (response.isFailure()) {
       return Promise.reject(response);
     }
 
     let economyData = response.data.Responses[economy.tableName()];
-    console.log('economyData-----Items--------------------', economyData);
 
     oThis.nextPagePayload = {};
 
