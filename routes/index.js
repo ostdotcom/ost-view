@@ -41,6 +41,7 @@ function fetchHomeData(req, res, next) {
 
   return routeHelper.performer(req, res, next, 'GetHomePageStats', 'r_a_2').then(function(requestResponse) {
     if (requestResponse.isSuccess()) {
+      console.log('requestResponse-----', requestResponse);
       processHomeDetailsResponse(requestResponse.data, req, res);
     } else {
       logger.log(req.originalUrl + ' : ' + requestResponse.err.code);
@@ -58,7 +59,7 @@ function processHomeDetailsResponse(requestResponse, req, res) {
     stats: {
       totalCommunities: requestResponse.totalEconomies || 0,
       totalTokenHolders: requestResponse.totalTokenHolders || 0,
-      totalMarketCap: requestResponse.totalMarketCap || 0
+      totalTokenTransfers: requestResponse.totalTokenTransfers || 0
     },
     meta: {
       baseUrlPrefix: coreConstants.BASE_URL_PREFIX,
