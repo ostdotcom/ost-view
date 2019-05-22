@@ -20,6 +20,17 @@ var ns =
     return parent;
   };
 
+var stakeCurrencies = {
+  OST: {
+    sandbox: 'OSTT',
+    mainnet: 'OST'
+  },
+  USDC: {
+    sandbox: 'USDCT',
+    mainnet: 'USDC'
+  }
+};
+
 // Handlebar compile for front-end
 if (Handlebars) {
   Handlebars.compile_fe = function(str) {
@@ -65,6 +76,17 @@ if (Handlebars) {
 
   Handlebars.registerHelper('getTXFee', function(gasUsed, gasPrice) {
     return PriceOracle.getDisplayTransactionFee(gasUsed, gasPrice);
+  });
+
+  Handlebars.registerHelper('baseCurrencySymbol', function(token, baseCurrencies, env, options) {
+    if (!token || !baseCurrencies) return;
+    env = env || 'mainnet';
+    var baseContractAddress = token && token['baseCurrencyContractAddress'],
+      addressDetails = baseCurrencies && baseCurrencies[baseContractAddress],
+      baseCurrencySymbol = (addressDetails && addressDetails['symbol']) || 'OST',
+      baseCurrencyConfig = stakeCurrencies[baseCurrencySymbol],
+      symbol = baseCurrencyConfig[env];
+    return symbol;
   });
 
   Handlebars.registerHelper('getTransactionToAddress', function(contractAddress, toAddress, options) {

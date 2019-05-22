@@ -12,6 +12,17 @@ const feReplace = function(str) {
 
 let Helper = null;
 
+const stakeCurrencies = {
+  OST: {
+    testnet: 'OSTT',
+    mainnet: 'OST'
+  },
+  USDC: {
+    testnet: 'USDCT',
+    mainnet: 'USDC'
+  }
+};
+
 module.exports = Helper = {
   decodeMethodFromInputData: function(inputData) {
     return erc20Tokens.decodeMethodFromInputData(inputData);
@@ -162,6 +173,8 @@ module.exports = Helper = {
     }
   },
 
+  baseCurrencySymbol: function(withoutFormatting) {},
+
   getBtBalance: function(amount, precision) {
     precision = Number(precision);
     if (isNaN(precision) || !precision) {
@@ -221,6 +234,10 @@ module.exports = Helper = {
       return feReplace(str);
     }
     return '';
+  },
+
+  getSubEnv: function() {
+    return coreConstants.VIEW_SUB_ENVIRONMENT;
   },
 
   getFEAddress: function(str, fromTo) {
