@@ -10,6 +10,17 @@ const feReplace = function(str) {
   return str.replace(/\{\{/g, '[[').replace(/\}\}/g, ']]');
 };
 
+const stakeCurrencies = {
+  OST: {
+    sandbox: 'OSTT',
+    mainnet: 'OST'
+  },
+  USDC: {
+    sandbox: 'USDCT',
+    mainnet: 'USDC'
+  }
+};
+
 let Helper = null;
 
 module.exports = Helper = {
@@ -160,6 +171,16 @@ module.exports = Helper = {
     } else {
       return 'OSTT';
     }
+  },
+
+  baseCurrencySymbol: function(token, baseCurrencies) {
+    if (!token || !baseCurrencies) return;
+    var baseContractAddress = token && token['baseCurrencyContractAddress'],
+      addressDetails = baseCurrencies && baseCurrencies[baseContractAddress],
+      baseCurrencySymbol = (addressDetails && addressDetails['symbol']) || 'OST',
+      baseCurrencyConfig = stakeCurrencies[baseCurrencySymbol],
+      symbol = baseCurrencyConfig[coreConstants.VIEW_SUB_ENVIRONMENT];
+    return symbol;
   },
 
   getBtBalance: function(amount, precision) {
