@@ -124,6 +124,7 @@ function processTransactionTokenTransferResponse(requestResponse, req, res) {
   let rawResponse = {
     tokenTransfers: requestResponse.tokenTransfers,
     economyMap: requestResponse.economyMap,
+    baseCurrencies: requestResponse.baseCurrencies,
     meta: {
       nextPagePayload: requestResponse.nextPagePayload
     }
