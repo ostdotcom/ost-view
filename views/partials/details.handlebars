@@ -9,15 +9,11 @@
       <div class="col-4 text-truncate section">
         <div class="mb-3">
           <div class="name">base erc20 token</div>
-          <div class="text-truncate value">{{baseCurrencySymbol}}</div>
-        </div>
-        <div class="mb-3">
-          <div class="name">utility branded token contract</div>
-          {{>address class="text-truncate value" style="max-width: 300px;" chainId=token.chainId address=token.contractAddress}}
+          <div class="text-truncate value">{{ostCurrencySymbol}}</div>
         </div>
         <div class="mt-3">
-          <div class="name">Decimal</div>
-          <div class="font-weight-light">{{token.decimals}}</div>
+          <div class="name">utility branded token contract</div>
+          {{>address class="text-truncate value" style="max-width: 300px;" chainId=token.chainId address=token.contractAddress}}
         </div>
       </div>
       <div class="col-4 text-truncate section">

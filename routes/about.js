@@ -28,7 +28,7 @@ router.get('/', sanitizer.sanitizeDynamicUrlParams, function(req, res, next) {
     meta: {
       baseUrlPrefix: coreConstants.BASE_URL_PREFIX,
       urlTemplates: baseRoutes.getAllUrls(),
-      currencySymbol: handlebarHelper.baseCurrencySymbol(true)
+      currencySymbol: handlebarHelper.ostCurrencySymbol(true)
     },
     page_meta: {
       title: 'OST VIEW | About',

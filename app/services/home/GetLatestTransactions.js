@@ -86,7 +86,7 @@ class GetLatestTransactions {
       response['nextPagePayload'] = oThis.nextPagePayload;
     }
 
-    response['currencySymbol'] = handlebarHelper.baseCurrencySymbol(true);
+    response['currencySymbol'] = handlebarHelper.ostCurrencySymbol(true);
 
     return responseHelper.successWithData(response);
   }
