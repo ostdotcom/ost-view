@@ -64,7 +64,7 @@ function processHomeDetailsResponse(requestResponse, req, res) {
     meta: {
       baseUrlPrefix: coreConstants.BASE_URL_PREFIX,
       urlTemplates: baseRoutes.getAllUrls(),
-      currencySymbol: handlebarHelper.ostCurrencySymbol(true)
+      currencySymbol: handlebarHelper.baseCurrencySymbol(true)
     },
     title: 'OST View - OST SideChains Explorer and Search',
     mCss: ['mHome.css'],

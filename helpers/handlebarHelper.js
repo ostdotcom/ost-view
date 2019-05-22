@@ -10,6 +10,17 @@ const feReplace = function(str) {
   return str.replace(/\{\{/g, '[[').replace(/\}\}/g, ']]');
 };
 
+const stakeCurrencies = {
+  OST: {
+    testnet: 'OSTT',
+    mainnet: 'OST'
+  },
+  USDC: {
+    testnet: 'USDCT',
+    mainnet: 'USDC'
+  }
+};
+
 let Helper = null;
 
 module.exports = Helper = {
@@ -154,12 +165,9 @@ module.exports = Helper = {
    *
    * @return {String}
    */
-  ostCurrencySymbol: function(withoutFormatting) {
-    if (coreConstants.VIEW_SUB_ENVIRONMENT == coreConstants.VIEW_SUB_ENVIRONMENT_MAIN) {
-      return 'OST';
-    } else {
-      return 'OSTT';
-    }
+  baseCurrencySymbol: function(ostSymbol, evn) {
+    ostSymbol = ostSymbol || 'OST';
+    return stakeCurrencies[ostSymbol][coreConstants.VIEW_SUB_ENVIRONMENT];
   },
 
   getBtBalance: function(amount, precision) {

@@ -58,7 +58,7 @@ function processAddressBasicDetailsResponse(response, req, res) {
     meta: {
       baseUrlPrefix: coreConstants.BASE_URL_PREFIX,
       urlTemplates: baseRoutes.getAllUrls(),
-      currencySymbol: handlebarHelper.ostCurrencySymbol(true)
+      currencySymbol: handlebarHelper.baseCurrencySymbol(true)
     }
   };
 
