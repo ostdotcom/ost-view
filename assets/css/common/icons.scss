@@ -1,5 +1,5 @@
-$sprite-retina-location: "//dxwfxs8b4lg24.cloudfront.net/ost-view/images/ost-view-sprite@2x-5.png";
-$sprite-location: "//dxwfxs8b4lg24.cloudfront.net/ost-view/images/ost-view-sprite@1x-5.png";
+$sprite-retina-location: "//dxwfxs8b4lg24.cloudfront.net/ost-view/images/ost-view-sprite@2x-6.png";
+$sprite-location: "//dxwfxs8b4lg24.cloudfront.net/ost-view/images/ost-view-sprite@1x-6.png";
 
 @mixin icon-generator($width,$height,$posX,$posY,$offsetHover,$offsetActive,$scale:100) {
   background-image: url($sprite-location);
@@ -56,6 +56,10 @@ $sprite-location: "//dxwfxs8b4lg24.cloudfront.net/ost-view/images/ost-view-sprit
 
 .total-volume.icon{
   @include icon-generator(108px, 65px, -858px, -15px, -858px, -858px);
+}
+
+.token-price-new.icon{
+  @include icon-generator(135px, 65px, -976px, -15px, -976px, -976px);
 }
 
 .token-price.icon{
