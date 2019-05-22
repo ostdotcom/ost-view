@@ -12,17 +12,6 @@ const feReplace = function(str) {
 
 let Helper = null;
 
-const stakeCurrencies = {
-  OST: {
-    testnet: 'OSTT',
-    mainnet: 'OST'
-  },
-  USDC: {
-    testnet: 'USDCT',
-    mainnet: 'USDC'
-  }
-};
-
 module.exports = Helper = {
   decodeMethodFromInputData: function(inputData) {
     return erc20Tokens.decodeMethodFromInputData(inputData);
@@ -172,8 +161,6 @@ module.exports = Helper = {
       return 'OSTT';
     }
   },
-
-  baseCurrencySymbol: function(withoutFormatting) {},
 
   getBtBalance: function(amount, precision) {
     precision = Number(precision);
