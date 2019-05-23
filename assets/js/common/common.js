@@ -85,7 +85,7 @@ if (Handlebars) {
       addressDetails = baseCurrencies && baseCurrencies[baseContractAddress],
       baseCurrencySymbol = (addressDetails && addressDetails['symbol']) || 'OST',
       baseCurrencyConfig = stakeCurrencies[baseCurrencySymbol],
-      symbol = baseCurrencyConfig[env];
+      symbol = baseCurrencyConfig && baseCurrencyConfig[env];
     return symbol;
   });
 
