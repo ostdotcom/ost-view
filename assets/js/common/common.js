@@ -20,14 +20,15 @@ var ns =
     return parent;
   };
 
+//TODO get it from metaobject.
 var stakeCurrencies = {
   OST: {
     sandbox: 'OSTT',
-    mainnet: 'OST'
+    main: 'OST'
   },
   USDC: {
     sandbox: 'USDCT',
-    mainnet: 'USDC'
+    main: 'USDC'
   }
 };
 

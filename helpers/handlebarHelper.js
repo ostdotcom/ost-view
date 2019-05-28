@@ -10,14 +10,15 @@ const feReplace = function(str) {
   return str.replace(/\{\{/g, '[[').replace(/\}\}/g, ']]');
 };
 
+//TODO dhananjay move to global constants
 const stakeCurrencies = {
   OST: {
-    sandbox: 'OSTT',
-    mainnet: 'OST'
+    [coreConstants.VIEW_SUB_ENVIRONMENT_SANDBOX]: 'OSTT',
+    [coreConstants.VIEW_SUB_ENVIRONMENT_MAIN]: 'OST'
   },
   USDC: {
-    sandbox: 'USDCT',
-    mainnet: 'USDC'
+    [coreConstants.VIEW_SUB_ENVIRONMENT_SANDBOX]: 'USDCT',
+    [coreConstants.VIEW_SUB_ENVIRONMENT_MAIN]: 'USDC'
   }
 };
 
@@ -179,7 +180,7 @@ module.exports = Helper = {
       addressDetails = baseCurrencies && baseCurrencies[baseContractAddress],
       baseCurrencySymbol = (addressDetails && addressDetails['symbol']) || 'OST',
       baseCurrencyConfig = stakeCurrencies[baseCurrencySymbol],
-      symbol = baseCurrencyConfig[coreConstants.VIEW_SUB_ENVIRONMENT];
+      symbol = baseCurrencyConfig && baseCurrencyConfig[coreConstants.VIEW_SUB_ENVIRONMENT];
     return symbol;
   },
 

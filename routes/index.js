@@ -41,7 +41,6 @@ function fetchHomeData(req, res, next) {
 
   return routeHelper.performer(req, res, next, 'GetHomePageStats', 'r_a_2').then(function(requestResponse) {
     if (requestResponse.isSuccess()) {
-      console.log('requestResponse-----', requestResponse);
       processHomeDetailsResponse(requestResponse.data, req, res);
     } else {
       logger.log(req.originalUrl + ' : ' + requestResponse.err.code);
