@@ -9,19 +9,19 @@
                         <!--<span class="ost-alpha-badge icon"></span>-->
                         <div class="card-text text-center mt-2">
                             <h3 class="name">Market Cap</h3>
-                            <div class="value text-truncate">{{displayToFixed token.marketCap}} {{ostCurrencySymbol}}</div>
+                            <div class="value text-truncate">{{displayToFixed token.marketCap}} {{baseCurrencySymbol token baseCurrencies }}</div>
                         </div>
                     </div>
                 </div>
             </div>
           <div class="col-md-4 text-truncate mb-4 d-flex">
             <div class="card w-100">
-                    <span class="token-price icon mx-auto card-img-top"></span>
+                    <span class="token-price-new icon mx-auto card-img-top"></span>
                     <div class="card-body">
                         <div class="card-text text-center mt-2">
                             <h3 class="name">Price</h3>
                             <div class="value text-truncate">
-                              {{inverseDisplayBtToOst token.conversionFactor 5}} {{ostCurrencySymbol}}
+                              {{inverseDisplayBtToOst token.conversionFactor 5}} {{baseCurrencySymbol token baseCurrencies }}
                             </div>
                         </div>
                     </div>
@@ -48,7 +48,7 @@
                 <div class="card-text text-center mt-2">
                   <h3 class="name">Total Volume</h3>
                   <div class="value text-truncate">
-                    {{bigNumber_toFromat token.totalVolume}} {{ostCurrencySymbol}}
+                    {{bigNumber_toFromat token.totalVolume}} {{baseCurrencySymbol token baseCurrencies }}
                   </div>
                 </div>
               </div>

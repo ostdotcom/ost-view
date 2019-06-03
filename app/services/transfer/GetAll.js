@@ -16,6 +16,7 @@ const rootPrefix = '../../..',
   CommonValidator = require(rootPrefix + '/lib/validators/common');
 
 require(rootPrefix + '/lib/providers/blockScanner');
+require(rootPrefix + '/lib/cacheMultiManagement/BaseCurrency');
 
 class GetAllTransfers {
   /**
@@ -36,6 +37,11 @@ class GetAllTransfers {
 
     oThis.txTransfers = {};
     oThis.contractAddresses = new Set();
+    oThis.baseCurrencyContractAddresses = [];
+    oThis.tokenTransfers = {};
+    oThis.nextPagePayload = null;
+    oThis.economyMap = {};
+    oThis.baseCurrencies = {};
   }
 
   /**
@@ -64,7 +70,18 @@ class GetAllTransfers {
 
     if (response.isFailure()) return response;
 
-    return oThis.getTransactionTransfers();
+    await oThis.getTransactionTransfers();
+    
+    await oThis.getBaseCurrencies();
+  
+    const result = {
+      tokenTransfers: oThis.tokenTransfers,
+      nextPagePayload: oThis.nextPagePayload,
+      economyMap: oThis.economyMap,
+      baseCurrencies: oThis.baseCurrencies
+    };
+  
+    return responseHelper.successWithData(result);
   }
 
   /**
@@ -96,21 +113,12 @@ class GetAllTransfers {
 
     const transactionTransferResponse = await oThis.getTransferDetails();
     oThis.txTransfers = transactionTransferResponse.tokenTransfers;
-
-    let formattedData = await oThis._formatTransferIdentifiers();
-
-    let economyResult = {};
-    if (formattedData && formattedData.length > 0) {
-      economyResult = await oThis.getEconomyDetails();
+    oThis.nextPagePayload = transactionTransferResponse.nextPagePayload;
+    oThis.tokenTransfers = await oThis._formatTransferIdentifiers();
+    
+    if (oThis.tokenTransfers && oThis.tokenTransfers.length > 0) {
+      oThis.economyMap = await oThis.getEconomyDetails();
     }
-
-    const result = {
-      tokenTransfers: formattedData,
-      nextPagePayload: transactionTransferResponse.nextPagePayload,
-      economyMap: economyResult
-    };
-
-    return responseHelper.successWithData(result);
   }
 
   /**
@@ -188,10 +196,35 @@ class GetAllTransfers {
 
     for (let contentId in economyData) {
       let formattedEconomy = await tokenFormatter.perform(economyData[contentId]);
+      oThis.baseCurrencyContractAddresses.push(formattedEconomy['baseCurrencyContractAddress']);
       economyData[contentId] = formattedEconomy;
     }
 
     return economyData;
+  }
+  
+  /**
+   * Get base currencies details for contract addresses
+   *
+   * @returns {Promise<void>}
+   */
+  async getBaseCurrencies() {
+    const oThis = this;
+    
+    oThis.baseCurrencyContractAddresses = [...new Set(oThis.baseCurrencyContractAddresses)];
+    
+    if(oThis.baseCurrencyContractAddresses.length === 0) {
+      return;
+    }
+    
+    const BaseCurrencyCache = oThis.ic().getShadowedClassFor(coreConstants.icNameSpace, 'BaseCurrencyCache'),
+      baseCurrencyCacheObj = new BaseCurrencyCache({baseCurrencyContractAddresses: oThis.baseCurrencyContractAddresses});
+    
+    let baseCurrencyCacheRsp = await baseCurrencyCacheObj.fetch();
+    
+    if(baseCurrencyCacheRsp.isSuccess()) {
+      oThis.baseCurrencies = baseCurrencyCacheRsp.data;
+    }
   }
 }
 

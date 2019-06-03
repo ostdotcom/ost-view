@@ -14,6 +14,7 @@ const rootPrefix = '../../..',
 const InstanceComposer = OSTBase.InstanceComposer;
 
 require(rootPrefix + '/lib/providers/blockScanner');
+require(rootPrefix + '/lib/cacheMultiManagement/BaseCurrency');
 
 class GetContractDetails {
   /**
@@ -27,6 +28,10 @@ class GetContractDetails {
 
     oThis.chainId = params.chainId;
     oThis.contractAddresses = [params.contractAddress];
+  
+    oThis.contractDetails = null;
+    oThis.baseCurrencies = {};
+    oThis.baseCurrencyContractAddress = [];
   }
 
   /**
@@ -55,7 +60,14 @@ class GetContractDetails {
 
     if (response.isFailure()) return response;
 
-    return oThis.getContractDetails();
+    await oThis.getContractDetails();
+    
+    await oThis.getBaseCurrencies();
+    
+    let serviceResponse = oThis.contractDetails;
+    serviceResponse['baseCurrencies'] = oThis.baseCurrencies;
+    
+    return responseHelper.successWithData(serviceResponse)
   }
 
   /**
@@ -96,9 +108,32 @@ class GetContractDetails {
       return responseHelper.error('s_c_gd_4', 'Data Not found');
     }
 
-    let result = await tokenFormatter.perform(contractData);
+    oThis.contractDetails = await tokenFormatter.perform(contractData);
+    oThis.baseCurrencyContractAddress = oThis.contractDetails['baseCurrencyContractAddress'];
 
-    return responseHelper.successWithData(result);
+    return responseHelper.successWithData({});
+  }
+
+  /**
+   * Get base currencies details for contract addresses
+   *
+   * @returns {Promise<*>}
+   */
+  async getBaseCurrencies() {
+    const oThis = this;
+  
+    if (!CommonValidator.isEthAddressValid(oThis.baseCurrencyContractAddress)) {
+      return responseHelper.error('s_c_gd_5', 'Invalid Base Currency Address');
+    }
+    
+    const BaseCurrencyCache = oThis.ic().getShadowedClassFor(coreConstants.icNameSpace, 'BaseCurrencyCache'),
+      baseCurrencyCacheObj = new BaseCurrencyCache({baseCurrencyContractAddresses: [oThis.baseCurrencyContractAddress]});
+    
+    let baseCurrencyCacheRsp = await baseCurrencyCacheObj.fetch();
+    
+    if(baseCurrencyCacheRsp.isSuccess()) {
+      oThis.baseCurrencies = baseCurrencyCacheRsp.data;
+    }
   }
 }
 

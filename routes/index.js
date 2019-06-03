@@ -58,7 +58,7 @@ function processHomeDetailsResponse(requestResponse, req, res) {
     stats: {
       totalCommunities: requestResponse.totalEconomies || 0,
       totalTokenHolders: requestResponse.totalTokenHolders || 0,
-      totalMarketCap: requestResponse.totalMarketCap || 0
+      totalTokenTransfers: requestResponse.totalTokenTransfers || 0
     },
     meta: {
       baseUrlPrefix: coreConstants.BASE_URL_PREFIX,
