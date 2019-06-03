@@ -47,13 +47,13 @@ class GlobalAggregator {
       Economy = blockScanner.model.Economy,
       economy = new Economy({ consistentRead: false }),
       shortNameForTotalTokenHolder = economy.shortNameFor('totalTokenHolders'),
-      shortNameForMarketCap = economy.shortNameFor('marketCap'),
+      shortNameForTotalTokenTransfers = economy.shortNameFor('totalTokenTransfers'),
       datatypeForTth = economy.shortNameToDataType[shortNameForTotalTokenHolder],
-      datatypeForMc = economy.shortNameToDataType[shortNameForMarketCap];
+      datatypeForTtt = economy.shortNameToDataType[shortNameForTotalTokenTransfers];
 
     let evaluateFlag = true,
       economiesDataArray = [],
-      globalMarketCap = 0,
+      globalTokenTransfers = 0,
       globalTokenHolders = 0,
       LastEvaluatedKey = {};
 
@@ -71,9 +71,9 @@ class GlobalAggregator {
     for (let index = 0; index < economiesDataArray.length; index++) {
       let economyRow = economiesDataArray[index];
 
-      globalMarketCap = basicHelper
-        .convertToBigNumber(globalMarketCap)
-        .add(basicHelper.convertToBigNumber(economyRow[shortNameForMarketCap][datatypeForMc]));
+      globalTokenTransfers = basicHelper
+        .convertToBigNumber(globalTokenTransfers)
+        .add(basicHelper.convertToBigNumber(economyRow[shortNameForTotalTokenTransfers][datatypeForTtt]));
       globalTokenHolders = basicHelper
         .convertToBigNumber(globalTokenHolders)
         .add(basicHelper.convertToBigNumber(economyRow[shortNameForTotalTokenHolder][datatypeForTth]));
@@ -81,7 +81,7 @@ class GlobalAggregator {
 
     let batchWriteParam = {
       stats: '1',
-      totalMarketCap: globalMarketCap.toString(10),
+      totalTokenTransfers: globalTokenTransfers.toString(10),
       totalTokenHolders: globalTokenHolders.toString(10),
       totalEconomies: economiesDataArray.length.toString()
     };
@@ -96,11 +96,11 @@ class GlobalAggregator {
       Economy = blockScanner.model.Economy,
       economy = new Economy({ consistentRead: false }),
       shortNameForTotalTokenHolder = economy.shortNameFor('totalTokenHolders'),
-      shortNameForMarketCap = economy.shortNameFor('marketCap');
+      shortNameForTotalTokenTransfers = economy.shortNameFor('totalTokenTransfers');
 
     let queryParams = {
       TableName: economy.tableName(),
-      ProjectionExpression: `${shortNameForTotalTokenHolder},${shortNameForMarketCap}`,
+      ProjectionExpression: `${shortNameForTotalTokenHolder},${shortNameForTotalTokenTransfers}`,
       ConsistentRead: false
     };
 

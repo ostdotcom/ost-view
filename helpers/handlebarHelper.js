@@ -10,6 +10,18 @@ const feReplace = function(str) {
   return str.replace(/\{\{/g, '[[').replace(/\}\}/g, ']]');
 };
 
+//TODO dhananjay move to global constants
+const stakeCurrencies = {
+  OST: {
+    [coreConstants.VIEW_SUB_ENVIRONMENT_SANDBOX]: 'OSTT',
+    [coreConstants.VIEW_SUB_ENVIRONMENT_MAIN]: 'OST'
+  },
+  USDC: {
+    [coreConstants.VIEW_SUB_ENVIRONMENT_SANDBOX]: 'USDCT',
+    [coreConstants.VIEW_SUB_ENVIRONMENT_MAIN]: 'USDC'
+  }
+};
+
 let Helper = null;
 
 module.exports = Helper = {
@@ -162,6 +174,16 @@ module.exports = Helper = {
     }
   },
 
+  baseCurrencySymbol: function(token, baseCurrencies) {
+    if (!token || !baseCurrencies) return;
+    var baseContractAddress = token && token['baseCurrencyContractAddress'],
+      addressDetails = baseCurrencies && baseCurrencies[baseContractAddress],
+      baseCurrencySymbol = (addressDetails && addressDetails['symbol']) || 'OST',
+      baseCurrencyConfig = stakeCurrencies[baseCurrencySymbol],
+      symbol = baseCurrencyConfig && baseCurrencyConfig[coreConstants.VIEW_SUB_ENVIRONMENT];
+    return symbol;
+  },
+
   getBtBalance: function(amount, precision) {
     precision = Number(precision);
     if (isNaN(precision) || !precision) {
@@ -221,6 +243,10 @@ module.exports = Helper = {
       return feReplace(str);
     }
     return '';
+  },
+
+  getSubEnv: function() {
+    return coreConstants.VIEW_SUB_ENVIRONMENT;
   },
 
   getFEAddress: function(str, fromTo) {

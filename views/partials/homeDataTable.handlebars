@@ -38,14 +38,16 @@
                                       <div class="col-3">
                                         TOKEN
                                       </div>
-                                      <div class="col-3 text-right">
-                                        MARKET CAP ({{ostCurrencySymbol}})
-                                      </div>
                                       <div class="col-2 text-right">
-                                        PRICE ({{ostCurrencySymbol}})
+                                        TOKEN HOLDERS
                                       </div>
                                       <div class="col-3 text-right">
-                                        TOTAL VOLUME ({{ostCurrencySymbol}})
+                                        MARKET CAP
+                                        <!--({{ostCurrencySymbol}})-->
+                                      </div>
+                                      <div class="col-3 text-right">
+                                        TOTAL VOLUME
+                                        <!--({{ostCurrencySymbol}})-->
                                       </div>
                                     </div>
                                   </div>
@@ -62,20 +64,17 @@
                                                         </div>
                                                       </div>
                                                       <div class="col-3 d-flex align-items-center">
-                                                        <!--<div class="circle circle-sm [[symbol_icon]]">-->
-                                                          <!--<div>[[symbol]]</div>-->
-                                                        <!--</div>-->
                                                         <a href="{{getFEURLTemplate meta.urlTemplates.token}}"
                                                            class="d-inline-block text-truncate">[[name]]</a>
                                                       </div>
-                                                      <div class="col-3 text-truncate text-right">
-                                                        [[toNumeral marketCap]]
-                                                      </div>
                                                       <div class="col-2 text-truncate text-right">
-                                                        [[inverseDisplayBtToOst conversionFactor]]
+                                                        [[toNumeral totalTokenHolders]]
                                                       </div>
                                                       <div class="col-3 text-truncate text-right">
-                                                        [[toNumeral totalVolume]]
+                                                        [[toNumeral marketCap]] [[baseCurrencySymbol this ../baseCurrencies '{{getSubEnv}}']]
+                                                      </div>
+                                                      <div class="col-3 text-truncate text-right">
+                                                        [[toNumeral totalVolume]] [[baseCurrencySymbol this ../baseCurrencies '{{getSubEnv}}']]
                                                       </div>
                                                   </div>
                                               </div>

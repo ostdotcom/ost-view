@@ -2,6 +2,7 @@
   "environment": "development",
   "subEnvironment": "sandbox",
   "ddbTablePrefix": "de_m_a_",
+  "sharedDdbTablePrefix": "de_m_",
   "port":3000,
   "workers":1,
   "authentication": {
@@ -133,6 +134,10 @@
           },
           "gatewayContractAddress": {
               "shortName": "gwca",
+              "dataType": "S"
+          },
+          "baseCurrencyContractAddress": {
+              "shortName": "bcca",
               "dataType": "S"
           }
       },
