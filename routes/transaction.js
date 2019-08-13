@@ -15,6 +15,7 @@ const rootPrefix = '..',
   responseHelper = require(rootPrefix + '/lib/formatter/response'),
   logger = require(rootPrefix + '/lib/logger/customConsoleLogger'),
   sanitizer = require(rootPrefix + '/helpers/sanitizer'),
+  jwt = require(rootPrefix + '/lib/Authentication/jwt'),
   coreConstants = require(rootPrefix + '/config/coreConstants'),
   baseRoutes = require(rootPrefix + '/lib/globalConstant/baseRoutes'),
   routeHelper = require(rootPrefix + '/routes/helper');
@@ -171,6 +172,57 @@ function processLatestTransactionResponse(queryResponse, req, res) {
     meta: {
       nextPagePayload: nextPagePayload,
       currencySymbol: queryResponse.currencySymbol
+    }
+  });
+
+  return renderResult(response, res, 'application/json');
+}
+
+/**
+ * Latest with stats
+ *
+ * @name latest transaction with stats
+ *
+ * @route {GET} {base_url}
+ */
+router.get('/latest-with-stats', jwt.authenticate, sanitizer.sanitizeDynamicUrlParams, function(req, res, next) {
+  fetchWebHomePageData(req, res, next);
+});
+
+function fetchWebHomePageData(req, res, next) {
+  require(rootPrefix + '/app/services/transaction/GetLatestTransactionsWithStats');
+
+  if (routeHelper.validateXhrRequest(req, res)) {
+    return;
+  }
+
+  return routeHelper
+    .performer(req, res, next, 'GetLatestTransactionWithStats', 'r_t_2')
+    .then(function(requestResponse) {
+      if (requestResponse.isSuccess()) {
+        processWebHomePageResponse(requestResponse.data, req, res);
+      } else {
+        logger.log(req.originalUrl + ' : ' + requestResponse.err.code);
+        return renderResult(
+          responseHelper.error(requestResponse.err.code, coreConstants.DEFAULT_DATA_NOT_AVAILABLE_TEXT),
+          res,
+          'application/json'
+        );
+      }
+    });
+}
+
+function processWebHomePageResponse(queryResponse, req, res) {
+  const transactions = queryResponse.latestTransactions.transactions,
+    nextPagePayload = queryResponse.latestTransactions.nextPagePayload,
+    stats = queryResponse.stats;
+
+  const response = responseHelper.successWithData({
+    stats: stats,
+    transactions: transactions,
+    meta: {
+      nextPagePayload: nextPagePayload,
+      currencySymbol: queryResponse.latestTransactions.currencySymbol
     }
   });
 
