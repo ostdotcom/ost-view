@@ -63,7 +63,18 @@ class GetTransactionDetails {
       return responseHelper.error('s_t_gd_2', 'Data Not found');
     }
 
+    const pricePointsRsp = await oThis.getLatestPricePoints();
+
+    if (pricePointsRsp.isFailure()) {
+      return Promise.reject({});
+    }
+
+    const pricePointsRspData = pricePointsRsp.data;
     result['transaction'] = await transactionFormatter.perform(transaction);
+
+    result['pricePoint'] = pricePointsRspData;
+
+    logger.log('=============result', result);
 
     return responseHelper.successWithData(result);
   }
@@ -114,6 +125,23 @@ class GetTransactionDetails {
     }
 
     return result;
+  }
+
+  /**
+   * Get latest price points.
+   *
+   * @returns {Promise<Promise<Result>|*|Promise<Response>>}
+   */
+  async getLatestPricePoints() {
+    const oThis = this,
+      blockScannerProvider = oThis.ic().getInstanceFor(coreConstants.icNameSpace, 'blockScannerProvider'),
+      blockScanner = blockScannerProvider.getInstance();
+
+    const LatestPricePointsCache = blockScanner.cache.LatestPricePoint;
+
+    console.log('LatestPricePointsCache =========', LatestPricePointsCache);
+
+    return new LatestPricePointsCache().fetch();
   }
 }
 
