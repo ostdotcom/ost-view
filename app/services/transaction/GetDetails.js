@@ -74,8 +74,6 @@ class GetTransactionDetails {
 
     result['pricePoint'] = pricePointsRspData;
 
-    logger.log('=============result', result);
-
     return responseHelper.successWithData(result);
   }
 
