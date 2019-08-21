@@ -229,7 +229,7 @@ if (cluster.isMaster) {
 
   app.use('/', indexRoutes);
   app.use('/about', startRequestLog, aboutRoutes);
-  app.use('/stats', startRequestLog, statsRoutes);
+  app.use('/:baseUrlPrefix/stats', startRequestLog, statsRoutes);
 
   app.use('/:baseUrlPrefix/search', startRequestLog, validateUrlPrefix, searchRoutes);
 
