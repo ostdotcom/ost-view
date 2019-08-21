@@ -81,7 +81,7 @@ class GetLatestTransactions {
     const pricePointsRsp = await oThis.getLatestPricePoints();
 
     if (pricePointsRsp.isFailure()) {
-      return Promise.reject({});
+      return Promise.reject(pricePointsRsp);
     }
 
     const pricePointsRspData = pricePointsRsp.data;
@@ -292,8 +292,6 @@ class GetLatestTransactions {
       blockScanner = blockScannerProvider.getInstance();
 
     const LatestPricePointsCache = blockScanner.cache.LatestPricePoint;
-
-    console.log('LatestPricePointsCache =========', LatestPricePointsCache);
 
     return new LatestPricePointsCache().fetch();
   }
