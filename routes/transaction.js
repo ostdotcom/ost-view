@@ -15,7 +15,6 @@ const rootPrefix = '..',
   responseHelper = require(rootPrefix + '/lib/formatter/response'),
   logger = require(rootPrefix + '/lib/logger/customConsoleLogger'),
   sanitizer = require(rootPrefix + '/helpers/sanitizer'),
-  jwt = require(rootPrefix + '/lib/Authentication/jwt'),
   coreConstants = require(rootPrefix + '/config/coreConstants'),
   baseRoutes = require(rootPrefix + '/lib/globalConstant/baseRoutes'),
   routeHelper = require(rootPrefix + '/routes/helper');

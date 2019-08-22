@@ -97,8 +97,6 @@ class GetLatestTransactions {
 
     response['currencySymbol'] = handlebarHelper.ostCurrencySymbol(true);
 
-    logger.log('response ======', response);
-
     return responseHelper.successWithData(response);
   }
 
