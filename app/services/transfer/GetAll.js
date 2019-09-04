@@ -211,7 +211,7 @@ class GetAllTransfers {
   async getBaseCurrencies() {
     const oThis = this;
     
-    oThis.baseCurrencyContractAddresses = [...new Set(oThis.baseCurrencyContractAddresses)];
+    oThis.baseCurrencyContractAddresses = oThis.baseCurrencyContractAddresses.filter(Boolean);
     
     if(oThis.baseCurrencyContractAddresses.length === 0) {
       return;
