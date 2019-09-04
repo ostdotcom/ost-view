@@ -33,6 +33,7 @@ const rootPrefix = '.',
   blockRoutes = require(rootPrefix + '/routes/block'),
   transactionRoutes = require(rootPrefix + '/routes/transaction'),
   aboutRoutes = require(rootPrefix + '/routes/about'),
+  statsRoutes = require(rootPrefix + '/routes/stats'),
   tokenRoutes = require(rootPrefix + '/routes/token'),
   addressRoutes = require(rootPrefix + '/routes/address'),
   sanitizer = require(rootPrefix + '/helpers/sanitizer');
@@ -228,6 +229,7 @@ if (cluster.isMaster) {
 
   app.use('/', indexRoutes);
   app.use('/about', startRequestLog, aboutRoutes);
+  app.use('/:baseUrlPrefix/stats', startRequestLog, statsRoutes);
 
   app.use('/:baseUrlPrefix/search', startRequestLog, validateUrlPrefix, searchRoutes);
 

@@ -72,14 +72,23 @@ class GetLatestTransactions {
     for (let i = 0; i < oThis.latestSortedTransactionHashes.length; i++) {
       let transactionInfo = results[oThis.latestSortedTransactionHashes[i]];
       // Can happen if block scanner is running in delay - considered acceptable
-      if (Object.keys(transactionInfo).length == 0) {
+      if (Object.keys(transactionInfo).length === 0) {
         continue;
       }
       transactions.push(await transactionFormatter.perform(transactionInfo));
     }
 
-    let response = {
-      transactions: transactions
+    const pricePointsRsp = await oThis.getLatestPricePoints();
+
+    if (pricePointsRsp.isFailure()) {
+      return Promise.reject(pricePointsRsp);
+    }
+
+    const pricePointsRspData = pricePointsRsp.data;
+
+    const response = {
+      transactions: transactions,
+      pricePoint: pricePointsRspData
     };
 
     if (oThis.nextPagePayload) {
@@ -268,6 +277,21 @@ class GetLatestTransactions {
     }
 
     return result;
+  }
+
+  /**
+   * Get latest price points.
+   *
+   * @returns {Promise<Promise<Result>|*|Promise<Response>>}
+   */
+  async getLatestPricePoints() {
+    const oThis = this,
+      blockScannerProvider = oThis.ic().getInstanceFor(coreConstants.icNameSpace, 'blockScannerProvider'),
+      blockScanner = blockScannerProvider.getInstance();
+
+    const LatestPricePointsCache = blockScanner.cache.LatestPricePoint;
+
+    return new LatestPricePointsCache().fetch();
   }
 }
 
