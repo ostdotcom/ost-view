@@ -52,10 +52,12 @@ router.get('/ec-:chainId-:contractAddress', sanitizer.sanitizeDynamicUrlParams, 
 });
 
 function processTokenDetailsResponse(response, req, res) {
-  let tokenDetails = response;
+  let tokenDetails = response,
+    baseCurrenciesDetails = response.baseCurrencies;
 
   let rawResponse = {
     token: tokenDetails,
+    baseCurrencies: baseCurrenciesDetails,
     meta: {
       baseUrlPrefix: coreConstants.BASE_URL_PREFIX,
       urlTemplates: baseRoutes.getAllUrls()
@@ -220,6 +222,7 @@ router.get('/top', sanitizer.sanitizeDynamicUrlParams, function(req, res, next) 
 function processTopTokensResponse(queryResponse, req, res) {
   const response = responseHelper.successWithData({
     tokens: queryResponse.tokens,
+    baseCurrencies: queryResponse.baseCurrencies,
     meta: {
       nextPagePayload: queryResponse.nextPagePayload
     }
@@ -257,11 +260,13 @@ router.get('/th-:chainId-:contractAddress-:address', sanitizer.sanitizeDynamicUr
 function processTokenHolderResponse(response, req, res) {
   const tokenHolderDetails = response.tokenHolderDetails,
     tokenDetails = response.tokenDetails,
+    baseCurrenciesDetails = response.baseCurrencies,
     urlTemplates = baseRoutes.getAllUrls();
 
   let rawResponse = {
     tokenHolder: tokenHolderDetails,
     token: tokenDetails,
+    baseCurrencies: baseCurrenciesDetails,
     meta: {
       baseUrlPrefix: coreConstants.BASE_URL_PREFIX,
       urlTemplates: urlTemplates

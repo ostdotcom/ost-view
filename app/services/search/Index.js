@@ -109,15 +109,29 @@ class SearchIndex {
       addressDetailsRsp = await shardByEconomyAddress.fetchAddressDetails(searchAddress),
       searchResultsArray = [],
       probableEconomyAddressChainIdArray = [],
-      chainIdToContractAddressHash = {};
+      chainIdToContractAddressHash = {},
+      addressDetailsRspData = addressDetailsRsp.data;
 
-    if (addressDetailsRsp.isSuccess() && addressDetailsRsp.data.length > 0) {
-      for (let index in addressDetailsRsp.data) {
+
+    // Address is not found in our table, now show it for all the chains
+    if(addressDetailsRsp.isSuccess() && addressDetailsRspData.length === 0){
+      let chainsArr = oThis.ic().configStrategy.chains;
+      for(let indx in chainsArr){
+        addressDetailsRspData.push({
+          address: searchAddress,
+          contractAddress: '0x0',
+          chainId: chainsArr[indx].chainId
+        })
+      }
+    }
+
+    if (addressDetailsRsp.isSuccess() && addressDetailsRspData.length > 0) {
+      for (let index in addressDetailsRspData) {
         let searchResultsHash = {};
-        if (addressDetailsRsp.data[index].contractAddress == '0x0') {
-          let payload = addressDetailsRsp.data[index];
+        if (addressDetailsRspData[index].contractAddress == '0x0') {
+          let payload = addressDetailsRspData[index];
           searchResultsHash['kind'] = coreConstants.addressEntity;
-          searchResultsHash['payload'] = addressDetailsRsp.data[index];
+          searchResultsHash['payload'] = addressDetailsRspData[index];
           searchResultsArray.push(searchResultsHash);
           chainIdToContractAddressHash[payload.chainId] = chainIdToContractAddressHash[payload.chainId] || [];
           if (!chainIdToContractAddressHash[payload.chainId].includes(payload.address)) {
@@ -125,8 +139,8 @@ class SearchIndex {
             probableEconomyAddressChainIdArray.push(payload.chainId);
           }
         } else {
-          let chainId = addressDetailsRsp.data[index].chainId,
-            contractAddress = addressDetailsRsp.data[index].contractAddress;
+          let chainId = addressDetailsRspData[index].chainId,
+            contractAddress = addressDetailsRspData[index].contractAddress;
 
           chainIdToContractAddressHash[chainId] = chainIdToContractAddressHash[chainId] || [];
           if (!chainIdToContractAddressHash[chainId].includes(contractAddress)) {

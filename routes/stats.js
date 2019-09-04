@@ -1,9 +1,9 @@
 'use strict';
 /**
- * Index route.<br><br>
- * Base url for all routes given below is: <b>base_url = /</b>
+ * Stats route.<br><br>
  *
- * @module Explorer Routes - Index
+ *
+ * @module Explorer Routes - Stats
  */
 const express = require('express');
 
@@ -13,10 +13,9 @@ const router = express.Router({ mergeParams: true });
 const rootPrefix = '..',
   responseHelper = require(rootPrefix + '/lib/formatter/response'),
   logger = require(rootPrefix + '/lib/logger/customConsoleLogger'),
+  JwtAuthentication = require(rootPrefix + '/lib/Authentication/jwt'),
   sanitizer = require(rootPrefix + '/helpers/sanitizer'),
-  handlebarHelper = require(rootPrefix + '/helpers/handlebarHelper'),
   coreConstants = require(rootPrefix + '/config/coreConstants'),
-  baseRoutes = require(rootPrefix + '/lib/globalConstant/baseRoutes'),
   routeHelper = require(rootPrefix + '/routes/helper');
 
 // Render final response
@@ -25,21 +24,21 @@ const renderResult = function(requestResponse, responseObject, contentType) {
 };
 
 /**
- * Index route
+ * Stats route
  *
- * @name Index route
+ * @name Stats route
  *
  * @route {GET} {base_url}
  *
  */
-router.get('/', sanitizer.sanitizeDynamicUrlParams, function(req, res, next) {
+router.get('/', JwtAuthentication.authenticate, sanitizer.sanitizeDynamicUrlParams, function(req, res, next) {
   fetchHomeData(req, res, next);
 });
 
 function fetchHomeData(req, res, next) {
   require(rootPrefix + '/app/services/home/GetHomePageStats');
 
-  return routeHelper.performer(req, res, next, 'GetHomePageStats', 'r_a_2').then(function(requestResponse) {
+  return routeHelper.performer(req, res, next, 'GetHomePageStats', 'r_s_1').then(function(requestResponse) {
     if (requestResponse.isSuccess()) {
       processHomeDetailsResponse(requestResponse.data, req, res);
     } else {
@@ -59,30 +58,10 @@ function processHomeDetailsResponse(requestResponse, req, res) {
       totalCommunities: requestResponse.totalEconomies || 0,
       totalTokenHolders: requestResponse.totalTokenHolders || 0,
       totalTokenTransfers: requestResponse.totalTokenTransfers || 0
-    },
-    meta: {
-      baseUrlPrefix: coreConstants.BASE_URL_PREFIX,
-      urlTemplates: baseRoutes.getAllUrls(),
-      currencySymbol: handlebarHelper.ostCurrencySymbol(true)
-    },
-    title: 'OST View - OST SideChains Explorer and Search',
-    mCss: ['mHome.css'],
-    mJs: ['mHome.js'],
-    view_data: {},
-    page_meta: {
-      title: 'OST VIEW - Block Explorer for OpenST Utility Blockchains',
-      description: 'OST VIEW is the home grown block explorer from OST for OpenST Utility Blockchains.',
-      keywords: 'OST, Simple Token, Utility Chain, Blockchain',
-      robots: 'index, follow',
-      image: `${coreConstants.CLOUD_FRONT_BASE_DOMAIN}/ost-view/images/ost-view-og-image-1.jpg`
-    },
-    constants: {
-      cloud_front_base_domain: coreConstants.CLOUD_FRONT_BASE_DOMAIN
-    },
-    template: coreConstants.home
+    }
   };
 
-  return renderResult(responseHelper.successWithData(rawResponse), res, req.headers['content-type']);
+  return renderResult(responseHelper.successWithData(rawResponse), res, 'application/json');
 }
 
 module.exports = router;

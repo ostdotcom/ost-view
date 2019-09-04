@@ -101,9 +101,10 @@
                 </div>
 
                 <div class="card-body">
-                    <div class="card-key mr-1">Actual Tx Cost/Fee</div>
+                    <div class="card-key mr-1">Tx Cost</div>
                     <span >
-                        {{getTXFee transaction.gasUsed transaction.gasPrice}} {{ostCurrencySymbol}}
+                        {{getTXFee transaction.gasUsed transaction.gasPrice}} {{ostCurrencySymbol}} &nbsp;
+                        ({{getTxFeeInUsd transaction.gasUsed transaction.gasPrice pricePoint}} {{usdCurrencySymbol}})
                     </span>
                 </div>
 

@@ -427,6 +427,10 @@ class CoreConstants {
   get icNameSpace() {
     return 'ostView';
   }
+
+  get USD_CURRENCY_SYMBOL() {
+    return 'USD';
+  }
 }
 
 module.exports = new CoreConstants();

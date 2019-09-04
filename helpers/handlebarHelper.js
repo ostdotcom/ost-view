@@ -10,6 +10,18 @@ const feReplace = function(str) {
   return str.replace(/\{\{/g, '[[').replace(/\}\}/g, ']]');
 };
 
+//TODO dhananjay move to global constants
+const stakeCurrencies = {
+  OST: {
+    [coreConstants.VIEW_SUB_ENVIRONMENT_SANDBOX]: 'OSTT',
+    [coreConstants.VIEW_SUB_ENVIRONMENT_MAIN]: 'OST'
+  },
+  USDC: {
+    [coreConstants.VIEW_SUB_ENVIRONMENT_SANDBOX]: 'USDCT',
+    [coreConstants.VIEW_SUB_ENVIRONMENT_MAIN]: 'USDC'
+  }
+};
+
 let Helper = null;
 
 module.exports = Helper = {
@@ -162,6 +174,20 @@ module.exports = Helper = {
     }
   },
 
+  usdCurrencySymbol: function() {
+    return coreConstants.USD_CURRENCY_SYMBOL;
+  },
+
+  baseCurrencySymbol: function(token, baseCurrencies) {
+    if (!token || !baseCurrencies) return;
+    var baseContractAddress = token && token['baseCurrencyContractAddress'],
+      addressDetails = baseCurrencies && baseCurrencies[baseContractAddress],
+      baseCurrencySymbol = (addressDetails && addressDetails['symbol']) || 'OST',
+      baseCurrencyConfig = stakeCurrencies[baseCurrencySymbol],
+      symbol = baseCurrencyConfig && baseCurrencyConfig[coreConstants.VIEW_SUB_ENVIRONMENT];
+    return symbol;
+  },
+
   getBtBalance: function(amount, precision) {
     precision = Number(precision);
     if (isNaN(precision) || !precision) {
@@ -221,6 +247,10 @@ module.exports = Helper = {
       return feReplace(str);
     }
     return '';
+  },
+
+  getSubEnv: function() {
+    return coreConstants.VIEW_SUB_ENVIRONMENT;
   },
 
   getFEAddress: function(str, fromTo) {
@@ -403,6 +433,17 @@ module.exports = Helper = {
       txFeeBn = new bigNumber(gasPrice).mul(gasUsed);
     if (txFeeBn) {
       return web3.utils.fromWei(txFeeBn.toString()).toString(10);
+    }
+    return 0;
+  },
+
+  getTxFeeInUsd: function(gasUsed, gasPrice, pricePoint) {
+    if (!gasUsed) return 0;
+    var oThis = this,
+      txFeeOst = Helper.getTXFee(gasUsed, gasPrice),
+      txFeeUsdBn = new bigNumber(txFeeOst).mul(pricePoint.OST.USD);
+    if (txFeeUsdBn) {
+      return Helper.displayToFixed(txFeeUsdBn.toString(), 7);
     }
     return 0;
   }

@@ -55,6 +55,7 @@ router.get('/tx-:chainId-:transactionHash', sanitizer.sanitizeDynamicUrlParams, 
 function processTransactionResponse(requestResponse, req, res) {
   let rawResponse = {
     transaction: requestResponse.transaction,
+    pricePoint: requestResponse.pricePoint,
     meta: {
       baseUrlPrefix: coreConstants.BASE_URL_PREFIX,
       urlTemplates: baseRoutes.getAllUrls()
@@ -124,6 +125,7 @@ function processTransactionTokenTransferResponse(requestResponse, req, res) {
   let rawResponse = {
     tokenTransfers: requestResponse.tokenTransfers,
     economyMap: requestResponse.economyMap,
+    baseCurrencies: requestResponse.baseCurrencies,
     meta: {
       nextPagePayload: requestResponse.nextPagePayload
     }
@@ -163,10 +165,12 @@ router.get('/latest', sanitizer.sanitizeDynamicUrlParams, function(req, res, nex
 
 function processLatestTransactionResponse(queryResponse, req, res) {
   const transactions = queryResponse.transactions,
+    pricePoint = queryResponse.pricePoint,
     nextPagePayload = queryResponse.nextPagePayload;
 
   const response = responseHelper.successWithData({
     transactions: transactions,
+    pricePoint: pricePoint,
     meta: {
       nextPagePayload: nextPagePayload,
       currencySymbol: queryResponse.currencySymbol
