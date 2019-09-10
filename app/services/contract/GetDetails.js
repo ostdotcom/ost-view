@@ -29,8 +29,8 @@ class GetContractDetails {
    * Constructor to get token details by chain Id and contract address.
    *
    * @param {object} params
-   * @param {string/number} params.chainId: chain id of the transactionHash
-   * @param {string} params.contractAddress: contract address for which details needed to be fetched
+   * @param {string/number} params.chainId: chain id of the deployed contract.
+   * @param {string} params.contractAddress: contract address for which details needed to be fetched.
    *
    * @constructor
    */
