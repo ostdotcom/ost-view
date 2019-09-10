@@ -81,12 +81,12 @@ const basicAuthentication = function(req, res, next) {
     user.pass === coreConstants.BASIC_AUTHENTICATION_PASSWORD
   ) {
     return next();
-  } else {
-    return unauthorized(res);
   }
+
+  return unauthorized(res);
 };
 
-// if the process is a master.
+// If the process is a master.
 if (cluster.isMaster) {
   // Set worker process title
   process.title = 'OST View master node';
@@ -117,10 +117,10 @@ if (cluster.isMaster) {
   // When any of the workers die the cluster module will emit the 'exit' event.
   cluster.on('exit', function(worker, code, signal) {
     if (worker.exitedAfterDisconnect === true) {
-      // don't restart worker as voluntary exit
+      // Don't restart worker as voluntary exit.
       logger.info('[worker-' + worker.id + '] voluntary exit. signal: ${signal}. code: ${code}');
     } else {
-      // restart worker as died unexpectedly
+      // Restart worker as died unexpectedly.
       logger.error(
         '[worker-' + worker.id + '] restarting died. signal: ${signal}. code: ${code}',
         worker.id,
@@ -131,10 +131,9 @@ if (cluster.isMaster) {
     }
   });
 
-  // When someone try to kill the master process
-  // kill <master process id>
+  // When someone try to kill the master process kill <master process id>
   process.on('SIGTERM', function() {
-    for (var id in cluster.workers) {
+    for (const id in cluster.workers) {
       cluster.workers[id].exitedAfterDisconnect = true;
     }
     cluster.disconnect(function() {
@@ -142,7 +141,7 @@ if (cluster.isMaster) {
     });
   });
 } else if (cluster.isWorker) {
-  // if the process is not a master
+  // If the process is not a master.
 
   // Set worker process title
   process.title = 'OST View worker-' + cluster.worker.id;
@@ -173,10 +172,10 @@ if (cluster.isMaster) {
   // Add basic auth in chain
   app.use(basicAuthentication);
 
-  //Setting view engine template handlebars
+  // Setting view engine template handlebars.
   app.set('views', path.join(__dirname, 'views'));
 
-  //Helper is used to ease stringifying JSON
+  // Helper is used to ease stringifying JSON.
   app.engine(
     'handlebars',
     exphbs({
@@ -188,7 +187,7 @@ if (cluster.isMaster) {
   );
   app.set('view engine', 'handlebars');
 
-  // connect-assets relies on to use defaults in config
+  // Module connect-assets relies on to use defaults in config.
   const connectAssetConfig = {
     paths: [path.join(__dirname, 'assets/css'), path.join(__dirname, 'assets/js')],
     buildDir: path.join(__dirname, 'builtAssets'),
@@ -208,11 +207,13 @@ if (cluster.isMaster) {
   const hbs = require('handlebars');
   hbs.registerHelper('css', function() {
     const css = connectAssets.options.helperContext.css.apply(this, arguments);
+
     return new hbs.SafeString(css);
   });
 
   hbs.registerHelper('js', function() {
     const js = connectAssets.options.helperContext.js.apply(this, arguments);
+
     return new hbs.SafeString(js);
   });
 
@@ -222,9 +223,9 @@ if (cluster.isMaster) {
 
   app.use(express.static(path.join(__dirname, 'public')));
 
-  let redirectIfOnUrl = '/' + coreConstants.MAINNET_BASE_URL_PREFIX;
+  const redirectIfOnUrl = '/' + coreConstants.MAINNET_BASE_URL_PREFIX;
 
-  // load route files
+  // Load route files.
   app.get(redirectIfOnUrl, redirectHome);
 
   app.use('/', indexRoutes);
@@ -240,16 +241,17 @@ if (cluster.isMaster) {
 
   app.use('/:baseUrlPrefix', startRequestLog, validateUrlPrefix, indexRoutes);
 
-  // catch 404 and forward to error handler
-  app.use(function(req, res, next) {
+  // Catch 404 and forward to error handler.
+  app.use(function(req, res) {
     return responseHelper.error('404', 'Not Found').renderResponse(res, 404);
   });
 
-  // error handler
-  app.use(function(err, req, res, next) {
-    // set locals, only providing error in development
+  // Error handler.
+  app.use(function(err, req, res) {
+    // Set locals, only providing error in development.
     logger.error(err);
-    return responseHelper.error('500', 'Something went wrong').renderResponse(res, 500);
+
+    return responseHelper.error('500', 'Something went wrong.').renderResponse(res, 500);
   });
 
   /**
@@ -308,7 +310,7 @@ function onError(error) {
 
   const bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
 
-  // handle specific listen errors with friendly messages
+  // Handle specific listen errors with friendly messages.
   switch (error.code) {
     case 'EACCES':
       logger.error(bind + ' requires elevated privileges');

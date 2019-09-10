@@ -147,8 +147,6 @@ class GetTokenHolderBalance {
     economyAddressData.contractAddress = oThis.contractAddress;
 
     oThis.tokenHolderDetails = await tokenHolderFormatter.perform(economyAddressData);
-
-    return responseHelper.successWithData({});
   }
 
   /**
