@@ -39,7 +39,7 @@ class GetTokenDetailsBySymbol {
     oThis.tokenSymbol = params.tokenSymbol;
 
     oThis.chainId = null;
-    oThis.contractAddresses = null;
+    oThis.contractAddress = null;
     oThis.contractDetails = null;
     oThis.baseCurrencies = {};
     oThis.baseCurrencyContractAddress = null;
@@ -106,7 +106,7 @@ class GetTokenDetailsBySymbol {
   /**
    * Get token details.
    *
-   * @sets oThis.chainId, oThis.contractAddresses, oThis.baseCurrencyContractAddress
+   * @sets oThis.chainId, oThis.contractAddress, oThis.baseCurrencyContractAddress
    *
    * @returns {Promise<result>}
    */
@@ -121,11 +121,11 @@ class GetTokenDetailsBySymbol {
       economyRsp = await Economy.searchBySymbol(oThis.tokenSymbol);
 
     if (economyRsp.isSuccess() && economyRsp.data.length === 1) {
-      const tokenNameDetails = economyRsp.data[0];
+      const tokenDetails = economyRsp.data[0];
 
-      oThis.chainId = tokenNameDetails.chainId;
-      oThis.contractAddresses = tokenNameDetails.contractAddress;
-      oThis.baseCurrencyContractAddress = tokenNameDetails.baseCurrencyContractAddress;
+      oThis.chainId = tokenDetails.chainId;
+      oThis.contractAddress = tokenDetails.contractAddress;
+      oThis.baseCurrencyContractAddress = tokenDetails.baseCurrencyContractAddress;
 
       return responseHelper.successWithData({});
     }
@@ -147,12 +147,12 @@ class GetTokenDetailsBySymbol {
       blockScanner = blockScannerProvider.getInstance(),
       ContractGetService = blockScanner.contract.Get;
 
-    const response = await new ContractGetService(oThis.chainId, oThis.contractAddresses).perform();
+    const response = await new ContractGetService(oThis.chainId, [oThis.contractAddress]).perform();
     if (response.isFailure()) {
       return response;
     }
 
-    const contractData = response.data[oThis.contractAddresses[0]];
+    const contractData = response.data[oThis.contractAddress];
     if (!contractData) {
       return responseHelper.error('s_t_gd_4', 'Token data not found.');
     }
