@@ -29,14 +29,14 @@ class GetTokenDetailsBySymbol {
    * Constructor to get token details by token symbol.
    *
    * @param {object} params
-   * @param {string} params.token_symbol
+   * @param {string} params.tokenSymbol
    *
    * @constructor
    */
   constructor(params) {
     const oThis = this;
 
-    oThis.tokenSymbol = params.token_symbol;
+    oThis.tokenSymbol = params.tokenSymbol;
 
     oThis.chainId = null;
     oThis.contractAddresses = null;

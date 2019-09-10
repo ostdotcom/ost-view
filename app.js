@@ -20,22 +20,23 @@ morgan.token('id', function getId(req) {
   return req.id;
 });
 
-// Load all required internal files
+// Load all required internal files.
 const rootPrefix = '.',
+  blockRoutes = require(rootPrefix + '/routes/block'),
   indexRoutes = require(rootPrefix + '/routes/index'),
+  aboutRoutes = require(rootPrefix + '/routes/about'),
+  statsRoutes = require(rootPrefix + '/routes/stats'),
+  tokenRoutes = require(rootPrefix + '/routes/token'),
   searchRoutes = require(rootPrefix + '/routes/search'),
+  sanitizer = require(rootPrefix + '/helpers/sanitizer'),
+  addressRoutes = require(rootPrefix + '/routes/address'),
+  coreConstants = require(rootPrefix + '/config/coreConstants'),
+  transactionRoutes = require(rootPrefix + '/routes/transaction'),
   responseHelper = require(rootPrefix + '/lib/formatter/response'),
   logger = require(rootPrefix + '/lib/logger/customConsoleLogger'),
   handlebarHelper = require(rootPrefix + '/helpers/handlebarHelper'),
   customMiddleware = require(rootPrefix + '/helpers/customMiddleware'),
-  coreConstants = require(rootPrefix + '/config/coreConstants'),
-  blockRoutes = require(rootPrefix + '/routes/block'),
-  transactionRoutes = require(rootPrefix + '/routes/transaction'),
-  aboutRoutes = require(rootPrefix + '/routes/about'),
-  statsRoutes = require(rootPrefix + '/routes/stats'),
-  tokenRoutes = require(rootPrefix + '/routes/token'),
-  addressRoutes = require(rootPrefix + '/routes/address'),
-  sanitizer = require(rootPrefix + '/helpers/sanitizer');
+  tokenDetailsBySymbolRoutes = require(rootPrefix + '/routes/tokenDetailsBySymbol');
 
 const startRequestLog = function(req, res, next) {
   logger.requestStartLog(customUrlParser.parse(req.originalUrl).pathname, req.method);
@@ -287,6 +288,8 @@ if (cluster.isMaster) {
 
   app.use('/', indexRoutes);
   app.use('/about', startRequestLog, aboutRoutes);
+  // app.use('/:tokenSymbol', startRequestLog, tokenDetailsBySymbolRoutes);
+  app.use('/:baseUrlPrefix/:tokenSymbol', startRequestLog, validateUrlPrefix, tokenDetailsBySymbolRoutes);
   app.use('/:baseUrlPrefix/stats', startRequestLog, statsRoutes);
 
   app.use('/:baseUrlPrefix/search', startRequestLog, validateUrlPrefix, searchRoutes);
