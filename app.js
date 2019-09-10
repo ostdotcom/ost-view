@@ -43,7 +43,7 @@ const startRequestLog = function(req, res, next) {
   return next();
 };
 
-// Url prefix can only be testnet or mainnet
+// Url prefix can only be testnet or mainnet.
 const validateUrlPrefix = function(req, res, next) {
   const isValidUrlPrefix = [coreConstants.MAINNET_BASE_URL_PREFIX, coreConstants.TESTNET_BASE_URL_PREFIX].includes(
     req.params.baseUrlPrefix
@@ -90,7 +90,6 @@ const basicAuthentication = function(req, res, next) {
 /**
  * Normalize a port into a number, string, or false.
  */
-
 function normalizePort(val) {
   const port = parseInt(val, 10);
 
@@ -316,19 +315,16 @@ if (cluster.isMaster) {
    * Get port from environment and store in Express.
    */
   const port = normalizePort(coreConstants.PORT || '7000');
-
   app.set('port', port);
 
   /**
    * Create HTTP server.
    */
-
   const server = http.createServer(app);
 
   /**
    * Listen on provided port, on all network interfaces.
    */
-
   server.listen(port, 443);
   server.on('error', onError);
   server.on('listening', function() {
