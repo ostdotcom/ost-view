@@ -118,7 +118,7 @@ class GetTokenDetailsByNameOrSymbol {
       EconomyService = blockScanner.model.Economy;
 
     const Economy = new EconomyService({ consistentRead: false }),
-      economyRsp = await Economy.searchByNameOrSymbol(oThis.tokenSymbol);
+      economyRsp = await Economy.searchBySymbol(oThis.tokenSymbol);
 
     if (economyRsp.isSuccess() && economyRsp.data.length === 1) {
       const tokenNameDetails = economyRsp.data[0];
