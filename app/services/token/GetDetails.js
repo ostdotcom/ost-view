@@ -7,7 +7,7 @@
 const OSTBase = require('@ostdotcom/base');
 
 const rootPrefix = '../../..',
-  CommonValidator = require(rootPrefix + '/lib/validators/common'),
+  CommonValidator = require(rootPrefix + '/lib/validators/Common'),
   coreConstants = require(rootPrefix + '/config/coreConstants'),
   logger = require(rootPrefix + '/lib/logger/customConsoleLogger'),
   responseHelper = require(rootPrefix + '/lib/formatter/response'),
