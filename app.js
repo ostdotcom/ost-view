@@ -1,11 +1,10 @@
-'use strict';
-
-/*
- * Main application file
+/**
+ * Main application file.
  *
+ * @module app
  */
 
-// Load all external modules
+// Load all external modules.
 const express = require('express'),
   path = require('path'),
   bodyParser = require('body-parser'),
@@ -40,12 +39,13 @@ const rootPrefix = '.',
 
 const startRequestLog = function(req, res, next) {
   logger.requestStartLog(customUrlParser.parse(req.originalUrl).pathname, req.method);
+
   return next();
 };
 
 // Url prefix can only be testnet or mainnet
 const validateUrlPrefix = function(req, res, next) {
-  let isValidUrlPrefix = [coreConstants.MAINNET_BASE_URL_PREFIX, coreConstants.TESTNET_BASE_URL_PREFIX].includes(
+  const isValidUrlPrefix = [coreConstants.MAINNET_BASE_URL_PREFIX, coreConstants.TESTNET_BASE_URL_PREFIX].includes(
     req.params.baseUrlPrefix
   );
 
@@ -56,21 +56,22 @@ const validateUrlPrefix = function(req, res, next) {
   return responseHelper.error('404', 'Not found').renderResponse(res, 404);
 };
 
-const redirectHome = function(req, res, next) {
+const redirectHome = function(req, res) {
   res.redirect(301, '/');
 };
 
 const basicAuthentication = function(req, res, next) {
-  if (coreConstants.USE_BASIC_AUTHENTICATION == 'false') {
+  if (coreConstants.USE_BASIC_AUTHENTICATION === 'false') {
     return next();
   }
 
-  function unauthorized(res) {
+  function unauthorized() {
     res.set('WWW-Authenticate', 'Basic realm=Authorization Required');
+
     return responseHelper.error('401', 'Unauthorized').renderResponse(res, 401);
   }
 
-  let user = basicAuth(req);
+  const user = basicAuth(req);
 
   if (!user || !user.name || !user.pass) {
     return unauthorized(res);
@@ -86,6 +87,63 @@ const basicAuthentication = function(req, res, next) {
   return unauthorized(res);
 };
 
+/**
+ * Normalize a port into a number, string, or false.
+ */
+
+function normalizePort(val) {
+  const port = parseInt(val, 10);
+
+  if (isNaN(port)) {
+    // Named pipe.
+    return val;
+  }
+
+  if (port >= 0) {
+    // Port number.
+    return port;
+  }
+
+  return false;
+}
+
+/**
+ * Event listener for HTTP server "error" event.
+ *
+ * @param {object} error
+ */
+function onError(error) {
+  if (error.syscall !== 'listen') {
+    throw error;
+  }
+
+  const bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
+
+  // Handle specific listen errors with friendly messages.
+  switch (error.code) {
+    case 'EACCES':
+      logger.error(bind + ' requires elevated privileges');
+      process.exit(1);
+      break;
+    case 'EADDRINUSE':
+      logger.error(bind + ' is already in use');
+      process.exit(1);
+      break;
+    default:
+      throw error;
+  }
+}
+
+/**
+ * Event listener for HTTP server "listening" event.
+ *
+ * @param {object} server
+ */
+function onListening(server) {
+  const addr = server.address();
+  const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
+}
+
 // If the process is a master.
 if (cluster.isMaster) {
   // Set worker process title
@@ -94,7 +152,7 @@ if (cluster.isMaster) {
   // Fork workers equal to number of CPUs
   const numWorkers = coreConstants.WORKERS || require('os').cpus().length;
 
-  for (let i = 0; i < numWorkers; i++) {
+  for (let index = 0; index < numWorkers; index++) {
     // Spawn a new worker process.
     cluster.fork();
   }
@@ -165,7 +223,7 @@ if (cluster.isMaster) {
   app.use(sanitizer.sanitizeBodyAndQuery);
 
   // Keep health checker here to skip basic auth
-  app.get('/health-checker', function(req, res, next) {
+  app.get('/health-checker', function(req, res) {
     res.send('');
   });
 
@@ -257,7 +315,6 @@ if (cluster.isMaster) {
   /**
    * Get port from environment and store in Express.
    */
-
   const port = normalizePort(coreConstants.PORT || '7000');
 
   app.set('port', port);
@@ -277,59 +334,4 @@ if (cluster.isMaster) {
   server.on('listening', function() {
     onListening(server);
   });
-}
-
-/**
- * Normalize a port into a number, string, or false.
- */
-
-function normalizePort(val) {
-  const port = parseInt(val, 10);
-
-  if (isNaN(port)) {
-    // named pipe
-    return val;
-  }
-
-  if (port >= 0) {
-    // port number
-    return port;
-  }
-
-  return false;
-}
-
-/**
- * Event listener for HTTP server "error" event.
- */
-
-function onError(error) {
-  if (error.syscall !== 'listen') {
-    throw error;
-  }
-
-  const bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
-
-  // Handle specific listen errors with friendly messages.
-  switch (error.code) {
-    case 'EACCES':
-      logger.error(bind + ' requires elevated privileges');
-      process.exit(1);
-      break;
-    case 'EADDRINUSE':
-      logger.error(bind + ' is already in use');
-      process.exit(1);
-      break;
-    default:
-      throw error;
-  }
-}
-
-/**
- * Event listener for HTTP server "listening" event.
- */
-
-function onListening(server) {
-  const addr = server.address();
-  const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
 }
