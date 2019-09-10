@@ -288,8 +288,6 @@ if (cluster.isMaster) {
 
   app.use('/', indexRoutes);
   app.use('/about', startRequestLog, aboutRoutes);
-  // app.use('/:tokenSymbol', startRequestLog, tokenDetailsBySymbolRoutes);
-  app.use('/:baseUrlPrefix/:tokenSymbol', startRequestLog, validateUrlPrefix, tokenDetailsBySymbolRoutes);
   app.use('/:baseUrlPrefix/stats', startRequestLog, statsRoutes);
 
   app.use('/:baseUrlPrefix/search', startRequestLog, validateUrlPrefix, searchRoutes);
@@ -299,7 +297,9 @@ if (cluster.isMaster) {
   app.use('/:baseUrlPrefix/token', startRequestLog, validateUrlPrefix, tokenRoutes);
   app.use('/:baseUrlPrefix/address', startRequestLog, validateUrlPrefix, addressRoutes);
 
+  app.use('/:baseUrlPrefix/:tokenSymbol', startRequestLog, validateUrlPrefix, tokenDetailsBySymbolRoutes);
   app.use('/:baseUrlPrefix', startRequestLog, validateUrlPrefix, indexRoutes);
+  // app.use('/:tokenSymbol', startRequestLog, tokenDetailsBySymbolRoutes);
 
   // Catch 404 and forward to error handler.
   app.use(function(req, res) {
