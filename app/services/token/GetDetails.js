@@ -1,5 +1,5 @@
 /**
- * Module to get token details by token name or token symbol.
+ * Module to get token details by token symbol.
  *
  * @module app/services/token/GetDetails
  */
@@ -20,13 +20,13 @@ require(rootPrefix + '/lib/providers/blockScanner');
 require(rootPrefix + '/lib/cacheMultiManagement/BaseCurrency');
 
 /**
- * Class to get token details by token name or token symbol.
+ * Class to get token details by token symbol.
  *
- * @class GetTokenDetailsByNameOrSymbol
+ * @class GetTokenDetailsBySymbol
  */
-class GetTokenDetailsByNameOrSymbol {
+class GetTokenDetailsBySymbol {
   /**
-   * Constructor to get token details by token name or token symbol.
+   * Constructor to get token details by token symbol.
    *
    * @param {object} params
    * @param {string} params.token_symbol
@@ -187,7 +187,7 @@ class GetTokenDetailsByNameOrSymbol {
 }
 
 InstanceComposer.registerAsShadowableClass(
-  GetTokenDetailsByNameOrSymbol,
+  GetTokenDetailsBySymbol,
   coreConstants.icNameSpace,
-  'GetTokenDetailsByNameOrSymbol'
+  'GetTokenDetailsBySymbol'
 );
