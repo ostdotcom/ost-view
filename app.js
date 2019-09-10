@@ -233,7 +233,7 @@ if (cluster.isMaster) {
   // Setting view engine template handlebars.
   app.set('views', path.join(__dirname, 'views'));
 
-  // Helper is used to ease stringifying JSON.
+  // Helper is used to ease stringify JSON.
   app.engine(
     'handlebars',
     exphbs({

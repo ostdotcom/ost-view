@@ -11,14 +11,14 @@ const router = express.Router({ mergeParams: true });
 
 // Load all internal dependencies.
 const rootPrefix = '..',
-  responseHelper = require(rootPrefix + '/lib/formatter/response'),
-  logger = require(rootPrefix + '/lib/logger/customConsoleLogger'),
+  routeHelper = require(rootPrefix + '/routes/helper'),
   sanitizer = require(rootPrefix + '/helpers/sanitizer'),
   coreConstants = require(rootPrefix + '/config/coreConstants'),
-  baseRoutes = require(rootPrefix + '/lib/globalConstant/baseRoutes'),
-  routeHelper = require(rootPrefix + '/routes/helper');
+  responseHelper = require(rootPrefix + '/lib/formatter/response'),
+  logger = require(rootPrefix + '/lib/logger/customConsoleLogger'),
+  baseRoutes = require(rootPrefix + '/lib/globalConstant/baseRoutes');
 
-// Render final response
+// Render final response.
 const renderResult = function(requestResponse, responseObject, contentType) {
   return requestResponse.renderResponse(responseObject, requestResponse.isSuccess() ? 200 : 500, contentType);
 };
