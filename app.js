@@ -298,8 +298,13 @@ if (cluster.isMaster) {
   app.use('/:baseUrlPrefix/address', startRequestLog, validateUrlPrefix, addressRoutes);
 
   app.use('/:baseUrlPrefix/:tokenSymbol', startRequestLog, validateUrlPrefix, tokenDetailsBySymbolRoutes);
+  if (coreConstants.IS_VIEW_SUB_ENVIRONMENT_MAIN) {
+    const redirectTokenDetailsBySymbol = function(req, res) {
+      res.redirect(301, '/:baseUrlPrefix/:tokenSymbol');
+    };
+    app.get('/:tokenSymbol', redirectTokenDetailsBySymbol);
+  }
   app.use('/:baseUrlPrefix', startRequestLog, validateUrlPrefix, indexRoutes);
-  // app.use('/:tokenSymbol', startRequestLog, tokenDetailsBySymbolRoutes);
 
   // Catch 404 and forward to error handler.
   app.use(function(req, res) {
