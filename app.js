@@ -297,13 +297,15 @@ if (cluster.isMaster) {
   app.use('/:baseUrlPrefix/token', startRequestLog, validateUrlPrefix, tokenRoutes);
   app.use('/:baseUrlPrefix/address', startRequestLog, validateUrlPrefix, addressRoutes);
 
+  if (coreConstants.IS_VIEW_SUB_ENVIRONMENT_MAIN) {
+    app.use('/:tokenSymbol', startRequestLog, tokenDetailsBySymbolRoutes);
+  }
   app.use('/:baseUrlPrefix/:tokenSymbol', startRequestLog, validateUrlPrefix, tokenDetailsBySymbolRoutes);
   app.use('/:baseUrlPrefix', startRequestLog, validateUrlPrefix, indexRoutes);
-  // app.use('/:tokenSymbol', startRequestLog, tokenDetailsBySymbolRoutes);
 
   // Catch 404 and forward to error handler.
   app.use(function(req, res) {
-    return responseHelper.error('404', 'Not Found').renderResponse(res, 404);
+    return responseHelper.error('404', 'Not found.').renderResponse(res, 404);
   });
 
   // Error handler.
