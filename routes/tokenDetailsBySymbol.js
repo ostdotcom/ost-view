@@ -73,6 +73,7 @@ function processTokenDetailsResponse(response, req, res) {
  */
 router.get('/', sanitizer.sanitizeDynamicUrlParams, function(req, res, next) {
   require(rootPrefix + '/app/services/token/GetDetails');
+  console.log("Request params: ", req.params);
 
   routeHelper.performer(req, res, next, 'GetTokenDetailsBySymbol', 'r_tbs_1').then(function(requestResponse) {
     if (requestResponse.isSuccess()) {
