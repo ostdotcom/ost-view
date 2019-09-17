@@ -289,17 +289,7 @@ if (cluster.isMaster) {
   app.use('/', indexRoutes);
   app.use('/about', startRequestLog, aboutRoutes);
 
-  if (coreConstants.IS_VIEW_SUB_ENVIRONMENT_MAIN) {
-    const redirectTokenDetailsBySymbol = function(req, res) {
-      console.log("Request: ", req);
-      res.redirect(301, `/${coreConstants.MAINNET_BASE_URL_PREFIX}/m133`);
-    };
-    app.get('/:tokenSymbol', redirectTokenDetailsBySymbol);
-  }
-
   app.use('/:baseUrlPrefix/stats', startRequestLog, statsRoutes);
-
-  app.use('/:baseUrlPrefix/:tokenSymbol', startRequestLog, tokenDetailsBySymbolRoutes);
 
   app.use('/:baseUrlPrefix/search', startRequestLog, validateUrlPrefix, searchRoutes);
 
@@ -308,7 +298,13 @@ if (cluster.isMaster) {
   app.use('/:baseUrlPrefix/token', startRequestLog, validateUrlPrefix, tokenRoutes);
   app.use('/:baseUrlPrefix/address', startRequestLog, validateUrlPrefix, addressRoutes);
 
-  app.use('/:baseUrlPrefix', startRequestLog, validateUrlPrefix, indexRoutes);
+  app.use('/:baseUrlPrefix/:tokenSymbol', startRequestLog, tokenDetailsBySymbolRoutes);
+  app.use('/' + coreConstants.BASE_URL_PREFIX, startRequestLog, validateUrlPrefix, indexRoutes);
+
+  app.get('/:tokenSymbol', sanitizer.sanitizeDynamicUrlParams, function(req, res, next) {
+    const routeToRedirect = `/${coreConstants.MAINNET_BASE_URL_PREFIX}/` + req.params.tokenSymbol;
+    res.redirect(301, routeToRedirect);
+  });
 
   // Catch 404 and forward to error handler.
   app.use(function(req, res) {
