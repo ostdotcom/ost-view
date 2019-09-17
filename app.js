@@ -299,9 +299,9 @@ if (cluster.isMaster) {
   app.use('/:baseUrlPrefix/address', startRequestLog, validateUrlPrefix, addressRoutes);
 
   app.use('/:baseUrlPrefix/:tokenSymbol', startRequestLog, tokenDetailsBySymbolRoutes);
-  app.use('/' + coreConstants.BASE_URL_PREFIX, startRequestLog, validateUrlPrefix, indexRoutes);
+  app.use('/' + coreConstants.BASE_URL_PREFIX, startRequestLog, indexRoutes);
 
-  app.get('/:tokenSymbol', sanitizer.sanitizeDynamicUrlParams, function(req, res, next) {
+  app.get('/:tokenSymbol', sanitizer.sanitizeDynamicUrlParams, function(req, res) {
     const routeToRedirect = `/${coreConstants.MAINNET_BASE_URL_PREFIX}/` + req.params.tokenSymbol;
     res.redirect(301, routeToRedirect);
   });
