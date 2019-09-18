@@ -8,10 +8,10 @@ const OSTBase = require('@ostdotcom/base');
 
 const rootPrefix = '../../..',
   CommonValidator = require(rootPrefix + '/lib/validators/Common'),
+  GetContractDetailsService = require(rootPrefix + '/app/services/contract/GetDetails'),
   coreConstants = require(rootPrefix + '/config/coreConstants'),
   logger = require(rootPrefix + '/lib/logger/customConsoleLogger'),
-  responseHelper = require(rootPrefix + '/lib/formatter/response'),
-  tokenFormatter = require(rootPrefix + '/lib/formatter/entities/token');
+  responseHelper = require(rootPrefix + '/lib/formatter/response');
 
 const InstanceComposer = OSTBase.InstanceComposer;
 
@@ -40,9 +40,6 @@ class GetTokenDetailsBySymbol {
 
     oThis.chainId = null;
     oThis.contractAddress = null;
-    oThis.contractDetails = null;
-    oThis.baseCurrencies = {};
-    oThis.baseCurrencyContractAddress = null;
   }
 
   /**
@@ -78,14 +75,7 @@ class GetTokenDetailsBySymbol {
       return tokenDetailsResponse;
     }
 
-    const promisesArray = [];
-    promisesArray.push(oThis.getContractDetails(), oThis.getBaseCurrencies());
-    await Promise.all(promisesArray);
-
-    const serviceResponse = oThis.contractDetails;
-    serviceResponse.baseCurrencies = oThis.baseCurrencies;
-
-    return responseHelper.successWithData(serviceResponse);
+    return new GetContractDetailsService({ chainId: oThis.chainId, contractAddress: oThis.contractAddress }).perform();
   }
 
   /**
@@ -125,64 +115,11 @@ class GetTokenDetailsBySymbol {
 
       oThis.chainId = tokenDetails.chainId;
       oThis.contractAddress = tokenDetails.contractAddress;
-      oThis.baseCurrencyContractAddress = tokenDetails.baseCurrencyContractAddress;
 
       return responseHelper.successWithData({});
     }
 
     return responseHelper.error('s_t_gd_3', 'Token data not found.');
-  }
-
-  /**
-   * Fetch contract details from block scanner.
-   *
-   * @sets oThis.contractDetails
-   *
-   * @returns {Promise<void>}
-   */
-  async getContractDetails() {
-    const oThis = this;
-
-    const blockScannerProvider = oThis.ic().getInstanceFor(coreConstants.icNameSpace, 'blockScannerProvider'),
-      blockScanner = blockScannerProvider.getInstance(),
-      ContractGetService = blockScanner.contract.Get;
-
-    const response = await new ContractGetService(oThis.chainId, [oThis.contractAddress]).perform();
-    if (response.isFailure()) {
-      return response;
-    }
-
-    const contractData = response.data[oThis.contractAddress];
-    if (!contractData) {
-      return responseHelper.error('s_t_gd_4', 'Token data not found.');
-    }
-
-    oThis.contractDetails = await tokenFormatter.perform(contractData);
-  }
-
-  /**
-   * Get base currencies details for contract addresses.
-   *
-   * @sets oThis.baseCurrencies
-   *
-   * @returns {Promise<*>}
-   */
-  async getBaseCurrencies() {
-    const oThis = this;
-
-    if (!CommonValidator.isEthAddressValid(oThis.baseCurrencyContractAddress)) {
-      return responseHelper.error('s_t_gd_5', 'Invalid base currency address.');
-    }
-
-    const BaseCurrencyCache = oThis.ic().getShadowedClassFor(coreConstants.icNameSpace, 'BaseCurrencyCache'),
-      baseCurrencyCacheObj = new BaseCurrencyCache({
-        baseCurrencyContractAddresses: [oThis.baseCurrencyContractAddress]
-      });
-
-    const baseCurrencyCacheRsp = await baseCurrencyCacheObj.fetch();
-    if (baseCurrencyCacheRsp.isSuccess()) {
-      oThis.baseCurrencies = baseCurrencyCacheRsp.data;
-    }
   }
 }
 

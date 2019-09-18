@@ -72,8 +72,7 @@ function processTokenDetailsResponse(response, req, res) {
  * @routeparam {Number} :tokenSymbol - Token symbol
  */
 router.get('/', sanitizer.sanitizeDynamicUrlParams, function(req, res, next) {
-  require(rootPrefix + '/app/services/token/GetDetails');
-  console.log("Request params: ", req.params);
+  require(rootPrefix + '/app/services/contract/GetDetailsBySymbol');
 
   routeHelper.performer(req, res, next, 'GetTokenDetailsBySymbol', 'r_tbs_1').then(function(requestResponse) {
     if (requestResponse.isSuccess()) {
