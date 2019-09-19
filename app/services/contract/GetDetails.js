@@ -129,8 +129,6 @@ class GetContractDetails {
       return responseHelper.error('s_c_gd_4', 'Data not found.');
     }
 
-    console.log('contractData --------', contractData);
-
     oThis.contractDetails = await tokenFormatter.perform(contractData);
     oThis.baseCurrencyContractAddress = oThis.contractDetails.baseCurrencyContractAddress;
   }
