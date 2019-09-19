@@ -16,7 +16,8 @@ const rootPrefix = '..',
   sanitizer = require(rootPrefix + '/helpers/sanitizer'),
   baseRoutes = require(rootPrefix + '/lib/globalConstant/baseRoutes'),
   handlebarHelper = require(rootPrefix + '/helpers/handlebarHelper'),
-  coreConstants = require(rootPrefix + '/config/coreConstants');
+  coreConstants = require(rootPrefix + '/config/coreConstants'),
+  canonicalConstant = require(rootPrefix + '/lib/globalConstant/canonical');
 
 // Render final response
 const renderResult = function(requestResponse, responseObject, contentType) {
@@ -34,6 +35,7 @@ router.get('/', sanitizer.sanitizeDynamicUrlParams, function(req, res, next) {
       title: 'OST VIEW | About',
       description: 'About OST VIEW, the home grown block explorer from OST for OpenST Utility Blockchains.',
       keywords: 'OST, Simple Token, Utility Chain, Blockchain',
+      canonical: canonicalConstant.forAbout(),
       robots: 'index, follow',
       image: `${coreConstants.CLOUD_FRONT_BASE_DOMAIN}/ost-view/images/ost-view-og-image-1.jpg`
     },
