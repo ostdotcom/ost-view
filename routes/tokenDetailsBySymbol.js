@@ -16,7 +16,8 @@ const rootPrefix = '..',
   coreConstants = require(rootPrefix + '/config/coreConstants'),
   responseHelper = require(rootPrefix + '/lib/formatter/response'),
   logger = require(rootPrefix + '/lib/logger/customConsoleLogger'),
-  baseRoutes = require(rootPrefix + '/lib/globalConstant/baseRoutes');
+  baseRoutes = require(rootPrefix + '/lib/globalConstant/baseRoutes'),
+  canonicalConstant = require(rootPrefix + '/lib/globalConstant/canonical');
 
 // Render final response.
 const renderResult = function(requestResponse, responseObject, contentType) {
@@ -44,6 +45,7 @@ function processTokenDetailsResponse(response, req, res) {
       }`,
       keywords: 'OST, Simple Token, Utility Chain, Blockchain',
       robots: 'index, nofollow',
+      canonical: canonicalConstant.forEconomy(response.tokenSymbol),
       image: `${coreConstants.CLOUD_FRONT_BASE_DOMAIN}/ost-view/images/ost-view-og-image-1.jpg`
     },
     mCss: ['mTokenDetails.css'],
