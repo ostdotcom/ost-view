@@ -4,6 +4,7 @@
   "ddbTablePrefix": "de_m_a_",
   "sharedDdbTablePrefix": "de_m_",
   "port":3000,
+  "domain": '127.0.0.1',
   "workers":1,
   "authentication": {
     "jwtSecretKey": "0xhhduru232434snc5b",

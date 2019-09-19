@@ -10,6 +10,11 @@
     <meta name="description" content="{{page_meta.description}}">
     <meta name="keywords" content="{{page_meta.keywords}}">
     <meta name="robots" content="{{page_meta.robots}}">
+
+    {{#if page_meta.canonical}}
+    <link rel="canonical" href="{{pageMeta.canonical}}" />
+    {{/if}}
+
     <meta property="og:title" content="{{page_meta.title}}"/>
     <meta property="og:description" content="{{page_meta.description}}"/>
     <meta property="og:type" content="website"/>
