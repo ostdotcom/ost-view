@@ -95,6 +95,15 @@ class CoreConstants {
   }
 
   /**
+   * Get domain
+   *
+   * @returns {*}
+   */
+  get DOMAIN() {
+    return configuration.domain;
+  }
+
+  /**
    * Use basic auth or not
    *
    * @returns {*}
