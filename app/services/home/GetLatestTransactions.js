@@ -11,7 +11,7 @@ const rootPrefix = '../../..',
   coreConstants = require(rootPrefix + '/config/coreConstants'),
   transactionFormatter = require(rootPrefix + '/lib/formatter/entities/transaction'),
   responseHelper = require(rootPrefix + '/lib/formatter/response'),
-  CommonValidator = require(rootPrefix + '/lib/validators/common');
+  CommonValidator = require(rootPrefix + '/lib/validators/Common');
 
 const InstanceComposer = OSTBase.InstanceComposer;
 

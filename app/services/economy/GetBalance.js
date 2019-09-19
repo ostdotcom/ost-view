@@ -1,27 +1,39 @@
-/*
- * GetAddressDetails - service to get address details
+/**
+ * Module to get token holder balance.
  *
+ * @module app/services/economy/GetBalance
  */
 
+const OSTBase = require('@ostdotcom/base');
+
 const rootPrefix = '../../..',
-  OSTBase = require('@ostdotcom/base'),
+  CommonValidator = require(rootPrefix + '/lib/validators/Common'),
   coreConstants = require(rootPrefix + '/config/coreConstants'),
   logger = require(rootPrefix + '/lib/logger/customConsoleLogger'),
-  tokenHolderFormatter = require(rootPrefix + '/lib/formatter/entities/tokenHolder'),
   responseHelper = require(rootPrefix + '/lib/formatter/response'),
-  CommonValidator = require(rootPrefix + '/lib/validators/common');
+  tokenHolderFormatter = require(rootPrefix + '/lib/formatter/entities/tokenHolder');
 
 const InstanceComposer = OSTBase.InstanceComposer;
 
+// Following require(s) for registering into instance composer.
 require(rootPrefix + '/lib/providers/blockScanner');
 require(rootPrefix + '/app/services/contract/GetDetails');
 
+/**
+ * Class to get token holder balance.
+ *
+ * @class GetTokenHolderBalance
+ */
 class GetTokenHolderBalance {
   /**
-   * constructor
+   * Constructor to get token holder balance.
    *
-   * @param chainId - chain id of the transactionHash
-   * @param contractAddresses - contract addresses for which details needed to be fetched
+   * @param {object} params
+   * @param {string/number} params.chainId: chain id of the deployed contract.
+   * @param {string} params.address: address for which balance needs to be fetched.
+   * @param {string} params.contractAddress: contract address for which details needed to be fetched.
+   *
+   * @constructor
    */
   constructor(params) {
     const oThis = this;
@@ -29,13 +41,13 @@ class GetTokenHolderBalance {
     oThis.chainId = params.chainId;
     oThis.address = params.address;
     oThis.contractAddress = params.contractAddress;
-  
+
     oThis.tokenHolderDetails = null;
     oThis.tokenDetails = null;
   }
 
   /**
-   * perform
+   * Main performer for class.
    *
    * @return {Promise|*}
    */
@@ -47,36 +59,40 @@ class GetTokenHolderBalance {
       logger.error(err);
       if (responseHelper.isCustomResult(err)) {
         return err;
-      } else {
-        return responseHelper.error('s_e_gb_1', 'something_went_wrong', err);
       }
+
+      return responseHelper.error('s_e_gb_1', 'something_went_wrong', err);
     });
   }
 
   /**
-   * asyncPerform
+   * Async perform.
    *
    * @return {Promise<*>}
    */
   async asyncPerform() {
     const oThis = this;
 
-    let response = await oThis.validateAndSanitize();
+    const response = await oThis.validateAndSanitize();
+    if (response.isFailure()) {
+      return response;
+    }
 
-    if (response.isFailure()) return response;
+    const promisesArray = [];
+    promisesArray.push(oThis.getContractDetails(), oThis.getAddressBalance());
+    await Promise.all(promisesArray);
 
-    await oThis.getAddressBalance();
-  
-    let serviceResponse = {};
-    serviceResponse['tokenHolderDetails'] = oThis.tokenHolderDetails;
-    serviceResponse['tokenDetails'] = oThis.tokenDetails;
-    serviceResponse['baseCurrencies'] = oThis.tokenDetails['baseCurrencies'];
-    
+    const serviceResponse = {
+      tokenHolderDetails: oThis.tokenHolderDetails,
+      tokenDetails: oThis.tokenDetails,
+      baseCurrencies: oThis.tokenDetails.baseCurrencies
+    };
+
     return responseHelper.successWithData(serviceResponse);
   }
 
   /**
-   * validateAndSanitize
+   * Validate and sanitize.
    *
    * @return {Promise<*>}
    */
@@ -99,46 +115,59 @@ class GetTokenHolderBalance {
   }
 
   /**
-   * GetContractDetails - get details from block scanner
+   * Get address balance.
+   *
+   * @sets oThis.tokenHolderDetails
+   *
+   * @returns {Promise<*>}
    */
   async getAddressBalance() {
-    const oThis = this,
-      blockScannerProvider = oThis.ic().getInstanceFor(coreConstants.icNameSpace, 'blockScannerProvider'),
-      blockScanner = blockScannerProvider.getInstance(),
-      EconomyAddressGetBalance = blockScanner.address.GetBalance;
+    const oThis = this;
 
-    let economyAddressGetBalance = new EconomyAddressGetBalance(oThis.chainId, oThis.contractAddress, [oThis.address]),
+    const blockScannerProvider = oThis.ic().getInstanceFor(coreConstants.icNameSpace, 'blockScannerProvider'),
+      blockScanner = blockScannerProvider.getInstance(),
+      EconomyAddressGetBalanceService = blockScanner.address.GetBalance;
+
+    const economyAddressGetBalance = new EconomyAddressGetBalanceService(oThis.chainId, oThis.contractAddress, [
+        oThis.address
+      ]),
       economyAddressGetBalanceRsp = await economyAddressGetBalance.perform();
 
     if (!economyAddressGetBalanceRsp.isSuccess() && !economyAddressGetBalanceRsp.data[oThis.address]) {
-      return responseHelper.error('s_e_gb_5', 'Data Not found');
+      return responseHelper.error('s_e_gb_5', 'Data not found.');
     }
 
-    let economyAddressData = economyAddressGetBalanceRsp.data[oThis.address];
-    economyAddressData['chainId'] = oThis.chainId;
+    const economyAddressData = economyAddressGetBalanceRsp.data[oThis.address];
+    economyAddressData.chainId = oThis.chainId;
 
     if (!economyAddressData) {
-      return responseHelper.error('s_e_gb_6', 'Data Not found');
+      return responseHelper.error('s_e_gb_6', 'Data not found.');
     }
 
-    economyAddressData['contractAddress'] = oThis.contractAddress;
+    economyAddressData.contractAddress = oThis.contractAddress;
 
     oThis.tokenHolderDetails = await tokenHolderFormatter.perform(economyAddressData);
-
-    let contractData = await oThis.getContractDetails(oThis.contractAddress);
-    oThis.tokenDetails = contractData.data;
-
-    return responseHelper.successWithData({});
   }
 
-  async getContractDetails(contractAddress) {
+  /**
+   * Get contract details.
+   *
+   * @sets oThis.tokenDetails
+   *
+   * @returns {Promise<*>}
+   */
+  async getContractDetails() {
     const oThis = this;
 
-    let contractDetails = oThis.ic().getShadowedClassFor(coreConstants.icNameSpace, 'GetContractDetails'),
-      ContractDataClass = new contractDetails({ chainId: oThis.chainId, contractAddress: contractAddress }),
-      contractDataDetails = await ContractDataClass.perform();
+    const ContractDetails = oThis.ic().getShadowedClassFor(coreConstants.icNameSpace, 'GetContractDetails'),
+      contractDataClass = new ContractDetails({ chainId: oThis.chainId, contractAddress: oThis.contractAddress });
 
-    return contractDataDetails;
+    const contractDataDetails = await contractDataClass.perform();
+    if (contractDataDetails.isFailure()) {
+      return contractDataDetails;
+    }
+
+    oThis.tokenDetails = contractDataDetails.data;
   }
 }
 

@@ -10,7 +10,7 @@ const rootPrefix = '../../..',
   logger = require(rootPrefix + '/lib/logger/customConsoleLogger'),
   responseHelper = require(rootPrefix + '/lib/formatter/response'),
   tokenTransferFormatter = require(rootPrefix + '/lib/formatter/entities/tokenTransfer'),
-  CommonValidator = require(rootPrefix + '/lib/validators/common');
+  CommonValidator = require(rootPrefix + '/lib/validators/Common');
 
 const InstanceComposer = OSTBase.InstanceComposer;
 
