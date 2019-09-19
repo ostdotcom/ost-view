@@ -30,7 +30,7 @@
     "@ostdotcom/base": "1.0.0",
     "@ostdotcom/cache": "1.0.6",
     "@ostdotcom/ost-price-oracle": "1.0.6",
-    "@ostdotcom/ost-block-scanner": "git://github.com/ostdotcom/ost-block-scanner.git#token_url_changes",
+    "@ostdotcom/ost-block-scanner": "1.0.1-beta.13",
     "@ostdotcom/storage": "1.0.4-beta.1",
     "abi-decoder": "1.0.9",
     "basic-auth": "2.0.0",
