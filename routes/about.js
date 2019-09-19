@@ -35,7 +35,7 @@ router.get('/', sanitizer.sanitizeDynamicUrlParams, function(req, res, next) {
       title: 'OST VIEW | About',
       description: 'About OST VIEW, the home grown block explorer from OST for OpenST Utility Blockchains.',
       keywords: 'OST, Simple Token, Utility Chain, Blockchain',
-      canonical: canonicalConstant.forAbout,
+      canonical: canonicalConstant.forAbout(),
       robots: 'index, follow',
       image: `${coreConstants.CLOUD_FRONT_BASE_DOMAIN}/ost-view/images/ost-view-og-image-1.jpg`
     },

@@ -74,7 +74,7 @@ function processHomeDetailsResponse(requestResponse, req, res) {
       title: 'OST VIEW - Block Explorer for OpenST Utility Blockchains',
       description: 'OST VIEW is the home grown block explorer from OST for OpenST Utility Blockchains.',
       keywords: 'OST, Simple Token, Utility Chain, Blockchain',
-      canonical: canonicalConstant.forHome,
+      canonical: canonicalConstant.forHome(),
       robots: 'index, follow',
       image: `${coreConstants.CLOUD_FRONT_BASE_DOMAIN}/ost-view/images/ost-view-og-image-1.jpg`
     },
