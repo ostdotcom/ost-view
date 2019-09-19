@@ -10,7 +10,7 @@ const rootPrefix = '../../..',
   tokenNameSearchFormatter = require(rootPrefix + '/lib/formatter/entities/tokenNameSearch'),
   tokenHolderSearchFormatter = require(rootPrefix + '/lib/formatter/entities/tokenHolderSearch'),
   responseHelper = require(rootPrefix + '/lib/formatter/response'),
-  CommonValidator = require(rootPrefix + '/lib/validators/common');
+  CommonValidator = require(rootPrefix + '/lib/validators/Common');
 
 const InstanceComposer = OSTBase.InstanceComposer;
 
@@ -112,16 +112,15 @@ class SearchIndex {
       chainIdToContractAddressHash = {},
       addressDetailsRspData = addressDetailsRsp.data;
 
-
     // Address is not found in our table, now show it for all the chains
-    if(addressDetailsRsp.isSuccess() && addressDetailsRspData.length === 0){
+    if (addressDetailsRsp.isSuccess() && addressDetailsRspData.length === 0) {
       let chainsArr = oThis.ic().configStrategy.chains;
-      for(let indx in chainsArr){
+      for (let indx in chainsArr) {
         addressDetailsRspData.push({
           address: searchAddress,
           contractAddress: '0x0',
           chainId: chainsArr[indx].chainId
-        })
+        });
       }
     }
 
