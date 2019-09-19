@@ -11,7 +11,7 @@ const rootPrefix = '../../..',
   coreConstants = require(rootPrefix + '/config/coreConstants'),
   logger = require(rootPrefix + '/lib/logger/customConsoleLogger'),
   responseHelper = require(rootPrefix + '/lib/formatter/response'),
-  CommonValidator = require(rootPrefix + '/lib/validators/common'),
+  CommonValidator = require(rootPrefix + '/lib/validators/Common'),
   transactionFormatter = require(rootPrefix + '/lib/formatter/entities/transaction');
 
 // Following require(s) for registering into instance composer

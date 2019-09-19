@@ -13,7 +13,7 @@ const rootPrefix = '../../..',
   tokenFormatter = require(rootPrefix + '/lib/formatter/entities/token'),
   tokenTransferFormatter = require(rootPrefix + '/lib/formatter/entities/tokenTransfer'),
   responseHelper = require(rootPrefix + '/lib/formatter/response'),
-  CommonValidator = require(rootPrefix + '/lib/validators/common');
+  CommonValidator = require(rootPrefix + '/lib/validators/Common');
 
 require(rootPrefix + '/lib/providers/blockScanner');
 require(rootPrefix + '/lib/cacheMultiManagement/BaseCurrency');
@@ -71,16 +71,16 @@ class GetAllTransfers {
     if (response.isFailure()) return response;
 
     await oThis.getTransactionTransfers();
-    
+
     await oThis.getBaseCurrencies();
-  
+
     const result = {
       tokenTransfers: oThis.tokenTransfers,
       nextPagePayload: oThis.nextPagePayload,
       economyMap: oThis.economyMap,
       baseCurrencies: oThis.baseCurrencies
     };
-  
+
     return responseHelper.successWithData(result);
   }
 
@@ -115,7 +115,7 @@ class GetAllTransfers {
     oThis.txTransfers = transactionTransferResponse.tokenTransfers;
     oThis.nextPagePayload = transactionTransferResponse.nextPagePayload;
     oThis.tokenTransfers = await oThis._formatTransferIdentifiers();
-    
+
     if (oThis.tokenTransfers && oThis.tokenTransfers.length > 0) {
       oThis.economyMap = await oThis.getEconomyDetails();
     }
@@ -202,7 +202,7 @@ class GetAllTransfers {
 
     return economyData;
   }
-  
+
   /**
    * Get base currencies details for contract addresses
    *
@@ -210,19 +210,21 @@ class GetAllTransfers {
    */
   async getBaseCurrencies() {
     const oThis = this;
-    
+
     oThis.baseCurrencyContractAddresses = oThis.baseCurrencyContractAddresses.filter(Boolean);
-    
-    if(oThis.baseCurrencyContractAddresses.length === 0) {
+
+    if (oThis.baseCurrencyContractAddresses.length === 0) {
       return;
     }
-    
+
     const BaseCurrencyCache = oThis.ic().getShadowedClassFor(coreConstants.icNameSpace, 'BaseCurrencyCache'),
-      baseCurrencyCacheObj = new BaseCurrencyCache({baseCurrencyContractAddresses: oThis.baseCurrencyContractAddresses});
-    
+      baseCurrencyCacheObj = new BaseCurrencyCache({
+        baseCurrencyContractAddresses: oThis.baseCurrencyContractAddresses
+      });
+
     let baseCurrencyCacheRsp = await baseCurrencyCacheObj.fetch();
-    
-    if(baseCurrencyCacheRsp.isSuccess()) {
+
+    if (baseCurrencyCacheRsp.isSuccess()) {
       oThis.baseCurrencies = baseCurrencyCacheRsp.data;
     }
   }
