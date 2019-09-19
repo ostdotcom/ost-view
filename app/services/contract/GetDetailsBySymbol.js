@@ -8,7 +8,6 @@ const OSTBase = require('@ostdotcom/base');
 
 const rootPrefix = '../../..',
   CommonValidator = require(rootPrefix + '/lib/validators/Common'),
-  GetContractDetailsService = require(rootPrefix + '/app/services/contract/GetDetails'),
   coreConstants = require(rootPrefix + '/config/coreConstants'),
   logger = require(rootPrefix + '/lib/logger/customConsoleLogger'),
   responseHelper = require(rootPrefix + '/lib/formatter/response');
@@ -17,7 +16,7 @@ const InstanceComposer = OSTBase.InstanceComposer;
 
 // Following require(s) for registering into instance composer.
 require(rootPrefix + '/lib/providers/blockScanner');
-require(rootPrefix + '/lib/cacheMultiManagement/BaseCurrency');
+require(rootPrefix + '/app/services/contract/GetDetails');
 
 /**
  * Class to get token details by token symbol.
@@ -74,6 +73,8 @@ class GetTokenDetailsBySymbol {
     if (tokenDetailsResponse.isFailure()) {
       return tokenDetailsResponse;
     }
+
+    const GetContractDetailsService = oThis.ic().getShadowedClassFor(coreConstants.icNameSpace, 'GetContractDetails');
 
     return new GetContractDetailsService({ chainId: oThis.chainId, contractAddress: oThis.contractAddress }).perform();
   }
