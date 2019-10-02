@@ -18,7 +18,7 @@ require(rootPrefix + '/app/services/block/ChainIds');
 
 class SearchIndex {
   /**
-   * constructor
+   * Constructor
    *
    * @param {object} params
    * @param {string} params.q - search term
@@ -31,7 +31,7 @@ class SearchIndex {
   }
 
   /**
-   * performer
+   * Performer
    */
   perform() {
     const oThis = this;
@@ -42,9 +42,9 @@ class SearchIndex {
 
       if (responseHelper.isCustomResult(err)) {
         return err;
-      } else {
-        return responseHelper.error('a_s_si_1', 'something_went_wrong');
       }
+
+      return responseHelper.error('a_s_si_1', 'something_went_wrong');
     });
   }
 
@@ -62,36 +62,37 @@ class SearchIndex {
       oThis.queryArgument.length == coreConstants.ETH_ADDRESS_LENGTH &&
       CommonValidator.isEthAddressValid(oThis.queryArgument)
     ) {
-      //given entity is address
+      // Given entity is address
       logger.info('Search entity is address:', oThis.queryArgument);
       response = await oThis._getAddressSearchResults(oThis.queryArgument);
     } else if (
       oThis.queryArgument.length == coreConstants.TRANSACTION_HASH_LENGTH &&
       CommonValidator.isTxHashValid(oThis.queryArgument)
     ) {
-      //given entity is transaction hash
+      // Given entity is transaction hash
       logger.info('Search entity is hash:', oThis.queryArgument);
       response = await oThis._getTransactionSearchResults(oThis.queryArgument);
     } else if (oThis.queryArgument == parseInt(oThis.queryArgument)) {
-      //given entity is block number
-      let blockNumber = parseInt(oThis.queryArgument);
+      // Given entity is block number
+      const blockNumber = parseInt(oThis.queryArgument);
       logger.info('Search entity is block number:', blockNumber);
       response = await oThis._getBlockSearchResults(blockNumber);
     } else if (CommonValidator.isTokenNameValid(oThis.queryArgument)) {
-      //given entity is economy name
-      let economyName = oThis.queryArgument;
+      // Given entity is economy name
+      const economyName = oThis.queryArgument;
       logger.info('Search entity is token name or token symbol:', economyName);
       response = await oThis._getTokenNameOrSymbolSearchResults(economyName);
     } else {
-      //Invalid search term
+      // Invalid search term
       logger.info('Search term invalid:', oThis.queryArgument);
       response = responseHelper.error('a_s_s_i_5', 'token data not found');
     }
+
     return response;
   }
 
   /**
-   * returns search results for given address.
+   * Returns search results for given address.
    *
    * @param {string} searchAddress - Ethereum address.
    *
@@ -114,8 +115,8 @@ class SearchIndex {
 
     // Address is not found in our table, now show it for all the chains
     if (addressDetailsRsp.isSuccess() && addressDetailsRspData.length === 0) {
-      let chainsArr = oThis.ic().configStrategy.chains;
-      for (let indx in chainsArr) {
+      const chainsArr = oThis.ic().configStrategy.chains;
+      for (const indx in chainsArr) {
         addressDetailsRspData.push({
           address: searchAddress,
           contractAddress: '0x0',
@@ -125,12 +126,12 @@ class SearchIndex {
     }
 
     if (addressDetailsRsp.isSuccess() && addressDetailsRspData.length > 0) {
-      for (let index in addressDetailsRspData) {
-        let searchResultsHash = {};
+      for (const index in addressDetailsRspData) {
+        const searchResultsHash = {};
         if (addressDetailsRspData[index].contractAddress == '0x0') {
-          let payload = addressDetailsRspData[index];
-          searchResultsHash['kind'] = coreConstants.addressEntity;
-          searchResultsHash['payload'] = addressDetailsRspData[index];
+          const payload = addressDetailsRspData[index];
+          searchResultsHash.kind = coreConstants.addressEntity;
+          searchResultsHash.payload = addressDetailsRspData[index];
           searchResultsArray.push(searchResultsHash);
           chainIdToContractAddressHash[payload.chainId] = chainIdToContractAddressHash[payload.chainId] || [];
           if (!chainIdToContractAddressHash[payload.chainId].includes(payload.address)) {
@@ -138,7 +139,7 @@ class SearchIndex {
             probableEconomyAddressChainIdArray.push(payload.chainId);
           }
         } else {
-          let chainId = addressDetailsRspData[index].chainId,
+          const chainId = addressDetailsRspData[index].chainId,
             contractAddress = addressDetailsRspData[index].contractAddress;
 
           chainIdToContractAddressHash[chainId] = chainIdToContractAddressHash[chainId] || [];
@@ -147,7 +148,7 @@ class SearchIndex {
           }
         }
       }
-      let contractAddressDetailsArray = await oThis._fetchContractAddressDetails(
+      const contractAddressDetailsArray = await oThis._fetchContractAddressDetails(
         chainIdToContractAddressHash,
         probableEconomyAddressChainIdArray
       );
@@ -160,7 +161,7 @@ class SearchIndex {
   }
 
   /**
-   * return search results for transaction hash passed.
+   * Return search results for transaction hash passed.
    *
    * @param {string}transactionHash
    * @returns {Promise<any>}
@@ -172,25 +173,26 @@ class SearchIndex {
       blockScanner = blockScannerProvider.getInstance(),
       shardByTransactionService = blockScanner.model.ShardByTransaction;
 
-    let shardByTransaction = new shardByTransactionService({ consistentRead: false }),
+    const shardByTransaction = new shardByTransactionService({ consistentRead: false }),
       shardByTransactionRsp = await shardByTransaction.fetchTransactionDetails(transactionHash),
       searchResultsArray = [];
 
     if (shardByTransactionRsp.isSuccess() && shardByTransactionRsp.data.length > 0) {
-      for (let index in shardByTransactionRsp.data) {
-        let txHashInfo = {};
-        txHashInfo['kind'] = coreConstants.transactionEntity;
-        txHashInfo['payload'] = shardByTransactionRsp.data[index];
+      for (const index in shardByTransactionRsp.data) {
+        const txHashInfo = {};
+        txHashInfo.kind = coreConstants.transactionEntity;
+        txHashInfo.payload = shardByTransactionRsp.data[index];
         searchResultsArray.push(txHashInfo);
       }
     } else {
       return Promise.resolve(responseHelper.error('a_s_s_i_2', 'transaction data not found'));
     }
+
     return Promise.resolve(responseHelper.successWithData(searchResultsArray));
   }
 
   /**
-   * return search results for given block number
+   * Return search results for given block number
    *
    * @param {number} blockNumber
    * @returns {Promise<any>}
@@ -204,13 +206,13 @@ class SearchIndex {
 
     if (blockGetChainIdsRsp.isSuccess() && blockGetChainIdsRsp.data.length > 0) {
       return Promise.resolve(blockGetChainIdsRsp);
-    } else {
-      return Promise.resolve(responseHelper.error('a_s_s_i_3', 'block number data not found'));
     }
+
+    return Promise.resolve(responseHelper.error('a_s_s_i_3', 'block number data not found'));
   }
 
   /**
-   * return search results for given token name or symbol
+   * Return search results for given token name or symbol
    *
    * @param {string} tokenNameOrSymbol
    * @returns {Promise<any>}
@@ -222,21 +224,22 @@ class SearchIndex {
       blockScanner = blockScannerProvider.getInstance(),
       economyService = blockScanner.model.Economy;
 
-    let economy = new economyService({ consistentRead: false }),
+    const economy = new economyService({ consistentRead: false }),
       economyRsp = await economy.searchByNameOrSymbol(tokenNameOrSymbol),
       searchResultsArray = [];
 
     if (economyRsp.isSuccess() && economyRsp.data.length > 0) {
-      for (let index in economyRsp.data) {
-        let tokenNameSearchHash = await tokenNameSearchFormatter.perform(economyRsp.data[index]);
-        let searchResultHash = {};
-        searchResultHash['kind'] = coreConstants.tokenEntity;
-        searchResultHash['payload'] = tokenNameSearchHash;
+      for (const index in economyRsp.data) {
+        const tokenNameSearchHash = await tokenNameSearchFormatter.perform(economyRsp.data[index]);
+        const searchResultHash = {};
+        searchResultHash.kind = coreConstants.tokenEntity;
+        searchResultHash.payload = tokenNameSearchHash;
         searchResultsArray.push(searchResultHash);
       }
     } else {
       return Promise.resolve(responseHelper.error('a_s_s_i_4', 'token data not found'));
     }
+
     return Promise.resolve(responseHelper.successWithData(searchResultsArray));
   }
 
@@ -247,28 +250,28 @@ class SearchIndex {
       EconomyService = blockScanner.model.Economy,
       responseArray = [];
 
-    let economyServiceObj = new EconomyService({ consistentRead: false }),
+    const economyServiceObj = new EconomyService({ consistentRead: false }),
       queryResponse = await economyServiceObj.multiGetEconomiesData(chainIdToContractAddressesHash);
 
     if (queryResponse.isSuccess()) {
-      for (let uniqueKey in queryResponse.data) {
-        let economyData = queryResponse.data[uniqueKey],
+      for (const uniqueKey in queryResponse.data) {
+        const economyData = queryResponse.data[uniqueKey],
           searchResultsHash = {};
         if (
           economyData.contractAddress == oThis.queryArgument &&
           probableEconomyAddressChainIdArray.includes(economyData.chainId)
         ) {
-          //It is an token entity
-          let formattedTokenData = await tokenNameSearchFormatter.perform(economyData);
-          searchResultsHash['kind'] = coreConstants.tokenEntity;
-          searchResultsHash['payload'] = formattedTokenData;
+          // It is an token entity
+          const formattedTokenData = await tokenNameSearchFormatter.perform(economyData);
+          searchResultsHash.kind = coreConstants.tokenEntity;
+          searchResultsHash.payload = formattedTokenData;
           responseArray.push(searchResultsHash);
         } else {
-          let formattedContractData = await tokenHolderSearchFormatter.perform(economyData);
-          formattedContractData['address'] = oThis.queryArgument;
+          const formattedContractData = await tokenHolderSearchFormatter.perform(economyData);
+          formattedContractData.address = oThis.queryArgument;
 
-          searchResultsHash['kind'] = coreConstants.tokenHolderEntity;
-          searchResultsHash['payload'] = formattedContractData;
+          searchResultsHash.kind = coreConstants.tokenHolderEntity;
+          searchResultsHash.payload = formattedContractData;
           responseArray.push(searchResultsHash);
         }
       }

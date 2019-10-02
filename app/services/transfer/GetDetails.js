@@ -16,10 +16,9 @@ require(rootPrefix + '/lib/providers/blockScanner');
 
 class GetTransferDetails {
   /**
-   * constructor
+   * Constructor
    *
-   * @param {Number} chainId - chain id of the transactionHash
-   * @param {Array} transferIdentifiers - {txHash: [eventIndexes]}
+   * @param params
    */
   constructor(params) {
     const oThis = this;
@@ -29,7 +28,7 @@ class GetTransferDetails {
   }
 
   /**
-   * perform
+   * Perform
    *
    * @return {Promise|*}
    */
@@ -43,22 +42,24 @@ class GetTransferDetails {
   }
 
   /**
-   * asyncPerform
+   * AsyncPerform
    *
    * @return {Promise<*>}
    */
   async asyncPerform() {
     const oThis = this;
 
-    let response = await oThis.validateAndSanitize();
+    const response = await oThis.validateAndSanitize();
 
-    if (response.isFailure()) return response;
+    if (response.isFailure()) {
+      return response;
+    }
 
     return oThis.getTransferDetails();
   }
 
   /**
-   * validateAndSanitize
+   * ValidateAndSanitize
    *
    * @return {Promise<*>}
    */
@@ -77,7 +78,7 @@ class GetTransferDetails {
   }
 
   /**
-   * getTransferDetails - get transfer details from block scanner
+   * GetTransferDetails - get transfer details from block scanner
    *
    */
   async getTransferDetails() {
@@ -86,9 +87,9 @@ class GetTransferDetails {
       blockScanner = blockScannerProvider.getInstance(),
       TransferGet = blockScanner.transfer.Get;
 
-    let transferGet = new TransferGet(oThis.chainId, oThis.transferIdentifiers);
+    const transferGet = new TransferGet(oThis.chainId, oThis.transferIdentifiers);
 
-    let response = await transferGet.perform();
+    const response = await transferGet.perform();
 
     return responseHelper.successWithData(response.data);
   }

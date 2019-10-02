@@ -9,7 +9,6 @@ const OSTBase = require('@ostdotcom/base'),
 const rootPrefix = '../../..',
   coreConstants = require(rootPrefix + '/config/coreConstants'),
   logger = require(rootPrefix + '/lib/logger/customConsoleLogger'),
-  base64Helper = require(rootPrefix + '/lib/Base64/helper'),
   tokenFormatter = require(rootPrefix + '/lib/formatter/entities/token'),
   tokenTransferFormatter = require(rootPrefix + '/lib/formatter/entities/tokenTransfer'),
   responseHelper = require(rootPrefix + '/lib/formatter/response'),
@@ -66,9 +65,11 @@ class GetAllTransfers {
   async asyncPerform() {
     const oThis = this;
 
-    let response = await oThis.validateAndSanitize();
+    const response = await oThis.validateAndSanitize();
 
-    if (response.isFailure()) return response;
+    if (response.isFailure()) {
+      return response;
+    }
 
     await oThis.getTransactionTransfers();
 
@@ -85,7 +86,7 @@ class GetAllTransfers {
   }
 
   /**
-   * validateAndSanitize
+   * ValidateAndSanitize
    *
    * @return {Promise<*>}
    */
@@ -157,10 +158,10 @@ class GetAllTransfers {
 
     const transactionTransfers = [];
 
-    for (let eventIndex in oThis.txTransfers) {
-      let transferInfo = oThis.txTransfers[eventIndex];
+    for (const eventIndex in oThis.txTransfers) {
+      const transferInfo = oThis.txTransfers[eventIndex];
 
-      transferInfo['chainId'] = oThis.chainId;
+      transferInfo.chainId = oThis.chainId;
 
       oThis.contractAddresses.add(transferInfo.contractAddress);
 
@@ -184,19 +185,19 @@ class GetAllTransfers {
       Economy = blockScanner.model.Economy,
       economy = new Economy({ consistentRead: false });
 
-    let contractAddresses = Array.from(oThis.contractAddresses);
+    const contractAddresses = Array.from(oThis.contractAddresses);
 
-    let serviceParams = {
+    const serviceParams = {
       [oThis.chainId]: contractAddresses
     };
 
-    let economyDataRsp = await economy.multiGetEconomiesData(serviceParams);
+    const economyDataRsp = await economy.multiGetEconomiesData(serviceParams);
 
-    let economyData = economyDataRsp.data;
+    const economyData = economyDataRsp.data;
 
-    for (let contentId in economyData) {
-      let formattedEconomy = await tokenFormatter.perform(economyData[contentId]);
-      oThis.baseCurrencyContractAddresses.push(formattedEconomy['baseCurrencyContractAddress']);
+    for (const contentId in economyData) {
+      const formattedEconomy = await tokenFormatter.perform(economyData[contentId]);
+      oThis.baseCurrencyContractAddresses.push(formattedEconomy.baseCurrencyContractAddress);
       economyData[contentId] = formattedEconomy;
     }
 
@@ -222,7 +223,7 @@ class GetAllTransfers {
         baseCurrencyContractAddresses: oThis.baseCurrencyContractAddresses
       });
 
-    let baseCurrencyCacheRsp = await baseCurrencyCacheObj.fetch();
+    const baseCurrencyCacheRsp = await baseCurrencyCacheObj.fetch();
 
     if (baseCurrencyCacheRsp.isSuccess()) {
       oThis.baseCurrencies = baseCurrencyCacheRsp.data;

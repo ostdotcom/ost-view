@@ -17,7 +17,7 @@ require(rootPrefix + '/lib/providers/blockScanner');
 
 class GetTransactionDetails {
   /**
-   * constructor
+   * Constructor
    *
    * @param chainId - chain id of the transactionHash
    * @param transactionHash - transactionHash for which details to be fetched
@@ -30,7 +30,7 @@ class GetTransactionDetails {
   }
 
   /**
-   * perform
+   * Perform
    *
    * @return {Promise|*}
    */
@@ -39,25 +39,28 @@ class GetTransactionDetails {
 
     return oThis.asyncPerform().catch(function(err) {
       logger.error(' In catch block of app/services/transaction/GetDetails.js');
+
       return responseHelper.error('s_t_gd_1', 'something_went_wrong', err);
     });
   }
 
   /**
-   * asyncPerform
+   * AsyncPerform
    *
    * @return {Promise<*>}
    */
   async asyncPerform() {
     const oThis = this;
 
-    let response = await oThis.validateAndSanitize();
+    const response = await oThis.validateAndSanitize();
 
-    if (response.isFailure()) return response;
+    if (response.isFailure()) {
+      return response;
+    }
 
-    let result = {};
+    const result = {};
 
-    let transaction = await oThis.getTransactionDetails();
+    const transaction = await oThis.getTransactionDetails();
 
     if (!transaction) {
       return responseHelper.error('s_t_gd_2', 'Data Not found');
@@ -70,15 +73,15 @@ class GetTransactionDetails {
     }
 
     const pricePointsRspData = pricePointsRsp.data;
-    result['transaction'] = await transactionFormatter.perform(transaction);
+    result.transaction = await transactionFormatter.perform(transaction);
 
-    result['pricePoint'] = pricePointsRspData;
+    result.pricePoint = pricePointsRspData;
 
     return responseHelper.successWithData(result);
   }
 
   /**
-   * validateAndSanitize
+   * ValidateAndSanitize
    *
    * @return {Promise<*>}
    */
@@ -97,7 +100,7 @@ class GetTransactionDetails {
   }
 
   /**
-   * getTransactionDetails - get details from block scanner
+   * GetTransactionDetails - get details from block scanner
    */
   async getTransactionDetails() {
     const oThis = this,
@@ -106,20 +109,20 @@ class GetTransactionDetails {
       TransactionGet = blockScanner.transaction.Get,
       TransactionExtended = blockScanner.transaction.GetExtended;
 
-    let transactionGet = new TransactionGet(oThis.chainId, oThis.transactionHashes);
+    const transactionGet = new TransactionGet(oThis.chainId, oThis.transactionHashes);
 
-    let response = await transactionGet.perform();
+    const response = await transactionGet.perform();
 
-    let result = response.data[oThis.transactionHashes[0]];
+    const result = response.data[oThis.transactionHashes[0]];
 
-    let transactionGetExtended = new TransactionExtended(oThis.chainId, oThis.transactionHashes);
+    const transactionGetExtended = new TransactionExtended(oThis.chainId, oThis.transactionHashes);
 
-    let transactionGetExtendedResponse = await transactionGetExtended.perform();
+    const transactionGetExtendedResponse = await transactionGetExtended.perform();
 
-    let input = transactionGetExtendedResponse.data[oThis.transactionHashes[0]].input;
+    const input = transactionGetExtendedResponse.data[oThis.transactionHashes[0]].input;
 
     if (input) {
-      result['inputData'] = input;
+      result.inputData = input;
     }
 
     return result;
