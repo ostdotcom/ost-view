@@ -45,7 +45,7 @@
     "express": "4.17.1",
     "express-handlebars": "3.0.0",
     "handlebars": "4.4.3",
-    "helmet": "3.9.0",
+    "helmet": "3.21.1",
     "jsonwebtoken": "8.1.0",
     "moment": "2.20.1",
     "morgan": "1.9.1",
