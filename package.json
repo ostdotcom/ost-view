@@ -58,7 +58,7 @@
   "devDependencies": {
     "jsdoc": "3.6.3",
     "lint-staged": "9.4.2",
-    "nodemon": "1.18.7",
+    "nodemon": "1.19.4",
     "nyc": "14.1.1",
     "pre-commit": "1.2.2",
     "prettier": "1.14.3",
