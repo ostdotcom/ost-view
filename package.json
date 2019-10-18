@@ -62,7 +62,7 @@
     "nyc": "14.1.1",
     "pre-commit": "1.2.2",
     "prettier": "1.14.3",
-    "eslint": "6.3.0"
+    "eslint": "6.5.1"
   },
   "pre-commit": [
     "pre-commit"
