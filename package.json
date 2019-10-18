@@ -44,7 +44,7 @@
     "debug": "2.6.9",
     "express": "4.17.1",
     "express-handlebars": "3.0.0",
-    "handlebars": "4.1.2",
+    "handlebars": "4.4.3",
     "helmet": "3.9.0",
     "jsonwebtoken": "8.1.0",
     "moment": "2.20.1",
