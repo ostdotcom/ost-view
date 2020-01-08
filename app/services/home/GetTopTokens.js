@@ -60,6 +60,17 @@ class GetTopTokens {
 
     await oThis.getBaseCurrencies();
 
+    return oThis._prepareResponse();
+  }
+
+  /**
+   * Prepare response
+   *
+   * @private
+   */
+  _prepareResponse() {
+    const oThis = this;
+
     let result = {};
 
     result['tokens'] = oThis.economies;
@@ -81,8 +92,10 @@ class GetTopTokens {
       Economy = blockScanner.model.Economy,
       economy = new Economy({ consistentRead: false }),
       longNameForBaseCurrencyContractAddress = 'baseCurrencyContractAddress';
-    
+
     let keyObjs = await oThis.getPrimaryKeysToQuery();
+
+    if (keyObjs.length === 0) return;
 
     let batchGetParams = { RequestItems: {} };
     batchGetParams.RequestItems[economy.tableName()] = {
@@ -97,9 +110,9 @@ class GetTopTokens {
     }
 
     let economyData = response.data.Responses[economy.tableName()];
-  
+
     let tokenDataMap = {}; // Needed for uniquely identifying tokens
-    
+
     for (let i = 0; i < economyData.length; i++) {
       let economyRow = economyData[i],
         keys = Object.keys(economyRow);
@@ -116,13 +129,13 @@ class GetTopTokens {
     for (let i = 0; i < oThis.economies.length; i++) {
       let token = oThis.economies[i];
       Object.assign(token, tokenDataMap[token.chainId + token.contractAddress]);
-  
+
       if (!token) {
         return responseHelper.error('s_h_gtt_2', 'Data Not found');
       }
-      
+
       token['totalVolume'] = token.totalVolume;
-  
+
       if (token['baseCurrencyContractAddress']) {
         oThis.baseCurrencyContractAddresses.push(token[longNameForBaseCurrencyContractAddress]);
       }
@@ -131,7 +144,6 @@ class GetTopTokens {
 
       oThis.economies[i] = result;
     }
-    
   }
 
   /**
@@ -217,16 +229,16 @@ class GetTopTokens {
       }
       oThis.economies.push(result);
       let keyObj = economy._keyObj(result);
-  
+
       if (oThis.chainIdToContractAddressMap[result.chainId]) {
         oThis.chainIdToContractAddressMap[result.chainId].push(result.contractAddress);
       } else {
         oThis.chainIdToContractAddressMap[result.chainId] = [result.contractAddress];
       }
-      
+
       queryKeys.push(keyObj);
     }
-    
+
     return queryKeys;
   }
 }
