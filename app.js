@@ -198,6 +198,16 @@ if (cluster.isMaster) {
       logger.info('Master received SIGTERM. Killing/disconnecting it.');
     });
   });
+
+  // When someone try to kill the master process kill <master process id>
+  process.on('SIGINT', function() {
+    for (const id in cluster.workers) {
+      cluster.workers[id].exitedAfterDisconnect = true;
+    }
+    cluster.disconnect(function() {
+      logger.info('Master received SIGINT. Killing/disconnecting it.');
+    });
+  });
 } else if (cluster.isWorker) {
   // If the process is not a master.
 
