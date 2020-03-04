@@ -106,6 +106,9 @@ function normalizePort(val) {
   return false;
 }
 
+// Set worker process title
+process.title = 'OST VIEW node worker';
+
 const app = express();
 
 // Load custom middleware.
@@ -259,6 +262,9 @@ function onError(error) {
   }
 }
 
+// eslint-disable-next-line no-empty-function
+process.send = process.send || function() {};
+
 /**
  * Event listener for HTTP server "listening" event.
  *
@@ -279,6 +285,3 @@ server.on('error', onError);
 server.on('listening', function() {
   onListening(server);
 });
-
-// eslint-disable-next-line no-empty-function
-process.send = process.send || function() {};
