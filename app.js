@@ -107,6 +107,9 @@ function normalizePort(val) {
   return false;
 }
 
+// eslint-disable-next-line no-empty-function
+process.send = process.send || function() {};
+
 /**
  * Event listener for HTTP server "error" event.
  *
@@ -142,6 +145,8 @@ function onError(error) {
 function onListening(server) {
   const addr = server.address();
   const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
+  logger.log('Listening on ' + bind);
+  process.send('ready');
 }
 
 // If the process is a master.
