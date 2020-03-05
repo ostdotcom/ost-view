@@ -10,7 +10,6 @@ const express = require('express'),
   bodyParser = require('body-parser'),
   helmet = require('helmet'),
   http = require('http'),
-  cluster = require('cluster'),
   exphbs = require('express-handlebars'),
   basicAuth = require('basic-auth'),
   morgan = require('morgan'),
@@ -107,6 +106,135 @@ function normalizePort(val) {
   return false;
 }
 
+// Set worker process title
+process.title = 'OST VIEW node worker';
+
+const app = express();
+
+// Load custom middleware.
+app.use(customMiddleware());
+app.use(
+  morgan(
+    '[:id] :remote-addr - :remote-user [:date[clf]] :method :url :response-time HTTP/:http-version" :status :res[content-length] :referrer :user-agent'
+  )
+);
+
+app.use(helmet());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// Sanitize request body and query params.
+// NOTE: dynamic variables in URL will be sanitized in routes.
+app.use(sanitizer.sanitizeBodyAndQuery);
+
+// Keep health checker here to skip basic auth.
+app.get('/health-checker', function(req, res) {
+  res.send('');
+});
+
+// Add basic auth in chain.
+app.use(basicAuthentication);
+
+// Setting view engine template handlebars.
+app.set('views', path.join(__dirname, 'views'));
+
+// Helper is used to ease stringify JSON.
+app.engine(
+  'handlebars',
+  exphbs({
+    defaultLayout: 'main',
+    helpers: handlebarHelper,
+    partialsDir: path.join(__dirname, 'views/partials'),
+    layoutsDir: path.join(__dirname, 'views/layouts')
+  })
+);
+app.set('view engine', 'handlebars');
+
+// Module connect-assets relies on to use defaults in config.
+const connectAssetConfig = {
+  paths: [path.join(__dirname, 'assets/css'), path.join(__dirname, 'assets/js')],
+  buildDir: path.join(__dirname, 'builtAssets'),
+  fingerprinting: true,
+  servePath: 'assets'
+};
+
+if (coreConstants.IS_VIEW_ENVIRONMENT_PRODUCTION || coreConstants.IS_VIEW_ENVIRONMENT_STAGING) {
+  connectAssetConfig.servePath = coreConstants.CLOUD_FRONT_BASE_DOMAIN + '/ost-view/js-css';
+  connectAssetConfig.bundle = true;
+  connectAssetConfig.compress = true;
+}
+
+const connectAssets = require('connect-assets')(connectAssetConfig);
+app.use(connectAssets);
+
+const hbs = require('handlebars');
+hbs.registerHelper('css', function() {
+  const css = connectAssets.options.helperContext.css.apply(this, arguments);
+
+  return new hbs.SafeString(css);
+});
+
+hbs.registerHelper('js', function() {
+  const js = connectAssets.options.helperContext.js.apply(this, arguments);
+
+  return new hbs.SafeString(js);
+});
+
+hbs.registerHelper('with', function(context, options) {
+  return options.fn(context);
+});
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+const redirectIfOnUrl = '/' + coreConstants.MAINNET_BASE_URL_PREFIX;
+
+// Load route files.
+app.get(redirectIfOnUrl, redirectHome);
+
+app.use('/', indexRoutes);
+app.use('/about', startRequestLog, aboutRoutes);
+
+app.use('/:baseUrlPrefix/stats', startRequestLog, statsRoutes);
+
+app.use('/:baseUrlPrefix/search', startRequestLog, validateUrlPrefix, searchRoutes);
+
+app.use('/:baseUrlPrefix/block', startRequestLog, validateUrlPrefix, blockRoutes);
+app.use('/:baseUrlPrefix/transaction', startRequestLog, validateUrlPrefix, transactionRoutes);
+app.use('/:baseUrlPrefix/token', startRequestLog, validateUrlPrefix, tokenRoutes);
+app.use('/:baseUrlPrefix/address', startRequestLog, validateUrlPrefix, addressRoutes);
+
+app.use('/:baseUrlPrefix/:tokenSymbol', startRequestLog, tokenDetailsBySymbolRoutes);
+app.use('/' + coreConstants.BASE_URL_PREFIX, startRequestLog, indexRoutes);
+
+app.get('/:tokenSymbol', sanitizer.sanitizeDynamicUrlParams, function(req, res) {
+  const routeToRedirect = `/${coreConstants.MAINNET_BASE_URL_PREFIX}/` + req.params.tokenSymbol;
+  res.redirect(301, routeToRedirect);
+});
+
+// Catch 404 and forward to error handler.
+app.use(function(req, res) {
+  return responseHelper.error('404', 'Not found.').renderResponse(res, 404);
+});
+
+// Error handler.
+app.use(function(err, req, res) {
+  // Set locals, only providing error in development.
+  logger.error(err);
+
+  return responseHelper.error('500', 'Something went wrong.').renderResponse(res, 500);
+});
+
+/**
+ * Get port from environment and store in Express.
+ */
+const port = normalizePort(coreConstants.PORT || '7000');
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+const server = http.createServer(app);
+
 /**
  * Event listener for HTTP server "error" event.
  *
@@ -134,218 +262,52 @@ function onError(error) {
   }
 }
 
+// eslint-disable-next-line no-empty-function
+process.send = process.send || function() {};
+
 /**
  * Event listener for HTTP server "listening" event.
  *
- * @param {object} server
+ * @param {object} serverObject
  */
-function onListening(server) {
-  const addr = server.address();
+function onListening(serverObject) {
+  const addr = serverObject.address();
   const bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
+  logger.log('Listening on ' + bind);
+  process.send('ready');
 }
 
-// If the process is a master.
-if (cluster.isMaster) {
-  // Set worker process title
-  process.title = 'OST View master node';
-
-  // Fork workers equal to number of CPUs
-  const numWorkers = coreConstants.WORKERS || require('os').cpus().length;
-
-  for (let index = 0; index < numWorkers; index++) {
-    // Spawn a new worker process.
-    cluster.fork();
-  }
-
-  // Worker started listening and is ready
-  cluster.on('listening', function(worker, address) {
-    logger.info('[worker-' + worker.id + '] is listening to ' + address.address + ':' + address.port);
+/**
+ * Event listener for sigint handling.
+ */
+function onTerminationSignal() {
+  logger.info('SIGINT signal received.');
+  logger.log('Closing http server.');
+  server.close(() => {
+    logger.log('Current concurrent connections:', server.connections);
+    logger.log('Http server closing. Bye.');
+    process.exit(0);
   });
 
-  // Worker came online. Will start listening shortly
-  cluster.on('online', function(worker) {
-    logger.info('[worker-' + worker.id + '] is online');
-  });
-
-  //  Called when all workers are disconnected and handles are closed.
-  cluster.on('disconnect', function(worker) {
-    logger.error('[worker-' + worker.id + '] is disconnected');
-  });
-
-  // When any of the workers die the cluster module will emit the 'exit' event.
-  cluster.on('exit', function(worker, code, signal) {
-    if (worker.exitedAfterDisconnect === true) {
-      // Don't restart worker as voluntary exit.
-      logger.info('[worker-' + worker.id + '] voluntary exit. signal: ${signal}. code: ${code}');
-    } else {
-      // Restart worker as died unexpectedly.
-      logger.error(
-        '[worker-' + worker.id + '] restarting died. signal: ${signal}. code: ${code}',
-        worker.id,
-        signal,
-        code
-      );
-      cluster.fork();
-    }
-  });
-
-  // When someone try to kill the master process kill <master process id>
-  process.on('SIGTERM', function() {
-    for (const id in cluster.workers) {
-      cluster.workers[id].exitedAfterDisconnect = true;
-    }
-    cluster.disconnect(function() {
-      logger.info('Master received SIGTERM. Killing/disconnecting it.');
-    });
-  });
-
-  // When someone try to kill the master process kill <master process id>
-  process.on('SIGINT', function() {
-    for (const id in cluster.workers) {
-      cluster.workers[id].exitedAfterDisconnect = true;
-    }
-    cluster.disconnect(function() {
-      logger.info('Master received SIGINT. Killing/disconnecting it.');
-    });
-  });
-} else if (cluster.isWorker) {
-  // If the process is not a master.
-
-  // Set worker process title
-  process.title = 'OST View worker-' + cluster.worker.id;
-
-  const app = express();
-
-  // Load custom middleware and set the worker id
-  app.use(customMiddleware({ worker_id: cluster.worker.id }));
-  app.use(
-    morgan(
-      '[:id] :remote-addr - :remote-user [:date[clf]] :method :url :response-time HTTP/:http-version" :status :res[content-length] :referrer :user-agent'
-    )
-  );
-
-  app.use(helmet());
-  app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({ extended: true }));
-
-  // Sanitize request body and query params
-  // NOTE: dynamic variables in URL will be sanitized in routes
-  app.use(sanitizer.sanitizeBodyAndQuery);
-
-  // Keep health checker here to skip basic auth
-  app.get('/health-checker', function(req, res) {
-    res.send('');
-  });
-
-  // Add basic auth in chain
-  app.use(basicAuthentication);
-
-  // Setting view engine template handlebars.
-  app.set('views', path.join(__dirname, 'views'));
-
-  // Helper is used to ease stringify JSON.
-  app.engine(
-    'handlebars',
-    exphbs({
-      defaultLayout: 'main',
-      helpers: handlebarHelper,
-      partialsDir: path.join(__dirname, 'views/partials'),
-      layoutsDir: path.join(__dirname, 'views/layouts')
-    })
-  );
-  app.set('view engine', 'handlebars');
-
-  // Module connect-assets relies on to use defaults in config.
-  const connectAssetConfig = {
-    paths: [path.join(__dirname, 'assets/css'), path.join(__dirname, 'assets/js')],
-    buildDir: path.join(__dirname, 'builtAssets'),
-    fingerprinting: true,
-    servePath: 'assets'
-  };
-
-  if (coreConstants.IS_VIEW_ENVIRONMENT_PRODUCTION || coreConstants.IS_VIEW_ENVIRONMENT_STAGING) {
-    connectAssetConfig.servePath = coreConstants.CLOUD_FRONT_BASE_DOMAIN + '/ost-view/js-css';
-    connectAssetConfig.bundle = true;
-    connectAssetConfig.compress = true;
-  }
-
-  const connectAssets = require('connect-assets')(connectAssetConfig);
-  app.use(connectAssets);
-
-  const hbs = require('handlebars');
-  hbs.registerHelper('css', function() {
-    const css = connectAssets.options.helperContext.css.apply(this, arguments);
-
-    return new hbs.SafeString(css);
-  });
-
-  hbs.registerHelper('js', function() {
-    const js = connectAssets.options.helperContext.js.apply(this, arguments);
-
-    return new hbs.SafeString(js);
-  });
-
-  hbs.registerHelper('with', function(context, options) {
-    return options.fn(context);
-  });
-
-  app.use(express.static(path.join(__dirname, 'public')));
-
-  const redirectIfOnUrl = '/' + coreConstants.MAINNET_BASE_URL_PREFIX;
-
-  // Load route files.
-  app.get(redirectIfOnUrl, redirectHome);
-
-  app.use('/', indexRoutes);
-  app.use('/about', startRequestLog, aboutRoutes);
-
-  app.use('/:baseUrlPrefix/stats', startRequestLog, statsRoutes);
-
-  app.use('/:baseUrlPrefix/search', startRequestLog, validateUrlPrefix, searchRoutes);
-
-  app.use('/:baseUrlPrefix/block', startRequestLog, validateUrlPrefix, blockRoutes);
-  app.use('/:baseUrlPrefix/transaction', startRequestLog, validateUrlPrefix, transactionRoutes);
-  app.use('/:baseUrlPrefix/token', startRequestLog, validateUrlPrefix, tokenRoutes);
-  app.use('/:baseUrlPrefix/address', startRequestLog, validateUrlPrefix, addressRoutes);
-
-  app.use('/:baseUrlPrefix/:tokenSymbol', startRequestLog, tokenDetailsBySymbolRoutes);
-  app.use('/' + coreConstants.BASE_URL_PREFIX, startRequestLog, indexRoutes);
-
-  app.get('/:tokenSymbol', sanitizer.sanitizeDynamicUrlParams, function(req, res) {
-    const routeToRedirect = `/${coreConstants.MAINNET_BASE_URL_PREFIX}/` + req.params.tokenSymbol;
-    res.redirect(301, routeToRedirect);
-  });
-
-  // Catch 404 and forward to error handler.
-  app.use(function(req, res) {
-    return responseHelper.error('404', 'Not found.').renderResponse(res, 404);
-  });
-
-  // Error handler.
-  app.use(function(err, req, res) {
-    // Set locals, only providing error in development.
-    logger.error(err);
-
-    return responseHelper.error('500', 'Something went wrong.').renderResponse(res, 500);
-  });
-
-  /**
-   * Get port from environment and store in Express.
-   */
-  const port = normalizePort(coreConstants.PORT || '7000');
-  app.set('port', port);
-
-  /**
-   * Create HTTP server.
-   */
-  const server = http.createServer(app);
-
-  /**
-   * Listen on provided port, on all network interfaces.
-   */
-  server.listen(port, 443);
-  server.on('error', onError);
-  server.on('listening', function() {
-    onListening(server);
-  });
+  setTimeout(function() {
+    logger.log('Timeout occurred for server.close(). Current concurrent connections:', server.connections);
+    process.exit(1);
+  }, 60000);
 }
+
+process.on('SIGTERM', function() {
+  onTerminationSignal();
+});
+
+process.on('SIGINT', function() {
+  onTerminationSignal();
+});
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+server.listen(port, 443);
+server.on('error', onError);
+server.on('listening', function() {
+  onListening(server);
+});
